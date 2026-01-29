@@ -1,0 +1,73 @@
+{
+  "documents": [
+    {
+      "id": "chevrutah-151",
+      "title": "Chevrutah №151 — Шмини",
+      "description": "Правильное питание по-еврейски. Законы кашрута и недельная глава Шмини.",
+      "category": "newspapers",
+      "parasha": "Шмини",
+      "language": "ru",
+      "date": "2025-04-26",
+      "pdfUrl": "/wp-content/uploads/forminator/25_7f81dabe26461a3bb47af6178372a8c7/uploads/rgvbkfupzln4-184-rus-shemini-26.pdf",
+      "pages": 8,
+      "thumbnailUrl": "/thumbnails/chevrutah-151.jpg"
+    },
+    {
+      "id": "chevrutah-900",
+      "title": "Chevrutah №900",
+      "description": "Юбилейный выпуск еженедельной газеты Chevrutah.",
+      "category": "newspapers",
+      "parasha": "",
+      "language": "ru",
+      "date": "2025-01-15",
+      "pdfUrl": "/wp-content/uploads/forminator/25_7f81dabe26461a3bb47af6178372a8c7/uploads/ejdnxcurfrt8-900.pdf",
+      "pages": 8,
+      "thumbnailUrl": "/thumbnails/chevrutah-900.jpg"
+    },
+    {
+      "id": "shomrey-shabos-1365",
+      "title": "Шомрей Шабос №1365",
+      "description": "Еженедельная газета одесской еврейской общины.",
+      "category": "newspapers",
+      "parasha": "Бамидбар",
+      "language": "ru",
+      "date": "2022-06-03",
+      "pdfUrl": "/wp-content/uploads/forminator/25_7f81dabe26461a3bb47af6178372a8c7/uploads/shomrey-shabos-1365.pdf",
+      "pages": 4,
+      "thumbnailUrl": "/thumbnails/shomrey-shabos-1365.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": "newspapers",
+      "title": "Еженедельные газеты",
+      "description": "Chevrutah, Шомрей Шабос и другие издания",
+      "count": 2800
+    },
+    {
+      "id": "educational",
+      "title": "Учебные материалы",
+      "description": "Статьи, уроки и образовательные материалы",
+      "count": 450
+    },
+    {
+      "id": "holidays",
+      "title": "Праздники",
+      "description": "Материалы к еврейским праздникам",
+      "count": 250
+    }
+  ],
+  "parashiot": [
+    "Берешит", "Ноах", "Лех-Леха", "Ваера", "Хаей-Сара",
+    "Толдот", "Ваеце", "Вайшлах", "Вайешев", "Микец",
+    "Ваигаш", "Вайехи", "Шмот", "Ваэра", "Бо",
+    "Бешалах", "Итро", "Мишпатим", "Трума", "Тецаве",
+    "Ки-Тиса", "Ваякгель", "Пкудей", "Ваикра", "Цав",
+    "Шмини", "Тазриа", "Мецора", "Ахарей-Мот", "Кдошим",
+    "Эмор", "Бегар", "Бехукотай", "Бамидбар", "Насо",
+    "Бегаалотха", "Шлах", "Корах", "Хукат", "Балак",
+    "Пинхас", "Матот", "Масэй", "Дварим", "Ваэтханан",
+    "Экев", "Реэ", "Шофтим", "Ки-Теце", "Ки-Таво",
+    "Ницавим", "Ваелех", "Гаазину", "Везот-Габраха"
+  ]
+}
