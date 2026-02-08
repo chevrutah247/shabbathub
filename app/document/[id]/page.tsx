@@ -50,16 +50,16 @@ export default function DocumentPage() {
     async function loadIssue() {
       try {
         const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/issues?id=eq.${id}&select=*`,
+          SUPABASE_URL + '/rest/v1/issues?id=eq.' + id + '&select=*',
           {
             headers: {
               'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Authorization': 'Bearer ' + SUPABASE_KEY,
             },
           }
         );
         
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         
         const data = await res.json();
         if (data.length === 0) {
@@ -67,9 +67,9 @@ export default function DocumentPage() {
           return;
         }
         setIssue(data[0]);
-      } catch (err: any) {
+      } catch (err) {
         console.error('Fetch error:', err);
-        setError(err.message);
+        setError('Ошибка загрузки');
       } finally {
         setLoading(false);
       }
@@ -94,20 +94,19 @@ export default function DocumentPage() {
             {error || 'Документ не найден'}
           </h1>
           <Link href="/catalog" className="text-primary-600 hover:underline">
-            ← Вернуться в каталог
+            Вернуться в каталог
           </Link>
         </div>
       </div>
     );
   }
 
-  const googleDocsUrl = issue.pdf_url 
-    ? `https://docs.google.com/viewer?url=${encodeURIComponent(issue.pdf_url)}&embedded=true`
+  const pdfViewerUrl = issue.pdf_url 
+    ? 'https://docs.google.com/viewer?url=' + encodeURIComponent(issue.pdf_url) + '&embedded=true'
     : null;
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Link 
@@ -122,12 +121,11 @@ export default function DocumentPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* PDF Viewer */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-              {googleDocsUrl ? (
+              {pdfViewerUrl ? (
                 <iframe
-                  src={googleDocsUrl}
+                  src={pdfViewerUrl}
                   className="w-full"
                   style={{ height: '80vh' }}
                   frameBorder="0"
@@ -140,7 +138,6 @@ export default function DocumentPage() {
             </div>
           </div>
 
-          {/* Info Panel */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">
@@ -167,10 +164,9 @@ export default function DocumentPage() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="bg-white rounded-2xl p-6 shadow-sm space-y-3">
               {issue.pdf_url && (
-                <>
+                <div className="space-y-3">
                   
                     href={issue.pdf_url}
                     target="_blank"
@@ -188,7 +184,7 @@ export default function DocumentPage() {
                     <Download size={20} />
                     Скачать
                   </a>
-                </>
+                </div>
               )}
             </div>
           </div>
