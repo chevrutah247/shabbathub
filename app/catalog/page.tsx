@@ -45,11 +45,19 @@ export default function CatalogPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=200&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url', {
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(res => res.json())
-      .then(data => setDocuments(data || []))
+      .then(data => {
+        // Сортируем: сначала с превью, потом без
+        const sorted = (data || []).sort((a: Document, b: Document) => {
+          if (a.thumbnail_url && !b.thumbnail_url) return -1;
+          if (!a.thumbnail_url && b.thumbnail_url) return 1;
+          return 0;
+        });
+        setDocuments(sorted);
+      })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
   }, []);
@@ -104,7 +112,7 @@ export default function CatalogPage() {
                 </Link>
                 
                 <div className="absolute left-1 top-1 flex flex-col gap-0.5">
-                  <button className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px]">
+                  <button className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center">
                     <FacebookIcon />
                   </button>
                   <button className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center">
