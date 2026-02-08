@@ -17,7 +17,8 @@ export default function FeaturedDocuments() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=8&select=id,title,description,pdf_url,page_count,gregorian_date,publication_id,thumbnail_url', {
+    // Загружаем только документы с превью
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=gregorian_date.desc&limit=8&select=id,title,description,pdf_url,page_count,gregorian_date,publication_id,thumbnail_url', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(res => res.json())
