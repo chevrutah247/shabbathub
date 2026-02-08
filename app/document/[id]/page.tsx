@@ -51,17 +51,10 @@ const TelegramIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
-<<<<<<< HEAD
-const languageFlags: Record<string, string> = {
-  ru: '🇷🇺',
-  he: '🇮🇱',
-  en: '🇺🇸',
-=======
 const languageCodes: Record<string, string> = {
   ru: 'RU',
   he: 'HE',
   en: 'EN',
->>>>>>> 5d2fd9c (Fix: dynamic data from Supabase, remove flags)
 };
 
 function formatDate(dateString: string | null | undefined, lang: string): string {
@@ -484,11 +477,7 @@ export default function DocumentPage() {
                 )}
                 <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 text-gray-600 rounded-full text-sm">
                   <Globe size={14} />
-<<<<<<< HEAD
-                  {languageFlags[pubLang]} {pubLang.toUpperCase()}
-=======
                   {languageCodes[pubLang]} {pubLang.toUpperCase()}
->>>>>>> 5d2fd9c (Fix: dynamic data from Supabase, remove flags)
                 </span>
               </div>
 
