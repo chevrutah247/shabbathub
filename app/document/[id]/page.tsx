@@ -390,14 +390,8 @@ export default function DocumentPage() {
           <div className="lg:col-span-2">
             {issue.pdf_url ? (
               <PDFViewer
-                pdfUrl={issue.pdf_url}
+                url={issue.pdf_url}
                 title={issue.title}
-                lang={lang}
-                onDownload={handleDownload}
-                onShare={handleShare}
-                onSubscribe={handleSubscribe}
-                pageCount={issue.page_count || undefined}
-                showSubscribe={!!issue.publication_id}
               />
             ) : (
               <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
