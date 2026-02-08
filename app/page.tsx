@@ -202,10 +202,10 @@ export default function HomePage() {
       <section className="py-16 bg-cream">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-display font-bold text-primary-900 mb-6">
-            О проекте ShabbatHub
+            О проекте ShabbatHub TEST_BUILD_001
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            ShabbatHub — это бесплатный онлайн-архив материалов к Шаббату. 
+            ShabbatHub TEST_BUILD_001 — это бесплатный онлайн-архив материалов к Шаббату. 
             Мы собираем и систематизируем еженедельные газеты, учебные материалы 
             и статьи на русском, иврите и английском языках, чтобы сделать 
             еврейское знание доступным для всех.
