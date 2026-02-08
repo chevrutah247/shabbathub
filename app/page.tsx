@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Search, BookOpen, Calendar, Globe, ChevronRight } from 'lucide-react';
 import SearchBar from '@/components/SearchBar';
 import FeaturedDocuments from '@/components/FeaturedDocuments';
-import { supabase } from '@/lib/supabase';
+// import { supabase } from '@/lib/supabase';
 
 export default function HomePage() {
   const [totalDocs, setTotalDocs] = useState<number | null>(null);
