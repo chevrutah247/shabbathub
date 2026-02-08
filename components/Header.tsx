@@ -16,10 +16,10 @@ const languageNames: Record<Language, string> = {
   he: 'עברית',
 };
 
-const languageFlags: Record<Language, string> = {
-  ru: '🇷🇺',
-  en: '🇺🇸',
-  he: '🇮🇱',
+const languageCodes: Record<Language, string> = {
+  ru: 'RU',
+  en: 'EN',
+  he: 'HE',
 };
 
 export default function Header() {
@@ -87,7 +87,7 @@ export default function Header() {
                 className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-primary-700 transition-colors"
               >
                 <Globe size={18} />
-                <span className="text-sm">{languageFlags[lang]}</span>
+                <span className="text-sm">{languageCodes[lang]}</span>
                 <ChevronDown size={14} />
               </button>
               
@@ -104,7 +104,7 @@ export default function Header() {
                         lang === l ? 'bg-primary-50 text-primary-700' : 'text-gray-700'
                       }`}
                     >
-                      <span>{languageFlags[l]}</span>
+                      <span>{languageCodes[l]}</span>
                       <span>{languageNames[l]}</span>
                     </button>
                   ))}
@@ -236,7 +236,7 @@ export default function Header() {
                       : 'bg-gray-100 text-gray-600'
                   }`}
                 >
-                  {languageFlags[l]} {languageNames[l]}
+                  {languageCodes[l]} {languageNames[l]}
                 </button>
               ))}
             </div>

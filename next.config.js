@@ -6,7 +6,20 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.supabase.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'drive.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+      },
     ],
+  },
+  // For react-pdf
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
   },
 }
 

@@ -17,10 +17,10 @@ interface Document {
   pages: number;
 }
 
-const languageFlags: Record<string, string> = {
-  ru: '🇷🇺',
-  he: '🇮🇱',
-  en: '🇺🇸',
+const languageCodes: Record<string, string> = {
+  ru: 'RU',
+  he: 'HE',
+  en: 'EN',
 };
 
 export default function CatalogPage() {
@@ -173,7 +173,7 @@ export default function CatalogPage() {
                   </div>
 
                   <div className="absolute top-2 right-2 text-lg">
-                    {languageFlags[doc.language]}
+                    {languageCodes[doc.language]}
                   </div>
                 </div>
 

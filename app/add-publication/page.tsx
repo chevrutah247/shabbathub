@@ -86,10 +86,10 @@ export default function AddPublicationPage() {
     { value: 'irregular', label: { ru: 'Нерегулярная', en: 'Irregular', he: 'לא קבוע' } },
   ];
 
-  const languageOptions: { value: LangType; label: string; flag: string }[] = [
-    { value: 'ru', label: 'Русский', flag: '🇷🇺' },
-    { value: 'en', label: 'English', flag: '🇺🇸' },
-    { value: 'he', label: 'עברית', flag: '🇮🇱' },
+  const languageOptions: { value: LangType; label: string; code: string }[] = [
+    { value: 'ru', label: 'Русский', code: 'RU' },
+    { value: 'en', label: 'English', code: 'EN' },
+    { value: 'he', label: 'עברית', code: 'HE' },
   ];
 
   return (
@@ -214,7 +214,7 @@ export default function AddPublicationPage() {
               >
                 {languageOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.flag} {opt.label}
+                    {opt.code} {opt.label}
                   </option>
                 ))}
               </select>
