@@ -14,12 +14,22 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchStats() {
-      const { count } = await supabase
-        .from('issues')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
-      
-      setTotalDocs(count || 0);
+      try {
+        const res = await fetch(
+          'https://yvgcxmqgvxlvbxsszqcc.supabase.co/rest/v1/issues?is_active=eq.true&select=id',
+          {
+            headers: {
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY',
+              'Prefer': 'count=exact'
+            },
+          }
+        );
+        const count = res.headers.get('content-range')?.split('/')[1];
+        setTotalDocs(count ? parseInt(count) : 0);
+      } catch (err) {
+        console.error('Stats fetch error:', err);
+        setTotalDocs(0);
+      }
     }
     fetchStats();
   }, []);
@@ -202,10 +212,10 @@ export default function HomePage() {
       <section className="py-16 bg-cream">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-display font-bold text-primary-900 mb-6">
-            О проекте ShabbatHub TEST_BUILD_001
+            О проекте ShabbatHub
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            ShabbatHub TEST_BUILD_001 — это бесплатный онлайн-архив материалов к Шаббату. 
+            ShabbatHub — это бесплатный онлайн-архив материалов к Шаббату. 
             Мы собираем и систематизируем еженедельные газеты, учебные материалы 
             и статьи на русском, иврите и английском языках, чтобы сделать 
             еврейское знание доступным для всех.
