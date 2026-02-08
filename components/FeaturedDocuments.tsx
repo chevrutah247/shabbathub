@@ -30,10 +30,15 @@ function formatDate(dateString: string | null | undefined): string {
 export default function FeaturedDocuments() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('FeaturedDocuments: useEffect started');
+    
     async function fetchDocuments() {
+      console.log('FeaturedDocuments: fetchDocuments called');
       try {
+        console.log('FeaturedDocuments: calling supabase...');
         const { data, error } = await supabase
           .from('issues')
           .select('id, title, description, pdf_url, page_count, gregorian_date, publication:publication_id(title_ru, primary_language), parsha:parsha_id(name_ru)')
@@ -41,13 +46,18 @@ export default function FeaturedDocuments() {
           .order('gregorian_date', { ascending: false })
           .limit(6);
 
+        console.log('FeaturedDocuments: supabase response', { data, error });
+
         if (error) {
-          console.error('Error fetching documents:', error);
+          console.error('FeaturedDocuments: Error fetching documents:', error);
+          setError(error.message);
           return;
         }
+        console.log('FeaturedDocuments: setting documents', data?.length);
         setDocuments(data || []);
       } catch (err) {
-        console.error('Error:', err);
+        console.error('FeaturedDocuments: Catch error:', err);
+        setError(String(err));
       } finally {
         setLoading(false);
       }
@@ -59,6 +69,15 @@ export default function FeaturedDocuments() {
     return (
       <div className="flex justify-center py-12">
         <Loader2 className="animate-spin text-primary-600" size={32} />
+        <span className="ml-2">Загрузка...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 text-red-500">
+        Ошибка: {error}
       </div>
     );
   }
