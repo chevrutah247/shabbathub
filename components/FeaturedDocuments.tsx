@@ -9,7 +9,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 function formatDate(dateString: string | null | undefined): string {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
 }
 
 export default function FeaturedDocuments() {
@@ -17,8 +17,7 @@ export default function FeaturedDocuments() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Загружаем только документы с превью
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=gregorian_date.desc&limit=8&select=id,title,description,pdf_url,page_count,gregorian_date,publication_id,thumbnail_url', {
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=gregorian_date.desc&limit=8&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(res => res.json())
@@ -29,20 +28,20 @@ export default function FeaturedDocuments() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-12">
-        <Loader2 className="animate-spin text-primary-600" size={32} />
+      <div className="flex justify-center py-8">
+        <Loader2 className="animate-spin text-primary-600" size={24} />
       </div>
     );
   }
 
   if (documents.length === 0) {
-    return <div className="text-center py-12 text-gray-500">Документы не найдены</div>;
+    return <div className="text-center py-8 text-gray-500 text-sm">Документы не найдены</div>;
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
       {documents.map((doc) => (
-        <article key={doc.id} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+        <article key={doc.id} className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all">
           <Link href={'/document/' + doc.id}>
             <div className="aspect-[3/4] bg-gray-100 overflow-hidden cursor-pointer">
               {doc.thumbnail_url ? (
@@ -52,25 +51,21 @@ export default function FeaturedDocuments() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                  <FileText size={40} className="text-gray-300" />
+                <div className="w-full h-full flex items-center justify-center">
+                  <FileText size={24} className="text-gray-300" />
                 </div>
               )}
             </div>
           </Link>
 
-          <div className="p-3">
-            <h3 className="font-medium text-sm text-gray-900 line-clamp-2 mb-1 group-hover:text-primary-700 transition-colors">
+          <div className="p-2">
+            <h3 className="font-medium text-xs text-gray-900 line-clamp-2 mb-1 group-hover:text-primary-700">
               <Link href={'/document/' + doc.id}>{doc.title}</Link>
             </h3>
-
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <div className="flex items-center gap-1">
-                <Calendar size={12} />
-                {formatDate(doc.gregorian_date)}
-              </div>
+            <div className="flex items-center justify-between text-[10px] text-gray-500">
+              <span>{formatDate(doc.gregorian_date)}</span>
               {doc.publication_id && (
-                <Link href={'/publication/' + doc.publication_id} className="text-primary-600 hover:text-primary-800 font-medium">
+                <Link href={'/publication/' + doc.publication_id} className="text-primary-600 hover:underline">
                   Все →
                 </Link>
               )}
