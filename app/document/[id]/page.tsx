@@ -342,7 +342,7 @@ export default function DocumentPage() {
   const pubName = issue.publication ? getLocalizedName(issue.publication, 'title') : '';
   const parshaName = issue.parsha ? getLocalizedName(issue.parsha, 'name') : null;
   const eventName = issue.event ? getLocalizedName(issue.event, 'name') : null;
-  const hebrewDate = formatHebrewDate(issue.hebrew_day, issue.hebrew_month, issue.hebrew_year, lang);
+  const hebrewDate = formatHebrewDate(issue.hebrew_day ?? null, issue.hebrew_month ?? null, issue.hebrew_year ?? null, lang);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareText = `${issue.title} — ShabbatHub`;
