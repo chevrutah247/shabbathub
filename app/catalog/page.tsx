@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Filter, FileText, Calendar, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
+import { Search, FileText, Calendar, Loader2, Heart, User, Download } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
@@ -14,64 +14,51 @@ interface Document {
   pdf_url: string;
   page_count: number;
   gregorian_date: string;
-  publication?: { title_ru: string; primary_language: string };
-  parsha?: { name_ru: string };
+  publication_id: string;
 }
 
-const languageCodes: Record<string, string> = {
-  ru: 'RU',
-  he: 'HE',
-  en: 'EN',
-};
-
-function formatDate(dateString: string | null): string {
+function formatYear(dateString: string | null): string {
   if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
+  return new Date(dateString).getFullYear().toString();
 }
+
+// Social icons
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+);
+
+const TelegramIcon = () => (
+  <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor">
+    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+  </svg>
+);
 
 export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('all');
 
   useEffect(() => {
-    async function fetchDocuments() {
-      try {
-        const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=100&select=id,title,description,pdf_url,page_count,gregorian_date`,
-          {
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
-            },
-          }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setDocuments(data);
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchDocuments();
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=100&select=id,title,description,pdf_url,page_count,gregorian_date,publication_id', {
+      headers: { 'apikey': SUPABASE_KEY }
+    })
+      .then(res => res.json())
+      .then(data => setDocuments(data || []))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
-  // Фильтрация
-  const filteredDocs = documents.filter((doc) => {
-    const matchesSearch = !searchQuery || 
-      doc.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
-  });
+  const filteredDocs = documents.filter(doc => 
+    !searchQuery || doc.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -84,81 +71,71 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen bg-cream">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-display font-bold text-primary-900 mb-8">
-          Каталог материалов
-        </h1>
+        <h1 className="text-2xl font-bold text-primary-900 mb-2">ShabbatHub — крупнейший архив материалов к Шаббату</h1>
+        <p className="text-gray-600 mb-6">Газеты, недельные главы Торы и печатные материалы к Шаббату на русском и английском языках</p>
 
-        {/* Поиск */}
-        <div className="mb-8">
-          <div className="relative max-w-xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Поиск по названию..."
+              placeholder="Поиск..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none text-sm"
             />
           </div>
         </div>
 
-        {/* Результаты */}
-        <p className="text-gray-600 mb-6">Найдено: {filteredDocs.length} материалов</p>
+        <p className="text-gray-500 text-sm mb-4">Найдено: {filteredDocs.length} материалов</p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredDocs.map((doc) => (
-            <article
-              key={doc.id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-              <div className="relative aspect-[8.5/6] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <FileText size={48} className="mx-auto text-gray-400 mb-2" />
-                    {doc.page_count && (
-                      <span className="text-sm text-gray-500">{doc.page_count} стр.</span>
-                    )}
+            <article key={doc.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="relative">
+                {/* Preview area */}
+                <Link href={'/document/' + doc.id}>
+                  <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center cursor-pointer">
+                    <FileText size={32} className="text-gray-300" />
                   </div>
-                </div>
+                </Link>
                 
-                <div className="absolute inset-0 bg-primary-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Link
-                    href={doc.pdf_url || '#'}
-                    target="_blank"
-                    className="flex items-center gap-2 bg-white text-primary-700 px-4 py-2 rounded-full font-medium"
-                  >
-                    <ExternalLink size={18} />
-                    Открыть PDF
-                  </Link>
+                {/* Social buttons left */}
+                <div className="absolute left-2 top-2 flex flex-col gap-1">
+                  <button className="w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700">
+                    <FacebookIcon />
+                  </button>
+                  <button className="w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600">
+                    <WhatsAppIcon />
+                  </button>
+                  <button className="w-7 h-7 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600">
+                    <TelegramIcon />
+                  </button>
                 </div>
 
-                <div className="absolute top-3 right-3 px-2.5 py-1 bg-white/90 backdrop-blur rounded-full text-xs font-semibold">
-                  <span className="text-primary-600">RU</span>
+                {/* Actions right */}
+                <div className="absolute right-2 top-2 flex flex-col gap-1">
+                  <button className="w-7 h-7 bg-white/90 text-gray-400 rounded-full flex items-center justify-center hover:text-red-500 shadow-sm">
+                    <Heart size={14} />
+                  </button>
+                  <button className="w-7 h-7 bg-white/90 text-gray-400 rounded-full flex items-center justify-center hover:text-primary-600 shadow-sm">
+                    <User size={14} />
+                  </button>
                 </div>
               </div>
 
-              <div className="p-5">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-700 transition-colors">
-                  {doc.title}
-                </h3>
-
-                {doc.description && (
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {doc.description}
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Calendar size={14} />
-                    {formatDate(doc.gregorian_date)}
-                  </div>
-                  <Link
-                    href={'/document/' + doc.id}
-                    className="text-primary-600 hover:text-primary-800 font-medium"
-                  >
-                    Подробнее →
+              <div className="p-3">
+                <h3 className="font-medium text-sm text-gray-900 line-clamp-2 mb-1 leading-tight">
+                  <Link href={'/document/' + doc.id} className="hover:text-primary-600">
+                    {doc.title}
                   </Link>
+                </h3>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>{formatYear(doc.gregorian_date)}</span>
+                  <div className="flex items-center gap-0.5 text-yellow-400">
+                    {'★'.repeat(5)}
+                    <span className="text-gray-400 ml-1">(0)</span>
+                  </div>
                 </div>
               </div>
             </article>
