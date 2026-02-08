@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, FileText, Loader2, Heart, User } from 'lucide-react';
+import { Search, FileText, Loader2, Heart, User, Filter } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
@@ -14,6 +14,14 @@ interface Document {
   gregorian_date: string;
   publication_id: string;
   thumbnail_url: string;
+  parsha_id: number;
+}
+
+interface Parsha {
+  id: number;
+  name_ru: string;
+  name_en: string;
+  order_num: number;
 }
 
 function formatYear(dateString: string | null): string {
@@ -39,32 +47,101 @@ const TelegramIcon = () => (
   </svg>
 );
 
+// Маппинг названий парш на ID
+const parshaNameToId: Record<string, number> = {
+  'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
+  'Toldot': 6, 'Vayetzei': 7, 'Vayishlach': 8, 'Vayeshev': 9, 'Miketz': 10,
+  'Vayigash': 11, 'Vayechi': 12, 'Shemot': 13, 'Vaera': 14, 'Bo': 15,
+  'Beshalach': 16, 'Yitro': 17, 'Mishpatim': 18, 'Terumah': 19, 'Tetzaveh': 20,
+  'Ki Tisa': 21, 'Vayakhel': 22, 'Pekudei': 23, 'Vayikra': 24, 'Tzav': 25,
+  'Shmini': 26, 'Tazria': 27, 'Metzora': 28, 'Achrei Mot': 29, 'Kedoshim': 30,
+  'Emor': 31, 'Behar': 32, 'Bechukotai': 33, 'Bamidbar': 34, 'Nasso': 35,
+  "Beha'alotcha": 36, "Sh'lach": 37, 'Korach': 38, 'Chukat': 39, 'Balak': 40,
+  'Pinchas': 41, 'Matot': 42, 'Masei': 43, 'Devarim': 44, 'Vaetchanan': 45,
+  'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
+  'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
+  'Teruma': 19, 'Trumah': 19
+};
+
 export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
+  const [currentParshaName, setCurrentParshaName] = useState<string>('');
+  const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
 
+  // Загрузка текущей парши из Hebcal
   useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url', {
+    async function fetchCurrentParsha() {
+      try {
+        const today = new Date();
+        const res = await fetch(
+          `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=${today.getFullYear()}&month=${today.getMonth() + 1}&ss=off&mf=off&c=off&s=on`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const parashat = data.items?.find((item: any) => {
+            if (item.category !== 'parashat') return false;
+            const itemDate = new Date(item.date);
+            return itemDate >= today || (itemDate.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          });
+          if (parashat) {
+            const name = parashat.title?.replace('Parashat ', '');
+            setCurrentParshaName(name);
+            const id = parshaNameToId[name];
+            if (id) {
+              setCurrentParshaId(id);
+              setSelectedParsha(id); // По умолчанию фильтруем по текущей
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching parsha:', err);
+      }
+    }
+    fetchCurrentParsha();
+  }, []);
+
+  // Загрузка парашей
+  useEffect(() => {
+    fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(res => res.json())
       .then(data => {
-        // Сортируем: сначала с превью, потом без
-        const sorted = (data || []).sort((a: Document, b: Document) => {
-          if (a.thumbnail_url && !b.thumbnail_url) return -1;
-          if (!a.thumbnail_url && b.thumbnail_url) return 1;
-          return 0;
-        });
-        setDocuments(sorted);
-      })
+        // Сортируем так, чтобы текущая парша была первой
+        if (currentParshaId && data) {
+          const sorted = [...data].sort((a, b) => {
+            if (a.id === currentParshaId) return -1;
+            if (b.id === currentParshaId) return 1;
+            return a.order_num - b.order_num;
+          });
+          setParshiot(sorted);
+        } else {
+          setParshiot(data || []);
+        }
+      });
+  }, [currentParshaId]);
+
+  // Загрузка документов
+  useEffect(() => {
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id', {
+      headers: { 'apikey': SUPABASE_KEY }
+    })
+      .then(res => res.json())
+      .then(data => setDocuments(data || []))
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredDocs = documents.filter(doc => 
-    !searchQuery || doc.title?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Фильтрация
+  const filteredDocs = documents.filter(doc => {
+    const matchesSearch = !searchQuery || doc.title?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesParsha = !selectedParsha || doc.parsha_id === selectedParsha;
+    return matchesSearch && matchesParsha;
+  });
 
   if (loading) {
     return (
@@ -80,8 +157,9 @@ export default function CatalogPage() {
         <h1 className="text-xl font-bold text-primary-900 mb-1">ShabbatHub — крупнейший архив материалов к Шаббату</h1>
         <p className="text-gray-600 text-sm mb-4">Газеты, недельные главы Торы и печатные материалы</p>
 
-        <div className="mb-4">
-          <div className="relative max-w-sm">
+        {/* Фильтры */}
+        <div className="flex flex-wrap gap-3 mb-4">
+          <div className="relative max-w-xs flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
@@ -91,7 +169,37 @@ export default function CatalogPage() {
               className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm"
             />
           </div>
+          
+          <select
+            value={selectedParsha || ''}
+            onChange={(e) => setSelectedParsha(e.target.value ? Number(e.target.value) : null)}
+            className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
+          >
+            <option value="">Все главы</option>
+            {parshiot.map(p => (
+              <option key={p.id} value={p.id}>
+                {p.name_ru} {p.id === currentParshaId ? '(текущая)' : ''}
+              </option>
+            ))}
+          </select>
+          
+          {selectedParsha && (
+            <button
+              onClick={() => setSelectedParsha(null)}
+              className="px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-lg"
+            >
+              Сбросить фильтр
+            </button>
+          )}
         </div>
+
+        {currentParshaName && selectedParsha === currentParshaId && (
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-3 mb-4">
+            <p className="text-sm text-primary-800">
+              📖 Текущая недельная глава: <strong>{currentParshaName}</strong>
+            </p>
+          </div>
+        )}
 
         <p className="text-gray-500 text-xs mb-3">Найдено: {filteredDocs.length}</p>
 
@@ -147,6 +255,12 @@ export default function CatalogPage() {
             </article>
           ))}
         </div>
+
+        {filteredDocs.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            Документы не найдены
+          </div>
+        )}
       </div>
     </div>
   );
