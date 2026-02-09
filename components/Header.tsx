@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library } from 'lucide-react';
 
-// Маппинг названий парш на русский
 const parshaToRussian: Record<string, string> = {
   'Bereishit': 'Берешит', 'Noach': 'Ноах', 'Lech-Lecha': 'Лех-Леха', 'Vayera': 'Ваера', 
   'Chayei Sarah': 'Хаей Сара', 'Toldot': 'Толдот', 'Vayetzei': 'Ваецей', 'Vayishlach': 'Ваишлах',
@@ -33,6 +32,7 @@ const hebrewMonths: Record<string, string> = {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
   const [hebrewDate, setHebrewDate] = useState('');
   const [currentParsha, setCurrentParsha] = useState('');
 
@@ -41,7 +41,6 @@ export default function Header() {
       try {
         const today = new Date();
         
-        // Получаем еврейскую дату
         const dateRes = await fetch(
           `https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth() + 1}&gd=${today.getDate()}&g2h=1`
         );
@@ -51,7 +50,6 @@ export default function Header() {
           setHebrewDate(`${dateData.hd} ${monthRu} ${dateData.hy}`);
         }
 
-        // Получаем текущую паршу
         const parshaRes = await fetch(
           `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=${today.getFullYear()}&month=${today.getMonth() + 1}&ss=off&mf=off&c=off&s=on`
         );
@@ -111,8 +109,43 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Поиск и язык */}
+          {/* Кнопки справа */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Добавить выпадающее меню */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
+                className="flex items-center gap-1.5 bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-primary-700 transition"
+              >
+                <Plus size={16} />
+                Добавить
+              </button>
+              
+              {isAddMenuOpen && (
+                <>
+                  <div className="fixed inset-0" onClick={() => setIsAddMenuOpen(false)} />
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
+                    <Link 
+                      href="/add-pdf" 
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setIsAddMenuOpen(false)}
+                    >
+                      <FileText size={16} />
+                      Добавить PDF
+                    </Link>
+                    <Link 
+                      href="/add-publication" 
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setIsAddMenuOpen(false)}
+                    >
+                      <Library size={16} />
+                      Добавить публикацию
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
             <button className="flex items-center gap-1.5 text-gray-500 hover:text-primary-600 text-sm">
               <Search size={18} />
               Поиск...
@@ -149,6 +182,16 @@ export default function Header() {
               <Heart size={20} />
               Поддержать
             </Link>
+            <div className="border-t pt-3 mt-2">
+              <Link href="/add-pdf" className="flex items-center gap-2 text-primary-600 py-2">
+                <FileText size={20} />
+                Добавить PDF
+              </Link>
+              <Link href="/add-publication" className="flex items-center gap-2 text-primary-600 py-2">
+                <Library size={20} />
+                Добавить публикацию
+              </Link>
+            </div>
           </nav>
         </div>
       )}
