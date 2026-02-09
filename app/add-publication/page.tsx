@@ -2,315 +2,326 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/lib/language-context';
-import { useAuth } from '@/lib/auth-context';
-import { supabase } from '@/lib/supabase';
-import { Frequency, Language as LangType } from '@/lib/types';
-import { 
-  FileText, Link as LinkIcon, Mail, MessageCircle, 
-  Globe, Calendar, ArrowLeft, Upload 
-} from 'lucide-react';
 import Link from 'next/link';
+import { ArrowLeft, Library, Loader2, Check, AlertCircle, Globe, Mail, MessageCircle } from 'lucide-react';
+
+const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
 
 export default function AddPublicationPage() {
   const router = useRouter();
-  const { t, lang } = useLanguage();
-  const { user } = useAuth();
-  
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [formData, setFormData] = useState({
-    title_ru: '',
-    title_en: '',
-    title_he: '',
-    description_ru: '',
-    description_en: '',
-    description_he: '',
-    frequency: 'weekly' as Frequency,
-    primary_language: 'ru' as LangType,
-    whatsapp_link: '',
-    telegram_link: '',
-    website_url: '',
-    email: '',
-  });
+  const [success, setSuccess] = useState(false);
 
-  // Redirect if not logged in
-  if (!user) {
+  // Form state
+  const [titleRu, setTitleRu] = useState('');
+  const [titleEn, setTitleEn] = useState('');
+  const [titleHe, setTitleHe] = useState('');
+  const [descriptionRu, setDescriptionRu] = useState('');
+  const [primaryLanguage, setPrimaryLanguage] = useState('ru');
+  const [frequency, setFrequency] = useState('weekly');
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [email, setEmail] = useState('');
+  const [telegramLink, setTelegramLink] = useState('');
+  const [whatsappLink, setWhatsappLink] = useState('');
+  const [rabbiName, setRabbiName] = useState('');
+  const [rabbiWebsite, setRabbiWebsite] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+
+    if (!titleRu) {
+      setError('Введите название публикации на русском');
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/publications', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          title_ru: titleRu,
+          title_en: titleEn || null,
+          title_he: titleHe || null,
+          description_ru: descriptionRu || null,
+          primary_language: primaryLanguage,
+          frequency: frequency,
+          website_url: websiteUrl || null,
+          email: email || null,
+          telegram_link: telegramLink || null,
+          whatsapp_link: whatsappLink || null,
+          is_active: true
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Ошибка сохранения');
+      }
+
+      setSuccess(true);
+      setTimeout(() => router.push('/add-pdf'), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (success) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">{t('messages.loginRequired')}</p>
-          <Link 
-            href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full"
-          >
-            {t('nav.login')}
-          </Link>
+        <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+          <Check size={64} className="mx-auto text-green-500 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Публикация создана!</h2>
+          <p className="text-gray-600">Теперь добавьте PDF...</p>
         </div>
       </div>
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const { data, error: insertError } = await supabase
-        .from('publications')
-        .insert([
-          {
-            ...formData,
-            created_by: user.id,
-          },
-        ])
-        .select()
-        .single();
-
-      if (insertError) throw insertError;
-
-      router.push(`/publication/${data.id}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const frequencyOptions: { value: Frequency; label: Record<string, string> }[] = [
-    { value: 'daily', label: { ru: 'Ежедневная', en: 'Daily', he: 'יומי' } },
-    { value: 'weekly', label: { ru: 'Еженедельная', en: 'Weekly', he: 'שבועי' } },
-    { value: 'monthly', label: { ru: 'Ежемесячная', en: 'Monthly', he: 'חודשי' } },
-    { value: 'irregular', label: { ru: 'Нерегулярная', en: 'Irregular', he: 'לא קבוע' } },
-  ];
-
-  const languageOptions: { value: LangType; label: string; code: string }[] = [
-    { value: 'ru', label: 'Русский', code: 'RU' },
-    { value: 'en', label: 'English', code: 'EN' },
-    { value: 'he', label: 'עברית', code: 'HE' },
-  ];
-
   return (
-    <div className="min-h-screen bg-cream py-8">
-      <div className="max-w-3xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-700 mb-4"
-          >
-            <ArrowLeft size={20} />
-            {t('nav.home')}
-          </Link>
-          <h1 className="text-3xl font-display font-bold text-primary-900">
-            {t('nav.addPublication')}
-          </h1>
-          <p className="text-gray-600 mt-2">
-            {lang === 'ru' && 'Создайте новую серию публикаций (газету, журнал и т.д.)'}
-            {lang === 'en' && 'Create a new publication series (newspaper, magazine, etc.)'}
-            {lang === 'he' && 'צור סדרת פרסומים חדשה (עיתון, מגזין וכו\')'}
-          </p>
-        </div>
+    <div className="min-h-screen bg-cream">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-6">
+          <ArrowLeft size={20} />
+          Назад в каталог
+        </Link>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Создать публикацию</h1>
+          <p className="text-gray-600 text-sm mb-6">
+            Публикация — это издание (газета, журнал, листок), которое выходит регулярно. 
+            После создания публикации вы сможете добавлять отдельные выпуски (PDF).
+          </p>
+
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+              <AlertCircle size={20} />
               {error}
             </div>
           )}
 
-          {/* Title - Russian */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.title')} (Русский) <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.title_ru}
-              onChange={(e) => setFormData({ ...formData, title_ru: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-              placeholder="Например: Chevrutah 24x7"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Названия */}
+            <div className="space-y-4">
+              <h3 className="font-medium text-gray-900">Название публикации</h3>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  На русском *
+                </label>
+                <input
+                  type="text"
+                  value={titleRu}
+                  onChange={(e) => setTitleRu(e.target.value)}
+                  placeholder="Шомрей Шабос"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                  required
+                />
+              </div>
 
-          {/* Title - English */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.title')} (English)
-            </label>
-            <input
-              type="text"
-              value={formData.title_en}
-              onChange={(e) => setFormData({ ...formData, title_en: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  На английском (опционально)
+                </label>
+                <input
+                  type="text"
+                  value={titleEn}
+                  onChange={(e) => setTitleEn(e.target.value)}
+                  placeholder="Shomrei Shabbos"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                />
+              </div>
 
-          {/* Title - Hebrew */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.title')} (עברית)
-            </label>
-            <input
-              type="text"
-              dir="rtl"
-              value={formData.title_he}
-              onChange={(e) => setFormData({ ...formData, title_he: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-            />
-          </div>
-
-          {/* Description - Russian */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.description')} (Русский)
-            </label>
-            <textarea
-              rows={3}
-              value={formData.description_ru}
-              onChange={(e) => setFormData({ ...formData, description_ru: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 resize-none"
-              maxLength={500}
-            />
-            <p className="text-xs text-gray-500 mt-1">{formData.description_ru.length}/500</p>
-          </div>
-
-          {/* Frequency & Primary Language */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar size={16} className="inline mr-2" />
-                {lang === 'ru' ? 'Периодичность' : lang === 'en' ? 'Frequency' : 'תדירות'}
-                <span className="text-red-500">*</span>
-              </label>
-              <select
-                required
-                value={formData.frequency}
-                onChange={(e) => setFormData({ ...formData, frequency: e.target.value as Frequency })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 bg-white"
-              >
-                {frequencyOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label[lang]}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  На иврите (опционально)
+                </label>
+                <input
+                  type="text"
+                  value={titleHe}
+                  onChange={(e) => setTitleHe(e.target.value)}
+                  placeholder="שומרי שבת"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-right"
+                  dir="rtl"
+                />
+              </div>
             </div>
 
+            {/* Описание */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Globe size={16} className="inline mr-2" />
-                {t('forms.selectLanguage')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Описание
               </label>
-              <select
-                required
-                value={formData.primary_language}
-                onChange={(e) => setFormData({ ...formData, primary_language: e.target.value as LangType })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 bg-white"
-              >
-                {languageOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.code} {opt.label}
-                  </option>
-                ))}
-              </select>
+              <textarea
+                value={descriptionRu}
+                onChange={(e) => setDescriptionRu(e.target.value)}
+                rows={3}
+                placeholder="Краткое описание публикации..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none"
+              />
             </div>
-          </div>
 
-          {/* Contact Links */}
-          <div className="border-t border-gray-100 pt-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              {lang === 'ru' ? 'Контакты (опционально)' : lang === 'en' ? 'Contacts (optional)' : 'פרטי קשר (אופציונלי)'}
-            </h3>
-
-            <div className="grid md:grid-cols-2 gap-4">
+            {/* Язык и частота */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MessageCircle size={16} className="inline mr-2 text-green-600" />
-                  WhatsApp
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Основной язык
+                </label>
+                <select
+                  value={primaryLanguage}
+                  onChange={(e) => setPrimaryLanguage(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
+                >
+                  <option value="ru">🇷🇺 Русский</option>
+                  <option value="en">🇺🇸 English</option>
+                  <option value="he">🇮🇱 עברית</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Периодичность
+                </label>
+                <select
+                  value={frequency}
+                  onChange={(e) => setFrequency(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
+                >
+                  <option value="weekly">Еженедельно</option>
+                  <option value="monthly">Ежемесячно</option>
+                  <option value="occasional">По праздникам</option>
+                  <option value="other">Другое</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Контакты */}
+            <div className="space-y-4">
+              <h3 className="font-medium text-gray-900 pt-2">Контактная информация</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <Globe size={14} className="inline mr-1" />
+                  Сайт издания
                 </label>
                 <input
                   type="url"
-                  value={formData.whatsapp_link}
-                  onChange={(e) => setFormData({ ...formData, whatsapp_link: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
-                  placeholder="https://chat.whatsapp.com/..."
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MessageCircle size={16} className="inline mr-2 text-blue-500" />
-                  Telegram
-                </label>
-                <input
-                  type="url"
-                  value={formData.telegram_link}
-                  onChange={(e) => setFormData({ ...formData, telegram_link: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
-                  placeholder="https://t.me/..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <LinkIcon size={16} className="inline mr-2" />
-                  {t('forms.website')}
-                </label>
-                <input
-                  type="url"
-                  value={formData.website_url}
-                  onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
-                  placeholder="https://..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <Mail size={16} className="inline mr-2" />
-                  Email
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <Mail size={14} className="inline mr-1" />
+                  Email издательства
                 </label>
                 <input
                   type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
-                  placeholder="contact@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="info@example.com"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
                 />
               </div>
-            </div>
-          </div>
 
-          {/* Submit */}
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="px-6 py-3 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              {t('forms.cancel')}
-            </button>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <MessageCircle size={14} className="inline mr-1" />
+                    Telegram
+                  </label>
+                  <input
+                    type="url"
+                    value={telegramLink}
+                    onChange={(e) => setTelegramLink(e.target.value)}
+                    placeholder="https://t.me/..."
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <MessageCircle size={14} className="inline mr-1" />
+                    WhatsApp
+                  </label>
+                  <input
+                    type="url"
+                    value={whatsappLink}
+                    onChange={(e) => setWhatsappLink(e.target.value)}
+                    placeholder="https://wa.me/..."
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Раввин */}
+            <div className="space-y-4">
+              <h3 className="font-medium text-gray-900 pt-2">Ответственный раввин (опционально)</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Имя раввина
+                  </label>
+                  <input
+                    type="text"
+                    value={rabbiName}
+                    onChange={(e) => setRabbiName(e.target.value)}
+                    placeholder="Рав Моше Коэн"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Сайт / Новости раввина
+                  </label>
+                  <input
+                    type="url"
+                    value={rabbiWebsite}
+                    onChange={(e) => setRabbiWebsite(e.target.value)}
+                    placeholder="https://..."
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Кнопка */}
             <button
               type="submit"
-              disabled={loading || !formData.title_ru}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 text-white rounded-xl font-medium transition-colors"
+              disabled={submitting}
+              className="w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
             >
-              {loading ? (
-                <span className="animate-spin">⏳</span>
+              {submitting ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Сохранение...
+                </>
               ) : (
                 <>
-                  <Upload size={20} />
-                  {t('forms.save')}
+                  <Library size={20} />
+                  Создать публикацию
                 </>
               )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
