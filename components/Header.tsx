@@ -4,6 +4,33 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Menu, X, BookOpen, Info, Heart, Globe } from 'lucide-react';
 
+// Маппинг названий парш на русский
+const parshaToRussian: Record<string, string> = {
+  'Bereishit': 'Берешит', 'Noach': 'Ноах', 'Lech-Lecha': 'Лех-Леха', 'Vayera': 'Ваера', 
+  'Chayei Sarah': 'Хаей Сара', 'Toldot': 'Толдот', 'Vayetzei': 'Ваецей', 'Vayishlach': 'Ваишлах',
+  'Vayeshev': 'Ваешев', 'Miketz': 'Микец', 'Vayigash': 'Ваигаш', 'Vayechi': 'Ваехи',
+  'Shemot': 'Шмот', 'Vaera': 'Ваэра', 'Bo': 'Бо', 'Beshalach': 'Бешалах',
+  'Yitro': 'Итро', 'Mishpatim': 'Мишпатим', 'Terumah': 'Трума', 'Tetzaveh': 'Тецаве',
+  'Ki Tisa': 'Ки Тиса', 'Vayakhel': 'Ваякгель', 'Pekudei': 'Пекудей',
+  'Vayikra': 'Ваикра', 'Tzav': 'Цав', 'Shmini': 'Шмини', 'Tazria': 'Тазриа',
+  'Metzora': 'Мецора', 'Achrei Mot': 'Ахарей Мот', 'Kedoshim': 'Кдошим',
+  'Emor': 'Эмор', 'Behar': 'Бегар', 'Bechukotai': 'Бехукотай',
+  'Bamidbar': 'Бамидбар', 'Nasso': 'Насо', "Beha'alotcha": 'Бегаалотха',
+  "Sh'lach": 'Шлах', 'Korach': 'Корах', 'Chukat': 'Хукат', 'Balak': 'Балак',
+  'Pinchas': 'Пинхас', 'Matot': 'Матот', 'Masei': 'Масей',
+  'Devarim': 'Дварим', 'Vaetchanan': 'Ваэтханан', 'Eikev': 'Экев',
+  "Re'eh": 'Реэ', 'Shoftim': 'Шофтим', 'Ki Teitzei': 'Ки Теце', 'Ki Tavo': 'Ки Таво',
+  'Nitzavim': 'Ницавим', 'Vayeilech': 'Ваелех', "Ha'azinu": 'Гаазину', 
+  'Vezot Habracha': 'Везот Габраха', 'Teruma': 'Трума', 'Trumah': 'Трума'
+};
+
+const hebrewMonths: Record<string, string> = {
+  'Nisan': 'Нисан', 'Iyyar': 'Ияр', 'Sivan': 'Сиван', 'Tamuz': 'Тамуз',
+  'Av': 'Ав', 'Elul': 'Элуль', 'Tishrei': 'Тишрей', 'Cheshvan': 'Хешван',
+  'Kislev': 'Кислев', 'Tevet': 'Тевет', 'Shvat': "Шват", "Sh'vat": "Шват",
+  'Adar': 'Адар', 'Adar I': 'Адар I', 'Adar II': 'Адар II'
+};
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hebrewDate, setHebrewDate] = useState('');
@@ -13,13 +40,15 @@ export default function Header() {
     async function fetchHebrewInfo() {
       try {
         const today = new Date();
+        
         // Получаем еврейскую дату
         const dateRes = await fetch(
           `https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth() + 1}&gd=${today.getDate()}&g2h=1`
         );
         if (dateRes.ok) {
           const dateData = await dateRes.json();
-          setHebrewDate(`${dateData.hd} ${dateData.hebrew}`);
+          const monthRu = hebrewMonths[dateData.hm] || dateData.hm;
+          setHebrewDate(`${dateData.hd} ${monthRu} ${dateData.hy}`);
         }
 
         // Получаем текущую паршу
@@ -34,7 +63,8 @@ export default function Header() {
             return itemDate >= today || (itemDate.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000);
           });
           if (parashat) {
-            setCurrentParsha(parashat.hebrew || parashat.title?.replace('Parashat ', ''));
+            const engName = parashat.title?.replace('Parashat ', '');
+            setCurrentParsha(parshaToRussian[engName] || engName);
           }
         }
       } catch (err) {
@@ -49,11 +79,9 @@ export default function Header() {
       {/* Верхняя строка с еврейской датой */}
       {(hebrewDate || currentParsha) && (
         <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
-          <span className="font-hebrew">
-            {hebrewDate && <span>{hebrewDate}</span>}
-            {hebrewDate && currentParsha && <span className="mx-2">•</span>}
-            {currentParsha && <span>פרשת {currentParsha}</span>}
-          </span>
+          {hebrewDate && <span>{hebrewDate}</span>}
+          {hebrewDate && currentParsha && <span className="mx-2">•</span>}
+          {currentParsha && <span>Глава «{currentParsha}»</span>}
         </div>
       )}
       
