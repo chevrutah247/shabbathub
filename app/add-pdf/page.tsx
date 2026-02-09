@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Upload, Calendar, BookOpen, Loader2, Check, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Upload, Calendar, Loader2, Check, AlertCircle, Image, FileText } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
@@ -38,6 +38,29 @@ const parshaNameToId: Record<string, number> = {
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54
 };
 
+// Извлечь ID файла из Google Drive ссылки
+function extractGoogleDriveId(url: string): string | null {
+  const patterns = [
+    /\/file\/d\/([a-zA-Z0-9_-]+)/,
+    /id=([a-zA-Z0-9_-]+)/,
+    /\/d\/([a-zA-Z0-9_-]+)/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+// Генерация thumbnail URL для Google Drive
+function generateThumbnailUrl(pdfUrl: string): string | null {
+  const fileId = extractGoogleDriveId(pdfUrl);
+  if (fileId) {
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+  }
+  return null;
+}
+
 export default function AddPdfPage() {
   const router = useRouter();
   const [publications, setPublications] = useState<Publication[]>([]);
@@ -58,6 +81,8 @@ export default function AddPdfPage() {
   const [parshaId, setParshaId] = useState<number | null>(null);
   const [eventId, setEventId] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
+  const [thumbnailUrl, setThumbnailUrl] = useState('');
+  const [autoThumbnail, setAutoThumbnail] = useState(true);
   const [description, setDescription] = useState('');
 
   // Загрузка текущей парши
@@ -80,7 +105,7 @@ export default function AddPdfPage() {
             const id = parshaNameToId[name];
             if (id) {
               setCurrentParshaId(id);
-              setParshaId(id); // Устанавливаем по умолчанию
+              setParshaId(id);
             }
           }
         }
@@ -91,7 +116,7 @@ export default function AddPdfPage() {
     fetchCurrentParsha();
   }, []);
 
-  // Конвертация григорианской даты в еврейскую
+  // Конвертация даты
   useEffect(() => {
     async function convertDate() {
       if (!gregorianDate) return;
@@ -111,6 +136,16 @@ export default function AddPdfPage() {
     convertDate();
   }, [gregorianDate]);
 
+  // Автогенерация thumbnail при изменении PDF URL
+  useEffect(() => {
+    if (autoThumbnail && pdfUrl) {
+      const thumb = generateThumbnailUrl(pdfUrl);
+      if (thumb) {
+        setThumbnailUrl(thumb);
+      }
+    }
+  }, [pdfUrl, autoThumbnail]);
+
   // Загрузка справочников
   useEffect(() => {
     Promise.all([
@@ -125,7 +160,6 @@ export default function AddPdfPage() {
       }).then(r => r.json())
     ]).then(([pubs, parshas, evts]) => {
       setPublications(pubs || []);
-      // Сортируем парашот — текущая первой
       if (currentParshaId && parshas) {
         const sorted = [...parshas].sort((a, b) => {
           if (a.id === currentParshaId) return -1;
@@ -170,6 +204,7 @@ export default function AddPdfPage() {
           parsha_id: parshaId || null,
           event_id: eventId || null,
           pdf_url: pdfUrl,
+          thumbnail_url: thumbnailUrl || null,
           is_active: true
         })
       });
@@ -354,6 +389,46 @@ export default function AddPdfPage() {
               />
               <p className="text-xs text-gray-500 mt-1">
                 Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга
+              </p>
+            </div>
+
+            {/* Превью */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Превью (обложка)
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={autoThumbnail}
+                    onChange={(e) => setAutoThumbnail(e.target.checked)}
+                    className="rounded"
+                  />
+                  Авто из Google Drive
+                </label>
+              </div>
+              <div className="flex gap-3">
+                <input
+                  type="url"
+                  value={thumbnailUrl}
+                  onChange={(e) => { setThumbnailUrl(e.target.value); setAutoThumbnail(false); }}
+                  placeholder="https://... (URL картинки)"
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                />
+                {thumbnailUrl && (
+                  <div className="w-16 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      src={thumbnailUrl} 
+                      alt="Preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.style.display = 'none')}
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Для Google Drive превью генерируется автоматически
               </p>
             </div>
 
