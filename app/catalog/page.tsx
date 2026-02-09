@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, FileText, Loader2, Heart, User, Filter } from 'lucide-react';
+import { Search, FileText, Loader2, Heart, User, ChevronDown } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
@@ -15,6 +15,8 @@ interface Document {
   publication_id: string;
   thumbnail_url: string;
   parsha_id: number;
+  event_id: string;
+  publication?: { primary_language: string };
 }
 
 interface Parsha {
@@ -23,6 +25,27 @@ interface Parsha {
   name_en: string;
   order_num: number;
 }
+
+interface Event {
+  id: string;
+  name_ru: string;
+  name_en: string;
+}
+
+const parshaNameToId: Record<string, number> = {
+  'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
+  'Toldot': 6, 'Vayetzei': 7, 'Vayishlach': 8, 'Vayeshev': 9, 'Miketz': 10,
+  'Vayigash': 11, 'Vayechi': 12, 'Shemot': 13, 'Vaera': 14, 'Bo': 15,
+  'Beshalach': 16, 'Yitro': 17, 'Mishpatim': 18, 'Terumah': 19, 'Tetzaveh': 20,
+  'Ki Tisa': 21, 'Vayakhel': 22, 'Pekudei': 23, 'Vayikra': 24, 'Tzav': 25,
+  'Shmini': 26, 'Tazria': 27, 'Metzora': 28, 'Achrei Mot': 29, 'Kedoshim': 30,
+  'Emor': 31, 'Behar': 32, 'Bechukotai': 33, 'Bamidbar': 34, 'Nasso': 35,
+  "Beha'alotcha": 36, "Sh'lach": 37, 'Korach': 38, 'Chukat': 39, 'Balak': 40,
+  'Pinchas': 41, 'Matot': 42, 'Masei': 43, 'Devarim': 44, 'Vaetchanan': 45,
+  'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
+  'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
+  'Teruma': 19, 'Trumah': 19
+};
 
 function formatYear(dateString: string | null): string {
   if (!dateString) return '';
@@ -47,32 +70,19 @@ const TelegramIcon = () => (
   </svg>
 );
 
-// Маппинг названий парш на ID
-const parshaNameToId: Record<string, number> = {
-  'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
-  'Toldot': 6, 'Vayetzei': 7, 'Vayishlach': 8, 'Vayeshev': 9, 'Miketz': 10,
-  'Vayigash': 11, 'Vayechi': 12, 'Shemot': 13, 'Vaera': 14, 'Bo': 15,
-  'Beshalach': 16, 'Yitro': 17, 'Mishpatim': 18, 'Terumah': 19, 'Tetzaveh': 20,
-  'Ki Tisa': 21, 'Vayakhel': 22, 'Pekudei': 23, 'Vayikra': 24, 'Tzav': 25,
-  'Shmini': 26, 'Tazria': 27, 'Metzora': 28, 'Achrei Mot': 29, 'Kedoshim': 30,
-  'Emor': 31, 'Behar': 32, 'Bechukotai': 33, 'Bamidbar': 34, 'Nasso': 35,
-  "Beha'alotcha": 36, "Sh'lach": 37, 'Korach': 38, 'Chukat': 39, 'Balak': 40,
-  'Pinchas': 41, 'Matot': 42, 'Masei': 43, 'Devarim': 44, 'Vaetchanan': 45,
-  'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
-  'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
-  'Teruma': 19, 'Trumah': 19
-};
-
 export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
-  const [currentParshaName, setCurrentParshaName] = useState<string>('');
   const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string>('date');
 
-  // Загрузка текущей парши из Hebcal
+  // Загрузка текущей парши
   useEffect(() => {
     async function fetchCurrentParsha() {
       try {
@@ -89,45 +99,45 @@ export default function CatalogPage() {
           });
           if (parashat) {
             const name = parashat.title?.replace('Parashat ', '');
-            setCurrentParshaName(name);
             const id = parshaNameToId[name];
-            if (id) {
-              setCurrentParshaId(id);
-              setSelectedParsha(id); // По умолчанию фильтруем по текущей
-            }
+            if (id) setCurrentParshaId(id);
           }
         }
       } catch (err) {
-        console.error('Error fetching parsha:', err);
+        console.error('Error:', err);
       }
     }
     fetchCurrentParsha();
   }, []);
 
-  // Загрузка парашей
+  // Загрузка справочников
   useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
-      headers: { 'apikey': SUPABASE_KEY }
-    })
-      .then(res => res.json())
-      .then(data => {
-        // Сортируем так, чтобы текущая парша была первой
-        if (currentParshaId && data) {
-          const sorted = [...data].sort((a, b) => {
-            if (a.id === currentParshaId) return -1;
-            if (b.id === currentParshaId) return 1;
-            return a.order_num - b.order_num;
-          });
-          setParshiot(sorted);
-        } else {
-          setParshiot(data || []);
-        }
-      });
+    Promise.all([
+      fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
+        headers: { 'apikey': SUPABASE_KEY }
+      }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=hebrew_month,hebrew_day&select=id,name_ru,name_en', {
+        headers: { 'apikey': SUPABASE_KEY }
+      }).then(r => r.json())
+    ]).then(([parshiotData, eventsData]) => {
+      // Сортируем парашот — текущая первой
+      if (currentParshaId && parshiotData) {
+        const sorted = [...parshiotData].sort((a, b) => {
+          if (a.id === currentParshaId) return -1;
+          if (b.id === currentParshaId) return 1;
+          return a.order_num - b.order_num;
+        });
+        setParshiot(sorted);
+      } else {
+        setParshiot(parshiotData || []);
+      }
+      setEvents(eventsData || []);
+    });
   }, [currentParshaId]);
 
   // Загрузка документов
   useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id', {
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,publication:publications(primary_language)', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(res => res.json())
@@ -136,12 +146,27 @@ export default function CatalogPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Фильтрация
-  const filteredDocs = documents.filter(doc => {
+  // Фильтрация и сортировка
+  let filteredDocs = documents.filter(doc => {
     const matchesSearch = !searchQuery || doc.title?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesParsha = !selectedParsha || doc.parsha_id === selectedParsha;
-    return matchesSearch && matchesParsha;
+    const matchesEvent = !selectedEvent || doc.event_id === selectedEvent;
+    const matchesLang = !selectedLanguage || doc.publication?.primary_language === selectedLanguage;
+    return matchesSearch && matchesParsha && matchesEvent && matchesLang;
   });
+
+  // Сортировка
+  if (sortBy === 'parsha' && currentParshaId) {
+    filteredDocs = [...filteredDocs].sort((a, b) => {
+      if (a.parsha_id === currentParshaId && b.parsha_id !== currentParshaId) return -1;
+      if (a.parsha_id !== currentParshaId && b.parsha_id === currentParshaId) return 1;
+      return 0;
+    });
+  } else if (sortBy === 'popular') {
+    // TODO: сортировка по скачиваниям
+  }
+
+  const hasFilters = selectedParsha || selectedEvent || selectedLanguage;
 
   if (loading) {
     return (
@@ -154,52 +179,104 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen bg-cream">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <h1 className="text-xl font-bold text-primary-900 mb-1">ShabbatHub — крупнейший архив материалов к Шаббату</h1>
-        <p className="text-gray-600 text-sm mb-4">Газеты, недельные главы Торы и печатные материалы</p>
+        <h1 className="text-xl font-bold text-primary-900 mb-1">Каталог материалов</h1>
+        <p className="text-gray-600 text-sm mb-4">Газеты, недельные главы Торы и печатные материалы к Шаббату</p>
 
         {/* Фильтры */}
-        <div className="flex flex-wrap gap-3 mb-4">
-          <div className="relative max-w-xs flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input
-              type="text"
-              placeholder="Поиск..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm"
-            />
-          </div>
-          
-          <select
-            value={selectedParsha || ''}
-            onChange={(e) => setSelectedParsha(e.target.value ? Number(e.target.value) : null)}
-            className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
-          >
-            <option value="">Все главы</option>
-            {parshiot.map(p => (
-              <option key={p.id} value={p.id}>
-                {p.name_ru} {p.id === currentParshaId ? '(текущая)' : ''}
-              </option>
-            ))}
-          </select>
-          
-          {selectedParsha && (
-            <button
-              onClick={() => setSelectedParsha(null)}
-              className="px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-lg"
+        <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
+          <div className="flex flex-wrap gap-3">
+            {/* Поиск */}
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <input
+                type="text"
+                placeholder="Поиск по названию..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm"
+              />
+            </div>
+
+            {/* Недельная глава */}
+            <select
+              value={selectedParsha || ''}
+              onChange={(e) => setSelectedParsha(e.target.value ? Number(e.target.value) : null)}
+              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white min-w-[160px]"
             >
-              Сбросить фильтр
-            </button>
+              <option value="">Все главы</option>
+              {parshiot.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.name_ru} {p.id === currentParshaId ? '★' : ''}
+                </option>
+              ))}
+            </select>
+
+            {/* События */}
+            <select
+              value={selectedEvent || ''}
+              onChange={(e) => setSelectedEvent(e.target.value || null)}
+              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white min-w-[140px]"
+            >
+              <option value="">Все события</option>
+              {events.map(e => (
+                <option key={e.id} value={e.id}>{e.name_ru}</option>
+              ))}
+            </select>
+
+            {/* Язык */}
+            <select
+              value={selectedLanguage || ''}
+              onChange={(e) => setSelectedLanguage(e.target.value || null)}
+              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
+            >
+              <option value="">Все языки</option>
+              <option value="ru">🇷🇺 Русский</option>
+              <option value="en">🇺🇸 English</option>
+              <option value="he">🇮🇱 עברית</option>
+            </select>
+
+            {/* Сортировка */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
+            >
+              <option value="date">По дате</option>
+              <option value="parsha">По текущей главе</option>
+              <option value="popular">По популярности</option>
+            </select>
+          </div>
+
+          {hasFilters && (
+            <div className="mt-3 pt-3 border-t flex items-center gap-2">
+              <span className="text-sm text-gray-500">Фильтры:</span>
+              {selectedParsha && (
+                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
+                  {parshiot.find(p => p.id === selectedParsha)?.name_ru}
+                  <button onClick={() => setSelectedParsha(null)} className="ml-1 hover:text-primary-900">×</button>
+                </span>
+              )}
+              {selectedEvent && (
+                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
+                  {events.find(e => e.id === selectedEvent)?.name_ru}
+                  <button onClick={() => setSelectedEvent(null)} className="ml-1 hover:text-primary-900">×</button>
+                </span>
+              )}
+              {selectedLanguage && (
+                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
+                  {selectedLanguage === 'ru' ? 'Русский' : selectedLanguage === 'en' ? 'English' : 'עברית'}
+                  <button onClick={() => setSelectedLanguage(null)} className="ml-1 hover:text-primary-900">×</button>
+                </span>
+              )}
+              <button
+                onClick={() => { setSelectedParsha(null); setSelectedEvent(null); setSelectedLanguage(null); }}
+                className="text-xs text-gray-500 hover:text-primary-600 ml-2"
+              >
+                Сбросить все
+              </button>
+            </div>
           )}
         </div>
-
-        {currentParshaName && selectedParsha === currentParshaId && (
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-3 mb-4">
-            <p className="text-sm text-primary-800">
-              📖 Текущая недельная глава: <strong>{currentParshaName}</strong>
-            </p>
-          </div>
-        )}
 
         <p className="text-gray-500 text-xs mb-3">Найдено: {filteredDocs.length}</p>
 
@@ -239,6 +316,12 @@ export default function CatalogPage() {
                     <User size={10} />
                   </button>
                 </div>
+
+                {doc.parsha_id === currentParshaId && (
+                  <div className="absolute bottom-1 left-1 bg-primary-600 text-white text-[8px] px-1.5 py-0.5 rounded">
+                    Эта неделя
+                  </div>
+                )}
               </div>
 
               <div className="p-2">
@@ -258,7 +341,7 @@ export default function CatalogPage() {
 
         {filteredDocs.length === 0 && (
           <div className="text-center py-12 text-gray-500">
-            Документы не найдены
+            По вашему запросу ничего не найдено
           </div>
         )}
       </div>
