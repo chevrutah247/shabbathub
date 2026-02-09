@@ -2,524 +2,395 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/lib/language-context';
-import { useAuth } from '@/lib/auth-context';
-import { supabase } from '@/lib/supabase';
-import { Publication, Parsha, Event } from '@/lib/types';
-import { 
-  FileText, Calendar, ArrowLeft, Upload, AlertCircle, CheckCircle
-} from 'lucide-react';
 import Link from 'next/link';
+import { ArrowLeft, Upload, Calendar, BookOpen, Loader2, Check, AlertCircle } from 'lucide-react';
+
+const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
+
+interface Publication {
+  id: string;
+  title_ru: string;
+}
+
+interface Parsha {
+  id: number;
+  name_ru: string;
+  order_num: number;
+}
+
+interface Event {
+  id: string;
+  name_ru: string;
+}
+
+const parshaNameToId: Record<string, number> = {
+  'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
+  'Toldot': 6, 'Vayetzei': 7, 'Vayishlach': 8, 'Vayeshev': 9, 'Miketz': 10,
+  'Vayigash': 11, 'Vayechi': 12, 'Shemot': 13, 'Vaera': 14, 'Bo': 15,
+  'Beshalach': 16, 'Yitro': 17, 'Mishpatim': 18, 'Terumah': 19, 'Tetzaveh': 20,
+  'Ki Tisa': 21, 'Vayakhel': 22, 'Pekudei': 23, 'Vayikra': 24, 'Tzav': 25,
+  'Shmini': 26, 'Tazria': 27, 'Metzora': 28, 'Achrei Mot': 29, 'Kedoshim': 30,
+  'Emor': 31, 'Behar': 32, 'Bechukotai': 33, 'Bamidbar': 34, 'Nasso': 35,
+  "Beha'alotcha": 36, "Sh'lach": 37, 'Korach': 38, 'Chukat': 39, 'Balak': 40,
+  'Pinchas': 41, 'Matot': 42, 'Masei': 43, 'Devarim': 44, 'Vaetchanan': 45,
+  'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
+  'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54
+};
 
 export default function AddPdfPage() {
   const router = useRouter();
-  const { t, lang } = useLanguage();
-  const { user } = useAuth();
-  
-  const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  
-  // Data from DB
   const [publications, setPublications] = useState<Publication[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
-  const [loadingData, setLoadingData] = useState(true);
-  
+  const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
   // Form state
-  const [formData, setFormData] = useState({
-    publication_id: '',
-    title: '',
-    description: '',
-    issue_number: '',
-    gregorian_date: new Date().toISOString().split('T')[0],
-    hebrew_day: 0,
-    hebrew_month: 0,
-    hebrew_year: 5786,
-    parsha_id: '',    // Можно указать вместе с event_id
-    event_id: '',     // Можно указать вместе с parsha_id
-  });
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [copyrightConfirmed, setCopyrightConfirmed] = useState(false);
+  const [title, setTitle] = useState('');
+  const [publicationId, setPublicationId] = useState('');
+  const [issueNumber, setIssueNumber] = useState('');
+  const [gregorianDate, setGregorianDate] = useState(new Date().toISOString().split('T')[0]);
+  const [hebrewDate, setHebrewDate] = useState('');
+  const [parshaId, setParshaId] = useState<number | null>(null);
+  const [eventId, setEventId] = useState('');
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [description, setDescription] = useState('');
 
-  // Hebrew months for dropdown
-  const hebrewMonths = [
-    { num: 7, ru: 'Тишрей', en: 'Tishrei', he: 'תשרי' },
-    { num: 8, ru: 'Хешван', en: 'Cheshvan', he: 'חשון' },
-    { num: 9, ru: 'Кислев', en: 'Kislev', he: 'כסלו' },
-    { num: 10, ru: 'Тевет', en: 'Tevet', he: 'טבת' },
-    { num: 11, ru: 'Шват', en: 'Shvat', he: 'שבט' },
-    { num: 12, ru: 'Адар', en: 'Adar', he: 'אדר' },
-    { num: 13, ru: 'Адар II', en: 'Adar II', he: 'אדר ב׳' },
-    { num: 1, ru: 'Нисан', en: 'Nisan', he: 'ניסן' },
-    { num: 2, ru: 'Ияр', en: 'Iyar', he: 'אייר' },
-    { num: 3, ru: 'Сиван', en: 'Sivan', he: 'סיון' },
-    { num: 4, ru: 'Тамуз', en: 'Tammuz', he: 'תמוז' },
-    { num: 5, ru: 'Ав', en: 'Av', he: 'אב' },
-    { num: 6, ru: 'Элул', en: 'Elul', he: 'אלול' },
-  ];
-
-  // Load data
+  // Загрузка текущей парши
   useEffect(() => {
-    async function loadData() {
+    async function fetchCurrentParsha() {
       try {
-        // Load publications
-        const { data: pubs } = await supabase
-          .from('publications')
-          .select('*')
-          .eq('is_active', true)
-          .order('title_ru');
-        
-        // Load parshiot
-        const { data: parshas } = await supabase
-          .from('parshiot')
-          .select('*')
-          .order('order_num');
-        
-        // Load events
-        const { data: evts } = await supabase
-          .from('events')
-          .select('*')
-          .eq('is_active', true)
-          .order('hebrew_month, hebrew_day');
-
-        if (pubs) setPublications(pubs);
-        if (parshas) setParshiot(parshas);
-        if (evts) setEvents(evts);
+        const today = new Date();
+        const res = await fetch(
+          `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=${today.getFullYear()}&month=${today.getMonth() + 1}&ss=off&mf=off&c=off&s=on`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const parashat = data.items?.find((item: any) => {
+            if (item.category !== 'parashat') return false;
+            const itemDate = new Date(item.date);
+            return itemDate >= today || (itemDate.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          });
+          if (parashat) {
+            const name = parashat.title?.replace('Parashat ', '');
+            const id = parshaNameToId[name];
+            if (id) {
+              setCurrentParshaId(id);
+              setParshaId(id); // Устанавливаем по умолчанию
+            }
+          }
+        }
       } catch (err) {
-        console.error('Error loading data:', err);
-      } finally {
-        setLoadingData(false);
+        console.error('Error:', err);
       }
     }
-
-    loadData();
+    fetchCurrentParsha();
   }, []);
 
-  // Redirect if not logged in
-  if (!user) {
+  // Конвертация григорианской даты в еврейскую
+  useEffect(() => {
+    async function convertDate() {
+      if (!gregorianDate) return;
+      try {
+        const [year, month, day] = gregorianDate.split('-');
+        const res = await fetch(
+          `https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${month}&gd=${day}&g2h=1`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setHebrewDate(`${data.hd} ${data.hm} ${data.hy}`);
+        }
+      } catch (err) {
+        console.error('Error converting date:', err);
+      }
+    }
+    convertDate();
+  }, [gregorianDate]);
+
+  // Загрузка справочников
+  useEffect(() => {
+    Promise.all([
+      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru', {
+        headers: { 'apikey': SUPABASE_KEY }
+      }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,order_num', {
+        headers: { 'apikey': SUPABASE_KEY }
+      }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', {
+        headers: { 'apikey': SUPABASE_KEY }
+      }).then(r => r.json())
+    ]).then(([pubs, parshas, evts]) => {
+      setPublications(pubs || []);
+      // Сортируем парашот — текущая первой
+      if (currentParshaId && parshas) {
+        const sorted = [...parshas].sort((a, b) => {
+          if (a.id === currentParshaId) return -1;
+          if (b.id === currentParshaId) return 1;
+          return a.order_num - b.order_num;
+        });
+        setParshiot(sorted);
+      } else {
+        setParshiot(parshas || []);
+      }
+      setEvents(evts || []);
+      setLoading(false);
+    });
+  }, [currentParshaId]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+
+    if (!title || !pdfUrl) {
+      setError('Заполните обязательные поля: название и ссылку на PDF');
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/issues', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          title,
+          description: description || null,
+          publication_id: publicationId || null,
+          issue_number: issueNumber || null,
+          gregorian_date: gregorianDate || null,
+          parsha_id: parshaId || null,
+          event_id: eventId || null,
+          pdf_url: pdfUrl,
+          is_active: true
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Ошибка сохранения');
+      }
+
+      setSuccess(true);
+      setTimeout(() => router.push('/catalog'), 2000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">{t('messages.loginRequired')}</p>
-          <Link 
-            href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full"
-          >
-            {t('nav.login')}
-          </Link>
-        </div>
+        <Loader2 className="animate-spin text-primary-600" size={32} />
       </div>
     );
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      setPdfFile(file);
-    } else {
-      setError('Please select a PDF file');
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!pdfFile) {
-      setError('Please select a PDF file');
-      return;
-    }
-    
-    if (!copyrightConfirmed) {
-      setError(t('forms.copyrightConfirm'));
-      return;
-    }
-
-    setLoading(true);
-    setUploading(true);
-    setError(null);
-
-    try {
-      // 1. Upload PDF to storage
-      const fileExt = 'pdf';
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `issues/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('pdfs')
-        .upload(filePath, pdfFile);
-
-      if (uploadError) throw uploadError;
-
-      // 2. Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('pdfs')
-        .getPublicUrl(filePath);
-
-      setUploading(false);
-
-      // 3. Create issue record
-      const issueData: any = {
-        publication_id: formData.publication_id,
-        title: formData.title,
-        description: formData.description || null,
-        issue_number: formData.issue_number || null,
-        gregorian_date: formData.gregorian_date,
-        hebrew_year: formData.hebrew_year,
-        hebrew_month: formData.hebrew_month || null,
-        hebrew_day: formData.hebrew_day || null,
-        pdf_url: publicUrl,
-        pdf_filename: pdfFile.name,
-        file_size: pdfFile.size,
-        uploaded_by: user.id,
-      };
-
-      // Add parsha if selected
-      if (formData.parsha_id) {
-        issueData.parsha_id = parseInt(formData.parsha_id);
-      }
-      
-      // Add event if selected (can be together with parsha!)
-      if (formData.event_id) {
-        issueData.event_id = formData.event_id;
-      }
-
-      const { error: insertError } = await supabase
-        .from('issues')
-        .insert([issueData]);
-
-      if (insertError) throw insertError;
-
-      setSuccess(true);
-      
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        router.push('/my-documents');
-      }, 2000);
-
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-      setUploading(false);
-    }
-  };
-
-  const getLocalizedName = (item: any, prefix: string) => {
-    const key = `${prefix}_${lang}` as keyof typeof item;
-    return item[key] || item[`${prefix}_ru`] || '';
-  };
-
   if (success) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="text-center bg-white p-8 rounded-2xl shadow-sm">
-          <CheckCircle size={64} className="mx-auto text-green-500 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {t('messages.uploadSuccess')}
-          </h2>
-          <p className="text-gray-600">
-            {lang === 'ru' && 'Перенаправление...'}
-            {lang === 'en' && 'Redirecting...'}
-            {lang === 'he' && 'מפנה מחדש...'}
-          </p>
+        <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+          <Check size={64} className="mx-auto text-green-500 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Материал добавлен!</h2>
+          <p className="text-gray-600">Перенаправление в каталог...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-cream py-8">
-      <div className="max-w-3xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-700 mb-4"
-          >
-            <ArrowLeft size={20} />
-            {t('nav.home')}
-          </Link>
-          <h1 className="text-3xl font-display font-bold text-primary-900">
-            {t('nav.addPdf')}
-          </h1>
-        </div>
+    <div className="min-h-screen bg-cream">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-6">
+          <ArrowLeft size={20} />
+          Назад в каталог
+        </Link>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Добавить PDF материал</h1>
+
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 flex items-start gap-3">
-              <AlertCircle className="shrink-0 mt-0.5" size={20} />
-              <span>{error}</span>
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+              <AlertCircle size={20} />
+              {error}
             </div>
           )}
 
-          {/* Title */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.title')} <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-            />
-          </div>
-
-          {/* Publication */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.selectPublication')} <span className="text-red-500">*</span>
-            </label>
-            <select
-              required
-              value={formData.publication_id}
-              onChange={(e) => setFormData({ ...formData, publication_id: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 bg-white"
-              disabled={loadingData}
-            >
-              <option value="">{t('forms.selectPublication')}</option>
-              {publications.map((pub) => (
-                <option key={pub.id} value={pub.id}>
-                  {getLocalizedName(pub, 'title')}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              <Link href="/add-publication" className="text-primary-600 hover:underline">
-                {lang === 'ru' && '+ Создать новую публикацию'}
-                {lang === 'en' && '+ Create new publication'}
-                {lang === 'he' && '+ צור פרסום חדש'}
-              </Link>
-            </p>
-          </div>
-
-          {/* Description */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('forms.description')}
-            </label>
-            <textarea
-              rows={3}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 resize-none"
-              maxLength={500}
-            />
-            <p className="text-xs text-gray-500 mt-1">{formData.description.length}/500</p>
-          </div>
-
-          {/* PDF File */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <FileText size={16} className="inline mr-2" />
-              PDF {t('forms.chooseFile')} <span className="text-red-500">*</span>
-            </label>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-primary-400 transition-colors">
-              <input
-                type="file"
-                accept=".pdf,application/pdf"
-                onChange={handleFileChange}
-                className="hidden"
-                id="pdf-upload"
-              />
-              <label htmlFor="pdf-upload" className="cursor-pointer">
-                {pdfFile ? (
-                  <div className="text-green-600">
-                    <CheckCircle size={32} className="mx-auto mb-2" />
-                    <p className="font-medium">{pdfFile.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {(pdfFile.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-gray-500">
-                    <Upload size={32} className="mx-auto mb-2" />
-                    <p>{t('forms.chooseFile')}</p>
-                    <p className="text-xs text-gray-400">PDF, max 50MB</p>
-                  </div>
-                )}
-              </label>
-            </div>
-          </div>
-
-          {/* Issue Number & Date */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Название */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('forms.issueNumber')}
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Название *
               </label>
               <input
                 type="text"
-                value={formData.issue_number}
-                onChange={(e) => setFormData({ ...formData, issue_number: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
-                placeholder="151"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Например: Шомрей Шабос №805 Мишпатим"
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none"
+                required
               />
             </div>
 
+            {/* Публикация */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar size={16} className="inline mr-2" />
-                {lang === 'ru' ? 'Дата (григорианская)' : lang === 'en' ? 'Date (Gregorian)' : 'תאריך (לועזי)'}
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Публикация (издание)
+              </label>
+              <select
+                value={publicationId}
+                onChange={(e) => setPublicationId(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
+              >
+                <option value="">— Выберите публикацию —</option>
+                {publications.map(p => (
+                  <option key={p.id} value={p.id}>{p.title_ru}</option>
+                ))}
+              </select>
+              <Link href="/add-publication" className="text-sm text-primary-600 hover:underline mt-1 inline-block">
+                + Создать новую публикацию
+              </Link>
+            </div>
+
+            {/* Номер выпуска */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Номер выпуска (опционально)
               </label>
               <input
-                type="date"
-                value={formData.gregorian_date}
-                onChange={(e) => setFormData({ ...formData, gregorian_date: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500"
+                type="text"
+                value={issueNumber}
+                onChange={(e) => setIssueNumber(e.target.value)}
+                placeholder="805"
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
               />
             </div>
-          </div>
 
-          {/* Hebrew Date */}
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <h4 className="font-medium text-gray-800 mb-3">
-              📅 {lang === 'ru' ? 'Еврейская дата (опционально)' : lang === 'en' ? 'Hebrew Date (optional)' : 'תאריך עברי (אופציונלי)'}
-            </h4>
-            <div className="grid grid-cols-3 gap-4">
+            {/* Дата */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">
-                  {lang === 'ru' ? 'День' : lang === 'en' ? 'Day' : 'יום'}
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Дата выхода
                 </label>
                 <input
-                  type="number"
-                  min={0}
-                  max={30}
-                  value={formData.hebrew_day || ''}
-                  onChange={(e) => setFormData({ ...formData, hebrew_day: parseInt(e.target.value) || 0 })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"
-                  placeholder="10"
+                  type="date"
+                  value={gregorianDate}
+                  onChange={(e) => setGregorianDate(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">
-                  {lang === 'ru' ? 'Месяц' : lang === 'en' ? 'Month' : 'חודש'}
-                </label>
-                <select
-                  value={formData.hebrew_month || ''}
-                  onChange={(e) => setFormData({ ...formData, hebrew_month: parseInt(e.target.value) || 0 })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 bg-white"
-                >
-                  <option value="">—</option>
-                  {hebrewMonths.map((m) => (
-                    <option key={m.num} value={m.num}>
-                      {lang === 'he' ? m.he : lang === 'en' ? m.en : m.ru}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-gray-600 mb-1">
-                  {lang === 'ru' ? 'Год' : lang === 'en' ? 'Year' : 'שנה'}
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Еврейская дата
                 </label>
                 <input
-                  type="number"
-                  min={5700}
-                  max={5900}
-                  value={formData.hebrew_year}
-                  onChange={(e) => setFormData({ ...formData, hebrew_year: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"
+                  type="text"
+                  value={hebrewDate}
+                  readOnly
+                  className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50 text-gray-600"
+                  placeholder="Авто-конвертация"
                 />
               </div>
             </div>
-          </div>
 
-          {/* Parsha Selector (optional) */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              📖 {t('forms.selectParsha')} 
-              <span className="text-gray-400 font-normal ml-2">
-                ({lang === 'ru' ? 'опционально' : lang === 'en' ? 'optional' : 'אופציונלי'})
-              </span>
-            </label>
-            <select
-              value={formData.parsha_id}
-              onChange={(e) => setFormData({ ...formData, parsha_id: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 bg-white"
-              disabled={loadingData}
-            >
-              <option value="">{t('filters.all')}</option>
-              {parshiot.map((parsha) => (
-                <option key={parsha.id} value={parsha.id}>
-                  {getLocalizedName(parsha, 'name')}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Недельная глава */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Недельная глава
+              </label>
+              <select
+                value={parshaId || ''}
+                onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)}
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
+              >
+                <option value="">— Не указана —</option>
+                {parshiot.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.name_ru} {p.id === currentParshaId ? '(текущая)' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Event Selector (optional) */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              🎉 {t('forms.selectEvent')}
-              <span className="text-gray-400 font-normal ml-2">
-                ({lang === 'ru' ? 'опционально' : lang === 'en' ? 'optional' : 'אופציונלי'})
-              </span>
-            </label>
-            <select
-              value={formData.event_id}
-              onChange={(e) => setFormData({ ...formData, event_id: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 bg-white"
-              disabled={loadingData}
-            >
-              <option value="">{t('filters.all')}</option>
-              {events.map((event) => (
-                <option key={event.id} value={event.id}>
-                  {getLocalizedName(event, 'name')}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Событие */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Событие / Праздник (опционально)
+              </label>
+              <select
+                value={eventId}
+                onChange={(e) => setEventId(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
+              >
+                <option value="">— Не указано —</option>
+                {events.map(e => (
+                  <option key={e.id} value={e.id}>{e.name_ru}</option>
+                ))}
+              </select>
+            </div>
 
-          {/* Copyright Confirmation */}
-          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-            <label className="flex items-start gap-3 cursor-pointer">
+            {/* Ссылка на PDF */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Ссылка на PDF *
+              </label>
               <input
-                type="checkbox"
-                checked={copyrightConfirmed}
-                onChange={(e) => setCopyrightConfirmed(e.target.checked)}
-                className="mt-1 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                type="url"
+                value={pdfUrl}
+                onChange={(e) => setPdfUrl(e.target.value)}
+                placeholder="https://drive.google.com/file/d/..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
+                required
               />
-              <span className="text-sm text-gray-700">
-                {t('forms.copyrightConfirm')} <span className="text-red-500">*</span>
-              </span>
-            </label>
-          </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга
+              </p>
+            </div>
 
-          {/* Submit */}
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="px-6 py-3 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              {t('forms.cancel')}
-            </button>
+            {/* Описание */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Описание (опционально)
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                placeholder="Краткое описание содержимого..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none"
+              />
+            </div>
+
+            {/* Кнопка */}
             <button
               type="submit"
-              disabled={loading || !pdfFile || !formData.publication_id || !copyrightConfirmed}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 text-white rounded-xl font-medium transition-colors"
+              disabled={submitting}
+              className="w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? (
+              {submitting ? (
                 <>
-                  <span className="animate-spin">⏳</span>
-                  {uploading ? 
-                    (lang === 'ru' ? 'Загрузка файла...' : lang === 'en' ? 'Uploading...' : 'מעלה...') :
-                    (lang === 'ru' ? 'Сохранение...' : lang === 'en' ? 'Saving...' : 'שומר...')
-                  }
+                  <Loader2 className="animate-spin" size={20} />
+                  Сохранение...
                 </>
               ) : (
                 <>
                   <Upload size={20} />
-                  {t('forms.submit')}
+                  Добавить материал
                 </>
               )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
