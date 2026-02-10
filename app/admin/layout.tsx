@@ -3,15 +3,19 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { LayoutDashboard, FileText, Users, Settings, LogOut, ChevronLeft } from 'lucide-react';
+
+const supabase = createClient(
+  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
+);
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
     async function checkAdmin() {
@@ -24,7 +28,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       setUserEmail(session.user.email || '');
 
-      // Проверяем роль в profiles
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -42,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     checkAdmin();
-  }, [router, supabase]);
+  }, [router]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -57,13 +60,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  if (!isAdmin) {
-    return null;
-  }
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-primary-900 text-white shadow-xl">
         <div className="p-6">
           <Link href="/" className="flex items-center gap-2 text-white/70 hover:text-white mb-6">
@@ -75,52 +75,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="mt-6">
-          <Link 
-            href="/admin" 
-            className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-          >
+          <Link href="/admin" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <LayoutDashboard size={20} />
             Обзор
           </Link>
-          <Link 
-            href="/admin/documents" 
-            className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-          >
+          <Link href="/admin/documents" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <FileText size={20} />
             Документы
           </Link>
-          <Link 
-            href="/admin/users" 
-            className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-          >
+          <Link href="/admin/users" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Users size={20} />
             Пользователи
-          </Link>
-          <Link 
-            href="/admin/settings" 
-            className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-          >
-            <Settings size={20} />
-            Настройки
           </Link>
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
           <div className="text-sm text-white/60 mb-2 truncate">{userEmail}</div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
-          >
+          <button onClick={handleLogout} className="flex items-center gap-2 text-white/70 hover:text-white">
             <LogOut size={18} />
             Выйти
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="ml-64 p-8">
-        {children}
-      </main>
+      <main className="ml-64 p-8">{children}</main>
     </div>
   );
 }
