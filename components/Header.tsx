@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/auth-context';
 
 const parshaToRussian: Record<string, string> = {
   'Bereishit': 'Берешит', 'Noach': 'Ноах', 'Lech-Lecha': 'Лех-Леха', 'Vayera': 'Ваера', 
@@ -37,30 +38,11 @@ export default function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [hebrewDate, setHebrewDate] = useState('');
   const [currentParsha, setCurrentParsha] = useState('');
-  const [user, setUser] = useState<any>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user || null);
-      if (session?.user) {
-        supabase.from('profiles').select('role').eq('id', session.user.id).single()
-          .then(({ data }) => setUserRole(data?.role || null));
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-      if (session?.user) {
-        supabase.from('profiles').select('role').eq('id', session.user.id).single()
-          .then(({ data }) => setUserRole(data?.role || null));
-      } else {
-        setUserRole(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  
+  // ✅ Use shared auth context instead of separate supabase listener
+  const { user, profile, signOut } = useAuth();
+  const router = useRouter();
+  const userRole = profile?.role ?? null;
 
   useEffect(() => {
     async function fetchHebrewInfo() {
@@ -98,9 +80,10 @@ export default function Header() {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     setIsUserMenuOpen(false);
-    window.location.href = '/';
+    router.push('/');
+    router.refresh();
   };
 
   return (
