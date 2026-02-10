@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
-);
+import { supabase } from '@/lib/supabase';
 
 const parshaToRussian: Record<string, string> = {
   'Bereishit': 'Берешит', 'Noach': 'Ноах', 'Lech-Lecha': 'Лех-Леха', 'Vayera': 'Ваера', 
@@ -46,7 +41,6 @@ export default function Header() {
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
-    // Проверяем авторизацию
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user || null);
       if (session?.user) {
@@ -106,6 +100,7 @@ export default function Header() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setIsUserMenuOpen(false);
+    window.location.href = '/';
   };
 
   return (
@@ -174,7 +169,6 @@ export default function Header() {
               Поиск...
             </button>
 
-            {/* Авторизация */}
             {user ? (
               <div className="relative">
                 <button 
