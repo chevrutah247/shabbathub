@@ -42,8 +42,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("AUTH DEBUG getSession:", session?.user?.email || "no session");
       setSession(session);
       setUser(session?.user ?? null);
+        console.log("AUTH DEBUG setUser:", session?.user?.email || "null");
       if (session?.user) {
         fetchProfile(session.user.id);
       } else {
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        console.log("AUTH DEBUG setUser:", session?.user?.email || "null");
         
         if (session?.user) {
           // Fire and forget - do NOT block the auth state change
