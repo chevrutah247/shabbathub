@@ -3,15 +3,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useLanguage } from '@/lib/language-context';
-import { useAuth } from '@/lib/auth-context';
+import { createClient } from '@supabase/supabase-js';
 import { Mail, Lock, LogIn, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+
+const supabase = createClient(
+  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
+);
 
 export default function LoginPage() {
   const router = useRouter();
-  const { t, lang } = useLanguage();
-  const { signIn } = useAuth();
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -23,41 +24,37 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    const { error } = await signIn(email, password);
-    
-    if (error) {
-      setError(
-        lang === 'ru' ? 'Неверный email или пароль' :
-        lang === 'en' ? 'Invalid email or password' :
-        'דוא"ל או סיסמה שגויים'
-      );
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        setError('Неверный email или пароль');
+        setLoading(false);
+      } else if (data.session) {
+        // Успешный вход - редирект
+        window.location.href = '/';
+      }
+    } catch (err) {
+      setError('Ошибка подключения');
       setLoading(false);
-    } else {
-      router.push('/');
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6"
-        >
+        <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6">
           <ArrowLeft size={20} />
-          {lang === 'ru' ? 'На главную' : lang === 'en' ? 'Back to Home' : 'חזרה לדף הבית'}
+          На главную
         </Link>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-display font-bold text-gray-800">
-              {lang === 'ru' ? 'Вход в аккаунт' : lang === 'en' ? 'Sign In' : 'התחברות'}
-            </h1>
-            <p className="text-gray-500 mt-2">
-              {lang === 'ru' ? 'Войдите чтобы загружать материалы' : 
-               lang === 'en' ? 'Sign in to upload materials' : 
-               'התחבר כדי להעלות חומרים'}
-            </p>
+            <h1 className="text-2xl font-display font-bold text-gray-800">Вход в аккаунт</h1>
+            <p className="text-gray-500 mt-2">Войдите чтобы загружать материалы</p>
           </div>
 
           {error && (
@@ -83,9 +80,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {lang === 'ru' ? 'Пароль' : lang === 'en' ? 'Password' : 'סיסמה'}
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Пароль</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 <input
@@ -116,16 +111,16 @@ export default function LoginPage() {
               ) : (
                 <>
                   <LogIn size={20} />
-                  {lang === 'ru' ? 'Войти' : lang === 'en' ? 'Sign In' : 'התחבר'}
+                  Войти
                 </>
               )}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-500">
-            {lang === 'ru' ? 'Нет аккаунта?' : lang === 'en' ? "Don't have an account?" : 'אין לך חשבון?'}{' '}
+            Нет аккаунта?{' '}
             <Link href="/register" className="text-primary-600 hover:underline font-medium">
-              {lang === 'ru' ? 'Зарегистрироваться' : lang === 'en' ? 'Sign Up' : 'הירשם'}
+              Зарегистрироваться
             </Link>
           </div>
         </div>
