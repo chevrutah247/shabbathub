@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
+);
 
 const parshaToRussian: Record<string, string> = {
   'Bereishit': 'Берешит', 'Noach': 'Ноах', 'Lech-Lecha': 'Лех-Леха', 'Vayera': 'Ваера', 
@@ -33,14 +39,39 @@ const hebrewMonths: Record<string, string> = {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [hebrewDate, setHebrewDate] = useState('');
   const [currentParsha, setCurrentParsha] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Проверяем авторизацию
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+      if (session?.user) {
+        supabase.from('profiles').select('role').eq('id', session.user.id).single()
+          .then(({ data }) => setUserRole(data?.role || null));
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+      if (session?.user) {
+        supabase.from('profiles').select('role').eq('id', session.user.id).single()
+          .then(({ data }) => setUserRole(data?.role || null));
+      } else {
+        setUserRole(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     async function fetchHebrewInfo() {
       try {
         const today = new Date();
-        
         const dateRes = await fetch(
           `https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth() + 1}&gd=${today.getDate()}&g2h=1`
         );
@@ -72,9 +103,13 @@ export default function Header() {
     fetchHebrewInfo();
   }, []);
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsUserMenuOpen(false);
+  };
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Верхняя строка с еврейской датой */}
       {(hebrewDate || currentParsha) && (
         <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
           {hebrewDate && <span>{hebrewDate}</span>}
@@ -85,7 +120,6 @@ export default function Header() {
       
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
-          {/* Лого */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl font-display font-bold">
               <span className="text-primary-600">Shabbat</span>
@@ -93,7 +127,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Навигация (десктоп) */}
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 transition-colors text-sm">
               <BookOpen size={18} />
@@ -109,9 +142,7 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Кнопки справа */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Добавить выпадающее меню */}
             <div className="relative">
               <button 
                 onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
@@ -125,19 +156,11 @@ export default function Header() {
                 <>
                   <div className="fixed inset-0" onClick={() => setIsAddMenuOpen(false)} />
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
-                    <Link 
-                      href="/add-pdf" 
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsAddMenuOpen(false)}
-                    >
+                    <Link href="/add-pdf" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAddMenuOpen(false)}>
                       <FileText size={16} />
                       Добавить PDF
                     </Link>
-                    <Link 
-                      href="/add-publication" 
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsAddMenuOpen(false)}
-                    >
+                    <Link href="/add-publication" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAddMenuOpen(false)}>
                       <Library size={16} />
                       Добавить публикацию
                     </Link>
@@ -150,23 +173,62 @@ export default function Header() {
               <Search size={18} />
               Поиск...
             </button>
+
+            {/* Авторизация */}
+            {user ? (
+              <div className="relative">
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"
+                >
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-primary-700 font-medium text-sm">
+                      {(user.email || '?')[0].toUpperCase()}
+                    </span>
+                  </div>
+                </button>
+                
+                {isUserMenuOpen && (
+                  <>
+                    <div className="fixed inset-0" onClick={() => setIsUserMenuOpen(false)} />
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
+                      <div className="px-4 py-2 border-b">
+                        <p className="text-sm font-medium truncate">{user.email}</p>
+                        <p className="text-xs text-gray-500">{userRole === 'admin' ? 'Администратор' : userRole === 'editor' ? 'Редактор' : 'Пользователь'}</p>
+                      </div>
+                      {(userRole === 'admin' || userRole === 'editor') && (
+                        <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}>
+                          <BookOpen size={16} />
+                          Админ-панель
+                        </Link>
+                      )}
+                      <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full">
+                        <LogOut size={16} />
+                        Выйти
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <Link href="/login" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm">
+                <User size={18} />
+                Войти
+              </Link>
+            )}
+
             <button className="flex items-center gap-1 text-gray-500 hover:text-primary-600 text-sm">
               <Globe size={18} />
               RU
             </button>
           </div>
 
-          {/* Мобильное меню */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Мобильное меню */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <nav className="flex flex-col p-4 gap-3">
@@ -191,6 +253,27 @@ export default function Header() {
                 <Library size={20} />
                 Добавить публикацию
               </Link>
+            </div>
+            <div className="border-t pt-3 mt-2">
+              {user ? (
+                <>
+                  {(userRole === 'admin' || userRole === 'editor') && (
+                    <Link href="/admin" className="flex items-center gap-2 text-gray-600 py-2">
+                      <BookOpen size={20} />
+                      Админ-панель
+                    </Link>
+                  )}
+                  <button onClick={handleLogout} className="flex items-center gap-2 text-red-600 py-2">
+                    <LogOut size={20} />
+                    Выйти
+                  </button>
+                </>
+              ) : (
+                <Link href="/login" className="flex items-center gap-2 text-primary-600 py-2">
+                  <User size={20} />
+                  Войти
+                </Link>
+              )}
             </div>
           </nav>
         </div>
