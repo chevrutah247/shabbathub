@@ -79,6 +79,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <FileText size={20} />
             Документы
           </Link>
+          <Link href="/admin/duplicates" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
+            <FileText size={20} />
+            Дубликаты
+          </Link>
           <Link href="/admin/users" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Users size={20} />
             Пользователи
