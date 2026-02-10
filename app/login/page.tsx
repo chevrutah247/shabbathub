@@ -24,10 +24,10 @@ export default function LoginPage() {
         setLoading(false);
       } else {
         // Small delay to let auth-context process the state change
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 100);
+        window.location.href = "/";
+          
+          
+        
       }
     } catch {
       setError('Ошибка сети');
