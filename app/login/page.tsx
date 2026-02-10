@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Mail, Lock, LogIn, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
@@ -13,6 +13,13 @@ export default function LoginPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Проверяем если уже залогинен
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setSuccess(true);
+    });
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -20,14 +27,11 @@ export default function LoginPage() {
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     
+    setLoading(false);
     if (error) {
       setError('Неверный email или пароль');
-      setLoading(false);
     } else {
       setSuccess(true);
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1000);
     }
   };
 
@@ -36,8 +40,10 @@ export default function LoginPage() {
       <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
           <CheckCircle className="mx-auto text-green-500 mb-4" size={48} />
-          <h1 className="text-xl font-bold text-gray-800">Вход выполнен!</h1>
-          <p className="text-gray-500 mt-2">Перенаправление...</p>
+          <h1 className="text-xl font-bold text-gray-800 mb-2">Вход выполнен!</h1>
+          <Link href="/" className="inline-block mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700">
+            Перейти на главную →
+          </Link>
         </div>
       </div>
     );
@@ -53,7 +59,6 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-800">Вход в аккаунт</h1>
-            <p className="text-gray-500 mt-2">Войдите чтобы загружать материалы</p>
           </div>
 
           {error && <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">{error}</div>}
@@ -78,7 +83,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 text-white rounded-xl font-medium">
+            <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-xl font-medium">
               {loading ? '⏳ Вход...' : <><LogIn size={20} />Войти</>}
             </button>
           </form>
