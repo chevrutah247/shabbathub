@@ -73,7 +73,7 @@ export default function HomePage() {
                 Каталог материалов
               </Link>
               <Link 
-                href="/latest"
+                href="/catalog"
                 className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20"
               >
                 <Calendar size={20} />
