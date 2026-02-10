@@ -173,7 +173,7 @@ export default function Header() {
                         <p className="text-sm font-medium truncate">{user.email}</p>
                         <p className="text-xs text-gray-500">{userRole === 'admin' ? 'Администратор' : userRole === 'editor' ? 'Редактор' : 'Пользователь'}</p>
                       </div>
-                      {(userRole === 'admin' || userRole === 'editor') && (
+                      {(userRole === 'superadmin' || userRole === 'admin') && (
                         <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}>
                           <BookOpen size={16} />
                           Админ-панель
@@ -234,7 +234,7 @@ export default function Header() {
             <div className="border-t pt-3 mt-2">
               {user ? (
                 <>
-                  {(userRole === 'admin' || userRole === 'editor') && (
+                  {(userRole === 'superadmin' || userRole === 'admin') && (
                     <Link href="/admin" className="flex items-center gap-2 text-gray-600 py-2">
                       <BookOpen size={20} />
                       Админ-панель
