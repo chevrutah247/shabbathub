@@ -42,7 +42,7 @@ export default function Header() {
   // ✅ Use shared auth context instead of separate supabase listener
   const { user, profile, signOut } = useAuth();
   const router = useRouter();
-  const userRole = profile?.role ?? null;
+  const userRole = (profile as any)?.role ?? null;
 
   useEffect(() => {
     async function fetchHebrewInfo() {
