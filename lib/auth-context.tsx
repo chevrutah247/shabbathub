@@ -30,7 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .select('*')
         .eq('id', userId)
         .single();
-
       if (error) throw error;
       setProfile(data);
     } catch (error) {
@@ -41,26 +40,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    console.log('AUTH DEBUG: useEffect started');
+    
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("AUTH DEBUG getSession:", session?.user?.email || "no session");
+      console.log('AUTH DEBUG getSession:', session?.user?.email || 'no session');
       setSession(session);
       setUser(session?.user ?? null);
-        console.log("AUTH DEBUG setUser:", session?.user?.email || "null");
       if (session?.user) {
         fetchProfile(session.user.id);
       } else {
         setLoading(false);
       }
+    }).catch((err) => {
+      console.error('AUTH DEBUG getSession ERROR:', err);
+      setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('AUTH DEBUG onAuthStateChange:', event, session?.user?.email || 'no session');
         setSession(session);
         setUser(session?.user ?? null);
-        console.log("AUTH DEBUG setUser:", session?.user?.email || "null");
-        
         if (session?.user) {
-          // Fire and forget - do NOT block the auth state change
           fetchProfile(session.user.id).catch(() => {});
         } else {
           setProfile(null);
@@ -74,47 +75,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       return { error };
     } catch (error) {
       return { error: error as Error };
     }
   };
 
-  const signUp = async (
-    email: string, 
-    password: string, 
-    firstName?: string, 
-    lastName?: string
-  ) => {
+  const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     try {
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-          },
-        },
+        email, password,
+        options: { data: { first_name: firstName, last_name: lastName } },
       });
-
       if (error) throw error;
-
       if (data.user && (firstName || lastName)) {
-        await supabase
-          .from('profiles')
-          .update({
-            first_name: firstName,
-            last_name: lastName,
-            display_name: [firstName, lastName].filter(Boolean).join(' '),
-          })
-          .eq('id', data.user.id);
+        await supabase.from('profiles').update({
+          first_name: firstName, last_name: lastName,
+          display_name: [firstName, lastName].filter(Boolean).join(' '),
+        }).eq('id', data.user.id);
       }
-
       return { error: null };
     } catch (error) {
       return { error: error as Error };
@@ -130,13 +110,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('Not authenticated') };
-
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id);
-
+      const { error } = await supabase.from('profiles').update(updates).eq('id', user.id);
       if (error) throw error;
       await fetchProfile(user.id);
       return { error: null };
@@ -146,18 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        profile,
-        session,
-        loading,
-        signIn,
-        signUp,
-        signOut,
-        updateProfile,
-      }}
-    >
+    <AuthContext.Provider value={{ user, profile, session, loading, signIn, signUp, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
