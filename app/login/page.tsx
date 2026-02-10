@@ -1,38 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/auth-context';
+import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
-  const { signIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    try {
-      const { error } = await signIn(email, password);
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-      } else {
-        // Small delay to let auth-context process the state change
-        window.location.href = "/";
-          
-          
-        
-      }
-    } catch {
-      setError('Ошибка сети');
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      setError(error.message);
       setLoading(false);
+      return;
     }
+
+    window.location.href = '/';
   };
 
   return (
