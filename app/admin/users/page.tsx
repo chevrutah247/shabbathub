@@ -1,13 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { Shield, ShieldCheck, Edit2, X, Save } from 'lucide-react';
 
-const supabase = createClient(
-  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
-);
 
 const ROLES = [
   { id: 'admin', name: 'Администратор', color: 'bg-red-100 text-red-700' },

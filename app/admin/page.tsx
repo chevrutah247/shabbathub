@@ -1,13 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { FileText, Users, Eye, TrendingUp } from 'lucide-react';
 
-const supabase = createClient(
-  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
-);
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ totalDocs: 0, totalUsers: 0, totalViews: 0, recentDocs: [] as any[] });
