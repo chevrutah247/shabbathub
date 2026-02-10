@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { Mail, Lock, LogIn, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, LogIn, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,9 +24,24 @@ export default function LoginPage() {
       setError('Неверный email или пароль');
       setLoading(false);
     } else {
-      window.location.replace('/');
+      setSuccess(true);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     }
   };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <CheckCircle className="mx-auto text-green-500 mb-4" size={48} />
+          <h1 className="text-xl font-bold text-gray-800">Вход выполнен!</h1>
+          <p className="text-gray-500 mt-2">Перенаправление...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
