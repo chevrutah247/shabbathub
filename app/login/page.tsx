@@ -1,92 +1,91 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import { Mail, Lock, LogIn, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY'
+);
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
 
-  // Проверяем если уже залогинен
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setSuccess(true);
-    });
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError('');
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    
-    setLoading(false);
-    if (error) {
-      setError('Неверный email или пароль');
-    } else {
-      setSuccess(true);
-    }
+    supabase.auth.signInWithPassword({ email, password })
+      .then(({ error }) => {
+        if (error) {
+          setError(error.message);
+          setLoading(false);
+        } else {
+          setDone(true);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        setError('Ошибка сети');
+        setLoading(false);
+      });
   };
 
-  if (success) {
+  if (done) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <CheckCircle className="mx-auto text-green-500 mb-4" size={48} />
-          <h1 className="text-xl font-bold text-gray-800 mb-2">Вход выполнен!</h1>
-          <Link href="/" className="inline-block mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700">
-            Перейти на главную →
-          </Link>
+      <div className="min-h-screen bg-primary-700 flex items-center justify-center">
+        <div className="bg-white rounded-2xl p-8 text-center">
+          <h1 className="text-2xl font-bold text-green-600 mb-4">✓ Вход выполнен!</h1>
+          <a href="/" className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg">
+            Перейти на главную
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-600 to-primary-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6">
-          <ArrowLeft size={20} />На главную
-        </Link>
+    <div className="min-h-screen bg-primary-700 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">Вход</h1>
+        
+        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-800">Вход в аккаунт</h1>
-          </div>
-
-          {error && <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">{error}</div>}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-12 pr-4 py-3 border rounded-xl" placeholder="your@email.com" />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Пароль</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input type={showPassword ? 'text' : 'password'} required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-12 pr-12 py-3 border rounded-xl" placeholder="••••••••" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-xl font-medium">
-              {loading ? '⏳ Вход...' : <><LogIn size={20} />Войти</>}
-            </button>
-          </form>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 border rounded-lg"
+            placeholder="Email"
+            disabled={loading}
+          />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 border rounded-lg"
+            placeholder="Пароль"
+            disabled={loading}
+          />
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full py-3 bg-primary-600 text-white rounded-lg disabled:bg-gray-400"
+          >
+            {loading ? 'Вход...' : 'Войти'}
+          </button>
+        </form>
+        
+        <div className="mt-4 text-center">
+          <a href="/" className="text-gray-500">← На главную</a>
         </div>
       </div>
     </div>
