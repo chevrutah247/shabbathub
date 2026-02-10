@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Search, FileText, Loader2, Heart, User, ChevronDown } from 'lucide-react';
+import { Search, FileText, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
+
+const PAGE_SIZE = 50; // 5 колонок × 10 рядов
 
 interface Document {
   id: string;
@@ -16,7 +18,6 @@ interface Document {
   thumbnail_url: string;
   parsha_id: number;
   event_id: string;
-  publication?: { primary_language: string };
 }
 
 interface Parsha {
@@ -24,12 +25,6 @@ interface Parsha {
   name_ru: string;
   name_en: string;
   order_num: number;
-}
-
-interface Event {
-  id: string;
-  name_ru: string;
-  name_en: string;
 }
 
 const parshaNameToId: Record<string, number> = {
@@ -44,43 +39,66 @@ const parshaNameToId: Record<string, number> = {
   'Pinchas': 41, 'Matot': 42, 'Masei': 43, 'Devarim': 44, 'Vaetchanan': 45,
   'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
-  'Teruma': 19, 'Trumah': 19
 };
 
-function formatYear(dateString: string | null): string {
+function formatDate(dateString: string | null): string {
   if (!dateString) return '';
-  return new Date(dateString).getFullYear().toString();
+  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-const FacebookIcon = () => (
-  <svg viewBox="0 0 24 24" width={12} height={12} fill="currentColor">
-    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-  </svg>
-);
+// Компонент карточки с ленивой загрузкой изображения
+function DocumentCard({ doc, currentParshaId }: { doc: Document; currentParshaId: number | null }) {
+  const [imgError, setImgError] = useState(false);
+  
+  return (
+    <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all group">
+      <Link href={'/document/' + doc.id}>
+        <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
+          {doc.thumbnail_url && !imgError ? (
+            <img 
+              src={doc.thumbnail_url} 
+              alt={doc.title}
+              loading="lazy"
+              onError={() => setImgError(true)}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+              <FileText size={32} className="text-gray-300" />
+            </div>
+          )}
+          
+          {doc.parsha_id === currentParshaId && (
+            <div className="absolute top-2 left-2 bg-primary-600 text-white text-[10px] px-2 py-1 rounded-full font-medium">
+              Эта неделя
+            </div>
+          )}
+        </div>
+      </Link>
 
-const WhatsAppIcon = () => (
-  <svg viewBox="0 0 24 24" width={12} height={12} fill="currentColor">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-);
-
-const TelegramIcon = () => (
-  <svg viewBox="0 0 24 24" width={12} height={12} fill="currentColor">
-    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-  </svg>
-);
+      <div className="p-3">
+        <h3 className="font-medium text-sm text-gray-900 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
+          <Link href={'/document/' + doc.id}>
+            {doc.title}
+          </Link>
+        </h3>
+        <p className="text-xs text-gray-500 mt-1">{formatDate(doc.gregorian_date)}</p>
+      </div>
+    </article>
+  );
+}
 
 export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(0);
+  
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
   const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>('date');
 
   // Загрузка текущей парши
   useEffect(() => {
@@ -110,98 +128,110 @@ export default function CatalogPage() {
     fetchCurrentParsha();
   }, []);
 
-  // Загрузка справочников
+  // Загрузка справочника парашот
   useEffect(() => {
-    Promise.all([
-      fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
-        headers: { 'apikey': SUPABASE_KEY }
-      }).then(r => r.json()),
-      fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=hebrew_month,hebrew_day&select=id,name_ru,name_en', {
-        headers: { 'apikey': SUPABASE_KEY }
-      }).then(r => r.json())
-    ]).then(([parshiotData, eventsData]) => {
-      // Сортируем парашот — текущая первой
-      if (currentParshaId && parshiotData) {
-        const sorted = [...parshiotData].sort((a, b) => {
-          if (a.id === currentParshaId) return -1;
-          if (b.id === currentParshaId) return 1;
-          return a.order_num - b.order_num;
-        });
-        setParshiot(sorted);
-      } else {
-        setParshiot(parshiotData || []);
-      }
-      setEvents(eventsData || []);
-    });
-  }, [currentParshaId]);
-
-  // Загрузка документов
-  useEffect(() => {
-    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc&limit=500&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,publication:publications(primary_language)', {
+    fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
       headers: { 'apikey': SUPABASE_KEY }
     })
-      .then(res => res.json())
-      .then(data => setDocuments(data || []))
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+      .then(r => r.json())
+      .then(data => {
+        if (currentParshaId && data) {
+          const sorted = [...data].sort((a: Parsha, b: Parsha) => {
+            if (a.id === currentParshaId) return -1;
+            if (b.id === currentParshaId) return 1;
+            return a.order_num - b.order_num;
+          });
+          setParshiot(sorted);
+        } else {
+          setParshiot(data || []);
+        }
+      });
+  }, [currentParshaId]);
 
-  // Фильтрация и сортировка
-  let filteredDocs = documents.filter(doc => {
-    const matchesSearch = !searchQuery || doc.title?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesParsha = !selectedParsha || doc.parsha_id === selectedParsha;
-    const matchesEvent = !selectedEvent || doc.event_id === selectedEvent;
-    const matchesLang = !selectedLanguage || doc.publication?.primary_language === selectedLanguage;
-    return matchesSearch && matchesParsha && matchesEvent && matchesLang;
-  });
+  // Загрузка документов с пагинацией
+  const fetchDocuments = useCallback(async () => {
+    setLoading(true);
+    
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    
+    let url = `${SUPABASE_URL}/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc`;
+    
+    if (searchQuery) {
+      url += `&title=ilike.*${encodeURIComponent(searchQuery)}*`;
+    }
+    
+    if (selectedParsha) {
+      url += `&parsha_id=eq.${selectedParsha}`;
+    }
+    
+    try {
+      const res = await fetch(url + `&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id`, {
+        headers: { 
+          'apikey': SUPABASE_KEY,
+          'Range': `${from}-${to}`,
+          'Prefer': 'count=exact'
+        }
+      });
+      
+      const data = await res.json();
+      const contentRange = res.headers.get('content-range');
+      const total = contentRange ? parseInt(contentRange.split('/')[1]) : 0;
+      
+      setDocuments(data || []);
+      setTotalCount(total);
+    } catch (err) {
+      console.error('Error fetching documents:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, searchQuery, selectedParsha]);
 
-  // Сортировка
-  if (sortBy === 'parsha' && currentParshaId) {
-    filteredDocs = [...filteredDocs].sort((a, b) => {
-      if (a.parsha_id === currentParshaId && b.parsha_id !== currentParshaId) return -1;
-      if (a.parsha_id !== currentParshaId && b.parsha_id === currentParshaId) return 1;
-      return 0;
-    });
-  } else if (sortBy === 'popular') {
-    // TODO: сортировка по скачиваниям
-  }
+  useEffect(() => {
+    fetchDocuments();
+  }, [fetchDocuments]);
 
-  const hasFilters = selectedParsha || selectedEvent || selectedLanguage;
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchQuery(searchInput);
+    setPage(0);
+  };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <Loader2 className="animate-spin text-primary-600" size={32} />
-      </div>
-    );
-  }
+  const handleParshaChange = (value: string) => {
+    setSelectedParsha(value ? Number(value) : null);
+    setPage(0);
+  };
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
     <div className="min-h-screen bg-cream">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <h1 className="text-xl font-bold text-primary-900 mb-1">Каталог материалов</h1>
-        <p className="text-gray-600 text-sm mb-4">Газеты, недельные главы Торы и печатные материалы к Шаббату</p>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-primary-900 mb-2">Каталог материалов</h1>
+          <p className="text-gray-600">Газеты, недельные главы Торы и материалы к Шаббату</p>
+        </div>
 
         {/* Фильтры */}
-        <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
+        <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
           <div className="flex flex-wrap gap-3">
             {/* Поиск */}
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+            <form onSubmit={handleSearch} className="relative flex-1 min-w-[250px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
                 placeholder="Поиск по названию..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none"
               />
-            </div>
+            </form>
 
             {/* Недельная глава */}
             <select
               value={selectedParsha || ''}
-              onChange={(e) => setSelectedParsha(e.target.value ? Number(e.target.value) : null)}
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white min-w-[160px]"
+              onChange={(e) => handleParshaChange(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[180px]"
             >
               <option value="">Все главы</option>
               {parshiot.map(p => (
@@ -211,138 +241,116 @@ export default function CatalogPage() {
               ))}
             </select>
 
-            {/* События */}
-            <select
-              value={selectedEvent || ''}
-              onChange={(e) => setSelectedEvent(e.target.value || null)}
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white min-w-[140px]"
-            >
-              <option value="">Все события</option>
-              {events.map(e => (
-                <option key={e.id} value={e.id}>{e.name_ru}</option>
-              ))}
-            </select>
-
-            {/* Язык */}
-            <select
-              value={selectedLanguage || ''}
-              onChange={(e) => setSelectedLanguage(e.target.value || null)}
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
-            >
-              <option value="">Все языки</option>
-              <option value="ru">🇷🇺 Русский</option>
-              <option value="en">🇺🇸 English</option>
-              <option value="he">🇮🇱 עברית</option>
-            </select>
-
-            {/* Сортировка */}
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none text-sm bg-white"
-            >
-              <option value="date">По дате</option>
-              <option value="parsha">По текущей главе</option>
-              <option value="popular">По популярности</option>
-            </select>
-          </div>
-
-          {hasFilters && (
-            <div className="mt-3 pt-3 border-t flex items-center gap-2">
-              <span className="text-sm text-gray-500">Фильтры:</span>
-              {selectedParsha && (
-                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
-                  {parshiot.find(p => p.id === selectedParsha)?.name_ru}
-                  <button onClick={() => setSelectedParsha(null)} className="ml-1 hover:text-primary-900">×</button>
-                </span>
-              )}
-              {selectedEvent && (
-                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
-                  {events.find(e => e.id === selectedEvent)?.name_ru}
-                  <button onClick={() => setSelectedEvent(null)} className="ml-1 hover:text-primary-900">×</button>
-                </span>
-              )}
-              {selectedLanguage && (
-                <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs">
-                  {selectedLanguage === 'ru' ? 'Русский' : selectedLanguage === 'en' ? 'English' : 'עברית'}
-                  <button onClick={() => setSelectedLanguage(null)} className="ml-1 hover:text-primary-900">×</button>
-                </span>
-              )}
+            {/* Сброс */}
+            {(searchQuery || selectedParsha) && (
               <button
-                onClick={() => { setSelectedParsha(null); setSelectedEvent(null); setSelectedLanguage(null); }}
-                className="text-xs text-gray-500 hover:text-primary-600 ml-2"
+                onClick={() => {
+                  setSearchQuery('');
+                  setSearchInput('');
+                  setSelectedParsha(null);
+                  setPage(0);
+                }}
+                className="px-4 py-2.5 text-gray-600 hover:text-primary-600 transition-colors"
               >
-                Сбросить все
+                Сбросить
               </button>
-            </div>
+            )}
+          </div>
+        </div>
+
+        {/* Статистика */}
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-gray-600">
+            Найдено: <span className="font-medium text-gray-900">{totalCount.toLocaleString()}</span> материалов
+          </p>
+          {totalPages > 1 && (
+            <p className="text-gray-500 text-sm">
+              Страница {page + 1} из {totalPages}
+            </p>
           )}
         </div>
 
-        <p className="text-gray-500 text-xs mb-3">Найдено: {filteredDocs.length}</p>
-
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
-          {filteredDocs.map((doc) => (
-            <article key={doc.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="relative">
-                <Link href={'/document/' + doc.id}>
-                  <div className="aspect-[3/4] bg-gray-100 overflow-hidden cursor-pointer">
-                    {doc.thumbnail_url ? (
-                      <img src={doc.thumbnail_url} alt={doc.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <FileText size={20} className="text-gray-300" />
-                      </div>
-                    )}
-                  </div>
-                </Link>
-                
-                <div className="absolute left-1 top-1 flex flex-col gap-0.5">
-                  <button className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center">
-                    <FacebookIcon />
-                  </button>
-                  <button className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center">
-                    <WhatsAppIcon />
-                  </button>
-                  <button className="w-5 h-5 bg-sky-500 text-white rounded-full flex items-center justify-center">
-                    <TelegramIcon />
-                  </button>
-                </div>
-
-                <div className="absolute right-1 top-1 flex flex-col gap-0.5">
-                  <button className="w-5 h-5 bg-white/90 text-gray-400 rounded-full flex items-center justify-center hover:text-red-500 shadow-sm">
-                    <Heart size={10} />
-                  </button>
-                  <button className="w-5 h-5 bg-white/90 text-gray-400 rounded-full flex items-center justify-center hover:text-primary-600 shadow-sm">
-                    <User size={10} />
-                  </button>
-                </div>
-
-                {doc.parsha_id === currentParshaId && (
-                  <div className="absolute bottom-1 left-1 bg-primary-600 text-white text-[8px] px-1.5 py-0.5 rounded">
-                    Эта неделя
-                  </div>
-                )}
-              </div>
-
-              <div className="p-2">
-                <h3 className="font-medium text-[11px] text-gray-900 line-clamp-2 leading-tight">
-                  <Link href={'/document/' + doc.id} className="hover:text-primary-600">
-                    {doc.title}
-                  </Link>
-                </h3>
-                <div className="flex items-center justify-between text-[10px] text-gray-500 mt-1">
-                  <span>{formatYear(doc.gregorian_date)}</span>
-                  <span className="text-yellow-400">★★★★★</span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {filteredDocs.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            По вашему запросу ничего не найдено
+        {/* Сетка документов — 5 колонок */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="animate-spin text-primary-600" size={32} />
           </div>
+        ) : documents.length === 0 ? (
+          <div className="text-center py-20 text-gray-500">
+            <FileText size={48} className="mx-auto mb-4 text-gray-300" />
+            <p>По вашему запросу ничего не найдено</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {documents.map((doc) => (
+                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} />
+              ))}
+            </div>
+
+            {/* Пагинация */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setPage(0)}
+                  disabled={page === 0}
+                  className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  В начало
+                </button>
+                <button
+                  onClick={() => setPage(p => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                
+                <div className="flex gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i;
+                    } else if (page < 3) {
+                      pageNum = i;
+                    } else if (page > totalPages - 4) {
+                      pageNum = totalPages - 5 + i;
+                    } else {
+                      pageNum = page - 2 + i;
+                    }
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setPage(pageNum)}
+                        className={`w-10 h-10 rounded-lg border ${
+                          page === pageNum 
+                            ? 'bg-primary-600 text-white border-primary-600' 
+                            : 'bg-white hover:bg-gray-50'
+                        }`}
+                      >
+                        {pageNum + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <button
+                  onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                  disabled={page >= totalPages - 1}
+                  className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight size={20} />
+                </button>
+                <button
+                  onClick={() => setPage(totalPages - 1)}
+                  disabled={page >= totalPages - 1}
+                  className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  В конец
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
