@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { FileText, Trash2, Check, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, Trash2, Check, ExternalLink, ChevronDown, ChevronUp, Eye, X } from 'lucide-react';
 
 interface DuplicateGroup {
   title: string;
@@ -15,6 +15,8 @@ export default function AdminDuplicates() {
   const [loading, setLoading] = useState(true);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const [totalDuplicates, setTotalDuplicates] = useState(0);
+  const [viewingPdf, setViewingPdf] = useState<string | null>(null);
+  const [viewingTitle, setViewingTitle] = useState<string>('');
 
   const fetchDuplicates = async () => {
     setLoading(true);
@@ -65,6 +67,11 @@ export default function AdminDuplicates() {
     fetchDuplicates();
   };
 
+  const openViewer = (url: string, title: string) => {
+    setViewingPdf(url);
+    setViewingTitle(title);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -107,27 +114,44 @@ export default function AdminDuplicates() {
               
               {expandedGroup === group.title && (
                 <div className="border-t px-6 py-4 space-y-3">
-                  {group.items.map((item) => (
+                  {group.items.map((item, index) => (
                     <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                       {item.thumbnail_url ? (
-                        <img src={item.thumbnail_url} alt="" className="w-16 h-20 object-cover rounded" />
+                        <img 
+                          src={item.thumbnail_url} 
+                          alt="" 
+                          className="w-16 h-20 object-cover rounded cursor-pointer hover:opacity-80" 
+                          onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
+                        />
                       ) : (
-                        <div className="w-16 h-20 bg-gray-200 rounded flex items-center justify-center">
+                        <div 
+                          className="w-16 h-20 bg-gray-200 rounded flex items-center justify-center cursor-pointer hover:bg-gray-300"
+                          onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
+                        >
                           <FileText className="text-gray-400" size={24} />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-500">Добавлен: {new Date(item.created_at).toLocaleDateString('ru-RU')}</p>
+                        <p className="text-sm text-gray-500">
+                          #{index + 1} · Добавлен: {new Date(item.created_at).toLocaleDateString('ru-RU')}
+                        </p>
                         <p className="text-xs text-gray-400 truncate mt-1">{item.pdf_url}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <a href={item.pdf_url} target="_blank" className="p-2 text-gray-400 hover:text-primary-600">
+                        <button 
+                          onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)} 
+                          className="p-2 text-gray-400 hover:text-primary-600"
+                          title="Просмотреть"
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <a href={item.pdf_url} target="_blank" className="p-2 text-gray-400 hover:text-primary-600" title="Открыть в новой вкладке">
                           <ExternalLink size={18} />
                         </a>
                         <button onClick={() => handleKeepOne(item.id, group)} className="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200">
                           Оставить
                         </button>
-                        <button onClick={() => handleHide(item.id)} className="p-2 text-gray-400 hover:text-red-600">
+                        <button onClick={() => handleHide(item.id)} className="p-2 text-gray-400 hover:text-red-600" title="Скрыть">
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -137,6 +161,36 @@ export default function AdminDuplicates() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* PDF Viewer Modal */}
+      {viewingPdf && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h3 className="font-bold text-lg truncate">{viewingTitle}</h3>
+              <div className="flex items-center gap-2">
+                <a 
+                  href={viewingPdf} 
+                  target="_blank" 
+                  className="px-3 py-1 bg-gray-100 rounded text-sm hover:bg-gray-200"
+                >
+                  Открыть в новой вкладке
+                </a>
+                <button onClick={() => setViewingPdf(null)} className="p-2 hover:bg-gray-100 rounded">
+                  <X size={24} />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 p-2">
+              <iframe 
+                src={viewingPdf} 
+                className="w-full h-full rounded border"
+                title="PDF Viewer"
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>
