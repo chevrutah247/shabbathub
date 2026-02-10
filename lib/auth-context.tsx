@@ -40,25 +40,56 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    console.log('AUTH DEBUG: useEffect started');
-    
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('AUTH DEBUG getSession:', session?.user?.email || 'no session');
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        setLoading(false);
+    let mounted = true;
+
+    const init = async () => {
+      try {
+        // Try getSession with a 5 second timeout
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('getSession timeout')), 5000)
+        );
+
+        const { data: { session } } = await Promise.race([sessionPromise, timeoutPromise]) as any;
+        
+        console.log('AUTH: getSession ok:', session?.user?.email || 'no session');
+
+        if (!mounted) return;
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          await fetchProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('AUTH: getSession failed:', err);
+        // Fallback: try to read session from localStorage
+        try {
+          const stored = localStorage.getItem('sb-yvgcxmqgvxlvbxsszqcc-auth-token');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            console.log('AUTH: fallback from localStorage:', parsed.user?.email);
+            if (mounted && parsed.user) {
+              setUser(parsed.user);
+              setSession(parsed);
+              fetchProfile(parsed.user.id).catch(() => {});
+            }
+          } else {
+            if (mounted) setLoading(false);
+          }
+        } catch {
+          if (mounted) setLoading(false);
+        }
       }
-    }).catch((err) => {
-      console.error('AUTH DEBUG getSession ERROR:', err);
-      setLoading(false);
-    });
+    };
+
+    init();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log('AUTH DEBUG onAuthStateChange:', event, session?.user?.email || 'no session');
+        console.log('AUTH: onAuthStateChange:', event, session?.user?.email || 'no user');
+        if (!mounted) return;
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
@@ -70,7 +101,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
