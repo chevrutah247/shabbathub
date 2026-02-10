@@ -36,10 +36,28 @@ export default function AdminDocuments() {
   const [totalCount, setTotalCount] = useState(0);
   const [editingDoc, setEditingDoc] = useState<any>(null);
   const [saving, setSaving] = useState(false);
+  const [publications, setPublications] = useState<{ id: string; title_ru: string }[]>([]);
+
+  // Загрузить список публикаций для dropdown
+  useEffect(() => {
+    async function fetchPublications() {
+      const { data } = await supabase
+        .from('publications')
+        .select('id, title_ru')
+        .eq('is_active', true)
+        .order('title_ru', { ascending: true });
+      setPublications(data || []);
+    }
+    fetchPublications();
+  }, []);
 
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
-    let query = supabase.from('issues').select('id, title, issue_number, parsha_id, gregorian_date, thumbnail_url, pdf_url, is_active, created_at', { count: 'exact' }).order('created_at', { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+    let query = supabase
+      .from('issues')
+      .select('id, title, issue_number, parsha_id, publication_id, gregorian_date, thumbnail_url, pdf_url, is_active, created_at', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
     if (search) query = query.ilike('title', `%${search}%`);
     const { data, count } = await query;
     setDocuments(data || []);
@@ -52,7 +70,14 @@ export default function AdminDocuments() {
   const handleSave = async () => {
     if (!editingDoc) return;
     setSaving(true);
-    await supabase.from('issues').update({ title: editingDoc.title, issue_number: editingDoc.issue_number, parsha_id: editingDoc.parsha_id || null, gregorian_date: editingDoc.gregorian_date || null, is_active: editingDoc.is_active }).eq('id', editingDoc.id);
+    await supabase.from('issues').update({
+      title: editingDoc.title,
+      issue_number: editingDoc.issue_number,
+      parsha_id: editingDoc.parsha_id || null,
+      publication_id: editingDoc.publication_id || null,
+      gregorian_date: editingDoc.gregorian_date || null,
+      is_active: editingDoc.is_active,
+    }).eq('id', editingDoc.id);
     setEditingDoc(null);
     fetchDocuments();
     setSaving(false);
@@ -62,6 +87,11 @@ export default function AdminDocuments() {
     if (!confirm('Скрыть документ?')) return;
     await supabase.from('issues').update({ is_active: false }).eq('id', id);
     fetchDocuments();
+  };
+
+  const getPublicationName = (pubId: string | null) => {
+    if (!pubId) return '—';
+    return publications.find(p => p.id === pubId)?.title_ru || '—';
   };
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
@@ -83,6 +113,7 @@ export default function AdminDocuments() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Документ</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Публикация</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Номер</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Глава</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Статус</th>
@@ -90,7 +121,7 @@ export default function AdminDocuments() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {loading ? <tr><td colSpan={5} className="px-4 py-8 text-center">Загрузка...</td></tr> : documents.map((doc) => (
+            {loading ? <tr><td colSpan={6} className="px-4 py-8 text-center">Загрузка...</td></tr> : documents.map((doc) => (
               <tr key={doc.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
@@ -98,6 +129,7 @@ export default function AdminDocuments() {
                     <span className="font-medium max-w-xs truncate">{doc.title}</span>
                   </div>
                 </td>
+                <td className="px-4 py-3 text-gray-600 text-sm">{getPublicationName(doc.publication_id)}</td>
                 <td className="px-4 py-3 text-gray-600">{doc.issue_number || '—'}</td>
                 <td className="px-4 py-3 text-gray-600">{doc.parsha_id ? PARSHAS.find(p => p.id === doc.parsha_id)?.name : '—'}</td>
                 <td className="px-4 py-3"><span className={`px-2 py-1 text-xs rounded-full ${doc.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{doc.is_active ? 'Активен' : 'Скрыт'}</span></td>
@@ -128,15 +160,46 @@ export default function AdminDocuments() {
               <button onClick={() => setEditingDoc(null)}><X size={24}/></button>
             </div>
             <div className="p-6 space-y-4">
-              <div><label className="block text-sm font-medium mb-1">Название</label><input type="text" value={editingDoc.title} onChange={(e) => setEditingDoc({...editingDoc, title: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/></div>
-              <div><label className="block text-sm font-medium mb-1">Номер выпуска</label><input type="text" value={editingDoc.issue_number || ''} onChange={(e) => setEditingDoc({...editingDoc, issue_number: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/></div>
-              <div><label className="block text-sm font-medium mb-1">Глава</label><select value={editingDoc.parsha_id || ''} onChange={(e) => setEditingDoc({...editingDoc, parsha_id: e.target.value ? parseInt(e.target.value) : null})} className="w-full px-4 py-2 border rounded-lg"><option value="">—</option>{PARSHAS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
-              <div><label className="block text-sm font-medium mb-1">Дата</label><input type="date" value={editingDoc.gregorian_date || ''} onChange={(e) => setEditingDoc({...editingDoc, gregorian_date: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/></div>
-              <div className="flex items-center gap-2"><input type="checkbox" checked={editingDoc.is_active} onChange={(e) => setEditingDoc({...editingDoc, is_active: e.target.checked})}/><label>Активен</label></div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Название</label>
+                <input type="text" value={editingDoc.title} onChange={(e) => setEditingDoc({...editingDoc, title: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Публикация</label>
+                <select
+                  value={editingDoc.publication_id || ''}
+                  onChange={(e) => setEditingDoc({...editingDoc, publication_id: e.target.value || null})}
+                  className="w-full px-4 py-2 border rounded-lg"
+                >
+                  <option value="">— Без публикации —</option>
+                  {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Номер выпуска</label>
+                <input type="text" value={editingDoc.issue_number || ''} onChange={(e) => setEditingDoc({...editingDoc, issue_number: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Глава</label>
+                <select value={editingDoc.parsha_id || ''} onChange={(e) => setEditingDoc({...editingDoc, parsha_id: e.target.value ? parseInt(e.target.value) : null})} className="w-full px-4 py-2 border rounded-lg">
+                  <option value="">—</option>
+                  {PARSHAS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Дата</label>
+                <input type="date" value={editingDoc.gregorian_date || ''} onChange={(e) => setEditingDoc({...editingDoc, gregorian_date: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" checked={editingDoc.is_active} onChange={(e) => setEditingDoc({...editingDoc, is_active: e.target.checked})}/>
+                <label>Активен</label>
+              </div>
             </div>
             <div className="p-6 border-t flex justify-end gap-3">
               <button onClick={() => setEditingDoc(null)} className="px-4 py-2 text-gray-600">Отмена</button>
-              <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2"><Save size={18}/>{saving ? 'Сохранение...' : 'Сохранить'}</button>
+              <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2">
+                <Save size={18}/>{saving ? 'Сохранение...' : 'Сохранить'}
+              </button>
             </div>
           </div>
         </div>
