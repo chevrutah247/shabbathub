@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
 const parshaToRussian: Record<string, string> = {
@@ -38,6 +38,7 @@ export default function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [hebrewDate, setHebrewDate] = useState('');
   const [currentParsha, setCurrentParsha] = useState('');
+  const [copied, setCopied] = useState(false);
   
   const { user, profile, signOut } = useAuth();
   const router = useRouter();
@@ -85,6 +86,40 @@ export default function Header() {
     router.refresh();
   };
 
+  const handleShare = async () => {
+    if (!user) return;
+    const shareUrl = `${window.location.origin}?ref=${user.id}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'ShabbatHub — архив материалов к Шаббату',
+          text: 'Крупнейший архив газет, недельных глав Торы и печатных материалов к Шаббату',
+          url: shareUrl,
+        });
+        return;
+      } catch (err) {
+        // Пользователь отменил или ошибка — fallback на копирование
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback для старых браузеров
+      const input = document.createElement('input');
+      input.value = shareUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       {(hebrewDate || currentParsha) && (
@@ -124,6 +159,22 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
+            {/* Кнопка Поделиться */}
+            {user && (
+              <button
+                onClick={handleShare}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
+                  copied
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                }`}
+                title="Скопировать вашу реферальную ссылку"
+              >
+                {copied ? <Check size={16} /> : <Share2 size={16} />}
+                {copied ? 'Скопировано!' : 'Поделиться'}
+              </button>
+            )}
+
             <div className="relative">
               <button 
                 onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
@@ -228,6 +279,12 @@ export default function Header() {
               <Heart size={20} />
               Поддержать
             </Link>
+            {user && (
+              <button onClick={handleShare} className="flex items-center gap-2 text-amber-700 py-2">
+                {copied ? <Check size={20} /> : <Share2 size={20} />}
+                {copied ? 'Ссылка скопирована!' : 'Поделиться сайтом'}
+              </button>
+            )}
             <div className="border-t pt-3 mt-2">
               <Link href="/add-pdf" className="flex items-center gap-2 text-primary-600 py-2">
                 <FileText size={20} />
