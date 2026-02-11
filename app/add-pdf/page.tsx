@@ -138,15 +138,46 @@ export default function AddPdfPage() {
   }, []);
 
   useEffect(() => {
-    async function convertDate() {
+    async function convertDateAndParsha() {
       if (!gregorianDate) return;
       try {
         const [year, month, day] = gregorianDate.split('-');
-        const res = await fetch(`https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${parseInt(month)}&gd=${parseInt(day)}&g2h=1`);
-        if (res.ok) { const d = await res.json(); setHebrewDate(`${d.hd} ${d.hm} ${d.hy}`); }
-      } catch (err) { console.error('Error converting date:', err); }
+        const yy = parseInt(year), mm = parseInt(month), dd = parseInt(day);
+
+        const dateRes = await fetch(\`https://www.hebcal.com/converter?cfg=json&gy=\${yy}&gm=\${mm}&gd=\${dd}&g2h=1\`);
+        if (dateRes.ok) {
+          const d = await dateRes.json();
+          setHebrewDate(\`\${d.hd} \${d.hm} \${d.hy}\`);
+        }
+
+        const parshaRes = await fetch(
+          \`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=\${yy}&month=\${mm}&ss=off&mf=off&c=off&s=on\`
+        );
+        if (parshaRes.ok) {
+          const data = await parshaRes.json();
+          const inputDate = new Date(yy, mm - 1, dd);
+          inputDate.setHours(0, 0, 0, 0);
+
+          const upcoming = data.items
+            ?.filter((item: any) => item.category === 'parashat')
+            ?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            ?.find((item: any) => {
+              const d = new Date(item.date);
+              d.setHours(0, 0, 0, 0);
+              return d >= inputDate;
+            });
+
+          if (upcoming) {
+            const name = upcoming.title?.replace('Parashat ', '');
+            const id = parshaNameToId[name];
+            if (id) setParshaId(id);
+          }
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
     }
-    convertDate();
+    convertDateAndParsha();
   }, [gregorianDate]);
 
   useEffect(() => {
