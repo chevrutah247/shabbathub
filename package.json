@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.78.0",
+    "@upstash/redis": "^1.36.2",
     "lucide-react": "^0.344.0",
     "next": "^14.2.0",
     "react": "^18.2.0",

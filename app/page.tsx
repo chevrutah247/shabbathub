@@ -65,14 +65,14 @@ export default function HomePage() {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <Link 
+              <a 
                 href="/catalog"
                 className="inline-flex items-center gap-2 bg-white text-primary-700 px-6 py-3 rounded-full font-medium hover:bg-gold-400 hover:text-primary-900 transition-all"
               >
                 <BookOpen size={20} />
                 Каталог материалов
               </Link>
-              <Link 
+              <a 
                 href="/catalog"
                 className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20"
               >
@@ -135,7 +135,7 @@ export default function HomePage() {
               </h2>
               <p className="text-gray-600">Свежие материалы к Шаббату</p>
             </div>
-            <Link 
+            <a 
               href="/catalog"
               className="hidden md:flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium"
             >
@@ -147,7 +147,7 @@ export default function HomePage() {
           <FeaturedDocuments />
           
           <div className="mt-10 text-center md:hidden">
-            <Link 
+            <a 
               href="/catalog"
               className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-full font-medium hover:bg-primary-700 transition-colors"
             >
@@ -166,7 +166,7 @@ export default function HomePage() {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <Link 
+            <a 
               href="/catalog?category=newspapers"
               className="group p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -179,7 +179,7 @@ export default function HomePage() {
               </p>
             </Link>
             
-            <Link 
+            <a 
               href="/catalog?category=educational"
               className="group p-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -192,7 +192,7 @@ export default function HomePage() {
               </p>
             </Link>
             
-            <Link 
+            <a 
               href="/catalog?category=holidays"
               className="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -220,8 +220,8 @@ export default function HomePage() {
             и статьи на русском, иврите и английском языках, чтобы сделать 
             еврейское знание доступным для всех.
           </p>
-          <Link 
-            href="/about"
+          <a 
+            href="#"
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium"
           >
             Узнать больше о проекте
