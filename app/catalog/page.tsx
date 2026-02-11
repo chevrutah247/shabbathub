@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -21,17 +22,8 @@ interface Document {
   issue_number: string;
 }
 
-interface Parsha {
-  id: number;
-  name_ru: string;
-  name_en: string;
-  order_num: number;
-}
-
-interface Publication {
-  id: string;
-  title_ru: string;
-}
+interface Parsha { id: number; name_ru: string; name_en: string; order_num: number; }
+interface Publication { id: string; title_ru: string; }
 
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
@@ -53,16 +45,11 @@ function formatDate(dateString: string | null): string {
 }
 
 function DocumentCard({ doc, currentParshaId, parshaMap, pubMap }: {
-  doc: Document;
-  currentParshaId: number | null;
-  parshaMap: Record<number, string>;
-  pubMap: Record<string, string>;
+  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>;
 }) {
   const [imgError, setImgError] = useState(false);
   const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
   const pubName = doc.publication_id ? pubMap[doc.publication_id] : null;
-
-  // Собираем инфо-строку: Публикация · №выпуска · Парша
   const infoParts: string[] = [];
   if (pubName) infoParts.push(pubName);
   if (doc.issue_number) infoParts.push('№' + doc.issue_number);
@@ -73,47 +60,31 @@ function DocumentCard({ doc, currentParshaId, parshaMap, pubMap }: {
       <Link href={'/document/' + doc.id}>
         <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
           {doc.thumbnail_url && !imgError ? (
-            <img
-              src={doc.thumbnail_url}
-              alt={doc.title}
-              loading="lazy"
-              onError={() => setImgError(true)}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" onError={() => setImgError(true)}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
               <FileText size={32} className="text-gray-300" />
             </div>
           )}
-
           {doc.parsha_id === currentParshaId && (
-            <div className="absolute top-2 left-2 bg-primary-600 text-white text-[10px] px-2 py-1 rounded-full font-medium">
-              Эта неделя
-            </div>
+            <div className="absolute top-2 left-2 bg-primary-600 text-white text-[10px] px-2 py-1 rounded-full font-medium">Эта неделя</div>
           )}
         </div>
       </Link>
-
       <div className="p-3">
         <h3 className="font-medium text-sm text-gray-900 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
-          <Link href={'/document/' + doc.id}>
-            {doc.title}
-          </Link>
+          <Link href={'/document/' + doc.id}>{doc.title}</Link>
         </h3>
-        {infoParts.length > 0 && (
-          <p className="text-xs text-gray-500 mt-1.5 line-clamp-1">
-            {infoParts.join(' · ')}
-          </p>
-        )}
-        {doc.gregorian_date && (
-          <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(doc.gregorian_date)}</p>
-        )}
+        {infoParts.length > 0 && <p className="text-xs text-gray-500 mt-1.5 line-clamp-1">{infoParts.join(' · ')}</p>}
+        {doc.gregorian_date && <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(doc.gregorian_date)}</p>}
       </div>
     </article>
   );
 }
 
-export default function CatalogPage() {
+function CatalogContent() {
+  const searchParams = useSearchParams();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [parshaMap, setParshaMap] = useState<Record<number, string>>({});
@@ -121,11 +92,18 @@ export default function CatalogPage() {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
   const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
+  const [initialized, setInitialized] = useState(false);
+
+  // Чтение ?search= из URL
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q) { setSearchInput(q); setSearchQuery(q); }
+    setInitialized(true);
+  }, [searchParams]);
 
   useEffect(() => {
     async function fetchCurrentParsha() {
@@ -140,11 +118,7 @@ export default function CatalogPage() {
           const upcoming = data.items
             ?.filter((item: any) => item.category === 'parashat')
             ?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
-            ?.find((item: any) => {
-              const d = new Date(item.date);
-              d.setHours(0, 0, 0, 0);
-              return d >= today;
-            });
+            ?.find((item: any) => { const d = new Date(item.date); d.setHours(0, 0, 0, 0); return d >= today; });
           if (upcoming) {
             const name = upcoming.title?.replace('Parashat ', '');
             const id = parshaNameToId[name];
@@ -156,14 +130,9 @@ export default function CatalogPage() {
     fetchCurrentParsha();
   }, []);
 
-  // Загрузка парашот и публикаций
   useEffect(() => {
-    // Парашот
-    fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
-      headers: { 'apikey': SUPABASE_KEY }
-    })
-      .then(r => r.json())
-      .then(data => {
+    fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', { headers: { 'apikey': SUPABASE_KEY } })
+      .then(r => r.json()).then(data => {
         if (!data) return;
         const map: Record<number, string> = {};
         data.forEach((p: Parsha) => { map[p.id] = p.name_ru; });
@@ -175,17 +144,10 @@ export default function CatalogPage() {
             return a.order_num - b.order_num;
           });
           setParshiot(sorted);
-        } else {
-          setParshiot(data);
-        }
+        } else { setParshiot(data); }
       });
-
-    // Публикации
-    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru', {
-      headers: { 'apikey': SUPABASE_KEY }
-    })
-      .then(r => r.json())
-      .then(data => {
+    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru', { headers: { 'apikey': SUPABASE_KEY } })
+      .then(r => r.json()).then(data => {
         if (!data) return;
         const map: Record<string, string> = {};
         data.forEach((p: Publication) => { map[p.id] = p.title_ru; });
@@ -194,20 +156,16 @@ export default function CatalogPage() {
   }, [currentParshaId]);
 
   const fetchDocuments = useCallback(async () => {
+    if (!initialized) return;
     setLoading(true);
     const from = page * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
     let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc';
     if (searchQuery) { url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*'; }
     if (selectedParsha) { url += '&parsha_id=eq.' + selectedParsha; }
-
     try {
       const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', {
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Range': from + '-' + to,
-          'Prefer': 'count=exact'
-        }
+        headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' }
       });
       const data = await res.json();
       const contentRange = res.headers.get('content-range');
@@ -216,7 +174,7 @@ export default function CatalogPage() {
       setTotalCount(total);
     } catch (err) { console.error('Error fetching documents:', err); }
     finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha]);
+  }, [page, searchQuery, selectedParsha, initialized]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -231,7 +189,6 @@ export default function CatalogPage() {
           <h1 className="text-2xl font-bold text-primary-900 mb-2">Каталог материалов</h1>
           <p className="text-gray-600">Газеты, недельные главы Торы и материалы к Шаббату</p>
         </div>
-
         <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
           <div className="flex flex-wrap gap-3">
             <form onSubmit={handleSearch} className="relative flex-1 min-w-[250px]">
@@ -242,9 +199,7 @@ export default function CatalogPage() {
             <select value={selectedParsha || ''} onChange={(e) => handleParshaChange(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[180px]">
               <option value="">Все главы</option>
-              {parshiot.map(p => (
-                <option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ★' : ''}</option>
-              ))}
+              {parshiot.map(p => (<option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ★' : ''}</option>))}
             </select>
             {(searchQuery || selectedParsha) && (
               <button onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setPage(0); }}
@@ -252,12 +207,10 @@ export default function CatalogPage() {
             )}
           </div>
         </div>
-
         <div className="flex items-center justify-between mb-4">
           <p className="text-gray-600">Найдено: <span className="font-medium text-gray-900">{totalCount.toLocaleString()}</span> материалов</p>
           {totalPages > 1 && <p className="text-gray-500 text-sm">Страница {page + 1} из {totalPages}</p>}
         </div>
-
         {loading ? (
           <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-primary-600" size={32} /></div>
         ) : documents.length === 0 ? (
@@ -265,11 +218,8 @@ export default function CatalogPage() {
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {documents.map((doc) => (
-                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} />
-              ))}
+              {documents.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} />))}
             </div>
-
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
                 <button onClick={() => setPage(0)} disabled={page === 0} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">В начало</button>
@@ -297,5 +247,13 @@ export default function CatalogPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function CatalogPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-cream flex items-center justify-center"><Loader2 className="animate-spin text-primary-600" size={32} /></div>}>
+      <CatalogContent />
+    </Suspense>
   );
 }
