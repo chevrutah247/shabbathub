@@ -213,6 +213,16 @@ export default function HomePage() {
       <section className="py-16 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="text-5xl mb-4">📚</div>
+          <h2 className="text-3xl font-display font-bold mb-4">Группы для изучения Торы</h2>
+          <p className="text-lg text-indigo-200 mb-8">WhatsApp и Telegram группы для совместного изучения</p>
+          <Link href="/torah-groups" className="inline-flex items-center gap-2 bg-white text-indigo-900 px-8 py-4 rounded-full font-bold hover:bg-yellow-400 transition-all">Смотреть группы →</Link>
+        </div>
+      </section>
+
+      {/* Torah Groups */}
+      <section className="py-16 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="text-5xl mb-4">📚</div>
           <h2 className="text-3xl font-display font-bold mb-4">
             Группы для изучения Торы
           </h2>
