@@ -3,27 +3,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Upload, Calendar, Loader2, Check, AlertCircle, Image, FileText, X, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, Upload, Loader2, Check, AlertCircle, FileText, X, Link as LinkIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
 
-interface Publication {
-  id: string;
-  title_ru: string;
-}
-
-interface Parsha {
-  id: number;
-  name_ru: string;
-  order_num: number;
-}
-
-interface Event {
-  id: string;
-  name_ru: string;
-}
+interface Publication { id: string; title_ru: string; }
+interface Parsha { id: number; name_ru: string; order_num: number; }
+interface Event { id: string; name_ru: string; }
 
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
@@ -41,28 +29,50 @@ const parshaNameToId: Record<string, number> = {
 
 function extractGoogleDriveId(url: string): string | null {
   const patterns = [/\/file\/d\/([a-zA-Z0-9_-]+)/, /id=([a-zA-Z0-9_-]+)/, /\/d\/([a-zA-Z0-9_-]+)/];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
+  for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
   return null;
 }
 
 function generateThumbnailUrl(pdfUrl: string): string | null {
   const fileId = extractGoogleDriveId(pdfUrl);
-  if (fileId) return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-  return null;
+  return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w400` : null;
 }
 
-function generateUniqueFilename(originalName: string): string {
-  const ext = originalName.split('.').pop()?.toLowerCase() || 'pdf';
+function generateUniqueFilename(originalName: string, ext: string = 'pdf'): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  const cleanName = originalName
-    .replace(/\.[^/.]+$/, '')
-    .replace(/[^a-zA-Z0-9а-яА-ЯёЁ\-_]/g, '-')
-    .substring(0, 50);
+  const cleanName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9а-яА-ЯёЁ\-_]/g, '-').substring(0, 50);
   return `${cleanName}-${timestamp}-${random}.${ext}`;
+}
+
+// Генерация превью из PDF (первая страница)
+async function generateThumbnailFromPdf(file: File): Promise<Blob | null> {
+  try {
+    const pdfjsLib = await import('pdfjs-dist');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const page = await pdf.getPage(1);
+
+    const scale = 1.5;
+    const viewport = page.getViewport({ scale });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    return new Promise<Blob | null>((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.8);
+    });
+  } catch (err) {
+    console.error('Thumbnail generation error:', err);
+    return null;
+  }
 }
 
 export default function AddPdfPage() {
@@ -76,7 +86,6 @@ export default function AddPdfPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // Form state
   const [title, setTitle] = useState('');
   const [publicationId, setPublicationId] = useState('');
   const [issueNumber, setIssueNumber] = useState('');
@@ -89,15 +98,16 @@ export default function AddPdfPage() {
   const [autoThumbnail, setAutoThumbnail] = useState(true);
   const [description, setDescription] = useState('');
 
-  // File upload state
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [generatingThumb, setGeneratingThumb] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Загрузка текущей парши — ИСПРАВЛЕНО: берём ближайший будущий Шаббат
+  // Текущая парша — ближайший будущий Шаббат
   useEffect(() => {
     async function fetchCurrentParsha() {
       try {
@@ -108,56 +118,37 @@ export default function AddPdfPage() {
         );
         if (res.ok) {
           const data = await res.json();
-          // Ищем ближайшую БУДУЩУЮ или текущую паршу (Шаббат сегодня или позже)
           const upcoming = data.items
             ?.filter((item: any) => item.category === 'parashat')
             ?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
             ?.find((item: any) => {
-              const itemDate = new Date(item.date);
-              itemDate.setHours(0, 0, 0, 0);
-              // Шаббат этой недели: от воскресенья до субботы
-              // Если сегодня суббота — показываем текущую
-              // Если воскресенье-пятница — показываем следующую субботу
-              return itemDate >= today;
+              const d = new Date(item.date);
+              d.setHours(0, 0, 0, 0);
+              return d >= today;
             });
-
           if (upcoming) {
             const name = upcoming.title?.replace('Parashat ', '');
             const id = parshaNameToId[name];
-            if (id) {
-              setCurrentParshaId(id);
-              setParshaId(id);
-            }
+            if (id) { setCurrentParshaId(id); setParshaId(id); }
           }
         }
-      } catch (err) {
-        console.error('Error:', err);
-      }
+      } catch (err) { console.error('Error:', err); }
     }
     fetchCurrentParsha();
   }, []);
 
-  // Конвертация даты
   useEffect(() => {
     async function convertDate() {
       if (!gregorianDate) return;
       try {
         const [year, month, day] = gregorianDate.split('-');
-        const res = await fetch(
-          `https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${parseInt(month)}&gd=${parseInt(day)}&g2h=1`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setHebrewDate(`${data.hd} ${data.hm} ${data.hy}`);
-        }
-      } catch (err) {
-        console.error('Error converting date:', err);
-      }
+        const res = await fetch(`https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${parseInt(month)}&gd=${parseInt(day)}&g2h=1`);
+        if (res.ok) { const d = await res.json(); setHebrewDate(`${d.hd} ${d.hm} ${d.hy}`); }
+      } catch (err) { console.error('Error converting date:', err); }
     }
     convertDate();
   }, [gregorianDate]);
 
-  // Автогенерация thumbnail при изменении PDF URL
   useEffect(() => {
     if (autoThumbnail && pdfUrl && uploadMode === 'url') {
       const thumb = generateThumbnailUrl(pdfUrl);
@@ -165,18 +156,11 @@ export default function AddPdfPage() {
     }
   }, [pdfUrl, autoThumbnail, uploadMode]);
 
-  // Загрузка справочников
   useEffect(() => {
     Promise.all([
-      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru', {
-        headers: { 'apikey': SUPABASE_KEY }
-      }).then(r => r.json()),
-      fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,order_num', {
-        headers: { 'apikey': SUPABASE_KEY }
-      }).then(r => r.json()),
-      fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', {
-        headers: { 'apikey': SUPABASE_KEY }
-      }).then(r => r.json())
+      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,order_num', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json())
     ]).then(([pubs, parshas, evts]) => {
       setPublications(pubs || []);
       if (currentParshaId && parshas) {
@@ -186,47 +170,43 @@ export default function AddPdfPage() {
           return a.order_num - b.order_num;
         });
         setParshiot(sorted);
-      } else {
-        setParshiot(parshas || []);
-      }
+      } else { setParshiot(parshas || []); }
       setEvents(evts || []);
       setLoading(false);
     });
   }, [currentParshaId]);
 
-  // Drag & Drop handlers
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
+  // Генерация превью при выборе файла
+  useEffect(() => {
+    if (!selectedFile) { setThumbnailPreview(null); return; }
+    let cancelled = false;
+    setGeneratingThumb(true);
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
+    generateThumbnailFromPdf(selectedFile).then((blob) => {
+      if (cancelled || !blob) { setGeneratingThumb(false); return; }
+      const url = URL.createObjectURL(blob);
+      setThumbnailPreview(url);
+      setGeneratingThumb(false);
+    });
 
+    return () => { cancelled = true; };
+  }, [selectedFile]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }, []);
+  const handleDragLeave = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }, []);
   const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
+    e.preventDefault(); e.stopPropagation(); setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file && file.type === 'application/pdf') {
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
-    } else {
-      setError('Можно загружать только PDF файлы');
-    }
+    } else { setError('Можно загружать только PDF файлы'); }
   }, [title]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type !== 'application/pdf') {
-        setError('Можно загружать только PDF файлы');
-        return;
-      }
+      if (file.type !== 'application/pdf') { setError('Можно загружать только PDF файлы'); return; }
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
     }
@@ -234,75 +214,65 @@ export default function AddPdfPage() {
 
   const removeFile = () => {
     setSelectedFile(null);
+    setThumbnailPreview(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // Загрузить файл в Supabase Storage
   const uploadFile = async (file: File): Promise<string> => {
-    const filename = generateUniqueFilename(file.name);
+    const filename = generateUniqueFilename(file.name, 'pdf');
     const filePath = `uploads/${filename}`;
+    setUploading(true); setUploadProgress(0);
 
-    setUploading(true);
-    setUploadProgress(0);
-
-    // Симуляция прогресса
     const progressInterval = setInterval(() => {
       setUploadProgress(prev => Math.min(prev + 10, 90));
     }, 200);
 
-    const { data, error } = await supabase.storage
-      .from('pdfs')
-      .upload(filePath, file, {
-        contentType: 'application/pdf',
-        upsert: false,
-      });
+    const { error } = await supabase.storage.from('pdfs').upload(filePath, file, { contentType: 'application/pdf', upsert: false });
+    clearInterval(progressInterval); setUploadProgress(100);
 
-    clearInterval(progressInterval);
-    setUploadProgress(100);
+    if (error) { setUploading(false); throw new Error('Ошибка загрузки: ' + error.message); }
 
-    if (error) {
-      setUploading(false);
-      throw new Error('Ошибка загрузки файла: ' + error.message);
-    }
-
-    // Получить публичный URL
-    const { data: urlData } = supabase.storage
-      .from('pdfs')
-      .getPublicUrl(filePath);
-
+    const { data: urlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
     setUploading(false);
     return urlData.publicUrl;
   };
 
+  const uploadThumbnail = async (blob: Blob, originalName: string): Promise<string> => {
+    const filename = generateUniqueFilename(originalName, 'jpg');
+    const filePath = `thumbnails/${filename}`;
+
+    const { error } = await supabase.storage.from('pdfs').upload(filePath, blob, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw new Error('Ошибка загрузки превью: ' + error.message);
+
+    const { data: urlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
+    return urlData.publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSubmitting(true);
+    e.preventDefault(); setError(null); setSubmitting(true);
 
-    if (!title) {
-      setError('Укажите название');
-      setSubmitting(false);
-      return;
-    }
-
-    if (uploadMode === 'file' && !selectedFile) {
-      setError('Выберите PDF файл для загрузки');
-      setSubmitting(false);
-      return;
-    }
-
-    if (uploadMode === 'url' && !pdfUrl) {
-      setError('Укажите ссылку на PDF');
-      setSubmitting(false);
-      return;
-    }
+    if (!title) { setError('Укажите название'); setSubmitting(false); return; }
+    if (uploadMode === 'file' && !selectedFile) { setError('Выберите PDF файл'); setSubmitting(false); return; }
+    if (uploadMode === 'url' && !pdfUrl) { setError('Укажите ссылку на PDF'); setSubmitting(false); return; }
 
     try {
       let finalPdfUrl = pdfUrl;
+      let finalThumbnailUrl = thumbnailUrl;
 
-      // Загрузить файл если нужно
       if (uploadMode === 'file' && selectedFile) {
         finalPdfUrl = await uploadFile(selectedFile);
+
+        // Загрузить превью если сгенерировалось
+        if (thumbnailPreview) {
+          try {
+            const thumbBlob = await generateThumbnailFromPdf(selectedFile);
+            if (thumbBlob) {
+              finalThumbnailUrl = await uploadThumbnail(thumbBlob, selectedFile.name);
+            }
+          } catch (err) {
+            console.error('Thumbnail upload error:', err);
+          }
+        }
       }
 
       const res = await fetch(SUPABASE_URL + '/rest/v1/issues', {
@@ -322,44 +292,35 @@ export default function AddPdfPage() {
           parsha_id: parshaId || null,
           event_id: eventId || null,
           pdf_url: finalPdfUrl,
-          thumbnail_url: thumbnailUrl || null,
+          thumbnail_url: finalThumbnailUrl || null,
           is_active: true
         })
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Ошибка сохранения');
-      }
+      if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'Ошибка сохранения'); }
 
       setSuccess(true);
       setTimeout(() => router.push('/catalog'), 2000);
     } catch (err: any) {
       setError(err.message);
-    } finally {
-      setSubmitting(false);
-    }
+    } finally { setSubmitting(false); }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <Loader2 className="animate-spin text-primary-600" size={32} />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen bg-cream flex items-center justify-center">
+      <Loader2 className="animate-spin text-primary-600" size={32} />
+    </div>
+  );
 
-  if (success) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-          <Check size={64} className="mx-auto text-green-500 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Материал добавлен!</h2>
-          <p className="text-gray-600">Перенаправление в каталог...</p>
-        </div>
+  if (success) return (
+    <div className="min-h-screen bg-cream flex items-center justify-center">
+      <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+        <Check size={64} className="mx-auto text-green-500 mb-4" />
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Материал добавлен!</h2>
+        <p className="text-gray-600">Перенаправление в каталог...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-cream">
@@ -374,8 +335,7 @@ export default function AddPdfPage() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
-              <AlertCircle size={20} />
-              {error}
+              <AlertCircle size={20} />{error}
             </div>
           )}
 
@@ -383,246 +343,145 @@ export default function AddPdfPage() {
             {/* Название */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Название *</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Например: Шомрей Шабос №805 Мишпатим"
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none"
-                required
-              />
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Шомрей Шабос №805 Мишпатим" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none" required />
             </div>
 
             {/* Публикация */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Публикация (издание)</label>
-              <select
-                value={publicationId}
-                onChange={(e) => setPublicationId(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
-              >
+              <select value={publicationId} onChange={(e) => setPublicationId(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
                 <option value="">— Выберите публикацию —</option>
-                {publications.map(p => (
-                  <option key={p.id} value={p.id}>{p.title_ru}</option>
-                ))}
+                {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru}</option>)}
               </select>
-              <Link href="/add-publication" className="text-sm text-primary-600 hover:underline mt-1 inline-block">
-                + Создать новую публикацию
-              </Link>
+              <Link href="/add-publication" className="text-sm text-primary-600 hover:underline mt-1 inline-block">+ Создать новую публикацию</Link>
             </div>
 
             {/* Номер выпуска */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Номер выпуска (опционально)</label>
-              <input
-                type="text"
-                value={issueNumber}
-                onChange={(e) => setIssueNumber(e.target.value)}
-                placeholder="805"
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
-              />
+              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="805" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
             </div>
 
             {/* Дата */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Дата выхода</label>
-                <input
-                  type="date"
-                  value={gregorianDate}
-                  onChange={(e) => setGregorianDate(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
-                />
+                <input type="date" value={gregorianDate} onChange={(e) => setGregorianDate(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Еврейская дата</label>
-                <input
-                  type="text"
-                  value={hebrewDate}
-                  readOnly
-                  className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50 text-gray-600"
-                  placeholder="Авто-конвертация"
-                />
+                <input type="text" value={hebrewDate} readOnly className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50 text-gray-600" placeholder="Авто-конвертация" />
               </div>
             </div>
 
-            {/* Недельная глава */}
+            {/* Глава */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Недельная глава</label>
-              <select
-                value={parshaId || ''}
-                onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
-              >
+              <select value={parshaId || ''} onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
                 <option value="">— Не указана —</option>
-                {parshiot.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.name_ru} {p.id === currentParshaId ? '(текущая)' : ''}
-                  </option>
-                ))}
+                {parshiot.map(p => <option key={p.id} value={p.id}>{p.name_ru} {p.id === currentParshaId ? '(текущая)' : ''}</option>)}
               </select>
             </div>
 
             {/* Событие */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Событие / Праздник (опционально)</label>
-              <select
-                value={eventId}
-                onChange={(e) => setEventId(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
-              >
+              <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
                 <option value="">— Не указано —</option>
-                {events.map(e => (
-                  <option key={e.id} value={e.id}>{e.name_ru}</option>
-                ))}
+                {events.map(e => <option key={e.id} value={e.id}>{e.name_ru}</option>)}
               </select>
             </div>
 
             {/* === PDF ФАЙЛ === */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">PDF файл *</label>
-              
-              {/* Переключатель режима */}
               <div className="flex gap-2 mb-3">
-                <button
-                  type="button"
-                  onClick={() => setUploadMode('file')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    uploadMode === 'file'
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <Upload size={16} />
-                  Загрузить файл
+                <button type="button" onClick={() => setUploadMode('file')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${uploadMode === 'file' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                  <Upload size={16} /> Загрузить файл
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setUploadMode('url')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    uploadMode === 'url'
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <LinkIcon size={16} />
-                  Вставить ссылку
+                <button type="button" onClick={() => setUploadMode('url')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${uploadMode === 'url' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                  <LinkIcon size={16} /> Вставить ссылку
                 </button>
               </div>
 
               {uploadMode === 'file' ? (
                 <>
-                  {/* Зона перетаскивания */}
                   {!selectedFile ? (
                     <div
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      onDrop={handleDrop}
+                      onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
                       onClick={() => fileInputRef.current?.click()}
-                      className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
-                        isDragging
-                          ? 'border-primary-500 bg-primary-50'
-                          : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
-                      }`}
+                      className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${isDragging ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'}`}
                     >
                       <Upload className={`mx-auto mb-3 ${isDragging ? 'text-primary-500' : 'text-gray-400'}`} size={40} />
-                      <p className="text-gray-700 font-medium mb-1">
-                        {isDragging ? 'Отпустите файл' : 'Перетащите PDF сюда'}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        или <span className="text-primary-600 underline">выберите файл</span> с компьютера
-                      </p>
+                      <p className="text-gray-700 font-medium mb-1">{isDragging ? 'Отпустите файл' : 'Перетащите PDF сюда'}</p>
+                      <p className="text-sm text-gray-500">или <span className="text-primary-600 underline">выберите файл</span> с компьютера</p>
                       <p className="text-xs text-gray-400 mt-2">Только PDF, до 50 MB</p>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept=".pdf,application/pdf"
-                        onChange={handleFileSelect}
-                        className="hidden"
-                      />
+                      <input ref={fileInputRef} type="file" accept=".pdf,application/pdf" onChange={handleFileSelect} className="hidden" />
                     </div>
                   ) : (
-                    /* Выбранный файл */
-                    <div className="border rounded-xl p-4 flex items-center gap-4 bg-green-50 border-green-200">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
-                        <FileText className="text-red-600" size={24} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">{selectedFile.name}</p>
-                        <p className="text-sm text-gray-500">
-                          {(selectedFile.size / 1024 / 1024).toFixed(1)} MB
-                        </p>
-                      </div>
-                      {uploading ? (
-                        <div className="w-20">
-                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary-600 rounded-full transition-all duration-300"
-                              style={{ width: `${uploadProgress}%` }}
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500 text-center mt-1">{uploadProgress}%</p>
+                    <div className="border rounded-xl p-4 bg-green-50 border-green-200">
+                      <div className="flex items-center gap-4">
+                        {/* Превью слева */}
+                        <div className="w-16 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border">
+                          {generatingThumb ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Loader2 className="animate-spin text-gray-400" size={16} />
+                            </div>
+                          ) : thumbnailPreview ? (
+                            <img src={thumbnailPreview} alt="Preview" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <FileText className="text-red-400" size={24} />
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={removeFile}
-                          className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                        >
-                          <X size={20} />
-                        </button>
-                      )}
+
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-gray-900 truncate">{selectedFile.name}</p>
+                          <p className="text-sm text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(1)} MB</p>
+                          {generatingThumb && <p className="text-xs text-primary-600 mt-1">Генерация превью...</p>}
+                          {thumbnailPreview && !generatingThumb && <p className="text-xs text-green-600 mt-1">Превью создано ✓</p>}
+                        </div>
+
+                        {uploading ? (
+                          <div className="w-20">
+                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                              <div className="h-full bg-primary-600 rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                            </div>
+                            <p className="text-xs text-gray-500 text-center mt-1">{uploadProgress}%</p>
+                          </div>
+                        ) : (
+                          <button type="button" onClick={removeFile} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
+                            <X size={20} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )}
                 </>
               ) : (
-                /* Режим ссылки */
                 <div>
-                  <input
-                    type="url"
-                    value={pdfUrl}
-                    onChange={(e) => setPdfUrl(e.target.value)}
-                    placeholder="https://drive.google.com/file/d/..."
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга
-                  </p>
+                  <input type="url" value={pdfUrl} onChange={(e) => setPdfUrl(e.target.value)} placeholder="https://drive.google.com/file/d/..." className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
+                  <p className="text-xs text-gray-500 mt-1">Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга</p>
                 </div>
               )}
             </div>
 
-            {/* Превью — показываем только для режима ссылки */}
+            {/* Превью для режима ссылки */}
             {uploadMode === 'url' && (
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="block text-sm font-medium text-gray-700">Превью (обложка)</label>
                   <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={autoThumbnail}
-                      onChange={(e) => setAutoThumbnail(e.target.checked)}
-                      className="rounded"
-                    />
+                    <input type="checkbox" checked={autoThumbnail} onChange={(e) => setAutoThumbnail(e.target.checked)} className="rounded" />
                     Авто из Google Drive
                   </label>
                 </div>
                 <div className="flex gap-3">
-                  <input
-                    type="url"
-                    value={thumbnailUrl}
-                    onChange={(e) => { setThumbnailUrl(e.target.value); setAutoThumbnail(false); }}
-                    placeholder="https://... (URL картинки)"
-                    className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
-                  />
+                  <input type="url" value={thumbnailUrl} onChange={(e) => { setThumbnailUrl(e.target.value); setAutoThumbnail(false); }} placeholder="https://... (URL картинки)" className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
                   {thumbnailUrl && (
                     <div className="w-16 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                      <img
-                        src={thumbnailUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                        onError={(e) => (e.currentTarget.style.display = 'none')}
-                      />
+                      <img src={thumbnailUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
                     </div>
                   )}
                 </div>
@@ -632,31 +491,15 @@ export default function AddPdfPage() {
             {/* Описание */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Описание (опционально)</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                placeholder="Краткое описание содержимого..."
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none"
-              />
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Краткое описание содержимого..." className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none" />
             </div>
 
             {/* Кнопка */}
-            <button
-              type="submit"
-              disabled={submitting || uploading}
-              className="w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
+            <button type="submit" disabled={submitting || uploading} className="w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
               {submitting || uploading ? (
-                <>
-                  <Loader2 className="animate-spin" size={20} />
-                  {uploading ? 'Загрузка файла...' : 'Сохранение...'}
-                </>
+                <><Loader2 className="animate-spin" size={20} />{uploading ? 'Загрузка файла...' : 'Сохранение...'}</>
               ) : (
-                <>
-                  <Upload size={20} />
-                  Добавить материал
-                </>
+                <><Upload size={20} />Добавить материал</>
               )}
             </button>
           </form>
