@@ -113,7 +113,7 @@ export default function AddPdfPage() {
       try {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const res = await fetch(
+        const res = 
           `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=${today.getFullYear()}&month=${today.getMonth() + 1}&ss=off&mf=off&c=off&s=on`
         );
         if (res.ok) {
@@ -150,7 +150,7 @@ export default function AddPdfPage() {
           setHebrewDate(\`\${d.hd} \${d.hm} \${d.hy}\`);
         }
 
-        const parshaRes = await fetch(
+        const parshaRes = 
           \`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=\${yy}&month=\${mm}&ss=off&mf=off&c=off&s=on\`
         );
         if (parshaRes.ok) {
