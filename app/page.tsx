@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { Search, BookOpen, Calendar, Globe, ChevronRight } from 'lucide-react';
 import SearchBar from '@/components/SearchBar';
 import FeaturedDocuments from '@/components/FeaturedDocuments';
-// import { supabase } from '@/lib/supabase';
 
 export default function HomePage() {
   const [totalDocs, setTotalDocs] = useState<number | null>(null);
@@ -40,7 +39,6 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-900 via-primary-700 to-primary-800 text-white overflow-hidden">
-        {/* Декоративные элементы */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-64 h-64 bg-gold-500 rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl" />
@@ -65,14 +63,14 @@ export default function HomePage() {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <a 
+              <Link 
                 href="/catalog"
                 className="inline-flex items-center gap-2 bg-white text-primary-700 px-6 py-3 rounded-full font-medium hover:bg-gold-400 hover:text-primary-900 transition-all"
               >
                 <BookOpen size={20} />
                 Каталог материалов
               </Link>
-              <a 
+              <Link 
                 href="/catalog"
                 className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20"
               >
@@ -135,7 +133,7 @@ export default function HomePage() {
               </h2>
               <p className="text-gray-600">Свежие материалы к Шаббату</p>
             </div>
-            <a 
+            <Link 
               href="/catalog"
               className="hidden md:flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium"
             >
@@ -147,7 +145,7 @@ export default function HomePage() {
           <FeaturedDocuments />
           
           <div className="mt-10 text-center md:hidden">
-            <a 
+            <Link 
               href="/catalog"
               className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-full font-medium hover:bg-primary-700 transition-colors"
             >
@@ -166,7 +164,7 @@ export default function HomePage() {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <a 
+            <Link 
               href="/catalog?category=newspapers"
               className="group p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -179,7 +177,7 @@ export default function HomePage() {
               </p>
             </Link>
             
-            <a 
+            <Link 
               href="/catalog?category=educational"
               className="group p-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -192,7 +190,7 @@ export default function HomePage() {
               </p>
             </Link>
             
-            <a 
+            <Link 
               href="/catalog?category=holidays"
               className="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-all"
             >
@@ -205,17 +203,6 @@ export default function HomePage() {
               </p>
             </Link>
           </div>
-        </div>
-      </section>
-
-
-      {/* Torah Groups */}
-      <section className="py-16 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="text-5xl mb-4">📚</div>
-          <h2 className="text-3xl font-display font-bold mb-4">Группы для изучения Торы</h2>
-          <p className="text-lg text-indigo-200 mb-8">WhatsApp и Telegram группы для совместного изучения</p>
-          <Link href="/torah-groups" className="inline-flex items-center gap-2 bg-white text-indigo-900 px-8 py-4 rounded-full font-bold hover:bg-yellow-400 transition-all">Смотреть группы →</Link>
         </div>
       </section>
 
@@ -250,8 +237,8 @@ export default function HomePage() {
             и статьи на русском, иврите и английском языках, чтобы сделать 
             еврейское знание доступным для всех.
           </p>
-          <a 
-            href="#"
+          <Link 
+            href="/about"
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium"
           >
             Узнать больше о проекте
