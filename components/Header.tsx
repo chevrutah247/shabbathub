@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
 const parshaToRussian: Record<string, string> = {
@@ -39,7 +39,6 @@ export default function Header() {
   const [hebrewDate, setHebrewDate] = useState('');
   const [currentParsha, setCurrentParsha] = useState('');
   
-  // ✅ Use shared auth context instead of separate supabase listener
   const { user, profile, signOut } = useAuth();
   const router = useRouter();
   const userRole = (profile as any)?.role ?? null;
@@ -109,6 +108,10 @@ export default function Header() {
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 transition-colors text-sm">
               <BookOpen size={18} />
               Каталог
+            </Link>
+            <Link href="/leaders" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 transition-colors text-sm">
+              <Trophy size={18} />
+              Лидеры
             </Link>
             <Link href="/about" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 transition-colors text-sm">
               <Info size={18} />
@@ -212,6 +215,10 @@ export default function Header() {
             <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2">
               <BookOpen size={20} />
               Каталог
+            </Link>
+            <Link href="/leaders" className="flex items-center gap-2 text-gray-600 py-2">
+              <Trophy size={20} />
+              Лидеры
             </Link>
             <Link href="/about" className="flex items-center gap-2 text-gray-600 py-2">
               <Info size={20} />
