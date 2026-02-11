@@ -28,6 +28,11 @@ interface Parsha {
   order_num: number;
 }
 
+interface Publication {
+  id: string;
+  title_ru: string;
+}
+
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
   'Toldot': 6, 'Vayetzei': 7, 'Vayishlach': 8, 'Vayeshev': 9, 'Miketz': 10,
@@ -47,9 +52,21 @@ function formatDate(dateString: string | null): string {
   return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function DocumentCard({ doc, currentParshaId, parshaMap }: { doc: Document; currentParshaId: number | null; parshaMap: Record<number, string> }) {
+function DocumentCard({ doc, currentParshaId, parshaMap, pubMap }: {
+  doc: Document;
+  currentParshaId: number | null;
+  parshaMap: Record<number, string>;
+  pubMap: Record<string, string>;
+}) {
   const [imgError, setImgError] = useState(false);
   const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
+  const pubName = doc.publication_id ? pubMap[doc.publication_id] : null;
+
+  // Собираем инфо-строку: Публикация · №выпуска · Парша
+  const infoParts: string[] = [];
+  if (pubName) infoParts.push(pubName);
+  if (doc.issue_number) infoParts.push('№' + doc.issue_number);
+  if (parshaName) infoParts.push(parshaName);
 
   return (
     <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all group">
@@ -74,12 +91,6 @@ function DocumentCard({ doc, currentParshaId, parshaMap }: { doc: Document; curr
               Эта неделя
             </div>
           )}
-
-          {doc.issue_number && (
-            <div className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full font-medium">
-              {'№' + doc.issue_number}
-            </div>
-          )}
         </div>
       </Link>
 
@@ -89,16 +100,14 @@ function DocumentCard({ doc, currentParshaId, parshaMap }: { doc: Document; curr
             {doc.title}
           </Link>
         </h3>
-        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-          {parshaName && (
-            <span className="text-[11px] bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full font-medium">
-              {parshaName}
-            </span>
-          )}
-          {doc.gregorian_date && (
-            <span className="text-xs text-gray-400">{formatDate(doc.gregorian_date)}</span>
-          )}
-        </div>
+        {infoParts.length > 0 && (
+          <p className="text-xs text-gray-500 mt-1.5 line-clamp-1">
+            {infoParts.join(' · ')}
+          </p>
+        )}
+        {doc.gregorian_date && (
+          <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(doc.gregorian_date)}</p>
+        )}
       </div>
     </article>
   );
@@ -108,6 +117,7 @@ export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [parshaMap, setParshaMap] = useState<Record<number, string>>({});
+  const [pubMap, setPubMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -121,44 +131,43 @@ export default function CatalogPage() {
     async function fetchCurrentParsha() {
       try {
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const res = await fetch(
           'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=' + today.getFullYear() + '&month=' + (today.getMonth() + 1) + '&ss=off&mf=off&c=off&s=on'
         );
         if (res.ok) {
           const data = await res.json();
-          const parashat = data.items?.find((item: any) => {
-            if (item.category !== 'parashat') return false;
-            const itemDate = new Date(item.date);
-            itemDate.setHours(0, 0, 0, 0);
-            const t = new Date();
-            t.setHours(0, 0, 0, 0);
-            return itemDate >= t;
-          });
-          if (parashat) {
-            const name = parashat.title?.replace('Parashat ', '');
+          const upcoming = data.items
+            ?.filter((item: any) => item.category === 'parashat')
+            ?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            ?.find((item: any) => {
+              const d = new Date(item.date);
+              d.setHours(0, 0, 0, 0);
+              return d >= today;
+            });
+          if (upcoming) {
+            const name = upcoming.title?.replace('Parashat ', '');
             const id = parshaNameToId[name];
             if (id) setCurrentParshaId(id);
           }
         }
-      } catch (err) {
-        console.error('Error:', err);
-      }
+      } catch (err) { console.error('Error:', err); }
     }
     fetchCurrentParsha();
   }, []);
 
+  // Загрузка парашот и публикаций
   useEffect(() => {
+    // Парашот
     fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(r => r.json())
       .then(data => {
         if (!data) return;
-        // Build lookup map
         const map: Record<number, string> = {};
         data.forEach((p: Parsha) => { map[p.id] = p.name_ru; });
         setParshaMap(map);
-
         if (currentParshaId) {
           const sorted = [...data].sort((a: Parsha, b: Parsha) => {
             if (a.id === currentParshaId) return -1;
@@ -170,23 +179,27 @@ export default function CatalogPage() {
           setParshiot(data);
         }
       });
+
+    // Публикации
+    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru', {
+      headers: { 'apikey': SUPABASE_KEY }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data) return;
+        const map: Record<string, string> = {};
+        data.forEach((p: Publication) => { map[p.id] = p.title_ru; });
+        setPubMap(map);
+      });
   }, [currentParshaId]);
 
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
-
     const from = page * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
-
     let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc';
-
-    if (searchQuery) {
-      url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
-    }
-
-    if (selectedParsha) {
-      url += '&parsha_id=eq.' + selectedParsha;
-    }
+    if (searchQuery) { url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*'; }
+    if (selectedParsha) { url += '&parsha_id=eq.' + selectedParsha; }
 
     try {
       const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', {
@@ -196,35 +209,19 @@ export default function CatalogPage() {
           'Prefer': 'count=exact'
         }
       });
-
       const data = await res.json();
       const contentRange = res.headers.get('content-range');
       const total = contentRange ? parseInt(contentRange.split('/')[1]) : 0;
-
       setDocuments(data || []);
       setTotalCount(total);
-    } catch (err) {
-      console.error('Error fetching documents:', err);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error('Error fetching documents:', err); }
+    finally { setLoading(false); }
   }, [page, searchQuery, selectedParsha]);
 
-  useEffect(() => {
-    fetchDocuments();
-  }, [fetchDocuments]);
+  useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchQuery(searchInput);
-    setPage(0);
-  };
-
-  const handleParshaChange = (value: string) => {
-    setSelectedParsha(value ? Number(value) : null);
-    setPage(0);
-  };
-
+  const handleSearch = (e: React.FormEvent) => { e.preventDefault(); setSearchQuery(searchInput); setPage(0); };
+  const handleParshaChange = (value: string) => { setSelectedParsha(value ? Number(value) : null); setPage(0); };
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
@@ -235,81 +232,48 @@ export default function CatalogPage() {
           <p className="text-gray-600">Газеты, недельные главы Торы и материалы к Шаббату</p>
         </div>
 
-        {/* Фильтры */}
         <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
           <div className="flex flex-wrap gap-3">
             <form onSubmit={handleSearch} className="relative flex-1 min-w-[250px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                placeholder="Поиск по названию..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none"
-              />
+              <input type="text" placeholder="Поиск по названию..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none" />
             </form>
-            <select
-              value={selectedParsha || ''}
-              onChange={(e) => handleParshaChange(e.target.value)}
-              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[180px]"
-            >
+            <select value={selectedParsha || ''} onChange={(e) => handleParshaChange(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[180px]">
               <option value="">Все главы</option>
               {parshiot.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.name_ru}{p.id === currentParshaId ? ' ★' : ''}
-                </option>
+                <option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ★' : ''}</option>
               ))}
             </select>
             {(searchQuery || selectedParsha) && (
-              <button
-                onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setPage(0); }}
-                className="px-4 py-2.5 text-gray-600 hover:text-primary-600 transition-colors"
-              >
-                Сбросить
-              </button>
+              <button onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setPage(0); }}
+                className="px-4 py-2.5 text-gray-600 hover:text-primary-600 transition-colors">Сбросить</button>
             )}
           </div>
         </div>
 
-        {/* Статистика */}
         <div className="flex items-center justify-between mb-4">
-          <p className="text-gray-600">
-            Найдено: <span className="font-medium text-gray-900">{totalCount.toLocaleString()}</span> материалов
-          </p>
-          {totalPages > 1 && (
-            <p className="text-gray-500 text-sm">
-              Страница {page + 1} из {totalPages}
-            </p>
-          )}
+          <p className="text-gray-600">Найдено: <span className="font-medium text-gray-900">{totalCount.toLocaleString()}</span> материалов</p>
+          {totalPages > 1 && <p className="text-gray-500 text-sm">Страница {page + 1} из {totalPages}</p>}
         </div>
 
-        {/* Сетка документов */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="animate-spin text-primary-600" size={32} />
-          </div>
+          <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-primary-600" size={32} /></div>
         ) : documents.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <FileText size={48} className="mx-auto mb-4 text-gray-300" />
-            <p>По вашему запросу ничего не найдено</p>
-          </div>
+          <div className="text-center py-20 text-gray-500"><FileText size={48} className="mx-auto mb-4 text-gray-300" /><p>По вашему запросу ничего не найдено</p></div>
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {documents.map((doc) => (
-                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} />
+                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} />
               ))}
             </div>
 
-            {/* Пагинация */}
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
-                <button onClick={() => setPage(0)} disabled={page === 0} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                  В начало
-                </button>
-                <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                  <ChevronLeft size={20} />
-                </button>
+                <button onClick={() => setPage(0)} disabled={page === 0} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">В начало</button>
+                <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronLeft size={20} /></button>
                 <div className="flex gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
@@ -325,12 +289,8 @@ export default function CatalogPage() {
                     );
                   })}
                 </div>
-                <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                  <ChevronRight size={20} />
-                </button>
-                <button onClick={() => setPage(totalPages - 1)} disabled={page >= totalPages - 1} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                  В конец
-                </button>
+                <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronRight size={20} /></button>
+                <button onClick={() => setPage(totalPages - 1)} disabled={page >= totalPages - 1} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">В конец</button>
               </div>
             )}
           </>
