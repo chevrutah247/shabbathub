@@ -10,20 +10,10 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 const PAGE_SIZE = 50;
 
-interface Document {
-  id: string;
-  title: string;
-  pdf_url: string;
-  gregorian_date: string;
-  publication_id: string;
-  thumbnail_url: string;
-  parsha_id: number;
-  event_id: string;
-  issue_number: string;
-}
-
+interface Document { id: string; title: string; pdf_url: string; gregorian_date: string; publication_id: string; thumbnail_url: string; parsha_id: number; event_id: string; issue_number: string; }
 interface Parsha { id: number; name_ru: string; name_en: string; order_num: number; }
 interface Publication { id: string; title_ru: string; }
+interface Event { id: string; name_ru: string; }
 
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
@@ -44,16 +34,18 @@ function formatDate(dateString: string | null): string {
   return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function DocumentCard({ doc, currentParshaId, parshaMap, pubMap }: {
-  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>;
+function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap }: {
+  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>; eventMap: Record<string, string>;
 }) {
   const [imgError, setImgError] = useState(false);
   const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
   const pubName = doc.publication_id ? pubMap[doc.publication_id] : null;
+  const eventName = doc.event_id ? eventMap[doc.event_id] : null;
   const infoParts: string[] = [];
   if (pubName) infoParts.push(pubName);
   if (doc.issue_number) infoParts.push('№' + doc.issue_number);
   if (parshaName) infoParts.push(parshaName);
+  if (eventName) infoParts.push(eventName);
 
   return (
     <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all group">
@@ -87,8 +79,10 @@ function CatalogContent() {
   const searchParams = useSearchParams();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [parshaMap, setParshaMap] = useState<Record<number, string>>({});
   const [pubMap, setPubMap] = useState<Record<string, string>>({});
+  const [eventMap, setEventMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -96,9 +90,9 @@ function CatalogContent() {
   const [searchInput, setSearchInput] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
   const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
 
-  // Чтение ?search= из URL
   useEffect(() => {
     const q = searchParams.get('search');
     if (q) { setSearchInput(q); setSearchQuery(q); }
@@ -153,6 +147,14 @@ function CatalogContent() {
         data.forEach((p: Publication) => { map[p.id] = p.title_ru; });
         setPubMap(map);
       });
+    fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } })
+      .then(r => r.json()).then(data => {
+        if (!data) return;
+        setEvents(data);
+        const map: Record<string, string> = {};
+        data.forEach((e: Event) => { map[e.id] = e.name_ru; });
+        setEventMap(map);
+      });
   }, [currentParshaId]);
 
   const fetchDocuments = useCallback(async () => {
@@ -163,6 +165,7 @@ function CatalogContent() {
     let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc';
     if (searchQuery) { url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*'; }
     if (selectedParsha) { url += '&parsha_id=eq.' + selectedParsha; }
+    if (selectedEvent) { url += '&event_id=eq.' + selectedEvent; }
     try {
       const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', {
         headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' }
@@ -174,12 +177,12 @@ function CatalogContent() {
       setTotalCount(total);
     } catch (err) { console.error('Error fetching documents:', err); }
     finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, initialized]);
+  }, [page, searchQuery, selectedParsha, selectedEvent, initialized]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
   const handleSearch = (e: React.FormEvent) => { e.preventDefault(); setSearchQuery(searchInput); setPage(0); };
-  const handleParshaChange = (value: string) => { setSelectedParsha(value ? Number(value) : null); setPage(0); };
+  const hasFilters = searchQuery || selectedParsha || selectedEvent;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
@@ -196,13 +199,18 @@ function CatalogContent() {
               <input type="text" placeholder="Поиск по названию..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none" />
             </form>
-            <select value={selectedParsha || ''} onChange={(e) => handleParshaChange(e.target.value)}
-              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[180px]">
+            <select value={selectedParsha || ''} onChange={(e) => { setSelectedParsha(e.target.value ? Number(e.target.value) : null); setPage(0); }}
+              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[160px]">
               <option value="">Все главы</option>
               {parshiot.map(p => (<option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ★' : ''}</option>))}
             </select>
-            {(searchQuery || selectedParsha) && (
-              <button onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setPage(0); }}
+            <select value={selectedEvent || ''} onChange={(e) => { setSelectedEvent(e.target.value || null); setPage(0); }}
+              className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white min-w-[160px]">
+              <option value="">Все события</option>
+              {events.map(e => (<option key={e.id} value={e.id}>{e.name_ru}</option>))}
+            </select>
+            {hasFilters && (
+              <button onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setPage(0); }}
                 className="px-4 py-2.5 text-gray-600 hover:text-primary-600 transition-colors">Сбросить</button>
             )}
           </div>
@@ -218,7 +226,7 @@ function CatalogContent() {
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {documents.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} />))}
+              {documents.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} eventMap={eventMap} />))}
             </div>
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
