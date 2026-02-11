@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Suspense } from 'react';
 import { Providers } from '@/components/Providers';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ReferralTracker from '@/components/ReferralTracker';
+import SubscribePopup from '@/components/SubscribePopup';
 
 export const metadata: Metadata = {
   title: {
@@ -74,6 +77,10 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-cream">
         <Providers>
           <Header />
+          <Suspense fallback={null}>
+            <ReferralTracker />
+          </Suspense>
+          <SubscribePopup />
           <main className="flex-grow">
             {children}
           </main>
