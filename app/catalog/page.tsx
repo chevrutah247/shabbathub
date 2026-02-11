@@ -7,7 +7,7 @@ import { Search, FileText, Loader2, ChevronLeft, ChevronRight } from 'lucide-rea
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
 
-const PAGE_SIZE = 50; // 5 колонок × 10 рядов
+const PAGE_SIZE = 50;
 
 interface Document {
   id: string;
@@ -18,6 +18,7 @@ interface Document {
   thumbnail_url: string;
   parsha_id: number;
   event_id: string;
+  issue_number: string;
 }
 
 interface Parsha {
@@ -46,17 +47,17 @@ function formatDate(dateString: string | null): string {
   return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// Компонент карточки с ленивой загрузкой изображения
-function DocumentCard({ doc, currentParshaId }: { doc: Document; currentParshaId: number | null }) {
+function DocumentCard({ doc, currentParshaId, parshaMap }: { doc: Document; currentParshaId: number | null; parshaMap: Record<number, string> }) {
   const [imgError, setImgError] = useState(false);
-  
+  const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
+
   return (
     <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all group">
       <Link href={'/document/' + doc.id}>
         <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
           {doc.thumbnail_url && !imgError ? (
-            <img 
-              src={doc.thumbnail_url} 
+            <img
+              src={doc.thumbnail_url}
               alt={doc.title}
               loading="lazy"
               onError={() => setImgError(true)}
@@ -67,10 +68,16 @@ function DocumentCard({ doc, currentParshaId }: { doc: Document; currentParshaId
               <FileText size={32} className="text-gray-300" />
             </div>
           )}
-          
+
           {doc.parsha_id === currentParshaId && (
             <div className="absolute top-2 left-2 bg-primary-600 text-white text-[10px] px-2 py-1 rounded-full font-medium">
               Эта неделя
+            </div>
+          )}
+
+          {doc.issue_number && (
+            <div className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full font-medium">
+              {'№' + doc.issue_number}
             </div>
           )}
         </div>
@@ -82,7 +89,16 @@ function DocumentCard({ doc, currentParshaId }: { doc: Document; currentParshaId
             {doc.title}
           </Link>
         </h3>
-        <p className="text-xs text-gray-500 mt-1">{formatDate(doc.gregorian_date)}</p>
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+          {parshaName && (
+            <span className="text-[11px] bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full font-medium">
+              {parshaName}
+            </span>
+          )}
+          {doc.gregorian_date && (
+            <span className="text-xs text-gray-400">{formatDate(doc.gregorian_date)}</span>
+          )}
+        </div>
       </div>
     </article>
   );
@@ -91,29 +107,32 @@ function DocumentCard({ doc, currentParshaId }: { doc: Document; currentParshaId
 export default function CatalogPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
+  const [parshaMap, setParshaMap] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
   const [selectedParsha, setSelectedParsha] = useState<number | null>(null);
 
-  // Загрузка текущей парши
   useEffect(() => {
     async function fetchCurrentParsha() {
       try {
         const today = new Date();
         const res = await fetch(
-          `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=${today.getFullYear()}&month=${today.getMonth() + 1}&ss=off&mf=off&c=off&s=on`
+          'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=' + today.getFullYear() + '&month=' + (today.getMonth() + 1) + '&ss=off&mf=off&c=off&s=on'
         );
         if (res.ok) {
           const data = await res.json();
           const parashat = data.items?.find((item: any) => {
             if (item.category !== 'parashat') return false;
             const itemDate = new Date(item.date);
-            return itemDate >= today || (itemDate.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            itemDate.setHours(0, 0, 0, 0);
+            const t = new Date();
+            t.setHours(0, 0, 0, 0);
+            return itemDate >= t;
           });
           if (parashat) {
             const name = parashat.title?.replace('Parashat ', '');
@@ -128,14 +147,19 @@ export default function CatalogPage() {
     fetchCurrentParsha();
   }, []);
 
-  // Загрузка справочника парашот
   useEffect(() => {
     fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', {
       headers: { 'apikey': SUPABASE_KEY }
     })
       .then(r => r.json())
       .then(data => {
-        if (currentParshaId && data) {
+        if (!data) return;
+        // Build lookup map
+        const map: Record<number, string> = {};
+        data.forEach((p: Parsha) => { map[p.id] = p.name_ru; });
+        setParshaMap(map);
+
+        if (currentParshaId) {
           const sorted = [...data].sort((a: Parsha, b: Parsha) => {
             if (a.id === currentParshaId) return -1;
             if (b.id === currentParshaId) return 1;
@@ -143,41 +167,40 @@ export default function CatalogPage() {
           });
           setParshiot(sorted);
         } else {
-          setParshiot(data || []);
+          setParshiot(data);
         }
       });
   }, [currentParshaId]);
 
-  // Загрузка документов с пагинацией
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
-    
+
     const from = page * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
-    
-    let url = `${SUPABASE_URL}/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc`;
-    
+
+    let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc';
+
     if (searchQuery) {
-      url += `&title=ilike.*${encodeURIComponent(searchQuery)}*`;
+      url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     }
-    
+
     if (selectedParsha) {
-      url += `&parsha_id=eq.${selectedParsha}`;
+      url += '&parsha_id=eq.' + selectedParsha;
     }
-    
+
     try {
-      const res = await fetch(url + `&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id`, {
-        headers: { 
+      const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', {
+        headers: {
           'apikey': SUPABASE_KEY,
-          'Range': `${from}-${to}`,
+          'Range': from + '-' + to,
           'Prefer': 'count=exact'
         }
       });
-      
+
       const data = await res.json();
       const contentRange = res.headers.get('content-range');
       const total = contentRange ? parseInt(contentRange.split('/')[1]) : 0;
-      
+
       setDocuments(data || []);
       setTotalCount(total);
     } catch (err) {
@@ -215,7 +238,6 @@ export default function CatalogPage() {
         {/* Фильтры */}
         <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
           <div className="flex flex-wrap gap-3">
-            {/* Поиск */}
             <form onSubmit={handleSearch} className="relative flex-1 min-w-[250px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
@@ -226,8 +248,6 @@ export default function CatalogPage() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none"
               />
             </form>
-
-            {/* Недельная глава */}
             <select
               value={selectedParsha || ''}
               onChange={(e) => handleParshaChange(e.target.value)}
@@ -236,20 +256,13 @@ export default function CatalogPage() {
               <option value="">Все главы</option>
               {parshiot.map(p => (
                 <option key={p.id} value={p.id}>
-                  {p.name_ru} {p.id === currentParshaId ? '★' : ''}
+                  {p.name_ru}{p.id === currentParshaId ? ' ★' : ''}
                 </option>
               ))}
             </select>
-
-            {/* Сброс */}
             {(searchQuery || selectedParsha) && (
               <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSearchInput('');
-                  setSelectedParsha(null);
-                  setPage(0);
-                }}
+                onClick={() => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setPage(0); }}
                 className="px-4 py-2.5 text-gray-600 hover:text-primary-600 transition-colors"
               >
                 Сбросить
@@ -270,7 +283,7 @@ export default function CatalogPage() {
           )}
         </div>
 
-        {/* Сетка документов — 5 колонок */}
+        {/* Сетка документов */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="animate-spin text-primary-600" size={32} />
@@ -284,68 +297,38 @@ export default function CatalogPage() {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {documents.map((doc) => (
-                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} />
+                <DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} />
               ))}
             </div>
 
             {/* Пагинация */}
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
-                <button
-                  onClick={() => setPage(0)}
-                  disabled={page === 0}
-                  className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => setPage(0)} disabled={page === 0} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                   В начало
                 </button>
-                <button
-                  onClick={() => setPage(p => Math.max(0, p - 1))}
-                  disabled={page === 0}
-                  className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                   <ChevronLeft size={20} />
                 </button>
-                
                 <div className="flex gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i;
-                    } else if (page < 3) {
-                      pageNum = i;
-                    } else if (page > totalPages - 4) {
-                      pageNum = totalPages - 5 + i;
-                    } else {
-                      pageNum = page - 2 + i;
-                    }
+                    if (totalPages <= 5) { pageNum = i; }
+                    else if (page < 3) { pageNum = i; }
+                    else if (page > totalPages - 4) { pageNum = totalPages - 5 + i; }
+                    else { pageNum = page - 2 + i; }
                     return (
-                      <button
-                        key={pageNum}
-                        onClick={() => setPage(pageNum)}
-                        className={`w-10 h-10 rounded-lg border ${
-                          page === pageNum 
-                            ? 'bg-primary-600 text-white border-primary-600' 
-                            : 'bg-white hover:bg-gray-50'
-                        }`}
-                      >
+                      <button key={pageNum} onClick={() => setPage(pageNum)}
+                        className={'w-10 h-10 rounded-lg border ' + (page === pageNum ? 'bg-primary-600 text-white border-primary-600' : 'bg-white hover:bg-gray-50')}>
                         {pageNum + 1}
                       </button>
                     );
                   })}
                 </div>
-                
-                <button
-                  onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                  disabled={page >= totalPages - 1}
-                  className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                   <ChevronRight size={20} />
                 </button>
-                <button
-                  onClick={() => setPage(totalPages - 1)}
-                  disabled={page >= totalPages - 1}
-                  className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => setPage(totalPages - 1)} disabled={page >= totalPages - 1} className="px-3 py-2 rounded-lg border bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                   В конец
                 </button>
               </div>
