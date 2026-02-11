@@ -4,6 +4,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 
+const quickLinks = [
+  { label: '🕎 Ханука', query: 'Ханука' },
+  { label: '🍷 Пурим', query: 'Пурим' },
+  { label: '🫓 Песах', query: 'Песах' },
+  { label: '📜 Шавуот', query: 'Шавуот' },
+  { label: '🏕️ Суккот', query: 'Суккот' },
+  { label: '🍎 Рош Ашана', query: 'Рош Ашана' },
+  { label: '🕊️ Йом Кипур', query: 'Йом Кипур' },
+];
+
 export default function SearchBar() {
   const [query, setQuery] = useState('');
   const router = useRouter();
@@ -11,15 +21,20 @@ export default function SearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      router.push('/catalog?search=' + encodeURIComponent(query.trim()));
     }
+  };
+
+  const handleQuickLink = (q: string) => {
+    setQuery(q);
+    router.push('/catalog?search=' + encodeURIComponent(q));
   };
 
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="relative">
-        <Search 
-          size={22} 
+        <Search
+          size={22}
           className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
         />
         <input
@@ -36,20 +51,17 @@ export default function SearchBar() {
           Найти
         </button>
       </div>
-      
-      {/* Подсказки */}
+
+      {/* Быстрые ссылки — праздники */}
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {['Берешит', 'Шмини', 'Песах', 'Суккот', 'Пурим'].map((tag) => (
+        {quickLinks.map((link) => (
           <button
-            key={tag}
+            key={link.query}
             type="button"
-            onClick={() => {
-              setQuery(tag);
-              router.push(`/search?q=${encodeURIComponent(tag)}`);
-            }}
+            onClick={() => handleQuickLink(link.query)}
             className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-full text-white/80 hover:text-white transition-colors"
           >
-            {tag}
+            {link.label}
           </button>
         ))}
       </div>
