@@ -3,37 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, FileText, Calendar, Loader2, Download, Globe, Mail, MessageCircle } from 'lucide-react';
+import { ArrowLeft, FileText, Loader2, Download, Globe, Mail, MessageCircle, Bell } from 'lucide-react';
+import SubscribeForm from '@/components/SubscribeForm';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
 
 interface Publication {
-  id: string;
-  title_ru: string;
-  title_en: string;
-  title_he: string;
-  description_ru: string;
-  primary_language: string;
-  whatsapp_link: string;
-  telegram_link: string;
-  website_url: string;
-  email: string;
-  cover_image_url: string;
-  total_issues: number;
+  id: string; title_ru: string; title_en: string; title_he: string; description_ru: string;
+  primary_language: string; whatsapp_link: string; telegram_link: string; website_url: string;
+  email: string; cover_image_url: string; total_issues: number;
 }
-
 interface Issue {
-  id: string;
-  title: string;
-  pdf_url: string;
-  thumbnail_url: string;
-  page_count: number;
-  gregorian_date: string;
-  issue_number: string;
-  parsha_id: number;
+  id: string; title: string; pdf_url: string; thumbnail_url: string;
+  page_count: number; gregorian_date: string; issue_number: string; parsha_id: number;
 }
-
 interface Parsha { id: number; name_ru: string; }
 
 function formatDate(dateString: string | null): string {
@@ -50,10 +34,10 @@ export default function PublicationPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [showSubscribe, setShowSubscribe] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-
     Promise.all([
       fetch(SUPABASE_URL + '/rest/v1/publications?id=eq.' + id + '&select=*', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
       fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + id + '&is_active=eq.true&order=gregorian_date.desc&limit=100&select=id,title,pdf_url,thumbnail_url,page_count,gregorian_date,issue_number,parsha_id', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
@@ -73,9 +57,7 @@ export default function PublicationPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) {
-    return <div className="min-h-screen bg-cream flex items-center justify-center"><Loader2 className="animate-spin text-primary-600" size={48} /></div>;
-  }
+  if (loading) return <div className="min-h-screen bg-cream flex items-center justify-center"><Loader2 className="animate-spin text-primary-600" size={48} /></div>;
 
   if (error || !publication) {
     return (
@@ -103,17 +85,15 @@ export default function PublicationPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Основной контент */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex items-start gap-5">
-                {/* Обложка публикации */}
                 {publication.cover_image_url && (
                   <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0">
                     <img src={publication.cover_image_url} alt={title} className="w-full h-full object-cover" />
                   </div>
                 )}
-                <div>
+                <div className="flex-1">
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
                   {publication.description_ru && <p className="text-gray-600 mb-3">{publication.description_ru}</p>}
                   <p className="text-sm text-gray-500">{issues.length} выпусков</p>
@@ -121,22 +101,16 @@ export default function PublicationPage() {
               </div>
             </div>
 
-            {/* Переключатель вида */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900">Все выпуски</h2>
               <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
                 <button onClick={() => setViewMode('grid')}
-                  className={'px-3 py-1.5 text-sm rounded-md transition ' + (viewMode === 'grid' ? 'bg-white shadow text-gray-900' : 'text-gray-500')}>
-                  Плитка
-                </button>
+                  className={'px-3 py-1.5 text-sm rounded-md transition ' + (viewMode === 'grid' ? 'bg-white shadow text-gray-900' : 'text-gray-500')}>Плитка</button>
                 <button onClick={() => setViewMode('list')}
-                  className={'px-3 py-1.5 text-sm rounded-md transition ' + (viewMode === 'list' ? 'bg-white shadow text-gray-900' : 'text-gray-500')}>
-                  Список
-                </button>
+                  className={'px-3 py-1.5 text-sm rounded-md transition ' + (viewMode === 'list' ? 'bg-white shadow text-gray-900' : 'text-gray-500')}>Список</button>
               </div>
             </div>
 
-            {/* Выпуски — Плитка */}
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {issues.map((issue) => {
@@ -169,7 +143,6 @@ export default function PublicationPage() {
                 })}
               </div>
             ) : (
-              /* Выпуски — Список */
               <div className="space-y-3">
                 {issues.map((issue) => {
                   const pName = issue.parsha_id ? parshaMap[issue.parsha_id] : null;
@@ -203,14 +176,28 @@ export default function PublicationPage() {
                 })}
               </div>
             )}
-
-            {issues.length === 0 && (
-              <p className="text-gray-500 text-center py-8">Выпуски не найдены</p>
-            )}
+            {issues.length === 0 && <p className="text-gray-500 text-center py-8">Выпуски не найдены</p>}
           </div>
 
           {/* Сайдбар */}
           <div className="space-y-6">
+            {/* Подписка с предвыбором публикации */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
+              {showSubscribe ? (
+                <SubscribeForm preSelectedPubId={id} compact onSuccess={() => setShowSubscribe(false)} />
+              ) : (
+                <div className="text-center">
+                  <Bell className="mx-auto text-amber-500 mb-3" size={32} />
+                  <p className="font-medium text-gray-900 mb-1">Получайте новые выпуски</p>
+                  <p className="text-sm text-gray-500 mb-4">Уведомление на email при загрузке нового номера «{title}»</p>
+                  <button onClick={() => setShowSubscribe(true)}
+                    className="w-full bg-amber-500 text-white py-3 rounded-xl font-medium hover:bg-amber-600 transition flex items-center justify-center gap-2">
+                    <Bell size={18} /> Подписаться
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h2 className="font-bold text-gray-900 mb-4">Контакты</h2>
               <div className="space-y-3">
@@ -238,12 +225,6 @@ export default function PublicationPage() {
                   <p className="text-gray-400 text-sm">Контакты не указаны</p>
                 )}
               </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <Link href="/subscribe" className="block w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition text-center">
-                Подписаться на обновления
-              </Link>
             </div>
           </div>
         </div>

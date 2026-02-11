@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2 } from 'lucide-react';
+import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell } from 'lucide-react';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
@@ -225,6 +225,14 @@ export default function DocumentPage() {
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
                 <Download size={20} />Скачать
               </a>
+            </div>
+
+            {/* Подписка */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <Link href={'/subscribe' + (issue.publication_id ? '?pub=' + issue.publication_id : '')}
+                className="flex items-center justify-center gap-2 w-full bg-amber-500 text-white py-3 rounded-xl font-medium hover:bg-amber-600 transition">
+                <Bell size={20} />Подписаться на обновления
+              </Link>
             </div>
           </div>
         </div>

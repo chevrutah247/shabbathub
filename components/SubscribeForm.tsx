@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Mail, Check, Loader2, Bell, Newspaper } from 'lucide-react';
+import { Mail, Check, Loader2, Bell, Newspaper, BookOpen } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
 
@@ -16,76 +16,22 @@ interface Publication {
   primary_language: string;
 }
 
-type Lang = 'ru' | 'en' | 'he';
-
-const labels: Record<Lang, {
-  title: string;
-  subtitle: string;
-  email: string;
-  selectPubs: string;
-  news: string;
-  newsDesc: string;
-  submit: string;
-  success: string;
-  successDesc: string;
-  allPubs: string;
-}> = {
-  ru: {
-    title: 'Подписка на обновления',
-    subtitle: 'Получайте новые материалы на почту',
-    email: 'Ваш email',
-    selectPubs: 'Выберите публикации',
-    news: 'Новости проекта',
-    newsDesc: 'Получать новости о ShabbatHub',
-    submit: 'Подписаться',
-    success: 'Вы подписаны!',
-    successDesc: 'Вы будете получать уведомления о новых материалах.',
-    allPubs: 'Все публикации',
-  },
-  en: {
-    title: 'Subscribe to updates',
-    subtitle: 'Get new materials by email',
-    email: 'Your email',
-    selectPubs: 'Select publications',
-    news: 'Project news',
-    newsDesc: 'Receive ShabbatHub news',
-    submit: 'Subscribe',
-    success: "You're subscribed!",
-    successDesc: 'You will receive notifications about new materials.',
-    allPubs: 'All publications',
-  },
-  he: {
-    title: 'הרשמה לעדכונים',
-    subtitle: 'קבלו חומרים חדשים למייל',
-    email: 'האימייל שלכם',
-    selectPubs: 'בחרו פרסומים',
-    news: 'חדשות הפרויקט',
-    newsDesc: 'לקבל חדשות על ShabbatHub',
-    submit: 'להירשם',
-    success: '!נרשמתם בהצלחה',
-    successDesc: 'תקבלו התראות על חומרים חדשים.',
-    allPubs: 'כל הפרסומים',
-  },
-};
-
 interface SubscribeFormProps {
-  lang?: Lang;
+  preSelectedPubId?: string;
   compact?: boolean;
   onSuccess?: () => void;
 }
 
-export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess }: SubscribeFormProps) {
+export default function SubscribeForm({ preSelectedPubId, compact = false, onSuccess }: SubscribeFormProps) {
   const { user } = useAuth();
   const [email, setEmail] = useState('');
   const [publications, setPublications] = useState<Publication[]>([]);
-  const [selectedPubs, setSelectedPubs] = useState<string[]>([]);
+  const [selectedPubs, setSelectedPubs] = useState<string[]>(preSelectedPubId ? [preSelectedPubId] : []);
   const [subscribeNews, setSubscribeNews] = useState(true);
+  const [subscribePubs, setSubscribePubs] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-
-  const t = labels[lang];
-  const isRtl = lang === 'he';
 
   useEffect(() => {
     if (user?.email) setEmail(user.email);
@@ -99,18 +45,11 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
       .then(data => setPublications(data || []));
   }, []);
 
-  const getPubTitle = (pub: Publication): string => {
-    if (lang === 'en' && pub.title_en) return pub.title_en;
-    if (lang === 'he' && pub.title_he) return pub.title_he;
-    return pub.title_ru || pub.title_en || '';
-  };
-
-  // Фильтруем публикации: сначала на языке пользователя, потом остальные
-  const sortedPubs = [...publications].sort((a, b) => {
-    const aMatch = a.primary_language === lang ? 0 : 1;
-    const bMatch = b.primary_language === lang ? 0 : 1;
-    return aMatch - bMatch;
-  });
+  useEffect(() => {
+    if (preSelectedPubId && !selectedPubs.includes(preSelectedPubId)) {
+      setSelectedPubs(prev => [...prev, preSelectedPubId]);
+    }
+  }, [preSelectedPubId]);
 
   const togglePub = (id: string) => {
     setSelectedPubs(prev =>
@@ -118,14 +57,32 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
     );
   };
 
+  const selectAll = () => {
+    if (selectedPubs.length === publications.length) {
+      setSelectedPubs([]);
+    } else {
+      setSelectedPubs(publications.map(p => p.id));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) { setError(lang === 'ru' ? 'Укажите email' : 'Enter email'); return; }
+    if (!email) { setError('Укажите email'); return; }
+    if (!subscribeNews && selectedPubs.length === 0) { setError('Выберите хотя бы одну подписку'); return; }
     setError('');
     setSubmitting(true);
 
     try {
-      // Проверяем существующую подписку
+      const payload = {
+        email,
+        language: 'ru',
+        subscribe_news: subscribeNews,
+        publication_ids: subscribePubs ? selectedPubs : [],
+        user_id: user?.id || null,
+        is_active: true,
+        updated_at: new Date().toISOString(),
+      };
+
       const { data: existing } = await supabase
         .from('subscriptions')
         .select('id')
@@ -133,30 +90,9 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
         .maybeSingle();
 
       if (existing) {
-        // Обновляем
-        await supabase
-          .from('subscriptions')
-          .update({
-            language: lang,
-            subscribe_news: subscribeNews,
-            publication_ids: selectedPubs,
-            user_id: user?.id || null,
-            is_active: true,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('email', email);
+        await supabase.from('subscriptions').update(payload).eq('email', email);
       } else {
-        // Создаём
-        await supabase
-          .from('subscriptions')
-          .insert({
-            email,
-            language: lang,
-            subscribe_news: subscribeNews,
-            publication_ids: selectedPubs,
-            user_id: user?.id || null,
-            is_active: true,
-          });
+        await supabase.from('subscriptions').insert(payload);
       }
 
       setSuccess(true);
@@ -170,48 +106,87 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
 
   if (success) {
     return (
-      <div className="text-center py-6" dir={isRtl ? 'rtl' : 'ltr'}>
+      <div className="text-center py-6">
         <div className="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-3">
           <Check className="text-green-600" size={28} />
         </div>
-        <p className="text-lg font-bold text-gray-900">{t.success}</p>
-        <p className="text-sm text-gray-500 mt-1">{t.successDesc}</p>
+        <p className="text-lg font-bold text-gray-900">Вы подписаны!</p>
+        <p className="text-sm text-gray-500 mt-1">Уведомления придут на {email}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} dir={isRtl ? 'rtl' : 'ltr'} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {!compact && (
         <div className="text-center mb-2">
           <Bell className="mx-auto text-primary-600 mb-2" size={28} />
-          <h3 className="text-lg font-bold text-gray-900">{t.title}</h3>
-          <p className="text-sm text-gray-500">{t.subtitle}</p>
+          <h3 className="text-lg font-bold text-gray-900">Подписка на обновления</h3>
+          <p className="text-sm text-gray-500">Выберите что вас интересует</p>
         </div>
       )}
 
       {/* Email */}
       <div className="relative">
-        <Mail className={'absolute top-1/2 -translate-y-1/2 text-gray-400 ' + (isRtl ? 'right-3' : 'left-3')} size={18} />
+        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder={t.email}
-          className={'w-full py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none ' + (isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4')}
+          placeholder="Ваш email"
+          className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
           required
         />
       </div>
 
-      {/* Публикации */}
-      {!compact && sortedPubs.length > 0 && (
-        <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">{t.selectPubs}</p>
-          <div className="max-h-48 overflow-y-auto space-y-1.5 border rounded-lg p-3 bg-gray-50">
-            {sortedPubs.map(pub => {
-              const isLangMatch = pub.primary_language === lang;
-              return (
-                <label key={pub.id} className={'flex items-center gap-2.5 py-1.5 px-2 rounded-md cursor-pointer transition-colors ' + (selectedPubs.includes(pub.id) ? 'bg-primary-50' : 'hover:bg-white')}>
+      {/* === Подписка на новости === */}
+      <div className="border rounded-xl p-4">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={subscribeNews}
+            onChange={(e) => setSubscribeNews(e.target.checked)}
+            className="rounded text-primary-600 mt-0.5"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <Bell size={16} className="text-amber-500" />
+              <span className="font-medium text-gray-900">Новости проекта</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-0.5">Обновления ShabbatHub, новые функции, важные объявления</p>
+          </div>
+        </label>
+      </div>
+
+      {/* === Подписка на публикации === */}
+      <div className="border rounded-xl p-4">
+        <label className="flex items-start gap-3 cursor-pointer mb-3">
+          <input
+            type="checkbox"
+            checked={subscribePubs}
+            onChange={(e) => setSubscribePubs(e.target.checked)}
+            className="rounded text-primary-600 mt-0.5"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <BookOpen size={16} className="text-primary-600" />
+              <span className="font-medium text-gray-900">Новые выпуски публикаций</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-0.5">Письмо со ссылкой на скачивание при загрузке нового выпуска</p>
+          </div>
+        </label>
+
+        {subscribePubs && (
+          <>
+            <div className="flex items-center justify-between mb-2 pl-8">
+              <p className="text-xs text-gray-600">Выберите публикации:</p>
+              <button type="button" onClick={selectAll} className="text-xs text-primary-600 hover:underline">
+                {selectedPubs.length === publications.length ? 'Снять все' : 'Выбрать все'}
+              </button>
+            </div>
+            <div className="max-h-48 overflow-y-auto space-y-1 pl-8">
+              {publications.map(pub => (
+                <label key={pub.id} className={'flex items-center gap-2.5 py-1.5 px-2 rounded-md cursor-pointer transition-colors ' + (selectedPubs.includes(pub.id) ? 'bg-primary-50' : 'hover:bg-gray-50')}>
                   <input
                     type="checkbox"
                     checked={selectedPubs.includes(pub.id)}
@@ -219,32 +194,16 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
                     className="rounded text-primary-600"
                   />
                   <Newspaper size={14} className="text-gray-400 shrink-0" />
-                  <span className="text-sm text-gray-800">{getPubTitle(pub)}</span>
-                  {isLangMatch && (
-                    <span className="text-[10px] bg-primary-100 text-primary-700 px-1.5 py-0.5 rounded-full ml-auto shrink-0">
-                      {lang === 'ru' ? 'рус' : lang === 'en' ? 'eng' : 'עב'}
-                    </span>
-                  )}
+                  <span className="text-sm text-gray-800">{pub.title_ru || pub.title_en}</span>
                 </label>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Новости */}
-      <label className="flex items-center gap-3 py-2 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={subscribeNews}
-          onChange={(e) => setSubscribeNews(e.target.checked)}
-          className="rounded text-primary-600"
-        />
-        <div>
-          <p className="text-sm font-medium text-gray-800">{t.news}</p>
-          <p className="text-xs text-gray-500">{t.newsDesc}</p>
-        </div>
-      </label>
+              ))}
+            </div>
+            {selectedPubs.length > 0 && (
+              <p className="text-xs text-primary-600 mt-2 pl-8">Выбрано: {selectedPubs.length} из {publications.length}</p>
+            )}
+          </>
+        )}
+      </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -254,7 +213,7 @@ export default function SubscribeForm({ lang = 'ru', compact = false, onSuccess 
         className="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {submitting ? <Loader2 className="animate-spin" size={18} /> : <Mail size={18} />}
-        {t.submit}
+        Подписаться
       </button>
     </form>
   );
