@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -12,6 +12,14 @@ function SubscribeContent() {
   const searchParams = useSearchParams();
   const { lang } = useLanguage();
   const pubId = searchParams.get('pub') || undefined;
+  const urlLang = searchParams.get('lang');
+  const { setLang } = useLanguage();
+
+  useEffect(() => {
+    if (urlLang && ['ru', 'en', 'he', 'uk'].includes(urlLang)) {
+      setLang(urlLang as any);
+    }
+  }, [urlLang]);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
 
   return (
