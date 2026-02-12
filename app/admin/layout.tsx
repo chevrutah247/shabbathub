@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail } from 'lucide-react';
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -90,6 +90,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/users" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Users size={20} />
             Пользователи
+          </Link>
+          <Link href="/admin/subscribers" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
+            <Mail size={20} />
+            Подписчики
           </Link>
         </nav>
 
