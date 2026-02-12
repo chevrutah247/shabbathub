@@ -36,6 +36,15 @@ export default function SubscribeBlock() {
         await supabase.from('subscriptions').insert(payload);
       }
       setSuccess(true);
+
+      // Отправить письмо-подтверждение
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'confirmation', email, lang }),
+        });
+      } catch {}
     } catch {}
     finally { setSubmitting(false); }
   };

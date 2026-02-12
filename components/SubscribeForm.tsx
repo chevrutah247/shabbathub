@@ -99,6 +99,18 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
       }
 
       setSuccess(true);
+
+      // Отправить письмо-подтверждение
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'confirmation', email, lang }),
+        });
+      } catch (emailErr) {
+        console.warn('Confirmation email failed:', emailErr);
+      }
+
       if (onSuccess) setTimeout(onSuccess, 2000);
     } catch (err: any) {
       setError(err.message);
