@@ -41,7 +41,7 @@ function generateGdriveThumbnailUrl(pdfUrl: string): string | null {
 function generateUniqueFilename(originalName: string, ext: string = 'pdf'): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  const cleanName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9а-яА-ЯёЁ\-_]/g, '-').substring(0, 50);
+  const cleanName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9\-_]/g, '-').substring(0, 50);
   return cleanName + '-' + timestamp + '-' + random + '.' + ext;
 }
 
@@ -313,6 +313,17 @@ export default function AddPdfPage() {
       });
 
       if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'Ошибка сохранения'); }
+      const savedData = await res.json();
+      if (publicationId) {
+        try {
+          const pubName = publications.find(p => p.id === publicationId)?.title_ru || title;
+          await fetch('/api/notify-subscribers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publication_id: publicationId, pub_title: pubName, issue_title: title, pdf_url: finalPdfUrl, doc_id: savedData?.[0]?.id })
+          });
+        } catch (e) { console.warn('Notify failed:', e); }
+      }
       setSuccess(true);
       setTimeout(() => router.push('/catalog'), 2000);
     } catch (err: any) { setError(err.message); } finally { setSubmitting(false); }
