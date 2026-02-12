@@ -163,8 +163,8 @@ function CatalogContent() {
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(200,160,80,0.15) 0%, transparent 60%)' }} />
           <div className="relative max-w-7xl mx-auto px-6 py-12 md:py-16 text-center">
             <div className="text-2xl mb-3" style={{ color: '#c4a882' }}>{'\u2766'}</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-amber-50 mb-3" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{t('catalog.title', lang)}</h1>
-            <p className="text-lg max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif", color: 'rgba(217,191,149,0.7)' }}>{t('catalog.subtitle', lang)}</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-amber-50 mb-3" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)', fontFamily: "'Playfair Display', Georgia, serif" }}>{t('catalog.title', lang)}</h1>
+            <p className="text-lg max-w-2xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif", color: 'rgba(217,191,149,0.9)', textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>{t('catalog.subtitle', lang)}</p>
             <div className="text-2xl mt-4" style={{ color: '#c4a882' }}>{'\u2766'}</div>
           </div>
         </div>
