@@ -114,7 +114,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
               <ChevronLeft size={20} />
             </button>
             <span className="text-sm">
-              {t('pdfViewer.page')} {currentPage} {t('pdfViewer.of')} {totalPages}
+              {t('pdfViewer.page', lang)} {currentPage} {t('pdfViewer.of', lang)} {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
@@ -131,7 +131,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
             <button
               onClick={handleZoomOut}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-              title={t('actions.zoomOut')}
+              title={t('actions.zoomOut', lang)}
             >
               <ZoomOut size={18} />
             </button>
@@ -139,7 +139,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
             <button
               onClick={handleZoomIn}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-              title={t('actions.zoomIn')}
+              title={t('actions.zoomIn', lang)}
             >
               <ZoomIn size={18} />
             </button>
@@ -172,7 +172,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
               <button
                 onClick={() => setShowShareMenu(!showShareMenu)}
                 className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                title={t('actions.share')}
+                title={t('actions.share', lang)}
               >
                 <Share2 size={18} />
               </button>
@@ -200,12 +200,12 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
                     {copied ? (
                       <>
                         <Check size={16} className="text-green-500" />
-                        <span className="text-green-600">{t('messages.linkCopied')}</span>
+                        <span className="text-green-600">{t('messages.linkCopied', lang)}</span>
                       </>
                     ) : (
                       <>
                         <Copy size={16} />
-                        {t('actions.copyLink')}
+                        {t('actions.copyLink', lang)}
                       </>
                     )}
                   </button>
@@ -217,7 +217,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
             <button
               onClick={handlePrint}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-              title={t('actions.print')}
+              title={t('actions.print', lang)}
             >
               <Printer size={18} />
             </button>
@@ -226,7 +226,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
             <button
               onClick={handleDownload}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-              title={t('actions.download')}
+              title={t('actions.download', lang)}
             >
               <Download size={18} />
             </button>
@@ -235,7 +235,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
             <button
               onClick={handleFullscreen}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-              title={t('pdfViewer.fullscreen')}
+              title={t('pdfViewer.fullscreen', lang)}
             >
               <Maximize2 size={18} />
             </button>
@@ -270,28 +270,28 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
           className="flex flex-col items-center gap-1 text-gray-400 hover:text-white"
         >
           <Share2 size={20} />
-          <span className="text-xs">{t('actions.share')}</span>
+          <span className="text-xs">{t('actions.share', lang)}</span>
         </button>
         <button
           onClick={handleDownload}
           className="flex flex-col items-center gap-1 text-gray-400 hover:text-white"
         >
           <Download size={20} />
-          <span className="text-xs">{t('actions.download')}</span>
+          <span className="text-xs">{t('actions.download', lang)}</span>
         </button>
         <button
           onClick={handlePrint}
           className="flex flex-col items-center gap-1 text-gray-400 hover:text-white"
         >
           <Printer size={20} />
-          <span className="text-xs">{t('actions.print')}</span>
+          <span className="text-xs">{t('actions.print', lang)}</span>
         </button>
         <button
           onClick={handleFullscreen}
           className="flex flex-col items-center gap-1 text-gray-400 hover:text-white"
         >
           <Maximize2 size={20} />
-          <span className="text-xs">{t('pdfViewer.fullscreen')}</span>
+          <span className="text-xs">{t('pdfViewer.fullscreen', lang)}</span>
         </button>
       </div>
     </div>
