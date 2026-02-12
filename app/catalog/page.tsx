@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll } from 'lucide-react';
 import SubscribeBlock from '@/components/SubscribeBlock';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
