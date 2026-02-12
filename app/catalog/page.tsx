@@ -1,3 +1,4 @@
+import { Lang } from '@/lib/language-context';
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
@@ -30,14 +31,14 @@ const parshaNameToId: Record<string, number> = {
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
 };
 
-function formatDate(dateString: string | null, lang: string): string {
+function formatDate(dateString: string | null, lang: Lang): string {
   if (!dateString) return '';
   const locale = lang === 'he' ? 'he-IL' : lang === 'uk' ? 'uk-UA' : lang === 'en' ? 'en-US' : 'ru-RU';
   return new Date(dateString).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang }: {
-  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>; eventMap: Record<string, string>; lang: string;
+  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>; eventMap: Record<string, string>; lang: Lang;
 }) {
   const [imgError, setImgError] = useState(false);
   const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
