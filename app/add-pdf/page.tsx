@@ -324,8 +324,6 @@ export default function AddPdfPage() {
           });
         } catch (e) { console.warn('Notify failed:', e); }
       }
-      const savedData = await res.json();
-      if (publicationId) { try { const pubName = publications.find(p => p.id === publicationId)?.title_ru || title; await fetch("/api/notify-subscribers", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ publication_id: publicationId, pub_title: pubName, issue_title: title, pdf_url: finalPdfUrl, doc_id: savedData?.[0]?.id }) }); } catch (e) { console.warn("Notify failed:", e); } }
       setSuccess(true);
       setTimeout(() => router.push('/catalog'), 2000);
     } catch (err: any) { setError(err.message); } finally { setSubmitting(false); }
