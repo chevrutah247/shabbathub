@@ -32,7 +32,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
   const handleZoomOut = () => setZoom((z) => Math.max(z - 25, 50));
 
   const handleDownload = () => {
-    const link = document.createElement('a');
+    const link = document.createElement('a', lang);
     link.href = url;
     link.download = title + '.pdf';
     link.click();
