@@ -157,7 +157,7 @@ export default function PDFViewer({ url, title, onClose, showControls = true }: 
                     className={`p-1.5 rounded transition-colors ${
                       viewMode === mode ? 'bg-primary-600 text-white' : 'text-gray-400 hover:text-white'
                     }`}
-                    title={t(`pdfViewer.${mode === 'single' ? 'singlePage' : mode === 'two' ? 'twoPages' : 'allPages'}`)}
+                    title={t(`pdfViewer.${mode === 'single' ? 'singlePage' : mode === 'two' ? 'twoPages' : 'allPages'}`, lang)}
                   >
                     <Icon size={16} />
                   </button>
