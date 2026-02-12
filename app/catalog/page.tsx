@@ -1,10 +1,10 @@
-import { Lang } from '@/lib/language-context';
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll } from 'lucide-react';
+import SubscribeBlock from '@/components/SubscribeBlock';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
 
@@ -216,9 +216,25 @@ function CatalogContent() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-8">
-                {documents.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} eventMap={eventMap} lang={lang} />))}
-              </div>
+              {(() => {
+                const COLS = 6;
+                const ROWS_PER_BANNER = 5;
+                const CHUNK = COLS * ROWS_PER_BANNER;
+                const chunks: Document[][] = [];
+                for (let i = 0; i < documents.length; i += CHUNK) { chunks.push(documents.slice(i, i + CHUNK)); }
+                return chunks.map((chunk, ci) => (
+                  <div key={ci}>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-8">
+                      {chunk.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} eventMap={eventMap} lang={lang} />))}
+                    </div>
+                    {ci < chunks.length - 1 && (
+                      <div className="my-8 max-w-2xl mx-auto">
+                        <SubscribeBlock />
+                      </div>
+                    )}
+                  </div>
+                ));
+              })()}
               {/* Wooden shelf */}
               <div className="mt-6 h-3 rounded-full mx-auto" style={{ background: 'linear-gradient(180deg, #b8854a 0%, #96693a 60%, #7a5530 100%)', boxShadow: '0 4px 12px rgba(120,80,40,0.2), inset 0 1px 0 rgba(255,255,255,0.15)', maxWidth: '95%' }} />
               {/* Pagination */}
