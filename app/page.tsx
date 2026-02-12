@@ -8,8 +8,11 @@ import { Search, BookOpen, Calendar, Globe, ChevronRight } from 'lucide-react';
 import SearchBar from '@/components/SearchBar';
 import FeaturedDocuments from '@/components/FeaturedDocuments';
 import SubscribeBlock from '@/components/SubscribeBlock';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 export default function HomePage() {
+  const { lang } = useLanguage();
   const [totalDocs, setTotalDocs] = useState<number | null>(null);
 
   useEffect(() => {
@@ -35,9 +38,10 @@ export default function HomePage() {
   }, []);
 
   const statsNumber = totalDocs !== null ? totalDocs.toLocaleString() : '...';
+  const dir = lang === 'he' ? 'rtl' : 'ltr';
 
   return (
-    <>
+    <div dir={dir}>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-900 via-primary-700 to-primary-800 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -52,11 +56,11 @@ export default function HomePage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-blue-100 mb-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-              Крупнейший архив материалов к Шаббату
+              {t('home.heroTitle', lang)}
             </p>
             
             <p className="text-lg text-blue-200 mb-10 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-              {totalDocs !== null ? statsNumber + ' материалов' : 'Загрузка...'}: газеты, статьи, учебные пособия
+              {totalDocs !== null ? statsNumber + ' ' + t('home.heroSubtitle', lang) : t('loading', lang)}: {t('home.heroDesc', lang)}
             </p>
             
             <div className="max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '0.3s' }}>
@@ -64,19 +68,15 @@ export default function HomePage() {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <Link 
-                href="/catalog"
-                className="inline-flex items-center gap-2 bg-white text-primary-700 px-6 py-3 rounded-full font-medium hover:bg-gold-400 hover:text-primary-900 transition-all"
-              >
+              <Link href="/catalog"
+                className="inline-flex items-center gap-2 bg-white text-primary-700 px-6 py-3 rounded-full font-medium hover:bg-gold-400 hover:text-primary-900 transition-all">
                 <BookOpen size={20} />
-                Каталог материалов
+                {t('home.catalogBtn', lang)}
               </Link>
-              <Link 
-                href="/catalog"
-                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20"
-              >
+              <Link href="/catalog"
+                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20">
                 <Calendar size={20} />
-                Последние выпуски
+                {t('home.latestBtn', lang)}
               </Link>
             </div>
           </div>
@@ -84,10 +84,7 @@ export default function HomePage() {
         
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 120" fill="none" className="w-full">
-            <path 
-              d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" 
-              fill="#faf8f5"
-            />
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#faf8f5"/>
           </svg>
         </div>
       </section>
@@ -98,19 +95,19 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <div className="text-3xl md:text-4xl font-bold text-primary-700 mb-2">{statsNumber}</div>
-              <div className="text-gray-600">Материалов</div>
+              <div className="text-gray-600">{t('home.materials', lang)}</div>
             </div>
             <div className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <div className="text-3xl md:text-4xl font-bold text-primary-700 mb-2">10+</div>
-              <div className="text-gray-600">Лет архива</div>
+              <div className="text-gray-600">{t('home.yearsArchive', lang)}</div>
             </div>
             <div className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-3xl md:text-4xl font-bold text-primary-700 mb-2">3</div>
-              <div className="text-gray-600">Языка</div>
+              <div className="text-3xl md:text-4xl font-bold text-primary-700 mb-2">4</div>
+              <div className="text-gray-600">{t('home.languages', lang)}</div>
             </div>
             <div className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <div className="text-3xl md:text-4xl font-bold text-primary-700 mb-2">∞</div>
-              <div className="text-gray-600">Бесплатно</div>
+              <div className="text-gray-600">{t('free', lang)}</div>
             </div>
           </div>
         </div>
@@ -121,11 +118,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-3xl font-display font-bold text-primary-900 mb-2">Последние выпуски</h2>
-              <p className="text-gray-600">Свежие материалы к Шаббату</p>
+              <h2 className="text-3xl font-display font-bold text-primary-900 mb-2">{t('home.latestTitle', lang)}</h2>
+              <p className="text-gray-600">{t('home.latestSubtitle', lang)}</p>
             </div>
             <Link href="/catalog" className="hidden md:flex items-center gap-1 text-primary-600 hover:text-primary-800 font-medium">
-              Смотреть все
+              {t('home.viewAll', lang)}
               <ChevronRight size={20} />
             </Link>
           </div>
@@ -134,7 +131,7 @@ export default function HomePage() {
           
           <div className="mt-10 text-center md:hidden">
             <Link href="/catalog" className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-full font-medium hover:bg-primary-700 transition-colors">
-              Смотреть все материалы
+              {t('home.viewAllMaterials', lang)}
               <ChevronRight size={20} />
             </Link>
           </div>
@@ -144,25 +141,23 @@ export default function HomePage() {
       {/* Категории */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-display font-bold text-primary-900 mb-10 text-center">Категории материалов</h2>
+          <h2 className="text-3xl font-display font-bold text-primary-900 mb-10 text-center">{t('home.categoriesTitle', lang)}</h2>
           
           <div className="grid md:grid-cols-3 gap-6">
             <Link href="/catalog?category=newspapers" className="group p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl hover:shadow-lg transition-all">
               <div className="text-4xl mb-4">📰</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">Еженедельные газеты</h3>
-              <p className="text-gray-600">Chevrutah, Шомрей Шабос и другие издания</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">{t('home.catNewspapers', lang)}</h3>
+              <p className="text-gray-600">{t('home.catNewspapersDesc', lang)}</p>
             </Link>
-            
             <Link href="/catalog?category=educational" className="group p-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl hover:shadow-lg transition-all">
               <div className="text-4xl mb-4">📚</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">Учебные материалы</h3>
-              <p className="text-gray-600">Статьи, уроки и образовательные материалы</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">{t('home.catEducational', lang)}</h3>
+              <p className="text-gray-600">{t('home.catEducationalDesc', lang)}</p>
             </Link>
-            
             <Link href="/catalog?category=holidays" className="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-all">
               <div className="text-4xl mb-4">🕎</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">Праздники</h3>
-              <p className="text-gray-600">Материалы к еврейским праздникам</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">{t('home.catHolidays', lang)}</h3>
+              <p className="text-gray-600">{t('home.catHolidaysDesc', lang)}</p>
             </Link>
           </div>
         </div>
@@ -172,10 +167,10 @@ export default function HomePage() {
       <section className="py-16 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="text-5xl mb-4">📚</div>
-          <h2 className="text-3xl font-display font-bold mb-4">Группы для изучения Торы</h2>
-          <p className="text-lg text-indigo-200 mb-8">WhatsApp и Telegram группы для совместного изучения</p>
+          <h2 className="text-3xl font-display font-bold mb-4">{t('home.torahGroupsTitle', lang)}</h2>
+          <p className="text-lg text-indigo-200 mb-8">{t('home.torahGroupsDesc', lang)}</p>
           <Link href="/torah-groups" className="inline-flex items-center gap-2 bg-white text-indigo-900 px-8 py-4 rounded-full font-bold hover:bg-yellow-400 transition-all">
-            Смотреть группы →
+            {t('home.torahGroupsBtn', lang)} →
           </Link>
         </div>
       </section>
@@ -190,19 +185,14 @@ export default function HomePage() {
       {/* О проекте */}
       <section className="py-16 bg-cream">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-display font-bold text-primary-900 mb-6">О проекте ShabbatHub</h2>
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            ShabbatHub — это бесплатный онлайн-архив материалов к Шаббату. 
-            Мы собираем и систематизируем еженедельные газеты, учебные материалы 
-            и статьи на русском, иврите и английском языках, чтобы сделать 
-            еврейское знание доступным для всех.
-          </p>
+          <h2 className="text-3xl font-display font-bold text-primary-900 mb-6">{t('home.aboutTitle', lang)}</h2>
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed">{t('home.aboutText', lang)}</p>
           <Link href="/about" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium">
-            Узнать больше о проекте
+            {t('home.aboutMore', lang)}
             <ChevronRight size={20} />
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 }
