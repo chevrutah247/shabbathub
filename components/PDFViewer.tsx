@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/translations';
 
 import { useState } from 'react';
 import { 
@@ -18,7 +19,7 @@ interface PDFViewerProps {
 type ViewMode = 'single' | 'two' | 'all';
 
 export default function PDFViewer({ url, title, onClose, showControls = true }: PDFViewerProps) {
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
   const [zoom, setZoom] = useState(100);
   const [viewMode, setViewMode] = useState<ViewMode>('single');
   const [currentPage, setCurrentPage] = useState(1);
