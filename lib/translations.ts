@@ -158,6 +158,31 @@ const translations = {
     uk: { ru: 'Українська', en: 'Ukrainian', he: 'אוקראינית', uk: 'Українська' },
   },
 
+  // ===== PDF Viewer =====
+  pdfViewer: {
+    page: { ru: 'Стр.', en: 'Page', he: 'עמוד', uk: 'Стор.' },
+    of: { ru: 'из', en: 'of', he: 'מתוך', uk: 'з' },
+    singlePage: { ru: 'Одна страница', en: 'Single page', he: 'עמוד בודד', uk: 'Одна сторінка' },
+    twoPages: { ru: 'Две страницы', en: 'Two pages', he: 'שני עמודים', uk: 'Дві сторінки' },
+    allPages: { ru: 'Все страницы', en: 'All pages', he: 'כל העמודים', uk: 'Всі сторінки' },
+    fullscreen: { ru: 'На весь экран', en: 'Fullscreen', he: 'מסך מלא', uk: 'На весь екран' },
+  },
+
+  // ===== Действия =====
+  actions: {
+    zoomIn: { ru: 'Увеличить', en: 'Zoom in', he: 'הגדל', uk: 'Збільшити' },
+    zoomOut: { ru: 'Уменьшить', en: 'Zoom out', he: 'הקטן', uk: 'Зменшити' },
+    share: { ru: 'Поделиться', en: 'Share', he: 'שתף', uk: 'Поділитися' },
+    copyLink: { ru: 'Копировать ссылку', en: 'Copy link', he: 'העתק קישור', uk: 'Копіювати посилання' },
+    print: { ru: 'Печать', en: 'Print', he: 'הדפס', uk: 'Друк' },
+    download: { ru: 'Скачать', en: 'Download', he: 'הורד', uk: 'Завантажити' },
+  },
+
+  // ===== Сообщения =====
+  messages: {
+    linkCopied: { ru: 'Ссылка скопирована!', en: 'Link copied!', he: '!הקישור הועתק', uk: 'Посилання скопійовано!' },
+  },
+
   // ===== Парша (ивритская дата для разных языков) =====
   parsha: {
     prefix: { ru: 'Глава «', en: 'Parashat ', he: 'פרשת ', uk: 'Глава «' },
