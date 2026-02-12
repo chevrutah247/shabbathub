@@ -158,8 +158,8 @@ function CatalogContent() {
 
       <div className="library-bg min-h-screen">
         {/* Header */}
-        <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #3d2c1f 0%, #5a3e2b 40%, #4a3425 100%)' }}>
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)' }} />
+        <div className="relative overflow-hidden" style={{ background: 'url(/library-bg.jpg) center/cover no-repeat' }}>
+          <div className="absolute inset-0 opacity-10" style={{ background: 'rgba(30,20,10,0.65)' }} />
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(200,160,80,0.15) 0%, transparent 60%)' }} />
           <div className="relative max-w-7xl mx-auto px-6 py-12 md:py-16 text-center">
             <div className="text-2xl mb-3" style={{ color: '#c4a882' }}>{'\u2766'}</div>
