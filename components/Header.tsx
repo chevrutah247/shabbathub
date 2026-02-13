@@ -94,6 +94,9 @@ export default function Header() {
   const [parshaEng, setParshaEng] = useState('');
   const [hebrewDateRaw, setHebrewDateRaw] = useState<{ hd: number; hm: string; hy: number } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [candleLighting, setCandleLighting] = useState('');
+  const [havdalah, setHavdalah] = useState('');
+  const [shabbatCity, setShabbatCity] = useState('');
   
   const { user, profile, signOut } = useAuth();
   const { lang, setLang } = useLanguage();
@@ -126,6 +129,52 @@ export default function Header() {
       } catch (err) { console.error('Error fetching Hebrew info:', err); }
     }
     fetchHebrewInfo();
+
+    // Fetch Shabbat times based on geolocation
+    async function fetchZmanim() {
+      try {
+        let lat = 40.7128, lng = -74.006, tzid = 'America/New_York', city = 'New York';
+        if (navigator.geolocation) {
+          try {
+            const pos = await new Promise<GeolocationPosition>((resolve, reject) => 
+              navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
+            );
+            lat = pos.coords.latitude;
+            lng = pos.coords.longitude;
+            // Get timezone
+            tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            // Get city name from reverse geocoding
+            try {
+              const geoRes = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lng + '&format=json&accept-language=ru');
+              if (geoRes.ok) {
+                const geoData = await geoRes.json();
+                city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.state || city;
+              }
+            } catch {}
+          } catch {
+            // Geolocation denied — use defaults
+          }
+        }
+        const res = await fetch(
+          'https://www.hebcal.com/shabbat?cfg=json&geo=pos&latitude=' + lat + '&longitude=' + lng + '&tzid=' + tzid
+        );
+        if (res.ok) {
+          const data = await res.json();
+          const candle = data.items?.find((i: any) => i.category === 'candles');
+          const havd = data.items?.find((i: any) => i.category === 'havdalah');
+          if (candle) {
+            const cTime = new Date(candle.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            setCandleLighting(cTime);
+          }
+          if (havd) {
+            const hTime = new Date(havd.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            setHavdalah(hTime);
+          }
+          setShabbatCity(city);
+        }
+      } catch (err) { console.error('Zmanim error:', err); }
+    }
+    fetchZmanim();
   }, []);
 
   const getDate = () => {
@@ -160,6 +209,9 @@ export default function Header() {
         <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
           {fDate}{fDate && fParsha && <span className="mx-2">•</span>}
           {fParsha && <span>{t('parsha.prefix', lang)}{fParsha}{t('parsha.suffix', lang)}</span>}
+          {candleLighting && <><span className="mx-2">•</span><span>🕯 {candleLighting}</span></>}
+          {havdalah && <><span className="mx-1">–</span><span>{havdalah}</span></>}
+          {shabbatCity && <span className="ml-1 text-blue-200">({shabbatCity})</span>}
         </div>
       )}
       <div className="max-w-7xl mx-auto px-4">
