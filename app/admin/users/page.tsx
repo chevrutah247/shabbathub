@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Shield, ShieldCheck, Edit2, X, Save } from 'lucide-react';
+import { Shield, ShieldCheck, Edit2, X, Save, KeyRound, Mail } from 'lucide-react';
 
 
 const ROLES = [
@@ -17,6 +17,7 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [saving, setSaving] = useState(false);
+  const [resetMsg, setResetMsg] = useState('');
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -103,9 +104,22 @@ export default function AdminUsers() {
               <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" value={editingUser.display_name || ''} onChange={(e) => setEditingUser({...editingUser, display_name: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/></div>
               <div><label className="block text-sm font-medium mb-1">Роль</label><select value={editingUser.role || 'subscriber'} onChange={(e) => setEditingUser({...editingUser, role: e.target.value})} className="w-full px-4 py-2 border rounded-lg">{ROLES.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select></div>
             </div>
-            <div className="p-6 border-t flex justify-end gap-3">
-              <button onClick={() => setEditingUser(null)} className="px-4 py-2 text-gray-600">Отмена</button>
-              <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2"><Save size={18}/>{saving ? '...' : 'Сохранить'}</button>
+            <div className="p-6 border-t space-y-3">
+              {resetMsg && <p className={resetMsg.includes('Ошибка') ? 'text-red-600 text-sm' : 'text-green-600 text-sm'}>{resetMsg}</p>}
+              <button onClick={async () => {
+                setResetMsg('');
+                try {
+                  const { error } = await supabase.auth.resetPasswordForEmail(editingUser.email, { redirectTo: 'https://shabbathub.com/reset-password' });
+                  if (error) throw error;
+                  setResetMsg('Письмо для сброса пароля отправлено на ' + editingUser.email);
+                } catch (e: any) { setResetMsg('Ошибка: ' + e.message); }
+              }} className="w-full px-4 py-2 border border-amber-300 text-amber-700 bg-amber-50 rounded-lg flex items-center justify-center gap-2 hover:bg-amber-100 transition-colors">
+                <KeyRound size={16}/>Отправить сброс пароля
+              </button>
+              <div className="flex justify-end gap-3">
+                <button onClick={() => { setEditingUser(null); setResetMsg(''); }} className="px-4 py-2 text-gray-600">Отмена</button>
+                <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2"><Save size={18}/>{saving ? '...' : 'Сохранить'}</button>
+              </div>
             </div>
           </div>
         </div>
