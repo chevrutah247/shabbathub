@@ -367,80 +367,103 @@ export default function AddPdfPage() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-6">
-          <ArrowLeft size={20} /> Назад в каталог
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Serif+4:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        .lib-card { background: linear-gradient(145deg, #fffdf7 0%, #faf6ee 100%); border: 2px solid #c9b896; border-radius: 20px; position: relative; overflow: hidden; }
+        .lib-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #1e3a6e 0%, #2c5f8a 30%, #b8860b 50%, #2c5f8a 70%, #1e3a6e 100%); }
+        .lib-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #1e3a6e 0%, #2c5f8a 30%, #b8860b 50%, #2c5f8a 70%, #1e3a6e 100%); }
+        .f-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #a09580; margin-bottom: 6px; display: block; }
+        .f-input { border: 1px solid #e0d8c8; border-radius: 8px; padding: 9px 14px; font-family: 'Source Serif 4', Georgia, serif; background: white; outline: none; width: 100%; transition: border-color 0.2s; font-size: 0.95rem; color: #2c2416; }
+        .f-input:focus { border-color: #b8860b; box-shadow: 0 0 0 2px rgba(184,134,11,0.08); }
+        .f-input::placeholder { color: #c9b896; }
+        .f-select { border: 1px solid #e0d8c8; border-radius: 8px; padding: 9px 14px; font-family: 'Source Serif 4', Georgia, serif; background: white; outline: none; width: 100%; cursor: pointer; font-size: 0.95rem; color: #2c2416; appearance: auto; }
+        .f-select:focus { border-color: #b8860b; }
+        .gold-submit { background: linear-gradient(135deg, #b8860b, #d4a012); color: white; font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; transition: all 0.3s; border: none; }
+        .gold-submit:hover { box-shadow: 0 4px 16px rgba(184,134,11,0.25); transform: translateY(-1px); }
+        .gold-submit:disabled { opacity: 0.5; transform: none; box-shadow: none; }
+        .watermark-add { position: absolute; right: 20px; top: 40%; transform: translateY(-50%) rotate(-15deg); font-family: 'Playfair Display', serif; font-size: 7rem; font-weight: 800; color: rgba(30,58,110,0.03); pointer-events: none; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, #e0d8c8, transparent); margin: 8px 0; }
+      `}</style>
+      <div className="max-w-2xl mx-auto px-4 py-10" style={{ minHeight: '100vh' }}>
+        <Link href="/catalog" className="inline-flex items-center gap-2 mb-6 text-sm hover:opacity-80 transition-opacity" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
+          <ArrowLeft size={16} /> Вернуться в каталог
         </Link>
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Добавить PDF материал</h1>
+        <div className="lib-card p-8 pt-10 pb-10 relative">
+          <div className="watermark-add">+</div>
+          <div className="text-center mb-6">
+            <p className="f-label" style={{ marginBottom: '4px', textAlign: 'center' }}>Карточка нового материала · ShabbatHub Library</p>
+            <div className="w-16 h-[1px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #b8860b, transparent)' }} />
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#1e3a6e', marginTop: '12px' }}>Добавить материал</h1>
+          </div>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
-              <AlertCircle size={20} />{error}
+            <div className="mb-6 px-4 py-3 rounded-lg flex items-center gap-2 text-sm" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontFamily: "'Source Serif 4', serif" }}>
+              <AlertCircle size={16} />{error}
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Название *</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Шомрей Шабос №805 Мишпатим" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none" required />
+              <label className="f-label">Название *</label>
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Шомрей Шабос №805 Мишпатим" className="f-input" required />
             </div>
+            <div className="section-divider" />
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Публикация (издание)</label>
-              <select value={publicationId} onChange={(e) => setPublicationId(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
+              <label className="f-label">Публикация (издание)</label>
+              <select value={publicationId} onChange={(e) => setPublicationId(e.target.value)} className="f-select">
                 <option value="">— Выберите публикацию —</option>
                 {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru}</option>)}
               </select>
-              <Link href="/add-publication" className="text-sm text-primary-600 hover:underline mt-1 inline-block">+ Создать новую публикацию</Link>
+              <Link href="/add-publication" className="text-xs mt-1.5 inline-block hover:opacity-80" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Создать новую публикацию</Link>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Номер выпуска (опционально)</label>
-              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="805" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
+              <label className="f-label">Номер выпуска (опц.)</label>
+              <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="805" className="f-input" />
             </div>
+            <div className="section-divider" />
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Дата выхода</label>
-                <input type="date" value={gregorianDate} onChange={(e) => setGregorianDate(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
+                <label className="f-label">Дата выхода</label>
+                <input type="date" value={gregorianDate} onChange={(e) => setGregorianDate(e.target.value)} className="f-input" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Еврейская дата</label>
-                <input type="text" value={hebrewDate} readOnly className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50 text-gray-600" placeholder="Авто-конвертация" />
+                <label className="f-label">Еврейская дата</label>
+                <input type="text" value={hebrewDate} readOnly className="f-input" style={{ background: '#faf6ee', color: '#8a7d6b' }} placeholder="Авто" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Недельная глава</label>
-              <select value={parshaId || ''} onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
+              <label className="f-label">Недельная глава</label>
+              <select value={parshaId || ''} onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)} className="f-select">
                 <option value="">— Не указана —</option>
                 {parshiot.map(p => (
-                  <option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' (текущая)' : ''}</option>
+                  <option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ✦' : ''}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Событие / Праздник (опционально)</label>
-              <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
+              <label className="f-label">Событие / Праздник (опц.)</label>
+              <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="f-select">
                 <option value="">— Не указано —</option>
                 {events.map(ev => <option key={ev.id} value={ev.id}>{ev.name_ru}</option>)}
               </select>
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Язык материала</label>
-              <select value={pdfLanguage} onChange={(e) => setPdfLanguage(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
+              <label className="f-label">Язык материала</label>
+              <select value={pdfLanguage} onChange={(e) => setPdfLanguage(e.target.value)} className="f-select">
                 <option value="ru">Русский</option>
-                <option value="he">Иврит</option>
+                <option value="he">עברית (Иврит)</option>
                 <option value="en">English</option>
                 <option value="uk">Українська</option>
               </select>
             </div>
-
+            <div className="section-divider" />
             {/* PDF файл */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">PDF файл *</label>
+              <label className="f-label">PDF файл *</label>
               <div className="flex gap-2 mb-3">
-                <button type="button" onClick={() => setUploadMode('file')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ' + (uploadMode === 'file' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}>
-                  <Upload size={16} /> Загрузить файл
+                <button type="button" onClick={() => setUploadMode('file')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm transition-colors ' + (uploadMode === 'file' ? 'text-white' : '')} style={uploadMode === 'file' ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5f8a)', fontFamily: "'Source Serif 4', serif", fontWeight: 600 } : { background: '#faf6ee', border: '1px solid #e0d8c8', color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
+                  <Upload size={15} /> Загрузить файл
                 </button>
-                <button type="button" onClick={() => setUploadMode('url')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ' + (uploadMode === 'url' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}>
-                  <LinkIcon size={16} /> Вставить ссылку
+                <button type="button" onClick={() => setUploadMode('url')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm transition-colors ' + (uploadMode === 'url' ? 'text-white' : '')} style={uploadMode === 'url' ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5f8a)', fontFamily: "'Source Serif 4', serif", fontWeight: 600 } : { background: '#faf6ee', border: '1px solid #e0d8c8', color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
+                  <LinkIcon size={15} /> Вставить ссылку
                 </button>
               </div>
 
@@ -448,11 +471,11 @@ export default function AddPdfPage() {
                 <>
                   {!selectedFile ? (
                     <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()}
-                      className={'border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ' + (isDragging ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50')}>
-                      <Upload className={'mx-auto mb-3 ' + (isDragging ? 'text-primary-500' : 'text-gray-400')} size={40} />
-                      <p className="text-gray-700 font-medium mb-1">{isDragging ? 'Отпустите файл' : 'Перетащите PDF сюда'}</p>
-                      <p className="text-sm text-gray-500">или <span className="text-primary-600 underline">выберите файл</span> с компьютера</p>
-                      <p className="text-xs text-gray-400 mt-2">Только PDF, до 50 MB</p>
+                      className="rounded-xl p-8 text-center cursor-pointer transition-all" style={{ border: isDragging ? '2px dashed #b8860b' : '2px dashed #e0d8c8', background: isDragging ? '#faf6ee' : '#fffdf7' }}>
+                      <Upload className="mx-auto mb-3" size={36} style={{ color: isDragging ? '#b8860b' : '#c9b896' }} />
+                      <p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontWeight: 500 }} className="mb-1">{isDragging ? 'Отпустите файл' : 'Перетащите PDF сюда'}</p>
+                      <p className="text-sm" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>или <span style={{ color: '#b8860b', textDecoration: 'underline' }}>выберите файл</span> с компьютера</p>
+                      <p className="text-xs mt-2" style={{ color: '#c9b896' }}>Только PDF, до 50 MB</p>
                       <input ref={fileInputRef} type="file" accept=".pdf,application/pdf" onChange={handleFileSelect} className="hidden" />
                     </div>
                   ) : (
@@ -520,14 +543,15 @@ export default function AddPdfPage() {
               <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Краткое описание содержимого..." className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none" />
             </div>
 
-            <button type="submit" disabled={submitting || uploading} className="w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            <button type="submit" disabled={submitting || uploading} className="gold-submit w-full py-3 rounded-xl flex items-center justify-center gap-2 text-sm">
               {submitting || uploading ? (
-                <><Loader2 className="animate-spin" size={20} />{uploading ? 'Загрузка файла...' : 'Сохранение...'}</>
+                <><Loader2 className="animate-spin" size={18} />{uploading ? 'Загрузка файла...' : 'Сохранение...'}</>
               ) : (
-                <><Upload size={20} />Добавить материал</>
+                <><Upload size={18} />Добавить в библиотеку</>
               )}
             </button>
           </form>
+          <div className="text-center mt-6"><p className="f-label" style={{ fontSize: '0.55rem', textAlign: 'center' }}>ShabbatHub Digital Library · Формуляр загрузки</p></div>
         </div>
       </div>
     </div>
