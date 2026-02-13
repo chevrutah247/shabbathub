@@ -101,6 +101,7 @@ function CatalogContent() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => { const q = searchParams.get('search'); if (q) { setSearchInput(q); setSearchQuery(q); } setInitialized(true); }, [searchParams]);
 
@@ -124,12 +125,12 @@ function CatalogContent() {
   const fetchDocuments = useCallback(async () => {
     if (!initialized) return; setLoading(true);
     const from = page * PAGE_SIZE; const to = from + PAGE_SIZE - 1;
-    let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=gregorian_date.desc,created_at.desc,created_at.desc';
+    let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=" + (sortOrder === "oldest" ? "gregorian_date.asc,created_at.asc" : "gregorian_date.desc,created_at.desc") + "';
     if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, initialized]);
+  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -195,6 +196,17 @@ function CatalogContent() {
                 {hasFilters && <button onClick={clearFilters} className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium" style={{ color: '#96693a', fontFamily: "'DM Sans', sans-serif" }}><X size={14} /> {t('reset', lang)}</button>}
               </div>
             )}
+          </div>
+
+          {/* Sort buttons */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {["newest","oldest"].map(s => (
+              <button key={s} onClick={() => { setSortOrder(s); setPage(0); }}
+                className={"px-4 py-2 rounded-xl text-sm font-medium transition-all " + (sortOrder === s ? "text-white" : "filter-select text-stone-600")}
+                style={sortOrder === s ? { background: "linear-gradient(135deg, \#96693a, \#b8854a)" } : {}}>
+                {s === "newest" ? t("catalog.newest", lang) : t("catalog.oldest", lang)}
+              </button>
+            ))}
           </div>
 
           {/* Counter */}
