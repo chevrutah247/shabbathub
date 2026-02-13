@@ -6,7 +6,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <contact@chevrutah24x7.
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://yvgcxmqgvxlvbxsszqcc.supabase.co',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy'
 );
 
 const supabaseAnon = createClient(
