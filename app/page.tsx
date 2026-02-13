@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { BookOpen, Search, ArrowRight, ChevronRight, Globe, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles } from 'lucide-react';
+import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
@@ -11,15 +11,15 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 interface Doc { id: string; title: string; thumbnail_url: string; gregorian_date: string; publication_id: string; }
 
 const t: Record<string, Record<string, string>> = {
-  heroTitle1: { ru: 'Крупнейшая', en: 'The Largest', he: 'הארכיון', uk: 'Найбільша' },
-  heroTitle2: { ru: 'цифровая библиотека', en: 'Digital Library', he: 'הדיגיטלי', uk: 'цифрова бібліотека' },
-  heroTitle3: { ru: 'материалов к Шаббату', en: 'of Shabbat Materials', he: 'הגדול ביותר', uk: 'матеріалів до Шаббату' },
+  heroTitle1: { ru: 'Крупнейшая', en: 'The Largest', he: 'הארכיון הדיגיטלי', uk: 'Найбільша' },
+  heroTitle2: { ru: 'цифровая библиотека', en: 'Digital Library', he: 'הגדול ביותר', uk: 'цифрова бібліотека' },
+  heroTitle3: { ru: 'материалов к Шаббату', en: 'of Shabbat Materials', he: 'של חומרי שבת', uk: 'матеріалів до Шаббату' },
   heroSub: { ru: 'Газеты, недельные главы Торы и печатные материалы на русском, английском и иврите', en: 'Newspapers, weekly Torah portions and printable materials in Russian, English and Hebrew', he: 'עיתונים, פרשות שבוע וחומרים להדפסה ברוסית, אנגלית ועברית', uk: 'Газети, тижневі глави Тори та друковані матеріали російською, англійською та івритом' },
   searchPlaceholder: { ru: 'Найти материалы к Шаббату...', en: 'Find Shabbat materials...', he: '...חיפוש חומרי שבת', uk: 'Знайти матеріали до Шаббату...' },
   explore: { ru: 'Открыть каталог', en: 'Explore catalog', he: 'לקטלוג', uk: 'Відкрити каталог' },
   subscribe: { ru: 'Подписаться', en: 'Subscribe', he: 'הרשמה', uk: 'Підписатися' },
   latest: { ru: 'Свежие выпуски', en: 'Latest Issues', he: 'גיליונות אחרונים', uk: 'Свіжі випуски' },
-  viewAll: { ru: 'Смотреть все', en: 'View all', he: 'הצג הכל', uk: 'Дивитись все' },
+  viewAll: { ru: 'Смотреть все →', en: 'View all →', he: '← הצג הכל', uk: 'Дивитись все →' },
   materials: { ru: 'материалов', en: 'materials', he: 'חומרים', uk: 'матеріалів' },
   publications: { ru: 'публикаций', en: 'publications', he: 'פרסומים', uk: 'публікацій' },
   languages: { ru: 'языка', en: 'languages', he: 'שפות', uk: 'мови' },
@@ -34,8 +34,7 @@ const t: Record<string, Record<string, string>> = {
   networkTitle: { ru: 'Chevrutah Network', en: 'Chevrutah Network', he: 'Chevrutah Network', uk: 'Chevrutah Network' },
   networkSub: { ru: 'Экосистема еврейских проектов', en: 'Jewish Projects Ecosystem', he: 'אקו-סיסטם של פרויקטים יהודיים', uk: 'Екосистема єврейських проєктів' },
   ctaTitle: { ru: 'Получайте свежие выпуски первыми', en: 'Get fresh issues first', he: 'קבלו גיליונות חדשים ראשונים', uk: 'Отримуйте свіжі випуски першими' },
-  ctaSub: { ru: 'Подпишитесь на уведомления и получайте новые материалы прямо на почту', en: 'Subscribe for notifications and receive new materials directly to your email', he: 'הירשמו להתראות וקבלו חומרים חדשים ישירות למייל', uk: 'Підпишіться на сповіщення та отримуйте нові матеріали прямо на пошту' },
-  emailPlaceholder: { ru: 'Ваш email', en: 'Your email', he: 'האימייל שלך', uk: 'Ваш email' },
+  ctaSub: { ru: 'Подпишитесь и получайте новые материалы прямо на почту', en: 'Subscribe and receive new materials directly to your email', he: 'הירשמו וקבלו חומרים חדשים ישירות למייל', uk: 'Підпишіться та отримуйте нові матеріали прямо на пошту' },
 };
 
 function AnimateIn({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -48,14 +47,14 @@ function AnimateIn({ children, delay = 0, className = '' }: { children: React.Re
     obs.observe(el);
     return () => obs.disconnect();
   }, [delay]);
-  return <div ref={ref} className={className} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 0.7s ease, transform 0.7s ease' }}>{children}</div>;
+  return <div ref={ref} className={className} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: 'opacity 0.6s ease, transform 0.6s ease' }}>{children}</div>;
 }
 
 const networkProjects = [
-  { name: 'ShabbatHub', desc: { ru: 'Архив материалов к Шаббату', en: 'Shabbat Materials Archive', he: 'ארכיון חומרי שבת', uk: 'Архів матеріалів до Шаббату' }, url: '/', icon: '📚', color: '#1e3a8a' },
-  { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы', en: 'Torah Learning', he: 'לימוד תורה', uk: 'Вивчення Тори' }, url: 'https://edonthego.org', icon: '🎓', color: '#065f46' },
-  { name: 'CH Groups', desc: { ru: 'Группы изучения', en: 'Study Groups', he: 'קבוצות לימוד', uk: 'Групи вивчення' }, url: 'https://crownheightsgroups.com', icon: '👥', color: '#7c2d12' },
-  { name: 'OpenHearts', desc: { ru: 'Дейтинг для всех', en: 'Dating for Everyone', he: 'היכרויות לכולם', uk: 'Дейтинг для всіх' }, url: 'https://openheartsdating.com', icon: '💙', color: '#4338ca' },
+  { name: 'ShabbatHub', desc: { ru: 'Архив материалов к Шаббату', en: 'Shabbat Materials Archive', he: 'ארכיון חומרי שבת', uk: 'Архів матеріалів до Шаббату' }, url: '/', icon: '📚', accent: '#1e3a8a' },
+  { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы онлайн', en: 'Torah Learning Online', he: 'לימוד תורה אונליין', uk: 'Вивчення Тори онлайн' }, url: 'https://edonthego.org', icon: '🎓', accent: '#065f46' },
+  { name: 'CH Groups', desc: { ru: 'Группы изучения', en: 'Study Groups', he: 'קבוצות לימוד', uk: 'Групи вивчення' }, url: 'https://crownheightsgroups.com', icon: '👥', accent: '#92400e' },
+  { name: 'OpenHearts', desc: { ru: 'Дейтинг для всех', en: 'Dating for Everyone', he: 'היכרויות לכולם', uk: 'Дейтинг для всіх' }, url: 'https://openheartsdating.com', icon: '💙', accent: '#4338ca' },
 ];
 
 export default function HomePage() {
@@ -78,150 +77,130 @@ export default function HomePage() {
   return (
     <div dir={dir}>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
-        .hero-bg {
-          background: linear-gradient(165deg, #0c1220 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+        .hero-warm {
+          background: linear-gradient(170deg, #fdfbf7 0%, #f8f4ed 40%, #f0e9dc 100%);
           position: relative;
           overflow: hidden;
         }
-        .hero-bg::before {
+        .hero-warm::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(ellipse 800px 600px at 20% 80%, rgba(196,168,130,0.08) 0%, transparent 70%),
-            radial-gradient(ellipse 600px 400px at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 70%),
-            radial-gradient(circle 300px at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 70%);
-        }
-        .hero-bg::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-          pointer-events: none;
+          top: -50%;
+          right: -20%;
+          width: 80%;
+          height: 120%;
+          border-radius: 50%;
+          background: radial-gradient(ellipse, rgba(30,58,138,0.04) 0%, transparent 70%);
         }
 
-        .gold-shimmer {
-          background: linear-gradient(120deg, #c4a882 0%, #f5d280 25%, #e8b84a 50%, #f5d280 75%, #c4a882 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: shimmer 4s linear infinite;
+        .accent-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); }
+        .gold-text { color: #b8860b; }
+
+        .search-card {
+          background: white;
+          border: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03);
+          transition: box-shadow 0.3s ease;
         }
-        @keyframes shimmer { to { background-position: 200% center; } }
-
-        .glass-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          backdrop-filter: blur(20px);
+        .search-card:focus-within {
+          box-shadow: 0 8px 32px rgba(30,58,138,0.08), 0 1px 3px rgba(0,0,0,0.03);
+          border-color: rgba(30,58,138,0.15);
         }
 
-        .book-hover { transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
-        .book-hover:hover { transform: translateY(-8px) scale(1.02); }
-        .book-hover:hover .book-shadow { box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 60px rgba(196,168,130,0.1); }
-
-        .float-1 { animation: float1 6s ease-in-out infinite; }
-        .float-2 { animation: float2 8s ease-in-out infinite; }
-        .float-3 { animation: float3 7s ease-in-out infinite; }
-        @keyframes float1 { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(2deg); } }
-        @keyframes float2 { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(-1.5deg); } }
-        @keyframes float3 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .category-card {
-          background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-          border: 1px solid rgba(196,168,130,0.15);
-          transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        .book-card { transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+        .book-card:hover { transform: translateY(-6px); }
+        .book-shadow { 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+          transition: box-shadow 0.35s ease;
+          border-radius: 8px;
+          overflow: hidden;
         }
-        .category-card:hover {
-          border-color: rgba(196,168,130,0.4);
-          background: linear-gradient(135deg, rgba(196,168,130,0.08) 0%, rgba(255,255,255,0.03) 100%);
+        .book-card:hover .book-shadow { box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06); }
+
+        .cat-card {
+          background: white;
+          border: 1px solid rgba(0,0,0,0.05);
+          border-radius: 20px;
+          transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+        .cat-card:hover {
+          border-color: rgba(30,58,138,0.12);
+          box-shadow: 0 12px 40px rgba(30,58,138,0.06);
           transform: translateY(-4px);
         }
 
-        .stat-num {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-weight: 300;
-          font-size: 3.5rem;
-          line-height: 1;
-          background: linear-gradient(180deg, #f5d280 0%, #c4a882 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .network-card {
+        .net-card {
+          background: white;
+          border: 1px solid rgba(0,0,0,0.05);
+          border-radius: 16px;
           transition: all 0.3s ease;
-          border: 1px solid rgba(255,255,255,0.06);
         }
-        .network-card:hover {
-          border-color: rgba(255,255,255,0.15);
-          background: rgba(255,255,255,0.05);
+        .net-card:hover {
+          border-color: rgba(0,0,0,0.1);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+          transform: translateY(-2px);
         }
 
-        .cta-section {
-          background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
-          position: relative;
-          overflow: hidden;
+        .stat-number {
+          font-family: 'Crimson Pro', Georgia, serif;
+          font-weight: 300;
+          font-size: 3rem;
+          line-height: 1;
+          color: #1e3a8a;
         }
-        .cta-section::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(ellipse at 30% 50%, rgba(245,158,11,0.1) 0%, transparent 60%);
-        }
+
+        .section-cream { background: #fdfbf7; }
+        .section-white { background: #ffffff; }
+        .section-blue { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); }
       `}</style>
 
       {/* ═══════ HERO ═══════ */}
-      <section className="hero-bg min-h-[85vh] flex items-center relative">
-        {/* Floating decorative elements */}
-        <div className="absolute top-20 left-[10%] w-20 h-28 rounded-sm opacity-[0.04] float-1" style={{ background: 'linear-gradient(135deg, #c4a882, #8b6914)', transform: 'rotate(-5deg)' }} />
-        <div className="absolute top-32 right-[15%] w-16 h-24 rounded-sm opacity-[0.03] float-2" style={{ background: 'linear-gradient(135deg, #3b82f6, #1e3a8a)', transform: 'rotate(8deg)' }} />
-        <div className="absolute bottom-24 left-[20%] w-14 h-20 rounded-sm opacity-[0.03] float-3" style={{ background: 'linear-gradient(135deg, #f59e0b, #b45309)', transform: 'rotate(-3deg)' }} />
-
-        <div className="relative max-w-7xl mx-auto px-6 py-20 w-full">
-          <div className="max-w-4xl">
+      <section className="hero-warm min-h-[80vh] flex items-center">
+        <div className="relative max-w-7xl mx-auto px-6 py-16 md:py-24 w-full">
+          <div className="max-w-3xl">
             <AnimateIn>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(196,168,130,0.2), rgba(196,168,130,0.05))', border: '1px solid rgba(196,168,130,0.2)' }}>
-                  <Library size={20} style={{ color: '#c4a882' }} />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center accent-gradient">
+                  <Library size={18} className="text-white" />
                 </div>
-                <span className="text-sm font-medium tracking-widest uppercase" style={{ color: 'rgba(196,168,130,0.7)', fontFamily: "'Space Grotesk', sans-serif" }}>ShabbatHub</span>
+                <span className="text-sm font-semibold tracking-wider uppercase text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>ShabbatHub</span>
               </div>
             </AnimateIn>
 
-            <AnimateIn delay={100}>
-              <h1 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                <span className="block text-5xl md:text-7xl lg:text-8xl font-light text-white/90 leading-[1.1] mb-2">{g('heroTitle1')}</span>
-                <span className="block text-5xl md:text-7xl lg:text-8xl font-light leading-[1.1] mb-2 gold-shimmer">{g('heroTitle2')}</span>
-                <span className="block text-3xl md:text-4xl lg:text-5xl font-light text-white/50 leading-[1.2]">{g('heroTitle3')}</span>
+            <AnimateIn delay={80}>
+              <h1 style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                <span className="block text-4xl md:text-6xl lg:text-7xl font-light text-stone-800 leading-[1.1]">{g('heroTitle1')}</span>
+                <span className="block text-4xl md:text-6xl lg:text-7xl font-semibold leading-[1.1] mt-1" style={{ color: '#1e3a8a' }}>{g('heroTitle2')}</span>
+                <span className="block text-2xl md:text-3xl lg:text-4xl font-light text-stone-400 leading-[1.3] mt-2">{g('heroTitle3')}</span>
               </h1>
             </AnimateIn>
 
-            <AnimateIn delay={250}>
-              <p className="mt-8 text-lg md:text-xl text-white/40 max-w-2xl leading-relaxed" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <AnimateIn delay={200}>
+              <p className="mt-6 text-base md:text-lg text-stone-500 max-w-xl leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 {g('heroSub')}
               </p>
             </AnimateIn>
 
-            <AnimateIn delay={400}>
-              <form onSubmit={handleSearch} className="mt-10 flex gap-3 max-w-xl">
+            <AnimateIn delay={320}>
+              <form onSubmit={handleSearch} className="mt-8 flex gap-3 max-w-lg">
                 <div className="relative flex-1">
-                  <Search className={'absolute top-1/2 -translate-y-1/2 text-white/30 ' + (dir === 'rtl' ? 'right-5' : 'left-5')} size={20} />
+                  <Search className={'absolute top-1/2 -translate-y-1/2 text-stone-300 ' + (dir === 'rtl' ? 'right-4' : 'left-4')} size={20} />
                   <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
                     placeholder={g('searchPlaceholder')}
-                    className={'w-full py-4 rounded-2xl glass-card text-white/90 placeholder-white/30 outline-none focus:border-amber-500/30 transition-colors ' + (dir === 'rtl' ? 'pr-14 pl-5' : 'pl-14 pr-5')}
-                    style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '15px' }} />
+                    className={'w-full py-3.5 rounded-xl search-card text-stone-700 placeholder-stone-300 outline-none text-sm ' + (dir === 'rtl' ? 'pr-12 pl-4' : 'pl-12 pr-4')}
+                    style={{ fontFamily: "'DM Sans', sans-serif" }} />
                 </div>
-                <Link href="/catalog" className="flex items-center gap-2 px-7 py-4 rounded-2xl text-sm font-semibold transition-all hover:scale-105"
-                  style={{ background: 'linear-gradient(135deg, #c4a882, #a68a5b)', color: '#0c1220', fontFamily: "'Space Grotesk', sans-serif" }}>
-                  {g('explore')} <ArrowRight size={16} />
+                <Link href="/catalog" className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 accent-gradient"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {g('explore')} <ArrowRight size={15} />
                 </Link>
               </form>
             </AnimateIn>
 
-            {/* Stats inline */}
-            <AnimateIn delay={550}>
-              <div className="mt-14 flex gap-10 md:gap-16">
+            <AnimateIn delay={440}>
+              <div className="mt-12 flex gap-10 md:gap-14">
                 {[
                   { num: totalCount.toLocaleString(), label: g('materials') },
                   { num: '40+', label: g('publications') },
@@ -229,8 +208,8 @@ export default function HomePage() {
                   { num: '5+', label: g('yearsArchive') },
                 ].map((s, i) => (
                   <div key={i}>
-                    <div className="stat-num">{s.num}</div>
-                    <div className="text-white/30 text-xs mt-1 uppercase tracking-wider" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.label}</div>
+                    <div className="stat-number">{s.num}</div>
+                    <div className="text-stone-400 text-xs mt-1 uppercase tracking-wider font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -240,34 +219,34 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ LATEST ISSUES ═══════ */}
-      <section className="py-20 px-6" style={{ background: '#0e0e12' }}>
+      <section className="section-white py-16 md:py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <AnimateIn>
-            <div className="flex items-end justify-between mb-12">
+            <div className="flex items-end justify-between mb-10">
               <div>
-                <h2 className="text-3xl md:text-4xl font-light text-white/90" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{g('latest')}</h2>
-                <div className="mt-2 w-16 h-0.5" style={{ background: 'linear-gradient(90deg, #c4a882, transparent)' }} />
+                <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('latest')}</h2>
+                <div className="mt-2 w-12 h-0.5 rounded-full accent-gradient" />
               </div>
-              <Link href="/catalog" className="flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                {g('viewAll')} <ChevronRight size={16} />
+              <Link href="/catalog" className="text-sm font-medium text-blue-700 hover:text-blue-800 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                {g('viewAll')}
               </Link>
             </div>
           </AnimateIn>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             {docs.map((doc, i) => (
-              <AnimateIn key={doc.id} delay={i * 80}>
-                <Link href={'/document/' + doc.id} className="book-hover block">
-                  <div className="book-shadow rounded-lg overflow-hidden" style={{ aspectRatio: '3/4', boxShadow: '0 8px 25px rgba(0,0,0,0.3)' }}>
+              <AnimateIn key={doc.id} delay={i * 60}>
+                <Link href={'/document/' + doc.id} className="book-card block">
+                  <div className="book-shadow" style={{ aspectRatio: '3/4' }}>
                     {doc.thumbnail_url ? (
                       <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(145deg, #2a2a3a, #1a1a28)' }}>
-                        <BookOpen size={24} className="text-white/20" />
+                      <div className="w-full h-full flex items-center justify-center bg-stone-100">
+                        <BookOpen size={24} className="text-stone-300" />
                       </div>
                     )}
                   </div>
-                  <h3 className="mt-3 text-xs text-white/60 line-clamp-2 leading-snug" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{doc.title}</h3>
+                  <h3 className="mt-2.5 text-xs font-medium text-stone-600 line-clamp-2 leading-snug" style={{ fontFamily: "'DM Sans', sans-serif" }}>{doc.title}</h3>
                 </Link>
               </AnimateIn>
             ))}
@@ -276,29 +255,26 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ CATEGORIES ═══════ */}
-      <section className="py-20 px-6" style={{ background: 'linear-gradient(180deg, #0e0e12, #121218)' }}>
+      <section className="section-cream py-16 md:py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <AnimateIn>
-            <h2 className="text-3xl md:text-4xl font-light text-white/90 mb-3 text-center" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{g('categories')}</h2>
-            <div className="w-16 h-0.5 mx-auto mb-14" style={{ background: 'linear-gradient(90deg, transparent, #c4a882, transparent)' }} />
+            <h2 className="text-2xl md:text-3xl font-semibold text-stone-800 text-center mb-3" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('categories')}</h2>
+            <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mb-12" />
           </AnimateIn>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
-              { title: g('newspapers'), desc: g('newspapersDesc'), icon: <FileText size={28} />, link: '/catalog' },
-              { title: g('torahPortions'), desc: g('torahDesc'), icon: <BookOpen size={28} />, link: '/catalog' },
-              { title: g('holidays'), desc: g('holidaysDesc'), icon: <Star size={28} />, link: '/catalog' },
+              { title: g('newspapers'), desc: g('newspapersDesc'), icon: <FileText size={24} />, bg: '#eef2ff' },
+              { title: g('torahPortions'), desc: g('torahDesc'), icon: <BookOpen size={24} />, bg: '#fef3c7' },
+              { title: g('holidays'), desc: g('holidaysDesc'), icon: <Star size={24} />, bg: '#ecfdf5' },
             ].map((cat, i) => (
-              <AnimateIn key={i} delay={i * 150}>
-                <Link href={cat.link} className="category-card block rounded-2xl p-8 h-full">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-5" style={{ background: 'linear-gradient(135deg, rgba(196,168,130,0.15), rgba(196,168,130,0.05))', color: '#c4a882' }}>
+              <AnimateIn key={i} delay={i * 120}>
+                <Link href="/catalog" className="cat-card block p-7 h-full">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: cat.bg, color: '#1e3a8a' }}>
                     {cat.icon}
                   </div>
-                  <h3 className="text-xl font-medium text-white/85 mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{cat.title}</h3>
-                  <p className="text-sm text-white/35 leading-relaxed" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{cat.desc}</p>
-                  <div className="mt-6 flex items-center gap-2 text-xs font-medium uppercase tracking-wider" style={{ color: '#c4a882', fontFamily: "'Space Grotesk', sans-serif" }}>
-                    {g('explore')} <ArrowRight size={14} />
-                  </div>
+                  <h3 className="text-lg font-semibold text-stone-800 mb-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{cat.title}</h3>
+                  <p className="text-sm text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{cat.desc}</p>
                 </Link>
               </AnimateIn>
             ))}
@@ -307,30 +283,30 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ CHEVRUTAH NETWORK ═══════ */}
-      <section className="py-20 px-6" style={{ background: '#0e0e12' }}>
+      <section className="section-white py-16 md:py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <AnimateIn>
-            <div className="text-center mb-14">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <Sparkles size={18} style={{ color: '#c4a882' }} />
-                <span className="text-sm font-medium tracking-widest uppercase" style={{ color: 'rgba(196,168,130,0.7)', fontFamily: "'Space Grotesk', sans-serif" }}>{g('networkTitle')}</span>
-                <Sparkles size={18} style={{ color: '#c4a882' }} />
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Sparkles size={16} className="text-amber-500" />
+                <span className="text-xs font-bold tracking-widest uppercase text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('networkTitle')}</span>
+                <Sparkles size={16} className="text-amber-500" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-light text-white/90" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{g('networkSub')}</h2>
-              <div className="w-16 h-0.5 mx-auto mt-4" style={{ background: 'linear-gradient(90deg, transparent, #c4a882, transparent)' }} />
+              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('networkSub')}</h2>
+              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3" />
             </div>
           </AnimateIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {networkProjects.map((p, i) => (
-              <AnimateIn key={i} delay={i * 100}>
-                <a href={p.url} target={p.url.startsWith('http') ? '_blank' : '_self'} rel="noopener" className="network-card block rounded-2xl p-6 bg-white/[0.02]">
-                  <div className="flex items-start justify-between mb-4">
-                    <span className="text-3xl">{p.icon}</span>
-                    {p.url.startsWith('http') && <ExternalLink size={14} className="text-white/20" />}
+              <AnimateIn key={i} delay={i * 80}>
+                <a href={p.url} target={p.url.startsWith('http') ? '_blank' : '_self'} rel="noopener" className="net-card block p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-2xl">{p.icon}</span>
+                    {p.url.startsWith('http') && <ExternalLink size={13} className="text-stone-300" />}
                   </div>
-                  <h3 className="text-lg font-medium text-white/80 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{p.name}</h3>
-                  <p className="text-sm text-white/30" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{p.desc[lang] || p.desc['ru']}</p>
+                  <h3 className="text-base font-semibold text-stone-700 mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{p.name}</h3>
+                  <p className="text-xs text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{p.desc[lang] || p.desc['ru']}</p>
                 </a>
               </AnimateIn>
             ))}
@@ -339,15 +315,18 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ CTA ═══════ */}
-      <section className="cta-section py-20 px-6">
-        <div className="relative max-w-3xl mx-auto text-center">
+      <section className="section-blue py-16 md:py-20 px-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #f59e0b, transparent)' }} />
+        <div className="relative max-w-2xl mx-auto text-center">
           <AnimateIn>
-            <Bell size={36} className="mx-auto mb-6" style={{ color: 'rgba(245,158,11,0.7)' }} />
-            <h2 className="text-3xl md:text-4xl font-light text-white mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{g('ctaTitle')}</h2>
-            <p className="text-white/50 mb-8 max-w-lg mx-auto" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{g('ctaSub')}</p>
-            <Link href="/subscribe" className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-base font-semibold transition-all hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#0c1220', fontFamily: "'Space Grotesk', sans-serif" }}>
-              <Bell size={18} /> {g('subscribe')}
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <Bell size={26} className="text-amber-300" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-white mb-3" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('ctaTitle')}</h2>
+            <p className="text-white/60 mb-8 text-sm max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('ctaSub')}</p>
+            <Link href="/subscribe" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              style={{ background: '#f59e0b', color: '#1e3a8a', fontFamily: "'DM Sans', sans-serif" }}>
+              <Bell size={16} /> {g('subscribe')}
             </Link>
           </AnimateIn>
         </div>
