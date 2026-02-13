@@ -41,12 +41,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/latest" className="text-blue-200 hover:text-white transition-colors">
+                <Link href="/catalog" className="text-blue-200 hover:text-white transition-colors">
                   Последние выпуски
                 </Link>
               </li>
               <li>
-                <Link href="/search" className="text-blue-200 hover:text-white transition-colors">
+                <Link href="/catalog" className="text-blue-200 hover:text-white transition-colors">
                   Поиск
                 </Link>
               </li>
@@ -63,12 +63,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/donate" className="text-blue-200 hover:text-white transition-colors">
+                <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
                   Поддержать проект
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-blue-200 hover:text-white transition-colors">
+                <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
                   Контакты
                 </Link>
               </li>

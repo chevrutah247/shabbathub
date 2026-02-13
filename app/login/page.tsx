@@ -136,7 +136,7 @@ export default function LoginPage() {
         )}
 
         <div className="mt-4 text-center">
-          <a href="/" className="text-gray-400 text-sm">{t('back')}</a>
+          <a href="/register" className="text-blue-600 hover:underline text-sm font-medium">{'Регистрация / Register'}</a><br/><a href="/" className="text-gray-400 text-sm">{t('back')}</a>
         </div>
       </div>
     </div>

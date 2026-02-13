@@ -119,7 +119,7 @@ export default function Header() {
           const parashat = parshaData.items?.find((item: any) => {
             if (item.category !== 'parashat') return false;
             const itemDate = new Date(item.date);
-            return itemDate >= today || (itemDate.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const dayDiff = (itemDate.getTime() - today.getTime()) / (24*60*60*1000); return dayDiff >= -1 && dayDiff <= 6;
           });
           if (parashat) setParshaEng(parashat.title?.replace('Parashat ', ''));
         }
