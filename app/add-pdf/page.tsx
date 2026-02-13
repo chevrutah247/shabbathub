@@ -117,6 +117,7 @@ export default function AddPdfPage() {
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [autoThumbnail, setAutoThumbnail] = useState(true);
   const [description, setDescription] = useState('');
+  const [pdfLanguage, setPdfLanguage] = useState('ru');
 
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -323,6 +324,7 @@ export default function AddPdfPage() {
           issue_number: issueNumber || null,
           gregorian_date: gregorianDate || null,
           parsha_id: parshaId || null,
+          language: pdfLanguage,
           event_id: eventId || null,
           pdf_url: finalPdfUrl,
           thumbnail_url: finalThumbnailUrl || null,
@@ -417,6 +419,16 @@ export default function AddPdfPage() {
               <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
                 <option value="">— Не указано —</option>
                 {events.map(ev => <option key={ev.id} value={ev.id}>{ev.name_ru}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Язык материала</label>
+              <select value={pdfLanguage} onChange={(e) => setPdfLanguage(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white">
+                <option value="ru">Русский</option>
+                <option value="he">Иврит</option>
+                <option value="en">English</option>
+                <option value="uk">Українська</option>
               </select>
             </div>
 
