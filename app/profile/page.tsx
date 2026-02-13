@@ -74,7 +74,7 @@ export default function ProfilePage() {
 
       if (subs && subs.length > 0) {
         // Get publication names
-        const pubIds = [...new Set(subs.map(s => s.publication_id).filter(Boolean))];
+        const pubIds = Array.from(new Set(subs.map(s => s.publication_id).filter(Boolean)));
         let pubMap: Record<string, string> = {};
         if (pubIds.length > 0) {
           const { data: pubs } = await supabase
