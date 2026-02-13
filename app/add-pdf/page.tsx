@@ -38,11 +38,29 @@ function generateGdriveThumbnailUrl(pdfUrl: string): string | null {
   return fileId ? 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400' : null;
 }
 
+const TRANSLIT: Record<string, string> = {
+  'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'y',
+  'к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f',
+  'х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya',
+  'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'Yo','Ж':'Zh','З':'Z','И':'I','Й':'Y',
+  'К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R','С':'S','Т':'T','У':'U','Ф':'F',
+  'Х':'Kh','Ц':'Ts','Ч':'Ch','Ш':'Sh','Щ':'Shch','Ъ':'','Ы':'Y','Ь':'','Э':'E','Ю':'Yu','Я':'Ya',
+  'є':'ye','і':'i','ї':'yi','ґ':'g','Є':'Ye','І':'I','Ї':'Yi','Ґ':'G',
+  'א':'a','ב':'b','ג':'g','ד':'d','ה':'h','ו':'v','ז':'z','ח':'ch','ט':'t','י':'y',
+  'כ':'k','ך':'k','ל':'l','מ':'m','ם':'m','נ':'n','ן':'n','ס':'s','ע':'a','פ':'p','ף':'p',
+  'צ':'ts','ץ':'ts','ק':'k','ר':'r','ש':'sh','ת':'t',
+};
+
+function transliterate(str: string): string {
+  return str.split('').map(c => TRANSLIT[c] ?? c).join('');
+}
+
 function generateUniqueFilename(originalName: string, ext: string = 'pdf'): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  const cleanName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9\-_]/g, '-').substring(0, 50);
-  return cleanName + '-' + timestamp + '-' + random + '.' + ext;
+  const translitName = transliterate(originalName);
+  const cleanName = translitName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9\-_]/g, '-').replace(/-+/g, '-').substring(0, 50);
+  return (cleanName || 'doc') + '-' + timestamp + '-' + random + '.' + ext;
 }
 
 async function generateThumbnailFromPdf(file: File): Promise<Blob | null> {
