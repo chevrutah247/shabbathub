@@ -90,12 +90,12 @@ export default function FeaturedDocuments() {
     async function fetchDocs() {
       try {
         let currentParshaDocsPromise = currentParshaId
-          ? fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&parsha_id=eq.' + currentParshaId + '&order=gregorian_date.desc&limit=8&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,issue_number', {
+          ? fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&parsha_id=eq.' + currentParshaId + '&order=created_at.desc&limit=8&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,issue_number', {
               headers: { 'apikey': SUPABASE_KEY }
             }).then(r => r.json())
           : Promise.resolve([]);
 
-        let recentDocsPromise = fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=gregorian_date.desc&limit=16&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,issue_number', {
+        let recentDocsPromise = fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&limit=16&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,issue_number', {
           headers: { 'apikey': SUPABASE_KEY }
         }).then(r => r.json());
 
