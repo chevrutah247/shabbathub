@@ -125,7 +125,7 @@ function CatalogContent() {
   const fetchDocuments = useCallback(async () => {
     if (!initialized) return; setLoading(true);
     const from = page * PAGE_SIZE; const to = from + PAGE_SIZE - 1;
-    let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=' + (sortOrder === 'oldest' ? 'gregorian_date.asc.nullsfirst,created_at.asc' : 'gregorian_date.desc.nullslast,created_at.desc');
+    let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=' + (sortOrder === 'oldest' ? 'created_at.asc' : 'created_at.desc');
     if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
