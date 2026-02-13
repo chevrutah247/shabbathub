@@ -248,6 +248,7 @@ export default function Header() {
                 </button>
                 {isUserMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsUserMenuOpen(false)} /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
                   <div className="px-4 py-2 border-b"><p className="text-sm font-medium truncate">{user.email}</p><p className="text-xs text-gray-500">{userRole === 'admin' ? t('roles.admin', lang) : userRole === 'editor' ? t('roles.editor', lang) : t('roles.user', lang)}</p></div>
+                  <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><User size={16} />Профиль</Link>
                   {(userRole === 'superadmin' || userRole === 'admin') && <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><BookOpen size={16} />{t('nav.admin', lang)}</Link>}
                   <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full"><LogOut size={16} />{t('nav.logout', lang)}</button>
                 </div></>)}
