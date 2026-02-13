@@ -209,8 +209,8 @@ export default function Header() {
         <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
           {fDate}{fDate && fParsha && <span className="mx-2">•</span>}
           {fParsha && <span>{t('parsha.prefix', lang)}{fParsha}{t('parsha.suffix', lang)}</span>}
-          {candleLighting && <><span className="mx-2">•</span><span>🕯 {candleLighting}</span></>}
-          {havdalah && <><span className="mx-1">–</span><span>{havdalah}</span></>}
+          {candleLighting && <><span className="mx-2">•</span><span>🕯 Зажигание: {candleLighting}</span></>}
+          {havdalah && <><span className="mx-1"> · </span><span>Авдала: {havdalah}</span></>}
           {shabbatCity && <span className="ml-1 text-blue-200">({shabbatCity})</span>}
         </div>
       )}
