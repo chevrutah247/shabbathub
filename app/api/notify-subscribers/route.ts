@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'publication_id and issue_title required' }, { status: 400 });
     }
 
-    const siteUrl = 'https://shabbathub-v2.vercel.app';
+    const siteUrl = 'https://shabbathub.com';
     const docUrl = doc_id ? siteUrl + '/document/' + doc_id : siteUrl + '/catalog';
     const downloadUrl = pdf_url || docUrl;
 
