@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Send, Check, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Send, Check, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
