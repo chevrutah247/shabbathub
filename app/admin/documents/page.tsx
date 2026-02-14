@@ -52,6 +52,8 @@ export default function AdminDocuments() {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [editingDoc, setEditingDoc] = useState<any>(null);
+  const [pubSearch, setPubSearch] = useState('');
+  const [pubDropdown, setPubDropdown] = useState(false);
   const [saving, setSaving] = useState(false);
   const [publications, setPublications] = useState<{ id: string; title_ru: string }[]>([]);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
@@ -253,7 +255,7 @@ export default function AdminDocuments() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
-                    <button onClick={() => setEditingDoc({...doc})} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
+                    <button onClick={() => setEditingDoc({...doc}); setPubSearch(''); setPubDropdown(false)} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
                     <button onClick={() => handleDelete(doc.id)} className="p-2 text-gray-400 hover:text-red-600"><Trash2 size={18}/></button>
                   </td>
                 </tr>
@@ -286,26 +288,43 @@ export default function AdminDocuments() {
                   </p>
                 )}
               </div>
-              <button onClick={() => setEditingDoc(null)}><X size={24}/></button>
+              <button onClick={() => { setEditingDoc(null); setPubDropdown(false); }}><X size={24}/></button>
             </div>
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Название</label>
                 <input type="text" value={editingDoc.title} onChange={(e) => setEditingDoc({...editingDoc, title: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/>
               </div>
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium mb-1">
                   Публикация
                   {!editingDoc.publication_id && <span className="text-amber-500 ml-1">⚠</span>}
                 </label>
-                <select
-                  value={editingDoc.publication_id || ''}
-                  onChange={(e) => setEditingDoc({...editingDoc, publication_id: e.target.value || null})}
+                <input
+                  type="text"
+                  value={pubSearch || (editingDoc.publication_id ? (publications.find(p => p.id === editingDoc.publication_id)?.title_ru || '') : '')}
+                  onChange={(e) => { setPubSearch(e.target.value); setPubDropdown(true); if (!e.target.value) setEditingDoc({...editingDoc, publication_id: null}); }}
+                  onFocus={() => setPubDropdown(true)}
+                  placeholder="Начните вводить название..."
                   className={`w-full px-4 py-2 border rounded-lg ${!editingDoc.publication_id ? 'border-amber-300 bg-amber-50' : ''}`}
-                >
-                  <option value="">— Без публикации —</option>
-                  {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru}</option>)}
-                </select>
+                />
+                {editingDoc.publication_id && <button type="button" onClick={() => { setEditingDoc({...editingDoc, publication_id: null}); setPubSearch(''); }} className="absolute right-3 top-8 text-gray-400 hover:text-red-500"><X size={16}/></button>}
+                {pubDropdown && (
+                  <div className="absolute z-10 left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    {publications.filter(p => {
+                      if (!pubSearch) return true;
+                      return p.title_ru.toLowerCase().includes(pubSearch.toLowerCase());
+                    }).map(p => (
+                      <button key={p.id} type="button" onClick={() => { setEditingDoc({...editingDoc, publication_id: p.id}); setPubSearch(''); setPubDropdown(false); }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-primary-50 transition-colors ${editingDoc.publication_id === p.id ? 'bg-primary-50 font-medium text-primary-700' : 'text-gray-700'}`}>
+                        {p.title_ru}
+                      </button>
+                    ))}
+                    {publications.filter(p => !pubSearch || p.title_ru.toLowerCase().includes(pubSearch.toLowerCase())).length === 0 && (
+                      <p className="px-4 py-2 text-sm text-gray-400">Не найдено</p>
+                    )}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
