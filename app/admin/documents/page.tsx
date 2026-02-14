@@ -255,7 +255,7 @@ export default function AdminDocuments() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
-                    <button onClick={() => setEditingDoc({...doc}); setPubSearch(''); setPubDropdown(false)} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
+                    <button onClick={() => { setEditingDoc({...doc}); setPubSearch(''); setPubDropdown(false); }}; setPubDropdown(false)} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
                     <button onClick={() => handleDelete(doc.id)} className="p-2 text-gray-400 hover:text-red-600"><Trash2 size={18}/></button>
                   </td>
                 </tr>
