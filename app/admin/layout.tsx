@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
 import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail } from 'lucide-react';
 
