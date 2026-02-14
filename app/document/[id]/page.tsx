@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell } from 'lucide-react';
+import ShareButtons from '@/components/ShareButtons';
 
-const SUPABASE_URL = 'https://yvgcxmqgvxlvbxsszqcc.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2Z2N4bXFndnhsdmJ4c3N6cWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NTM2MDEsImV4cCI6MjA4NTIyOTYwMX0.1oNxdtjuXnBhqU2zpVGCt-JotNN3ZDMS6AH0OlvlYSY';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 interface Issue {
   id: string;
@@ -225,6 +226,9 @@ export default function DocumentPage() {
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
                 <Download size={20} />Скачать
               </a>
+              <div className="flex items-center justify-center pt-2">
+                <ShareButtons url={`https://shabbathub.com/document/${id}`} title={issue.title} />
+              </div>
             </div>
 
             {/* Подписка */}

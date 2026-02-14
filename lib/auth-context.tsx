@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('AUTH: getSession failed:', err);
         // Fallback: try to read session from localStorage
         try {
-          const stored = localStorage.getItem('sb-yvgcxmqgvxlvbxsszqcc-auth-token');
+          const stored = localStorage.getItem('shabbathub-auth');
           if (stored) {
             const parsed = JSON.parse(stored);
             console.log('AUTH: fallback from localStorage:', parsed.user?.email);
