@@ -21,6 +21,8 @@ interface Issue {
   event_id: string;
   issue_number: string;
   publication_id: string;
+  view_count: number;
+  download_count: number;
 }
 
 function formatDate(dateString: string | null): string {
@@ -71,8 +73,13 @@ export default function DocumentPage() {
         else {
           const doc = data[0];
           setIssue(doc);
-          // Для Google Drive ссылок используем Google viewer
           if (isGoogleDriveUrl(doc.pdf_url)) setViewerMode('google');
+          // Increment view count (fire and forget)
+          fetch(SUPABASE_URL + '/rest/v1/issues?id=eq.' + id, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ view_count: (doc.view_count || 0) + 1 })
+          }).catch(() => {});
         }
       })
       .catch(() => setError('Ошибка загрузки'))
@@ -223,6 +230,14 @@ export default function DocumentPage() {
                 <ExternalLink size={20} />Открыть PDF
               </a>
               <a href={issue.pdf_url} download
+                onClick={() => {
+                  // Increment download count (fire and forget)
+                  fetch(SUPABASE_URL + '/rest/v1/issues?id=eq.' + id, {
+                    method: 'PATCH',
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ download_count: (issue.download_count || 0) + 1 })
+                  }).catch(() => {});
+                }}
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
                 <Download size={20} />Скачать
               </a>

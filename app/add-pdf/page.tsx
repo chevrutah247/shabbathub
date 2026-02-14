@@ -296,6 +296,10 @@ export default function AddPdfPage() {
     if (uploadMode === 'url' && !pdfUrl) { setError('Укажите ссылку на PDF'); setSubmitting(false); return; }
 
     try {
+      // Get current user for uploaded_by
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setError('Необходимо войти в систему'); setSubmitting(false); return; }
+
       let finalPdfUrl = pdfUrl;
       let finalThumbnailUrl = thumbnailUrl;
 
@@ -309,11 +313,14 @@ export default function AddPdfPage() {
         }
       }
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const authToken = session?.access_token || SUPABASE_KEY;
+
       const res = await fetch(SUPABASE_URL + '/rest/v1/issues', {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Authorization': 'Bearer ' + authToken,
           'Content-Type': 'application/json',
           'Prefer': 'return=representation'
         },
@@ -328,6 +335,7 @@ export default function AddPdfPage() {
           event_id: eventId || null,
           pdf_url: finalPdfUrl,
           thumbnail_url: finalThumbnailUrl || null,
+          uploaded_by: user.id,
           is_active: true
         })
       });
