@@ -2,22 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // Protect /admin routes
-  if (pathname.startsWith('/admin')) {
-    // Check for Supabase auth cookie (sb-<project-ref>-auth-token)
-    const authCookie = request.cookies.getAll().find(c =>
-      c.name.startsWith('sb-') && c.name.endsWith('-auth-token')
-    );
-
-    if (!authCookie) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-  }
-
+  // Admin auth is handled client-side in /app/admin/layout.tsx
+  // (checks supabase session + profile role)
+  // Middleware cannot check localStorage-based Supabase sessions
   return NextResponse.next();
 }
 
