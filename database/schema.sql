@@ -11,6 +11,7 @@ CREATE TABLE public.profiles (
     last_name TEXT,
     display_name TEXT,
     avatar_url TEXT,
+    role TEXT DEFAULT 'subscriber' CHECK (role IN ('admin', 'editor', 'author', 'subscriber')),
     preferred_language TEXT DEFAULT 'ru' CHECK (preferred_language IN ('ru', 'en', 'he')),
     email_notifications BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ DEFAULT NOW(),
