@@ -3,7 +3,7 @@ import { confirmationEmail, newIssueEmail } from '@/lib/email-templates';
 import { Lang } from '@/lib/language-context';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <noreply@shabbathub.com>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <onboarding@resend.dev>';
 
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_API_KEY) {

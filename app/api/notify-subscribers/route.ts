@@ -4,7 +4,7 @@ import { Lang } from '@/lib/language-context';
 import { createClient } from '@supabase/supabase-js';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <noreply@shabbathub.com>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <onboarding@resend.dev>';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     await resend.emails.send({
-      from: 'ShabbatHub <noreply@shabbathub.com>',
+      from: 'ShabbatHub <onboarding@resend.dev>',
       to: 'chevrutah24x7@gmail.com',
       subject: 'ShabbatHub: Сообщение от ' + name,
       ...(isEmail ? { replyTo: email } : {}),
