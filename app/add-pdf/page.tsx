@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-interface Publication { id: string; title_ru: string; }
+interface Publication { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; }
 interface Parsha { id: number; name_ru: string; order_num: number; }
 interface Event { id: string; name_ru: string; }
 
@@ -209,7 +209,7 @@ export default function AddPdfPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
       fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,order_num', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
       fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json())
     ]).then(([pubs, parshas, evts]) => {
@@ -344,7 +344,8 @@ export default function AddPdfPage() {
       const savedData = await res.json();
       if (publicationId) {
         try {
-          const pubName = publications.find(p => p.id === publicationId)?.title_ru || title;
+          const pub = publications.find(p => p.id === publicationId);
+          const pubName = (pub?.title_ru || pub?.title_en || pub?.title_he) || title;
           await fetch('/api/notify-subscribers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -418,7 +419,7 @@ export default function AddPdfPage() {
               <label className="f-label">Публикация (издание)</label>
               <select value={publicationId} onChange={(e) => setPublicationId(e.target.value)} className="f-select">
                 <option value="">— Выберите публикацию —</option>
-                {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru}</option>)}
+                {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru || p.title_en || p.title_he || '—'}</option>)}
               </select>
               <Link href="/add-publication" className="text-xs mt-1.5 inline-block hover:opacity-80" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Создать новую публикацию</Link>
             </div>

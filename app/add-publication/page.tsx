@@ -33,8 +33,8 @@ export default function AddPublicationPage() {
     setError(null);
     setSubmitting(true);
 
-    if (!titleRu) {
-      setError('Введите название публикации на русском');
+    if (!titleRu && !titleEn && !titleHe) {
+      setError('Введите название публикации хотя бы на одном языке');
       setSubmitting(false);
       return;
     }
@@ -49,7 +49,7 @@ export default function AddPublicationPage() {
           'Prefer': 'return=representation'
         },
         body: JSON.stringify({
-          title_ru: titleRu,
+          title_ru: titleRu || null,
           title_en: titleEn || null,
           title_he: titleHe || null,
           description_ru: descriptionRu || null,
@@ -65,7 +65,8 @@ export default function AddPublicationPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.message || 'Ошибка сохранения');
+        console.error('[ShabbatHub] Publication create error:', err);
+        throw new Error(err.message || err.details || err.hint || JSON.stringify(err));
       }
 
       setSuccess(true);
@@ -114,11 +115,14 @@ export default function AddPublicationPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Названия */}
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Название публикации</h3>
-              
+              <div>
+                <h3 className="font-medium text-gray-900">Название публикации</h3>
+                <p className="text-xs text-gray-500 mt-1">Заполните хотя бы на одном языке *</p>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На русском *
+                  На русском
                 </label>
                 <input
                   type="text"
@@ -126,13 +130,12 @@ export default function AddPublicationPage() {
                   onChange={(e) => setTitleRu(e.target.value)}
                   placeholder="Шомрей Шабос"
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
-                  required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На английском (опционально)
+                  На английском
                 </label>
                 <input
                   type="text"
@@ -145,7 +148,7 @@ export default function AddPublicationPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На иврите (опционально)
+                  На иврите
                 </label>
                 <input
                   type="text"
@@ -200,8 +203,8 @@ export default function AddPublicationPage() {
                 >
                   <option value="weekly">Еженедельно</option>
                   <option value="monthly">Ежемесячно</option>
-                  <option value="occasional">По праздникам</option>
-                  <option value="other">Другое</option>
+                  <option value="daily">Ежедневно</option>
+                  <option value="irregular">Нерегулярно / По праздникам</option>
                 </select>
               </div>
             </div>

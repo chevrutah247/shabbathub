@@ -112,7 +112,8 @@ export default function AdminPublications() {
 
   // Проверка похожих при создании
   useEffect(() => {
-    if (!editingPub || !isNew || !editingPub.title_ru || editingPub.title_ru.length < 3) {
+    const anyTitle = editingPub?.title_ru || editingPub?.title_en || editingPub?.title_he || '';
+    if (!editingPub || !isNew || anyTitle.length < 3) {
       setSimilarPubs([]);
       return;
     }
@@ -131,12 +132,12 @@ export default function AdminPublications() {
   };
 
   const handleSave = async () => {
-    if (!editingPub || !editingPub.title_ru) return;
+    if (!editingPub || (!editingPub.title_ru && !editingPub.title_en && !editingPub.title_he)) return;
     setSaving(true);
     const payload = {
-      title_ru: editingPub.title_ru,
-      title_en: editingPub.title_en || '',
-      title_he: editingPub.title_he || '',
+      title_ru: editingPub.title_ru || null,
+      title_en: editingPub.title_en || null,
+      title_he: editingPub.title_he || null,
       description_ru: editingPub.description_ru || '',
       description_en: editingPub.description_en || '',
       description_he: editingPub.description_he || '',
@@ -347,7 +348,7 @@ export default function AdminPublications() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Название (рус) *</label>
+                  <label className="block text-sm font-medium mb-1">Название (рус)</label>
                   <input type="text" value={editingPub.title_ru || ''} onChange={(e) => setEditingPub({ ...editingPub, title_ru: e.target.value })} className="w-full px-4 py-2 border rounded-lg" placeholder="Шомрей Шабос" />
                 </div>
                 <div>
@@ -418,7 +419,7 @@ export default function AdminPublications() {
             </div>
             <div className="p-6 border-t flex justify-end gap-3">
               <button onClick={() => { setEditingPub(null); setIsNew(false); setSimilarPubs([]); }} className="px-4 py-2 text-gray-600">Отмена</button>
-              <button onClick={handleSave} disabled={saving || !editingPub.title_ru} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2 disabled:opacity-50 hover:bg-primary-700">
+              <button onClick={handleSave} disabled={saving || (!editingPub.title_ru && !editingPub.title_en && !editingPub.title_he)} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2 disabled:opacity-50 hover:bg-primary-700">
                 <Save size={18} />{saving ? 'Сохранение...' : 'Сохранить'}
               </button>
             </div>

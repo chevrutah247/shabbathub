@@ -49,7 +49,7 @@ export default function ProfilePage() {
       if (subs && subs.length > 0) {
         const pubIds = Array.from(new Set(subs.map(s => s.publication_id).filter(Boolean)));
         let pubMap: Record<string, string> = {};
-        if (pubIds.length > 0) { const { data: pubs } = await supabase.from('publications').select('id, title_ru').in('id', pubIds); pubs?.forEach(p => { pubMap[p.id] = p.title_ru; }); }
+        if (pubIds.length > 0) { const { data: pubs } = await supabase.from('publications').select('id, title_ru, title_en, title_he').in('id', pubIds); pubs?.forEach(p => { pubMap[p.id] = p.title_ru || p.title_en || p.title_he || '—'; }); }
         setSubscriptions(subs.map(s => ({ ...s, pub_title: pubMap[s.publication_id] || 'Все публикации' })));
       }
       setLoadingSubs(false);

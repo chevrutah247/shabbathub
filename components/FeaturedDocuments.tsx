@@ -75,12 +75,12 @@ export default function FeaturedDocuments() {
         setParshaMap(map);
       });
 
-    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru', { headers: { 'apikey': SUPABASE_KEY } })
+    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } })
       .then(r => r.json())
       .then(data => {
         if (!data) return;
         const map: Record<string, string> = {};
-        data.forEach((p: any) => { map[p.id] = p.title_ru; });
+        data.forEach((p: any) => { map[p.id] = p.title_ru || p.title_en || p.title_he || '—'; });
         setPubMap(map);
       });
   }, []);

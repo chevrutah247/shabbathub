@@ -14,7 +14,7 @@ const PAGE_SIZE = 50;
 
 interface Document { id: string; title: string; pdf_url: string; gregorian_date: string; publication_id: string; thumbnail_url: string; parsha_id: number; event_id: string; issue_number: string; }
 interface Parsha { id: number; name_ru: string; name_en: string; order_num: number; }
-interface Publication { id: string; title_ru: string; }
+interface Publication { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; }
 interface Event { id: string; name_ru: string; }
 
 const parshaNameToId: Record<string, number> = {
@@ -118,7 +118,7 @@ function CatalogContent() {
 
   useEffect(() => {
     fetch(SUPABASE_URL + '/rest/v1/parshiot?order=order_num&select=id,name_ru,name_en,order_num', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()).then(data => { if (!data) return; const map: Record<number, string> = {}; data.forEach((p: Parsha) => { map[p.id] = p.name_ru; }); setParshaMap(map); if (currentParshaId) { const sorted = [...data].sort((a: Parsha, b: Parsha) => { if (a.id === currentParshaId) return -1; if (b.id === currentParshaId) return 1; return a.order_num - b.order_num; }); setParshiot(sorted); } else { setParshiot(data); } });
-    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()).then(data => { if (!data) return; const map: Record<string, string> = {}; data.forEach((p: Publication) => { map[p.id] = p.title_ru; }); setPubMap(map); });
+    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()).then(data => { if (!data) return; const map: Record<string, string> = {}; data.forEach((p: Publication) => { map[p.id] = p.title_ru || p.title_en || p.title_he || '—'; }); setPubMap(map); });
     fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()).then(data => { if (!data) return; setEvents(data); const map: Record<string, string> = {}; data.forEach((e: Event) => { map[e.id] = e.name_ru; }); setEventMap(map); });
   }, [currentParshaId]);
 

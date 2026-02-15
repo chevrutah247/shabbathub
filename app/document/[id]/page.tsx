@@ -98,8 +98,8 @@ export default function DocumentPage() {
         .then(r => r.json()).then(d => { if (d[0]) setEventName(d[0].name_ru); });
     }
     if (issue.publication_id) {
-      fetch(SUPABASE_URL + '/rest/v1/publications?id=eq.' + issue.publication_id + '&select=title_ru', { headers: { 'apikey': SUPABASE_KEY } })
-        .then(r => r.json()).then(d => { if (d[0]) setPubName(d[0].title_ru); });
+      fetch(SUPABASE_URL + '/rest/v1/publications?id=eq.' + issue.publication_id + '&select=title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } })
+        .then(r => r.json()).then(d => { if (d[0]) setPubName(d[0].title_ru || d[0].title_en || d[0].title_he || ''); });
     }
   }, [issue]);
 

@@ -22,9 +22,9 @@ export interface Profile {
 // Publication (серия газет)
 export interface Publication {
   id: string;
-  title_ru: string;
-  title_en?: string;
-  title_he?: string;
+  title_ru?: string | null;
+  title_en?: string | null;
+  title_he?: string | null;
   description_ru?: string;
   description_en?: string;
   description_he?: string;
@@ -200,8 +200,13 @@ export interface Translations {
 }
 
 // Form data for creating publication
+/** Get display title from publication (first available: ru → en → he) */
+export function getPublicationTitle(pub: { title_ru?: string | null; title_en?: string | null; title_he?: string | null }): string {
+  return pub.title_ru || pub.title_en || pub.title_he || '—';
+}
+
 export interface CreatePublicationForm {
-  title_ru: string;
+  title_ru?: string;
   title_en?: string;
   title_he?: string;
   description_ru?: string;

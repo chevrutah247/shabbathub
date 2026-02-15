@@ -55,7 +55,7 @@ export default function AdminDocuments() {
   const [pubSearch, setPubSearch] = useState('');
   const [pubDropdown, setPubDropdown] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [publications, setPublications] = useState<{ id: string; title_ru: string }[]>([]);
+  const [publications, setPublications] = useState<{ id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null }[]>([]);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [reviewCount, setReviewCount] = useState(0);
 
@@ -64,7 +64,7 @@ export default function AdminDocuments() {
     async function fetchPublications() {
       const { data } = await supabase
         .from('publications')
-        .select('id, title_ru')
+        .select('id, title_ru, title_en, title_he')
         .eq('is_active', true)
         .order('title_ru', { ascending: true });
       setPublications(data || []);
@@ -135,7 +135,8 @@ export default function AdminDocuments() {
 
   const getPublicationName = (pubId: string | null) => {
     if (!pubId) return null;
-    return publications.find(p => p.id === pubId)?.title_ru || null;
+    const p = publications.find(p => p.id === pubId);
+    return p ? (p.title_ru || p.title_en || p.title_he || '—') : null;
   };
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
@@ -302,7 +303,7 @@ export default function AdminDocuments() {
                 </label>
                 <input
                   type="text"
-                  value={pubSearch || (editingDoc.publication_id ? (publications.find(p => p.id === editingDoc.publication_id)?.title_ru || '') : '')}
+                  value={pubSearch || (editingDoc.publication_id ? (() => { const p = publications.find(p => p.id === editingDoc.publication_id); return p?.title_ru || p?.title_en || p?.title_he || ''; })() : '')}
                   onChange={(e) => { setPubSearch(e.target.value); setPubDropdown(true); if (!e.target.value) setEditingDoc({...editingDoc, publication_id: null}); }}
                   onFocus={() => setPubDropdown(true)}
                   placeholder="Начните вводить название..."
@@ -313,14 +314,15 @@ export default function AdminDocuments() {
                   <div className="absolute z-10 left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg max-h-48 overflow-y-auto">
                     {publications.filter(p => {
                       if (!pubSearch) return true;
-                      return p.title_ru.toLowerCase().includes(pubSearch.toLowerCase());
+                      const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase();
+                      return name.includes(pubSearch.toLowerCase());
                     }).map(p => (
                       <button key={p.id} type="button" onClick={() => { setEditingDoc({...editingDoc, publication_id: p.id}); setPubSearch(''); setPubDropdown(false); }}
                         className={`w-full text-left px-4 py-2 text-sm hover:bg-primary-50 transition-colors ${editingDoc.publication_id === p.id ? 'bg-primary-50 font-medium text-primary-700' : 'text-gray-700'}`}>
-                        {p.title_ru}
+                        {p.title_ru || p.title_en || p.title_he || '—'}
                       </button>
                     ))}
-                    {publications.filter(p => !pubSearch || p.title_ru.toLowerCase().includes(pubSearch.toLowerCase())).length === 0 && (
+                    {publications.filter(p => { const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase(); return !pubSearch || name.includes(pubSearch.toLowerCase()); }).length === 0 && (
                       <p className="px-4 py-2 text-sm text-gray-400">Не найдено</p>
                     )}
                   </div>
