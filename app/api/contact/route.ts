@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       const resend = new Resend(apiKey);
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-      emailResult = await resend.emails.send({
+      const { data: emailData, error: emailError } = await resend.emails.send({
         from: 'ShabbatHub <noreply@shabbathub.com>',
         to: 'chevrutah24x7@gmail.com',
         subject: 'ShabbatHub: Сообщение от ' + name,
@@ -51,13 +51,13 @@ export async function POST(req: Request) {
           </div>
         `,
       });
-      console.log('[ShabbatHub] Resend result:', JSON.stringify(emailResult));
+      emailResult = { data: emailData, error: emailError };
     }
 
     return NextResponse.json({
       success: true,
       db: dbError ? dbError.message : 'ok',
-      email: emailResult ? 'sent' : 'no_api_key',
+      resend: emailResult || 'no_api_key',
     });
   } catch (err: any) {
     console.error('[ShabbatHub] Contact error:', err);
