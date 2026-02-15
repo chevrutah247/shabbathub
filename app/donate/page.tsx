@@ -92,7 +92,7 @@ function t(key: keyof typeof texts, lang: string): string {
 }
 
 export default function DonatePage() {
-  const { lang } = useLang();
+  const lang = useLang();
   const isRtl = lang === 'he';
 
   return (
