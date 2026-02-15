@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
-import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail, MessageCircle } from 'lucide-react';
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -95,6 +95,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/subscribers" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Mail size={20} />
             Подписчики
+          </Link>
+          <Link href="/admin/messages" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
+            <MessageCircle size={20} />
+            Сообщения
           </Link>
         </nav>
 
