@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ReferralTracker from '@/components/ReferralTracker';
 import SubscribePopup from '@/components/SubscribePopup';
+import FloatingContactSticker from '@/components/FloatingContactSticker';
 
 export const metadata: Metadata = {
   title: {
@@ -79,6 +80,7 @@ export default function RootLayout({
             <ReferralTracker />
           </Suspense>
           <SubscribePopup />
+          <FloatingContactSticker />
           <main className="flex-grow">
             {children}
           </main>
