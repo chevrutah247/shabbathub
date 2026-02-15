@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { rateLimit } from '@/lib/rate-limit';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function POST(req: Request) {
   try {
@@ -13,21 +18,25 @@ export async function POST(req: Request) {
     const { name, email, message } = await req.json();
     if (!name || !email || !message) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
-    // Save to Supabase first (so we never lose messages)
-    await supabase.from('contact_messages').insert({
+    // Save to Supabase
+    const { error: dbError } = await supabaseAdmin.from('contact_messages').insert({
       name,
       contact: email,
       message,
       ip,
     });
+    if (dbError) {
+      console.error('[ShabbatHub] DB insert error:', dbError);
+    }
 
-    // Try sending email via Resend
+    // Send email via Resend
     const apiKey = process.env.RESEND_API_KEY;
+    let emailResult = null;
     if (apiKey) {
       const resend = new Resend(apiKey);
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-      const result = await resend.emails.send({
+      emailResult = await resend.emails.send({
         from: 'ShabbatHub <noreply@shabbathub.com>',
         to: 'chevrutah24x7@gmail.com',
         subject: 'ShabbatHub: Сообщение от ' + name,
@@ -42,11 +51,14 @@ export async function POST(req: Request) {
           </div>
         `,
       });
-
-      console.log('[ShabbatHub] Resend result:', JSON.stringify(result));
+      console.log('[ShabbatHub] Resend result:', JSON.stringify(emailResult));
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      db: dbError ? dbError.message : 'ok',
+      email: emailResult ? 'sent' : 'no_api_key',
+    });
   } catch (err: any) {
     console.error('[ShabbatHub] Contact error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
