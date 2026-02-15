@@ -34,7 +34,12 @@ const EMPTY_PUBLICATION: Partial<Publication> = {
   cover_image_url: '', is_active: true,
 };
 
-const FREQUENCIES = ['еженедельно', 'ежемесячно', 'ежеквартально', 'нерегулярно'];
+const FREQUENCIES = [
+  { value: 'weekly', label: 'Еженедельно' },
+  { value: 'monthly', label: 'Ежемесячно' },
+  { value: 'daily', label: 'Ежедневно' },
+  { value: 'irregular', label: 'Нерегулярно' },
+];
 const LANGUAGES = [
   { value: 'ru', label: 'Русский' },
   { value: 'he', label: 'Иврит' },
@@ -141,7 +146,7 @@ export default function AdminPublications() {
       description_ru: editingPub.description_ru || '',
       description_en: editingPub.description_en || '',
       description_he: editingPub.description_he || '',
-      frequency: editingPub.frequency || '',
+      frequency: editingPub.frequency || null,
       primary_language: editingPub.primary_language || 'ru',
       whatsapp_link: editingPub.whatsapp_link || '',
       telegram_link: editingPub.telegram_link || '',
@@ -282,7 +287,7 @@ export default function AdminPublications() {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-gray-600">{LANGUAGES.find(l => l.value === pub.primary_language)?.label || '—'}</td>
-                <td className="px-4 py-3 text-gray-600">{pub.frequency || '—'}</td>
+                <td className="px-4 py-3 text-gray-600">{FREQUENCIES.find(f => f.value === pub.frequency)?.label || pub.frequency || '—'}</td>
                 <td className="px-4 py-3">
                   <button onClick={() => viewIssues(pub.id, pub.title_ru)} className="text-primary-600 hover:underline font-medium">{pub.total_issues || 0}</button>
                 </td>
@@ -381,7 +386,7 @@ export default function AdminPublications() {
                   <label className="block text-sm font-medium mb-1">Периодичность</label>
                   <select value={editingPub.frequency || ''} onChange={(e) => setEditingPub({ ...editingPub, frequency: e.target.value })} className="w-full px-4 py-2 border rounded-lg">
                     <option value="">—</option>
-                    {FREQUENCIES.map(f => <option key={f} value={f}>{f}</option>)}
+                    {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
                   </select>
                 </div>
               </div>
