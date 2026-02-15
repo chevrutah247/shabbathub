@@ -18,18 +18,23 @@ export async function rateLimit(
   limit: number = 10,
   windowSeconds: number = 60
 ): Promise<{ success: boolean; remaining: number }> {
-  const r = getRedis();
-  if (!r) return { success: true, remaining: limit };
+  try {
+    const r = getRedis();
+    if (!r) return { success: true, remaining: limit };
 
-  const key = `rate_limit:${identifier}`;
-  const current = await r.incr(key);
+    const key = `rate_limit:${identifier}`;
+    const current = await r.incr(key);
 
-  if (current === 1) {
-    await r.expire(key, windowSeconds);
+    if (current === 1) {
+      await r.expire(key, windowSeconds);
+    }
+
+    return {
+      success: current <= limit,
+      remaining: Math.max(0, limit - current),
+    };
+  } catch {
+    // If Redis is misconfigured or down, allow the request
+    return { success: true, remaining: limit };
   }
-
-  return {
-    success: current <= limit,
-    remaining: Math.max(0, limit - current),
-  };
 }
