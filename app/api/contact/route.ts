@@ -54,11 +54,7 @@ export async function POST(req: Request) {
       emailResult = { data: emailData, error: emailError };
     }
 
-    return NextResponse.json({
-      success: true,
-      db: dbError ? dbError.message : 'ok',
-      resend: emailResult || 'no_api_key',
-    });
+    return NextResponse.json({ success: true });
   } catch (err: any) {
     console.error('[ShabbatHub] Contact error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
