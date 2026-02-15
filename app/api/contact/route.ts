@@ -13,14 +13,13 @@ export async function POST(req: Request) {
     if (!apiKey) return NextResponse.json({ error: 'Email service not configured' }, { status: 503 });
 
     const resend = new Resend(apiKey);
-    const fromEmail = process.env.FROM_EMAIL || 'ShabbatHub <onboarding@resend.dev>';
     const { name, email, message } = await req.json();
     if (!name || !email || !message) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     await resend.emails.send({
-      from: fromEmail,
+      from: 'ShabbatHub <noreply@shabbathub.com>',
       to: 'chevrutah24x7@gmail.com',
       subject: 'ShabbatHub: Сообщение от ' + name,
       ...(isEmail ? { replyTo: email } : {}),
