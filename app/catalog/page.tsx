@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen } from 'lucide-react';
+import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check } from 'lucide-react';
 import SubscribeBlock from '@/components/SubscribeBlock';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
@@ -86,6 +86,7 @@ function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang 
 
 function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
   const [imgError, setImgError] = useState(false);
+  const [copied, setCopied] = useState(false);
   const title = pub.title_ru || pub.title_en || pub.title_he || '—';
   const freqMap: Record<string, Record<string, string>> = {
     weekly: { ru: 'Еженедельно', en: 'Weekly', he: 'שבועי', uk: 'Щотижнево' },
@@ -94,6 +95,16 @@ function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
     irregular: { ru: 'Нерегулярно', en: 'Irregular', he: 'לא סדיר', uk: 'Нерегулярно' },
   };
   const freq = freqMap[pub.frequency]?.[lang] || freqMap[pub.frequency]?.['ru'] || '';
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = window.location.origin + '/publication/' + pub.id;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <article className="book-card group relative">
@@ -113,7 +124,16 @@ function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
               {pub.total_issues} {t('catalog.issuesCount', lang)}
             </div>
           )}
-          <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/10 transition-colors duration-300 z-10" />
+          {/* Share button */}
+          <button
+            onClick={handleShare}
+            className="absolute top-2 right-2 z-20 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200"
+            style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+            title={t('nav.share', lang)}
+          >
+            {copied ? <Check size={14} className="text-green-300" /> : <Share2 size={14} className="text-white" />}
+          </button>
+          <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/10 transition-colors duration-300 z-10 pointer-events-none" />
         </div>
         <div className="mt-3 px-0.5">
           <h3 className="text-sm font-semibold text-stone-800 line-clamp-2 leading-snug group-hover:text-amber-800 transition-colors" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{title}</h3>
@@ -145,7 +165,7 @@ function CatalogContent() {
   const [initialized, setInitialized] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [sortOrder, setSortOrder] = useState("newest");
-  const [viewMode, setViewMode] = useState<ViewMode>('issues');
+  const [viewMode, setViewMode] = useState<ViewMode>('publications');
   const [publicationsList, setPublicationsList] = useState<PublicationFull[]>([]);
   const [pubsLoading, setPubsLoading] = useState(false);
   const [pubsSearchInput, setPubsSearchInput] = useState('');
@@ -177,19 +197,19 @@ function CatalogContent() {
       fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
       fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&select=publication_id,thumbnail_url', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
     ]).then(([pubs, issues]) => {
-      // Build map: publication_id -> latest thumbnail
+      // Build map: publication_id -> latest thumbnail (skip empty strings)
       const thumbMap: Record<string, string> = {};
       if (Array.isArray(issues)) {
         for (const issue of issues) {
-          if (issue.publication_id && issue.thumbnail_url && !thumbMap[issue.publication_id]) {
+          if (issue.publication_id && issue.thumbnail_url && issue.thumbnail_url.trim() && !thumbMap[issue.publication_id]) {
             thumbMap[issue.publication_id] = issue.thumbnail_url;
           }
         }
       }
-      // Merge: use cover_image_url if set, otherwise fallback to latest issue thumbnail
+      // Merge: use cover_image_url if non-empty, otherwise fallback to latest issue thumbnail
       const enriched = (Array.isArray(pubs) ? pubs : []).map((p: PublicationFull) => ({
         ...p,
-        cover_image_url: p.cover_image_url || thumbMap[p.id] || null,
+        cover_image_url: (p.cover_image_url && p.cover_image_url.trim()) ? p.cover_image_url : (thumbMap[p.id] || null),
       }));
       setPublicationsList(enriched);
     }).catch(() => {}).finally(() => setPubsLoading(false));
@@ -252,10 +272,10 @@ function CatalogContent() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
           {/* Search */}
           <div className="search-ornate rounded-2xl p-5 md:p-6 mb-8">
-            <form onSubmit={handleSearch} className="flex gap-3 mb-0">
+            <form onSubmit={viewMode === 'issues' ? handleSearch : (e) => e.preventDefault()} className="flex gap-3 mb-0">
               <div className="relative flex-1">
                 <Search className={'absolute top-1/2 -translate-y-1/2 text-stone-400 ' + (lang === 'he' ? 'right-4' : 'left-4')} size={18} />
-                <input type="text" placeholder={t('catalog.searchPlaceholder', lang)} value={searchInput} onChange={(e) => setSearchInput(e.target.value)} className={'w-full py-3 rounded-xl filter-select outline-none ' + (lang === 'he' ? 'pr-11 pl-4' : 'pl-11 pr-4')} />
+                <input type="text" placeholder={t('catalog.searchPlaceholder', lang)} value={viewMode === 'publications' ? pubsSearchInput : searchInput} onChange={(e) => viewMode === 'publications' ? setPubsSearchInput(e.target.value) : setSearchInput(e.target.value)} className={'w-full py-3 rounded-xl filter-select outline-none ' + (lang === 'he' ? 'pr-11 pl-4' : 'pl-11 pr-4')} />
               </div>
               {viewMode === 'issues' && (
                 <button type="button" onClick={() => setShowFilters(!showFilters)} className={'flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all ' + (showFilters || hasFilters ? 'text-white' : 'filter-select text-stone-600 hover:text-stone-800')} style={showFilters || hasFilters ? { background: 'linear-gradient(135deg, #96693a, #b8854a)' } : {}}>
@@ -365,19 +385,9 @@ function CatalogContent() {
             </>
           ) : (
             <>
-              {/* Publications search */}
+              {/* Publications counter */}
               <div className="mb-6">
-                <div className="relative max-w-md">
-                  <Search className={'absolute top-1/2 -translate-y-1/2 text-stone-400 ' + (lang === 'he' ? 'right-4' : 'left-4')} size={16} />
-                  <input
-                    type="text"
-                    placeholder={t('catalog.searchPlaceholder', lang)}
-                    value={pubsSearchInput}
-                    onChange={(e) => setPubsSearchInput(e.target.value)}
-                    className={'w-full py-2.5 rounded-xl filter-select outline-none text-sm ' + (lang === 'he' ? 'pr-10 pl-4' : 'pl-10 pr-4')}
-                  />
-                </div>
-                <p className="text-stone-500 mt-3 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t('catalog.found', lang)}: <span className="font-semibold text-stone-800">{filteredPubs.length}</span> {t('catalog.publications', lang)}</p>
+                <p className="text-stone-500 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t('catalog.found', lang)}: <span className="font-semibold text-stone-800">{filteredPubs.length}</span> {t('catalog.publications', lang)}</p>
               </div>
 
               {/* Publications Content */}
