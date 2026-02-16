@@ -118,6 +118,8 @@ export default function AddPdfPage() {
   const [autoThumbnail, setAutoThumbnail] = useState(true);
   const [description, setDescription] = useState('');
   const [pdfLanguage, setPdfLanguage] = useState('ru');
+  const [pubSearch, setPubSearch] = useState('');
+  const [pubDropdownOpen, setPubDropdownOpen] = useState(false);
 
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -127,6 +129,18 @@ export default function AddPdfPage() {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [generatingThumb, setGeneratingThumb] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const pubDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Закрытие dropdown при клике вне
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (pubDropdownRef.current && !pubDropdownRef.current.contains(e.target as Node)) {
+        setPubDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Текущая парша — ближайший будущий Шаббат
   useEffect(() => {
@@ -415,12 +429,40 @@ export default function AddPdfPage() {
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Шомрей Шабос №805 Мишпатим" className="f-input" required />
             </div>
             <div className="section-divider" />
-            <div>
+            <div ref={pubDropdownRef} style={{ position: 'relative' }}>
               <label className="f-label">Публикация (издание)</label>
-              <select value={publicationId} onChange={(e) => setPublicationId(e.target.value)} className="f-select">
-                <option value="">— Выберите публикацию —</option>
-                {publications.map(p => <option key={p.id} value={p.id}>{p.title_ru || p.title_en || p.title_he || '—'}</option>)}
-              </select>
+              <input
+                type="text"
+                value={pubSearch || (publicationId ? (() => { const p = publications.find(p => p.id === publicationId); return p?.title_ru || p?.title_en || p?.title_he || ''; })() : '')}
+                onChange={(e) => { setPubSearch(e.target.value); setPubDropdownOpen(true); if (!e.target.value) setPublicationId(''); }}
+                onFocus={() => setPubDropdownOpen(true)}
+                placeholder="Начните вводить название..."
+                className="f-input"
+                autoComplete="off"
+              />
+              {publicationId && (
+                <button type="button" onClick={() => { setPublicationId(''); setPubSearch(''); }} style={{ position: 'absolute', right: '12px', top: '28px', color: '#a09580', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }}>✕</button>
+              )}
+              {pubDropdownOpen && (
+                <div style={{ position: 'absolute', zIndex: 20, left: 0, right: 0, marginTop: '2px', background: 'white', border: '1px solid #e0d8c8', borderRadius: '8px', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', maxHeight: '200px', overflowY: 'auto' }}>
+                  {publications.filter(p => {
+                    if (!pubSearch) return true;
+                    const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase();
+                    return name.includes(pubSearch.toLowerCase());
+                  }).map(p => (
+                    <button key={p.id} type="button" onClick={() => { setPublicationId(p.id); setPubSearch(''); setPubDropdownOpen(false); }}
+                      style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 14px', fontSize: '0.95rem', fontFamily: "'Source Serif 4', Georgia, serif", color: publicationId === p.id ? '#b8860b' : '#2c2416', fontWeight: publicationId === p.id ? 600 : 400, background: publicationId === p.id ? '#faf6ee' : 'transparent', border: 'none', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#faf6ee')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = publicationId === p.id ? '#faf6ee' : 'transparent')}
+                    >
+                      {p.title_ru || p.title_en || p.title_he || '—'}
+                    </button>
+                  ))}
+                  {publications.filter(p => { const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase(); return !pubSearch || name.includes(pubSearch.toLowerCase()); }).length === 0 && (
+                    <p style={{ padding: '8px 14px', fontSize: '0.9rem', color: '#a09580', margin: 0 }}>Не найдено</p>
+                  )}
+                </div>
+              )}
               <Link href="/add-publication" className="text-xs mt-1.5 inline-block hover:opacity-80" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Создать новую публикацию</Link>
             </div>
             <div>
