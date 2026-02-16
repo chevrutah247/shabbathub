@@ -90,6 +90,11 @@ const translations = {
     toStart: { ru: 'В начало', en: 'First', he: 'ראשון', uk: 'На початок' },
     toEnd: { ru: 'В конец', en: 'Last', he: 'אחרון', uk: 'В кінець' },
     thisWeek: { ru: 'Эта неделя', en: 'This week', he: 'השבוע', uk: 'Цей тиждень' },
+    newest: { ru: 'Сначала новые', en: 'Newest first', he: 'החדשים תחילה', uk: 'Спочатку нові' },
+    oldest: { ru: 'Сначала старые', en: 'Oldest first', he: 'הישנים תחילה', uk: 'Спочатку старі' },
+    issues: { ru: 'Выпуски', en: 'Issues', he: 'גיליונות', uk: 'Випуски' },
+    publications: { ru: 'Публикации', en: 'Publications', he: 'פרסומים', uk: 'Публікації' },
+    issuesCount: { ru: 'выпусков', en: 'issues', he: 'גיליונות', uk: 'випусків' },
   },
 
   // ===== Документ =====

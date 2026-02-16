@@ -120,7 +120,7 @@ export default function PublicationPage() {
                       <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
                         <div className="aspect-[3/4] bg-gray-100 overflow-hidden">
                           {issue.thumbnail_url ? (
-                            <img src={issue.thumbnail_url} alt={issue.title} loading="lazy"
+                            <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                           ) : (
@@ -151,7 +151,7 @@ export default function PublicationPage() {
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
                           {issue.thumbnail_url ? (
-                            <img src={issue.thumbnail_url} alt={issue.title} className="w-full h-full object-cover" />
+                            <img src={issue.thumbnail_url} alt={issue.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center"><FileText size={20} className="text-gray-300" /></div>
                           )}

@@ -239,7 +239,7 @@ export default function HomePage() {
                 <Link href={'/document/' + doc.id} className="book-card block">
                   <div className="book-shadow" style={{ aspectRatio: '3/4' }}>
                     {doc.thumbnail_url ? (
-                      <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" className="w-full h-full object-cover" />
+                      <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-stone-100">
                         <BookOpen size={24} className="text-stone-300" />
