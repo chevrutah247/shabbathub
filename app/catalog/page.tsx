@@ -280,13 +280,13 @@ function CatalogContent() {
         .book-cover { box-shadow: 3px 3px 8px rgba(120,80,40,0.15), 6px 6px 20px rgba(120,80,40,0.08), inset 0 0 0 1px rgba(120,80,40,0.08); border-radius: 2px 6px 6px 2px; transition: box-shadow 0.35s ease; }
         .book-card:hover .book-cover { box-shadow: 4px 4px 12px rgba(120,80,40,0.2), 8px 8px 30px rgba(120,80,40,0.12), inset 0 0 0 1px rgba(120,80,40,0.1); }
         .search-ornate { background: linear-gradient(135deg, #faf5ed 0%, #f5efe6 100%); border: 1px solid rgba(180,150,100,0.25); box-shadow: 0 4px 20px rgba(120,80,40,0.06), inset 0 1px 0 rgba(255,255,255,0.5); }
-        .pub-shelf { grid-column: 1 / -1; background: linear-gradient(180deg, #faf5ed 0%, #f5efe6 100%); border: 1px solid rgba(180,150,100,0.3); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: inset 0 2px 8px rgba(120,80,40,0.06), 0 4px 16px rgba(120,80,40,0.08); animation: shelfSlide 0.3s ease-out; overflow: hidden; }
+        .pub-shelf { grid-column: 1 / -1; min-width: 0; background: linear-gradient(180deg, #faf5ed 0%, #f5efe6 100%); border: 1px solid rgba(180,150,100,0.3); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: inset 0 2px 8px rgba(120,80,40,0.06), 0 4px 16px rgba(120,80,40,0.08); animation: shelfSlide 0.3s ease-out; }
         @keyframes shelfSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .pub-shelf-scroll { display: flex; gap: 0.75rem; overflow-x: auto; padding: 0.75rem 0 0.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .pub-shelf-scroll { display: flex; flex-wrap: nowrap; gap: 0.75rem; overflow-x: auto; overflow-y: hidden; padding: 0.75rem 0 0.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .pub-shelf-scroll::-webkit-scrollbar { height: 4px; }
         .pub-shelf-scroll::-webkit-scrollbar-track { background: transparent; }
         .pub-shelf-scroll::-webkit-scrollbar-thumb { background: #c4a882; border-radius: 2px; }
-        .shelf-issue { flex: 0 0 auto; width: 100px; scroll-snap-align: start; transition: transform 0.25s ease; }
+        .shelf-issue { flex: 0 0 100px; min-width: 100px; scroll-snap-align: start; transition: transform 0.25s ease; }
         .shelf-issue:hover { transform: translateY(-3px); }
         .filter-select { background-color: #fdfaf5; border: 1px solid rgba(180,150,100,0.3); font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
         .filter-select:focus { border-color: #b8854a; box-shadow: 0 0 0 3px rgba(184,133,74,0.15); }
