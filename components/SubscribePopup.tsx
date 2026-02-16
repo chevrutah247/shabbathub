@@ -31,9 +31,9 @@ export default function SubscribePopup() {
   const dir = lang === 'he' ? 'rtl' : 'ltr';
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" dir={dir}>
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-up">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto p-4" dir={dir}>
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 my-auto animate-slide-up">
         <button onClick={handleClose} className={'absolute top-4 text-gray-400 hover:text-gray-600 ' + (lang === 'he' ? 'left-4' : 'right-4')}>
           <X size={20} />
         </button>
