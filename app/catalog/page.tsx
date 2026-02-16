@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check } from 'lucide-react';
@@ -85,7 +85,7 @@ function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang 
   );
 }
 
-function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
+function PublicationCard({ pub, lang, onSelect, isExpanded }: { pub: PublicationFull; lang: Lang; onSelect?: (id: string) => void; isExpanded?: boolean }) {
   const [imgError, setImgError] = useState(false);
   const [copied, setCopied] = useState(false);
   const title = pub.title_ru || pub.title_en || pub.title_he || '—';
@@ -107,9 +107,13 @@ function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
     });
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (onSelect) { e.preventDefault(); onSelect(pub.id); }
+  };
+
   return (
-    <article className="book-card group relative">
-      <Link href={'/publication/' + pub.id} className="block">
+    <article className={'book-card group relative' + (isExpanded ? ' ring-2 ring-amber-400/60 rounded-lg' : '')}>
+      <a href={'/publication/' + pub.id} onClick={handleClick} className="block cursor-pointer">
         <div className="book-cover relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
           <div className="absolute inset-y-0 left-0 w-3 z-10" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.08) 40%, transparent 100%)' }} />
           {pub.cover_image_url && !imgError ? (
@@ -125,7 +129,6 @@ function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
               {pub.total_issues} {t('catalog.issuesCount', lang)}
             </div>
           )}
-          {/* Share button */}
           <button
             onClick={handleShare}
             className="absolute top-2 right-2 z-20 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200"
@@ -140,7 +143,7 @@ function PublicationCard({ pub, lang }: { pub: PublicationFull; lang: Lang }) {
           <h3 className="text-sm font-semibold text-stone-800 line-clamp-2 leading-snug group-hover:text-amber-800 transition-colors" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{title}</h3>
           {freq && <p className="text-[11px] text-stone-500 mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{freq}</p>}
         </div>
-      </Link>
+      </a>
     </article>
   );
 }
@@ -170,6 +173,9 @@ function CatalogContent() {
   const [publicationsList, setPublicationsList] = useState<PublicationFull[]>([]);
   const [pubsLoading, setPubsLoading] = useState(false);
   const [pubsSearchInput, setPubsSearchInput] = useState('');
+  const [expandedPubId, setExpandedPubId] = useState<string | null>(null);
+  const [expandedIssues, setExpandedIssues] = useState<{ id: string; title: string; thumbnail_url: string; gregorian_date: string; issue_number: string }[]>([]);
+  const [expandedLoading, setExpandedLoading] = useState(false);
 
   const categoryParam = searchParams.get('category');
   const categoryPubIds = categoryParam ? getPublicationIdsForCategory(categoryParam) : null;
@@ -200,7 +206,7 @@ function CatalogContent() {
     setPubsLoading(true);
     Promise.all([
       fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
-      fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&select=publication_id,thumbnail_url', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&select=publication_id,thumbnail_url&limit=5000', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
     ]).then(([pubs, issues]) => {
       // Build map: publication_id -> latest thumbnail (skip empty strings)
       const thumbMap: Record<string, string> = {};
@@ -225,6 +231,12 @@ function CatalogContent() {
     if (!pubsSearchInput) return true;
     const q = pubsSearchInput.toLowerCase();
     return (p.title_ru || '').toLowerCase().includes(q) || (p.title_en || '').toLowerCase().includes(q) || (p.title_he || '').toLowerCase().includes(q);
+  }).sort((a, b) => {
+    const langMap: Record<string, string> = { ru: 'ru', en: 'en', he: 'he', uk: 'ru' };
+    const userLang = langMap[lang] || 'ru';
+    const aMatch = a.primary_language === userLang ? 0 : 1;
+    const bMatch = b.primary_language === userLang ? 0 : 1;
+    return aMatch - bMatch;
   });
 
   const fetchDocuments = useCallback(async () => {
@@ -243,6 +255,19 @@ function CatalogContent() {
   const handleSearch = (e: React.FormEvent) => { e.preventDefault(); setSearchQuery(searchInput); setPage(0); };
   const hasFilters = searchQuery || selectedParsha || selectedEvent;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+  const handlePubSelect = async (pubId: string) => {
+    if (expandedPubId === pubId) { setExpandedPubId(null); return; }
+    setExpandedPubId(pubId);
+    setExpandedLoading(true);
+    setExpandedIssues([]);
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + pubId + '&is_active=eq.true&order=created_at.desc&limit=20&select=id,title,thumbnail_url,gregorian_date,issue_number', { headers: { 'apikey': SUPABASE_KEY } });
+      const data = await res.json();
+      setExpandedIssues(Array.isArray(data) ? data : []);
+    } catch { setExpandedIssues([]); }
+    finally { setExpandedLoading(false); }
+  };
   const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setPage(0); };
 
   return (
@@ -255,6 +280,14 @@ function CatalogContent() {
         .book-cover { box-shadow: 3px 3px 8px rgba(120,80,40,0.15), 6px 6px 20px rgba(120,80,40,0.08), inset 0 0 0 1px rgba(120,80,40,0.08); border-radius: 2px 6px 6px 2px; transition: box-shadow 0.35s ease; }
         .book-card:hover .book-cover { box-shadow: 4px 4px 12px rgba(120,80,40,0.2), 8px 8px 30px rgba(120,80,40,0.12), inset 0 0 0 1px rgba(120,80,40,0.1); }
         .search-ornate { background: linear-gradient(135deg, #faf5ed 0%, #f5efe6 100%); border: 1px solid rgba(180,150,100,0.25); box-shadow: 0 4px 20px rgba(120,80,40,0.06), inset 0 1px 0 rgba(255,255,255,0.5); }
+        .pub-shelf { grid-column: 1 / -1; background: linear-gradient(180deg, #faf5ed 0%, #f5efe6 100%); border: 1px solid rgba(180,150,100,0.3); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: inset 0 2px 8px rgba(120,80,40,0.06), 0 4px 16px rgba(120,80,40,0.08); animation: shelfSlide 0.3s ease-out; overflow: hidden; }
+        @keyframes shelfSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .pub-shelf-scroll { display: flex; gap: 0.75rem; overflow-x: auto; padding: 0.75rem 0 0.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .pub-shelf-scroll::-webkit-scrollbar { height: 4px; }
+        .pub-shelf-scroll::-webkit-scrollbar-track { background: transparent; }
+        .pub-shelf-scroll::-webkit-scrollbar-thumb { background: #c4a882; border-radius: 2px; }
+        .shelf-issue { flex: 0 0 auto; width: 100px; scroll-snap-align: start; transition: transform 0.25s ease; }
+        .shelf-issue:hover { transform: translateY(-3px); }
         .filter-select { background-color: #fdfaf5; border: 1px solid rgba(180,150,100,0.3); font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
         .filter-select:focus { border-color: #b8854a; box-shadow: 0 0 0 3px rgba(184,133,74,0.15); }
         .page-btn { font-family: 'DM Sans', sans-serif; border: 1px solid rgba(180,150,100,0.3); background: #fdfaf5; transition: all 0.2s; }
@@ -423,7 +456,52 @@ function CatalogContent() {
               ) : (
                 <>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-8">
-                    {filteredPubs.map((pub) => (<PublicationCard key={pub.id} pub={pub} lang={lang} />))}
+                    {filteredPubs.map((pub) => (
+                      <React.Fragment key={pub.id}>
+                        <PublicationCard pub={pub} lang={lang} onSelect={handlePubSelect} isExpanded={expandedPubId === pub.id} />
+                        {expandedPubId === pub.id && (
+                          <div className="pub-shelf">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <BookOpen size={16} className="text-amber-700 flex-shrink-0" />
+                                <h4 className="text-sm font-semibold text-stone-800 truncate" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{pub.title_ru || pub.title_en || pub.title_he}</h4>
+                              </div>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <Link href={'/publication/' + pub.id} className="text-xs font-medium text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                                  {t('catalog.allIssues', lang)} ({pub.total_issues}) →
+                                </Link>
+                                <button onClick={() => setExpandedPubId(null)} className="p-1 rounded-full hover:bg-stone-200/50 transition-colors">
+                                  <X size={14} className="text-stone-400" />
+                                </button>
+                              </div>
+                            </div>
+                            {pub.description_ru && <p className="text-xs text-stone-400 mb-2 line-clamp-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{pub.description_ru}</p>}
+                            {expandedLoading ? (
+                              <div className="flex items-center justify-center py-8"><Loader2 className="animate-spin text-amber-600" size={20} /></div>
+                            ) : expandedIssues.length === 0 ? (
+                              <p className="text-xs text-stone-400 italic text-center py-6">{t('catalog.notFound', lang)}</p>
+                            ) : (
+                              <div className="pub-shelf-scroll">
+                                {expandedIssues.map(issue => (
+                                  <Link key={issue.id} href={'/document/' + issue.id} className="shelf-issue block">
+                                    <div className="rounded overflow-hidden" style={{ aspectRatio: '3/4', boxShadow: '2px 2px 6px rgba(120,80,40,0.15)' }}>
+                                      {issue.thumbnail_url ? (
+                                        <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                                      ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-stone-100"><FileText size={18} className="text-stone-300" /></div>
+                                      )}
+                                    </div>
+                                    <p className="text-[10px] text-stone-600 mt-1.5 line-clamp-2 leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{issue.title || ('# ' + issue.issue_number)}</p>
+                                    {issue.gregorian_date && <p className="text-[9px] text-stone-400 mt-0.5">{formatDate(issue.gregorian_date, lang)}</p>}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                            <div className="mt-2 h-1.5 rounded-full mx-auto" style={{ background: 'linear-gradient(180deg, #b8854a 0%, #96693a 60%, #7a5530 100%)', boxShadow: '0 2px 6px rgba(120,80,40,0.15)', maxWidth: '90%' }} />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    ))}
                   </div>
                   {/* Wooden shelf */}
                   <div className="mt-6 h-3 rounded-full mx-auto" style={{ background: 'linear-gradient(180deg, #b8854a 0%, #96693a 60%, #7a5530 100%)', boxShadow: '0 4px 12px rgba(120,80,40,0.2), inset 0 1px 0 rgba(255,255,255,0.15)', maxWidth: '95%' }} />
