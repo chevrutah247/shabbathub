@@ -262,7 +262,7 @@ function CatalogContent() {
     setExpandedLoading(true);
     setExpandedIssues([]);
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + pubId + '&is_active=eq.true&order=created_at.desc&limit=20&select=id,title,thumbnail_url,gregorian_date,issue_number', { headers: { 'apikey': SUPABASE_KEY } });
+      const res = await fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + pubId + '&is_active=eq.true&order=created_at.desc&limit=500&select=id,title,thumbnail_url,gregorian_date,issue_number', { headers: { 'apikey': SUPABASE_KEY } });
       const data = await res.json();
       setExpandedIssues(Array.isArray(data) ? data : []);
     } catch { setExpandedIssues([]); }
@@ -474,17 +474,17 @@ function CatalogContent() {
                             ) : expandedIssues.length === 0 ? (
                               <p className="text-xs text-stone-400 italic text-center py-6">{t('catalog.notFound', lang)}</p>
                             ) : (
-                              <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '0.75rem', overflowX: 'auto', overflowY: 'hidden', padding: '0.75rem 0 0.5rem', WebkitOverflowScrolling: 'touch' }}>
+                              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-4 gap-y-5 pt-3 pb-1">
                                 {expandedIssues.map(issue => (
-                                  <Link key={issue.id} href={'/document/' + issue.id} className="block" style={{ flex: '0 0 100px', minWidth: '100px' }}>
-                                    <div className="rounded overflow-hidden" style={{ aspectRatio: '3/4', boxShadow: '2px 2px 6px rgba(120,80,40,0.15)' }}>
+                                  <Link key={issue.id} href={'/document/' + issue.id} className="book-card group block">
+                                    <div className="book-cover rounded overflow-hidden" style={{ aspectRatio: '3/4' }}>
                                       {issue.thumbnail_url ? (
-                                        <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                                        <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-stone-100"><FileText size={18} className="text-stone-300" /></div>
                                       )}
                                     </div>
-                                    <p className="text-[10px] text-stone-600 mt-1.5 line-clamp-2 leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{issue.title || ('# ' + issue.issue_number)}</p>
+                                    <p className="text-[10px] text-stone-600 mt-1.5 line-clamp-2 leading-tight group-hover:text-amber-800 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>{issue.title || ('\u2116' + issue.issue_number)}</p>
                                     {issue.gregorian_date && <p className="text-[9px] text-stone-400 mt-0.5">{formatDate(issue.gregorian_date, lang)}</p>}
                                   </Link>
                                 ))}
