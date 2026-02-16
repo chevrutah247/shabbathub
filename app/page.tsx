@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles } from 'lucide-react';
+import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles, BookMarked, Flame, Scale, Smile, Crown, FolderOpen, Heart } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -24,13 +24,22 @@ const t: Record<string, Record<string, string>> = {
   publications: { ru: 'публикаций', en: 'publications', he: 'פרסומים', uk: 'публікацій' },
   languages: { ru: 'языка', en: 'languages', he: 'שפות', uk: 'мови' },
   yearsArchive: { ru: 'лет архива', en: 'years of archive', he: 'שנות ארכיון', uk: 'років архіву' },
-  categories: { ru: 'Разделы библиотеки', en: 'Library Sections', he: 'מדורי הספרייה', uk: 'Розділи бібліотеки' },
-  newspapers: { ru: 'Еврейские газеты', en: 'Jewish Newspapers', he: 'עיתונים יהודיים', uk: 'Єврейські газети' },
-  newspapersDesc: { ru: 'Еженедельные газеты к Шаббату на русском, английском и иврите', en: 'Weekly Shabbat newspapers in Russian, English and Hebrew', he: 'עיתונים שבועיים לשבת ברוסית, אנגלית ועברית', uk: 'Щотижневі газети до Шаббату російською, англійською та івритом' },
-  torahPortions: { ru: 'Недельные главы Торы', en: 'Weekly Torah Portions', he: 'פרשות השבוע', uk: 'Тижневі глави Тори' },
-  torahDesc: { ru: 'Комментарии и разборы недельных глав от ведущих раввинов', en: 'Commentary and analysis from leading rabbis', he: 'פרשנות וניתוח מרבנים מובילים', uk: 'Коментарі та розбори тижневих глав від провідних равинів' },
-  holidays: { ru: 'Праздники и события', en: 'Holidays & Events', he: 'חגים ואירועים', uk: 'Свята та події' },
-  holidaysDesc: { ru: 'Специальные выпуски к еврейским праздникам и памятным датам', en: 'Special issues for Jewish holidays and memorial dates', he: 'גיליונות מיוחדים לחגים ולימי זיכרון', uk: 'Спеціальні випуски до єврейських свят та пам\'ятних дат' },
+  catTitle: { ru: 'Разделы библиотеки', en: 'Library Sections', he: 'מדורי הספרייה', uk: 'Розділи бібліотеки' },
+  catSub: { ru: 'Выберите тему и найдите нужные материалы', en: 'Choose a topic and find the materials you need', he: 'בחרו נושא ומצאו את החומרים שאתם צריכים', uk: 'Оберіть тему та знайдіть потрібні матеріали' },
+  catStories: { ru: 'Истории и история', en: 'Stories & History', he: 'סיפורים והיסטוריה', uk: 'Історії та історія' },
+  catStoriesDesc: { ru: 'Увлекательные рассказы и исторические материалы', en: 'Fascinating stories and historical materials', he: 'סיפורים מרתקים וחומרים היסטוריים', uk: 'Захопливі розповіді та історичні матеріали' },
+  catChassidut: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' },
+  catChassidutDesc: { ru: 'Учение хасидизма и комментарии', en: 'Chassidic teachings and commentary', he: 'תורת החסידות ופירושים', uk: 'Вчення хасидизму та коментарі' },
+  catHalacha: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' },
+  catHalachaDesc: { ru: 'Еврейский закон и практические руководства', en: 'Jewish law and practical guides', he: 'הלכה ומדריכים מעשיים', uk: 'Єврейський закон та практичні настанови' },
+  catKids: { ru: 'Детям', en: 'For Kids', he: 'לילדים', uk: 'Дітям' },
+  catKidsDesc: { ru: 'Материалы для детей и семейного чтения', en: 'Materials for children and family reading', he: 'חומרים לילדים ולקריאה משפחתית', uk: 'Матеріали для дітей та сімейного читання' },
+  catMoshiach: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' },
+  catMoshiachDesc: { ru: 'Материалы о Мошиахе и Геуле', en: 'Materials about Moshiach and Redemption', he: 'חומרים על משיח וגאולה', uk: 'Матеріали про Мошіаха та Геулу' },
+  catGeneral: { ru: 'Общее', en: 'General', he: 'כללי', uk: 'Загальне' },
+  catGeneralDesc: { ru: 'Разнообразные еврейские материалы', en: 'Various Jewish materials', he: 'חומרים יהודיים מגוונים', uk: 'Різноманітні єврейські матеріали' },
+  catMussar: { ru: 'Мусар', en: 'Mussar', he: 'מוסר', uk: 'Мусар' },
+  catMussarDesc: { ru: 'Этика, самосовершенствование и работа над собой', en: 'Ethics, self-improvement and character development', he: 'מוסר, שיפור עצמי ופיתוח אישי', uk: 'Етика, самовдосконалення та робота над собою' },
   networkTitle: { ru: 'Chevrutah Network', en: 'Chevrutah Network', he: 'Chevrutah Network', uk: 'Chevrutah Network' },
   networkSub: { ru: 'Экосистема еврейских проектов', en: 'Jewish Projects Ecosystem', he: 'אקו-סיסטם של פרויקטים יהודיים', uk: 'Екосистема єврейських проєктів' },
   ctaTitle: { ru: 'Получайте свежие выпуски первыми', en: 'Get fresh issues first', he: 'קבלו גיליונות חדשים ראשונים', uk: 'Отримуйте свіжі випуски першими' },
@@ -55,6 +64,16 @@ const networkProjects = [
   { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы онлайн', en: 'Torah Learning Online', he: 'לימוד תורה אונליין', uk: 'Вивчення Тори онлайн' }, url: 'https://edonthego.org', icon: '🎓', accent: '#065f46' },
   { name: 'CH Groups', desc: { ru: 'Группы изучения', en: 'Study Groups', he: 'קבוצות לימוד', uk: 'Групи вивчення' }, url: 'https://crownheightsgroups.com', icon: '👥', accent: '#92400e' },
   { name: 'OpenHearts', desc: { ru: 'Дейтинг для всех', en: 'Dating for Everyone', he: 'היכרויות לכולם', uk: 'Дейтинг для всіх' }, url: 'https://openheartsdating.com', icon: '💙', accent: '#4338ca' },
+];
+
+const libraryFolders = [
+  { slug: 'stories', icon: BookMarked, accent: '#6d28d9', accentLight: '#f5f3ff', title: 'catStories', desc: 'catStoriesDesc' },
+  { slug: 'chassidut', icon: Flame, accent: '#0369a1', accentLight: '#f0f9ff', title: 'catChassidut', desc: 'catChassidutDesc' },
+  { slug: 'halacha', icon: Scale, accent: '#15803d', accentLight: '#f0fdf4', title: 'catHalacha', desc: 'catHalachaDesc' },
+  { slug: 'kids', icon: Smile, accent: '#ea580c', accentLight: '#fff7ed', title: 'catKids', desc: 'catKidsDesc' },
+  { slug: 'moshiach', icon: Crown, accent: '#b45309', accentLight: '#fffbeb', title: 'catMoshiach', desc: 'catMoshiachDesc' },
+  { slug: 'general', icon: FolderOpen, accent: '#1e3a8a', accentLight: '#eef2ff', title: 'catGeneral', desc: 'catGeneralDesc' },
+  { slug: 'mussar', icon: Heart, accent: '#be123c', accentLight: '#fff1f2', title: 'catMussar', desc: 'catMussarDesc' },
 ];
 
 export default function HomePage() {
@@ -119,16 +138,99 @@ export default function HomePage() {
         }
         .book-card:hover .book-shadow { box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06); }
 
-        .cat-card {
+        .folder-card {
+          position: relative;
           background: white;
-          border: 1px solid rgba(0,0,0,0.05);
-          border-radius: 20px;
-          transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 4px 4px 16px 16px;
+          padding: 2.5rem 1.75rem 1.75rem;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          cursor: pointer;
+          overflow: visible;
         }
-        .cat-card:hover {
-          border-color: rgba(30,58,138,0.12);
-          box-shadow: 0 12px 40px rgba(30,58,138,0.06);
-          transform: translateY(-4px);
+        .folder-tab {
+          position: absolute;
+          top: -14px;
+          left: 20px;
+          height: 28px;
+          padding: 0 16px;
+          border-radius: 8px 8px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: white;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+          white-space: nowrap;
+        }
+        [dir="rtl"] .folder-tab { left: auto; right: 20px; }
+        .folder-card::after {
+          content: '';
+          position: absolute;
+          bottom: -6px;
+          left: 10%;
+          right: 10%;
+          height: 6px;
+          background: radial-gradient(ellipse, rgba(0,0,0,0.06) 0%, transparent 70%);
+          transition: all 0.4s ease;
+        }
+        .folder-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 16px 48px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+          border-color: rgba(0,0,0,0.1);
+        }
+        .folder-card:hover .folder-tab {
+          top: -18px;
+          height: 32px;
+          padding: 0 20px;
+          box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+        }
+        .folder-card:hover::after {
+          bottom: -10px;
+          left: 5%;
+          right: 5%;
+          height: 10px;
+          background: radial-gradient(ellipse, rgba(0,0,0,0.08) 0%, transparent 70%);
+        }
+        .folder-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1rem;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .folder-card:hover .folder-icon { transform: scale(1.08); }
+        .folder-arrow {
+          position: absolute;
+          bottom: 16px;
+          right: 16px;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transform: translateX(-4px);
+          transition: all 0.3s ease;
+        }
+        [dir="rtl"] .folder-arrow { right: auto; left: 16px; transform: translateX(4px) scaleX(-1); }
+        .folder-card:hover .folder-arrow { opacity: 1; transform: translateX(0); }
+        [dir="rtl"] .folder-card:hover .folder-arrow { transform: translateX(0) scaleX(-1); }
+        .library-shelf {
+          height: 8px;
+          border-radius: 4px;
+          background: linear-gradient(180deg, #c4a47a 0%, #a8845c 50%, #8c6a42 100%);
+          box-shadow: 0 4px 16px rgba(140,106,66,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+          margin-top: 2.5rem;
         }
 
         .net-card {
@@ -254,31 +356,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════ CATEGORIES ═══════ */}
+      {/* ═══════ LIBRARY SECTIONS ═══════ */}
       <section className="section-cream py-16 md:py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <AnimateIn>
-            <h2 className="text-2xl md:text-3xl font-semibold text-stone-800 text-center mb-3" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('categories')}</h2>
-            <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mb-12" />
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('catTitle')}</h2>
+              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3 mb-3" />
+              <p className="text-sm text-stone-400 max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('catSub')}</p>
+            </div>
           </AnimateIn>
 
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              { title: g('newspapers'), desc: g('newspapersDesc'), icon: <FileText size={24} />, bg: '#eef2ff' },
-              { title: g('torahPortions'), desc: g('torahDesc'), icon: <BookOpen size={24} />, bg: '#fef3c7' },
-              { title: g('holidays'), desc: g('holidaysDesc'), icon: <Star size={24} />, bg: '#ecfdf5' },
-            ].map((cat, i) => (
-              <AnimateIn key={i} delay={i * 120}>
-                <Link href="/catalog" className="cat-card block p-7 h-full">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: cat.bg, color: '#1e3a8a' }}>
-                    {cat.icon}
+          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:gap-6">
+            {libraryFolders.map((folder, i) => (
+              <AnimateIn key={folder.slug} delay={i * 80} className="w-[calc(50%-10px)] sm:w-[calc(33.333%-14px)] lg:w-[calc(25%-18px)]">
+                <Link href={'/catalog?category=' + folder.slug} className="folder-card block h-full">
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', borderRadius: '4px 4px 0 0', background: folder.accent }} />
+                  <div className="folder-tab" style={{ background: folder.accent }}>
+                    <folder.icon size={11} />
+                    <span>{g(folder.title)}</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-stone-800 mb-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{cat.title}</h3>
-                  <p className="text-sm text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{cat.desc}</p>
+                  <div className="folder-icon" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <folder.icon size={22} />
+                  </div>
+                  <h3 className="text-base font-semibold text-stone-800 mb-1.5" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g(folder.title)}</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", paddingRight: dir === 'rtl' ? 0 : '1.5rem', paddingLeft: dir === 'rtl' ? '1.5rem' : 0 }}>{g(folder.desc)}</p>
+                  <div className="folder-arrow" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <ArrowRight size={14} />
+                  </div>
                 </Link>
               </AnimateIn>
             ))}
           </div>
+
+          <div className="library-shelf max-w-[90%] mx-auto" />
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter,
 import SubscribeBlock from '@/components/SubscribeBlock';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { getPublicationIdsForCategory, categoryNames } from '@/lib/category-mapping';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -170,6 +171,10 @@ function CatalogContent() {
   const [pubsLoading, setPubsLoading] = useState(false);
   const [pubsSearchInput, setPubsSearchInput] = useState('');
 
+  const categoryParam = searchParams.get('category');
+  const categoryPubIds = categoryParam ? getPublicationIdsForCategory(categoryParam) : null;
+  const categoryName = categoryParam && categoryNames[categoryParam] ? (categoryNames[categoryParam][lang] || categoryNames[categoryParam]['ru']) : null;
+
   useEffect(() => { const q = searchParams.get('search'); if (q) { setSearchInput(q); setSearchQuery(q); } setInitialized(true); }, [searchParams]);
 
   useEffect(() => {
@@ -216,6 +221,7 @@ function CatalogContent() {
   }, [viewMode]);
 
   const filteredPubs = publicationsList.filter(p => {
+    if (categoryPubIds && !categoryPubIds.includes(p.id)) return false;
     if (!pubsSearchInput) return true;
     const q = pubsSearchInput.toLowerCase();
     return (p.title_ru || '').toLowerCase().includes(q) || (p.title_en || '').toLowerCase().includes(q) || (p.title_he || '').toLowerCase().includes(q);
@@ -228,8 +234,9 @@ function CatalogContent() {
     if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
+    if (categoryPubIds && categoryPubIds.length > 0) url += '&publication_id=in.(' + categoryPubIds.join(',') + ')';
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder]);
+  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder, categoryPubIds]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -298,6 +305,18 @@ function CatalogContent() {
               </div>
             )}
           </div>
+
+          {/* Category badge */}
+          {categoryName && (
+            <div className="flex items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white" style={{ background: 'linear-gradient(135deg, #96693a, #b8854a)' }}>
+                <Library size={14} /> {categoryName}
+              </span>
+              <Link href="/catalog" className="text-sm text-stone-400 hover:text-stone-600 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <X size={16} />
+              </Link>
+            </div>
+          )}
 
           {/* View mode toggle + Sort */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
