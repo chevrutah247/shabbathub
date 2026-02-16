@@ -169,15 +169,30 @@ function CatalogContent() {
     fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()).then(data => { if (!data) return; setEvents(data); const map: Record<string, string> = {}; data.forEach((e: Event) => { map[e.id] = e.name_ru; }); setEventMap(map); });
   }, [currentParshaId]);
 
-  // Fetch publications for publications view
+  // Fetch publications + latest issue thumbnails for publications view
   useEffect(() => {
     if (viewMode !== 'publications') return;
     setPubsLoading(true);
-    fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru', { headers: { 'apikey': SUPABASE_KEY } })
-      .then(r => r.json())
-      .then(data => { setPublicationsList(Array.isArray(data) ? data : []); })
-      .catch(() => {})
-      .finally(() => setPubsLoading(false));
+    Promise.all([
+      fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&select=publication_id,thumbnail_url', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+    ]).then(([pubs, issues]) => {
+      // Build map: publication_id -> latest thumbnail
+      const thumbMap: Record<string, string> = {};
+      if (Array.isArray(issues)) {
+        for (const issue of issues) {
+          if (issue.publication_id && issue.thumbnail_url && !thumbMap[issue.publication_id]) {
+            thumbMap[issue.publication_id] = issue.thumbnail_url;
+          }
+        }
+      }
+      // Merge: use cover_image_url if set, otherwise fallback to latest issue thumbnail
+      const enriched = (Array.isArray(pubs) ? pubs : []).map((p: PublicationFull) => ({
+        ...p,
+        cover_image_url: p.cover_image_url || thumbMap[p.id] || null,
+      }));
+      setPublicationsList(enriched);
+    }).catch(() => {}).finally(() => setPubsLoading(false));
   }, [viewMode]);
 
   const filteredPubs = publicationsList.filter(p => {
