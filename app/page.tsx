@@ -14,7 +14,7 @@ const t: Record<string, Record<string, string>> = {
   heroTitle1: { ru: 'Крупнейшая', en: 'The Largest', he: 'הארכיון הדיגיטלי', uk: 'Найбільша' },
   heroTitle2: { ru: 'цифровая библиотека', en: 'Digital Library', he: 'הגדול ביותר', uk: 'цифрова бібліотека' },
   heroTitle3: { ru: 'материалов к Шаббату', en: 'of Shabbat Materials', he: 'של חומרי שבת', uk: 'матеріалів до Шаббату' },
-  heroSub: { ru: 'Газеты, недельные главы Торы и печатные материалы на русском, английском и иврите', en: 'Newspapers, weekly Torah portions and printable materials in Russian, English and Hebrew', he: 'עיתונים, פרשות שבוע וחומרים להדפסה ברוסית, אנגלית ועברית', uk: 'Газети, тижневі глави Тори та друковані матеріали російською, англійською та івритом' },
+  heroSub: { ru: 'Газеты, недельные главы Торы и печатные материалы на русском, английском, украинском и иврите', en: 'Newspapers, weekly Torah portions and printable materials in Russian, English, Ukrainian and Hebrew', he: 'עיתונים, פרשות שבוע וחומרים להדפסה ברוסית, אנגלית, אוקראינית ועברית', uk: 'Газети, тижневі глави Тори та друковані матеріали російською, англійською, українською та івритом' },
   searchPlaceholder: { ru: 'Найти материалы к Шаббату...', en: 'Find Shabbat materials...', he: '...חיפוש חומרי שבת', uk: 'Знайти матеріали до Шаббату...' },
   explore: { ru: 'Открыть каталог', en: 'Explore catalog', he: 'לקטלוג', uk: 'Відкрити каталог' },
   subscribe: { ru: 'Подписаться', en: 'Subscribe', he: 'הרשמה', uk: 'Підписатися' },
@@ -305,9 +305,9 @@ export default function HomePage() {
               <div className="mt-12 flex gap-10 md:gap-14">
                 {[
                   { num: totalCount.toLocaleString(), label: g('materials') },
-                  { num: '40+', label: g('publications') },
-                  { num: '3', label: g('languages') },
-                  { num: '5+', label: g('yearsArchive') },
+                  { num: '434', label: g('publications') },
+                  { num: '4', label: g('languages') },
+                  { num: '15+', label: g('yearsArchive') },
                 ].map((s, i) => (
                   <div key={i}>
                     <div className="stat-number">{s.num}</div>

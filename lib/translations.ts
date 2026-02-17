@@ -95,6 +95,9 @@ const translations = {
     issues: { ru: 'Выпуски', en: 'Issues', he: 'גיליונות', uk: 'Випуски' },
     publications: { ru: 'Публикации', en: 'Publications', he: 'פרסומים', uk: 'Публікації' },
     issuesCount: { ru: 'выпусков', en: 'issues', he: 'גיליונות', uk: 'випусків' },
+    allIssues: { ru: 'Все выпуски', en: 'All issues', he: 'כל הגיליונות', uk: 'Всі випуски' },
+    language: { ru: 'Язык', en: 'Language', he: 'שפה', uk: 'Мова' },
+    allLanguages: { ru: 'Все', en: 'All', he: 'הכל', uk: 'Всі' },
   },
 
   // ===== Документ =====

@@ -27,6 +27,8 @@ export const categoryPublicationMap: Record<string, string[]> = {
     'd1441062-63e4-4fba-92b1-9a9459f21f1c', // Хитас
     '1602e562-6343-43ae-8317-f9509d209f0f', // מעמקים
     '16ed7c4d-5202-4646-834b-c4517315775d', // אביר יעקב
+    'e29b7706-51c2-4faa-ae97-2c3d953a15bb', // LearnChassidus
+    '9f605105-8017-4d3a-8e01-4ae0d7c1abe2', // The Weekly Farbrengen
   ],
   halacha: [
     'bcf51168-42c5-4adf-8988-55a64dec7b2d', // РАМБАМ МИШНЕ ТОРА
@@ -64,6 +66,15 @@ export const categoryPublicationMap: Record<string, string[]> = {
     '6026fb6f-540f-498c-90be-c44d1960849a', // הקהל
     'db25ae7b-8657-4239-890b-9217c86c575d', // הדברות
     '628a57c9-f3a4-4075-b113-747058c02fd0', // באר הפרשה
+    '93ffcfb3-58e2-4346-bab8-a6d6a19db0a2', // שלח לחמך (Shlach Lachmecha)
+    '25670d8f-0b9e-4fef-a2a2-7306f955fa09', // Недельный листок (Weekly Parsha Sheet)
+    '72e20438-85aa-4c13-9b2b-b0efe8e559ea', // Наш Голос (Nash Golos)
+    'dbb8c484-8a7a-44e7-a63f-90df9c854f30', // Фонд Наследия (Fond Nasledia)
+    'dc161e75-5a5a-4fb7-a7d3-2bc4fde623aa', // Torah Tidbits
+    '637c25b9-a2e3-4b80-8779-e90edc86abd2', // Bukharian Times
+    'd4c66f41-c8bd-43fb-8d48-3aad1efedcda', // СТМЭГИ (STMEGI)
+    '38c62555-1a5b-4c90-ade3-73de6d660d4d', // Parsha.net
+    'b10973f9-e98c-4293-886f-f31146bb0bdc', // Общинный Вестник (Obshchinniy Vestnik)
   ],
   mussar: [
     '9b08c2bf-17e5-4d73-bb87-f56d451a9e2f', // Беерот Ицхак
@@ -81,6 +92,7 @@ export const categoryPublicationMap: Record<string, string[]> = {
     'ab2eb159-0de6-4590-8572-0ebf03638010', // ובחרת בחיים
     '10a0d4de-6fae-4ac9-8f23-5c423ce30b19', // מסילות
     '39c16c78-caef-4402-84c0-f13b3a2eee43', // Mesilot HaNefesh
+    'eb3af85b-8df8-4637-92ac-ed4c4a3d98c8', // BeEzrat HaShem
   ],
 };
 
@@ -103,4 +115,7 @@ export const categoryNames: Record<string, Record<string, string>> = {
   moshiach:  { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' },
   general:   { ru: 'Общее', en: 'General', he: 'כללי', uk: 'Загальне' },
   mussar:    { ru: 'Мусар', en: 'Mussar', he: 'מוסר', uk: 'Мусар' },
+  other:     { ru: 'Другое', en: 'Other', he: 'אחר', uk: 'Інше' },
 };
+
+export const orderedCategories = ['stories', 'chassidut', 'halacha', 'kids', 'moshiach', 'mussar', 'general', 'other'] as const;
