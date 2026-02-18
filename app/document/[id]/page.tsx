@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell } from 'lucide-react';
+import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell, Printer, User } from 'lucide-react';
 import ShareButtons from '@/components/ShareButtons';
+import { trackEvent } from '@/lib/analytics';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -23,6 +24,23 @@ interface Issue {
   publication_id: string;
   view_count: number;
   download_count: number;
+  uploaded_by: string;
+}
+
+interface UploaderProfile {
+  id: string;
+  display_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  avatar_url: string | null;
+}
+
+interface RelatedIssue {
+  id: string;
+  title: string;
+  thumbnail_url: string;
+  gregorian_date: string;
+  publication_id: string;
 }
 
 function formatDate(dateString: string | null): string {
@@ -61,6 +79,8 @@ export default function DocumentPage() {
   const [parshaName, setParshaName] = useState('');
   const [eventName, setEventName] = useState('');
   const [pubName, setPubName] = useState('');
+  const [relatedIssues, setRelatedIssues] = useState<RelatedIssue[]>([]);
+  const [uploader, setUploader] = useState<UploaderProfile | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -101,6 +121,62 @@ export default function DocumentPage() {
       fetch(SUPABASE_URL + '/rest/v1/publications?id=eq.' + issue.publication_id + '&select=title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } })
         .then(r => r.json()).then(d => { if (d[0]) setPubName(d[0].title_ru || d[0].title_en || d[0].title_he || ''); });
     }
+    if (issue.uploaded_by) {
+      fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + issue.uploaded_by + '&select=id,display_name,first_name,last_name,avatar_url', { headers: { 'apikey': SUPABASE_KEY } })
+        .then(r => r.json()).then(d => { if (d[0]) setUploader(d[0]); });
+    }
+  }, [issue]);
+
+  useEffect(() => {
+    if (!issue) return;
+    trackEvent('document_open', {
+      document_id: issue.id,
+      publication_id: issue.publication_id || '',
+    });
+  }, [issue]);
+
+  useEffect(() => {
+    if (!issue) return;
+    const queries: Promise<any>[] = [];
+    if (issue.publication_id) {
+      queries.push(
+        fetch(
+          SUPABASE_URL +
+            '/rest/v1/issues?is_active=eq.true&publication_id=eq.' +
+            issue.publication_id +
+            '&id=neq.' +
+            issue.id +
+            '&order=created_at.desc&limit=4&select=id,title,thumbnail_url,gregorian_date,publication_id',
+          { headers: { apikey: SUPABASE_KEY } }
+        ).then((r) => r.json())
+      );
+    }
+    if (issue.parsha_id) {
+      queries.push(
+        fetch(
+          SUPABASE_URL +
+            '/rest/v1/issues?is_active=eq.true&parsha_id=eq.' +
+            issue.parsha_id +
+            '&id=neq.' +
+            issue.id +
+            '&order=created_at.desc&limit=4&select=id,title,thumbnail_url,gregorian_date,publication_id',
+          { headers: { apikey: SUPABASE_KEY } }
+        ).then((r) => r.json())
+      );
+    }
+
+    Promise.all(queries)
+      .then((lists) => {
+        const map = new Map<string, RelatedIssue>();
+        for (const list of lists) {
+          if (!Array.isArray(list)) continue;
+          for (const item of list) {
+            if (!map.has(item.id)) map.set(item.id, item);
+          }
+        }
+        setRelatedIssues(Array.from(map.values()).slice(0, 6));
+      })
+      .catch(() => setRelatedIssues([]));
   }, [issue]);
 
   if (loading) {
@@ -122,6 +198,26 @@ export default function DocumentPage() {
   const viewerUrl = viewerMode === 'google'
     ? getGoogleDriveViewerUrl(issue.pdf_url)
     : issue.pdf_url;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: issue.title,
+    description: issue.description || undefined,
+    image: issue.thumbnail_url || undefined,
+    datePublished: issue.gregorian_date || undefined,
+    isPartOf: pubName
+      ? {
+          '@type': 'Periodical',
+          name: pubName,
+        }
+      : undefined,
+    publisher: {
+      '@type': 'Organization',
+      name: 'ShabbatHub',
+      url: 'https://shabbathub.com',
+    },
+    mainEntityOfPage: `https://shabbathub.com/document/${issue.id}`,
+  };
 
   // Полноэкранный режим
   if (fullscreen) {
@@ -145,6 +241,7 @@ export default function DocumentPage() {
 
   return (
     <div className="min-h-screen bg-cream">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600">
@@ -221,16 +318,27 @@ export default function DocumentPage() {
                 {issue.page_count && (
                   <div className="flex items-center gap-2"><FileText size={16} className="text-gray-400" />{issue.page_count} страниц</div>
                 )}
+                {uploader && (
+                  <div className="flex items-center gap-2">
+                    <User size={16} className="text-gray-400" />
+                    <span className="text-gray-500">Загрузил:</span>
+                    <Link href={'/uploader/' + uploader.id} className="text-primary-600 hover:underline font-medium">
+                      {uploader.display_name || [uploader.first_name, uploader.last_name].filter(Boolean).join(' ') || 'Пользователь'}
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm space-y-3">
               <a href={issue.pdf_url} target="_blank" rel="noopener noreferrer"
+                onClick={() => trackEvent('document_pdf_open', { document_id: issue.id })}
                 className="flex items-center justify-center gap-2 w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition">
                 <ExternalLink size={20} />Открыть PDF
               </a>
               <a href={issue.pdf_url} download
                 onClick={() => {
+                  trackEvent('document_download', { document_id: issue.id });
                   // Increment download count (fire and forget)
                   fetch(SUPABASE_URL + '/rest/v1/issues?id=eq.' + id, {
                     method: 'PATCH',
@@ -241,6 +349,14 @@ export default function DocumentPage() {
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
                 <Download size={20} />Скачать
               </a>
+              <button
+                onClick={() => {
+                  const w = window.open(issue.pdf_url, '_blank');
+                  if (w) { w.addEventListener('load', () => { try { w.print(); } catch {} }); }
+                }}
+                className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
+                <Printer size={20} />Печать
+              </button>
               <div className="flex items-center justify-center pt-2">
                 <ShareButtons url={`https://shabbathub.com/document/${id}`} title={issue.title} />
               </div>
@@ -255,6 +371,36 @@ export default function DocumentPage() {
             </div>
           </div>
         </div>
+
+        {relatedIssues.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Похожие материалы</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {relatedIssues.map((doc) => (
+                <Link
+                  key={doc.id}
+                  href={'/document/' + doc.id}
+                  onClick={() => trackEvent('related_document_click', { from_document_id: issue.id, to_document_id: doc.id })}
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+                >
+                  <div className="aspect-[3/4] bg-gray-100 overflow-hidden">
+                    {doc.thumbnail_url ? (
+                      <img src={doc.thumbnail_url} alt={doc.title} className="w-full h-full object-cover" loading="lazy" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <FileText size={22} className="text-gray-300" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-2.5">
+                    <p className="text-xs font-medium text-gray-900 line-clamp-2">{doc.title}</p>
+                    {doc.gregorian_date && <p className="text-[11px] text-gray-500 mt-1">{formatDate(doc.gregorian_date)}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
