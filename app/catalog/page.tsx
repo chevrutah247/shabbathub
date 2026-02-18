@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check } from 'lucide-react';
@@ -348,12 +348,7 @@ function CatalogContent() {
     return aMatch - bMatch;
   });
 
-  // Compute publication IDs matching selected languages (for issues view filtering)
-  const langFilterPubIds = useMemo(() => {
-    if (selectedPubLangs.length === 0) return null; // no language filter = show all
-    const ids = publicationsList.filter(p => selectedPubLangs.includes(p.primary_language)).map(p => p.id);
-    return ids.length > 0 ? ids : ['__none__']; // if no pubs match, use dummy to return 0 results
-  }, [selectedPubLangs, publicationsList]);
+  // Language filter is applied directly via issues.language field in fetchDocuments
 
   const fetchDocuments = useCallback(async () => {
     if (!initialized) return; setLoading(true);
@@ -362,19 +357,14 @@ function CatalogContent() {
     if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
-    // Language filter: intersect with category filter if both are active
-    const effectivePubIds = (() => {
-      if (categoryPubIds && langFilterPubIds) {
-        const intersection = categoryPubIds.filter(id => langFilterPubIds.includes(id));
-        return intersection.length > 0 ? intersection : ['__none__'];
-      }
-      if (categoryPubIds) return categoryPubIds;
-      if (langFilterPubIds) return langFilterPubIds;
-      return null;
-    })();
-    if (effectivePubIds && effectivePubIds.length > 0) url += '&publication_id=in.(' + effectivePubIds.join(',') + ')';
+    // Language filter: use direct language field on issues table
+    if (selectedPubLangs.length > 0) {
+      url += '&language=in.(' + selectedPubLangs.join(',') + ')';
+    }
+    // Category filter: use publication IDs
+    if (categoryPubIds && categoryPubIds.length > 0) url += '&publication_id=in.(' + categoryPubIds.join(',') + ')';
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder, categoryPubIds, langFilterPubIds]);
+  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder, categoryPubIds, selectedPubLangs]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -463,6 +453,7 @@ function CatalogContent() {
   ];
   const togglePubLang = (langId: string) => {
     setSelectedPubLangs((prev) => prev.includes(langId) ? prev.filter((x) => x !== langId) : [...prev, langId]);
+    setPage(0);
   };
   const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setSelectedPubLangs([]); setPage(0); };
 
