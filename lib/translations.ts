@@ -31,6 +31,7 @@ const translations = {
     copied: { ru: 'Скопировано!', en: 'Copied!', he: '!הועתק', uk: 'Скопійовано!' },
     shareSite: { ru: 'Поделиться сайтом', en: 'Share site', he: 'שתף אתר', uk: 'Поділитися сайтом' },
     linkCopied: { ru: 'Ссылка скопирована!', en: 'Link copied!', he: '!הקישור הועתק', uk: 'Посилання скопійовано!' },
+    navigator: { ru: 'Навигатор', en: 'Navigator', he: 'נווט', uk: 'Навігатор' },
   },
 
   // ===== Роли =====

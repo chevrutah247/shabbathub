@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check, Store } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check, Store, Compass } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
@@ -242,6 +242,7 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />Маркет</Link>
             <Link href="/leaders" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Trophy size={18} />{t('nav.leaders', lang)}</Link>
+            <Link href="/navigator" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Compass size={18} />{t('nav.navigator', lang)}</Link>
             <Link href="/about" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Info size={18} />{t('nav.about', lang)}</Link>
             <Link href="/donate" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Heart size={18} />{t('nav.donate', lang)}</Link>
           </nav>
@@ -299,6 +300,7 @@ export default function Header() {
         <div className="md:hidden bg-white border-t"><nav className="flex flex-col p-4 gap-3">
           <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><BookOpen size={20} />{t('nav.catalog', lang)}</Link>          <Link href="/marketplace" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Store size={20} />Маркет</Link>
           <Link href="/leaders" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Trophy size={20} />{t('nav.leaders', lang)}</Link>
+          <Link href="/navigator" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Compass size={20} />{t('nav.navigator', lang)}</Link>
           <Link href="/about" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Info size={20} />{t('nav.about', lang)}</Link>
           <Link href="/donate" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Heart size={20} />{t('nav.donate', lang)}</Link>
           {user && <button onClick={handleShare} className="flex items-center gap-2 text-amber-700 py-2">{copied ? <Check size={20} /> : <Share2 size={20} />}{copied ? t('nav.linkCopied', lang) : t('nav.shareSite', lang)}</button>}
