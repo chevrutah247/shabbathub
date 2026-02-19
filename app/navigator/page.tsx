@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, ExternalLink, GraduationCap, BookOpen, Globe, Users, Building, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import { ChevronLeft, ExternalLink, GraduationCap, ChevronRight, Star, Play, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
 type Lang = 'ru' | 'en' | 'he' | 'uk';
@@ -15,11 +17,8 @@ const txt: Record<string, Record<Lang, string>> = {
     he: 'משאבים שימושיים לחיים יהודיים, חינוך וקהילה',
     uk: 'Корисні ресурси для єврейського життя, освіти та громади',
   },
-  education: { ru: 'Образование', en: 'Education', he: 'חינוך', uk: 'Освіта' },
-  community: { ru: 'Община', en: 'Community', he: 'קהילה', uk: 'Громада' },
-  torah: { ru: 'Тора и учёба', en: 'Torah & Study', he: 'תורה ולימוד', uk: 'Тора та навчання' },
-  organizations: { ru: 'Организации', en: 'Organizations', he: 'ארגונים', uk: 'Організації' },
   visitSite: { ru: 'Перейти на сайт', en: 'Visit website', he: 'בקר באתר', uk: 'Перейти на сайт' },
+  watchVideo: { ru: 'Смотреть видео', en: 'Watch video', he: 'צפה בסרטון', uk: 'Дивитися відео' },
   moreComingSoon: {
     ru: 'Новые ресурсы добавляются регулярно',
     en: 'New resources are added regularly',
@@ -33,6 +32,8 @@ const txt: Record<string, Record<Lang, string>> = {
     uk: 'Знаєте корисний ресурс? Напишіть нам!',
   },
 };
+
+/* ── Resource card types ── */
 
 interface Resource {
   name: Record<Lang, string>;
@@ -51,7 +52,30 @@ interface ResourceCategory {
   resources: Resource[];
 }
 
-const categories: ResourceCategory[] = [
+/* ── Video types ── */
+
+interface Video {
+  youtubeId: string;
+  title: Record<Lang, string>;
+  description: Record<Lang, string>;
+}
+
+interface VideoSubcategory {
+  key: string;
+  label: Record<Lang, string>;
+  videos: Video[];
+}
+
+interface VideoCategory {
+  key: string;
+  label: Record<Lang, string>;
+  icon: typeof Star;
+  subcategories: VideoSubcategory[];
+}
+
+/* ── Data ── */
+
+const resourceCategories: ResourceCategory[] = [
   {
     key: 'education',
     label: { ru: 'Образование', en: 'Education', he: 'חינוך', uk: 'Освіта' },
@@ -85,6 +109,148 @@ const categories: ResourceCategory[] = [
   },
 ];
 
+const videoCategories: VideoCategory[] = [
+  {
+    key: 'holidays',
+    label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' },
+    icon: Star,
+    subcategories: [
+      {
+        key: 'purim',
+        label: { ru: 'Пурим', en: 'Purim', he: 'פורים', uk: 'Пурім' },
+        videos: [
+          {
+            youtubeId: 'ET-GpqOk7oY',
+            title: {
+              ru: 'Пурим — история и традиции',
+              en: 'Purim — History & Traditions',
+              he: 'פורים — היסטוריה ומסורות',
+              uk: 'Пурім — історія та традиції',
+            },
+            description: {
+              ru: 'Видео о празднике Пурим',
+              en: 'Video about the holiday of Purim',
+              he: 'סרטון על חג הפורים',
+              uk: 'Відео про свято Пурім',
+            },
+          },
+          {
+            youtubeId: '0vIj0u1Ua24',
+            title: {
+              ru: 'Пурим — урок и вдохновение',
+              en: 'Purim — Lesson & Inspiration',
+              he: 'פורים — שיעור והשראה',
+              uk: 'Пурім — урок та натхнення',
+            },
+            description: {
+              ru: 'Видео о празднике Пурим',
+              en: 'Video about the holiday of Purim',
+              he: 'סרטון על חג הפורים',
+              uk: 'Відео про свято Пурім',
+            },
+          },
+          {
+            youtubeId: '8uQ8xB-KbYs',
+            title: {
+              ru: 'Пурим — радость и мицвот',
+              en: 'Purim — Joy & Mitzvot',
+              he: 'פורים — שמחה ומצוות',
+              uk: 'Пурім — радість та міцвот',
+            },
+            description: {
+              ru: 'Видео о празднике Пурим',
+              en: 'Video about the holiday of Purim',
+              he: 'סרטון על חג הפורים',
+              uk: 'Відео про свято Пурім',
+            },
+          },
+        ],
+      },
+    ],
+  },
+];
+
+/* ── Video Card Component ── */
+
+function VideoCard({ video, lang }: { video: Video; lang: Lang }) {
+  const [playing, setPlaying] = useState(false);
+  const thumbUrl = `https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`;
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-primary-200 transition-all duration-300 overflow-hidden">
+      <div className="relative aspect-video bg-gray-900">
+        {playing ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+            title={video.title[lang]}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full"
+          />
+        ) : (
+          <button
+            onClick={() => setPlaying(true)}
+            className="absolute inset-0 w-full h-full group cursor-pointer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={thumbUrl}
+              alt={video.title[lang]}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Play size={28} className="text-white ml-1" fill="white" />
+              </div>
+            </div>
+          </button>
+        )}
+      </div>
+      <div className="p-4">
+        <h4 className="font-semibold text-gray-900 text-sm leading-snug mb-1">
+          {video.title[lang]}
+        </h4>
+        <p className="text-gray-500 text-xs">{video.description[lang]}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Subcategory with toggle ── */
+
+function SubcategorySection({ sub, lang }: { sub: VideoSubcategory; lang: Lang }) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="mb-6">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 mb-4 group cursor-pointer"
+      >
+        <span className="text-lg font-semibold text-gray-800 group-hover:text-primary-600 transition-colors">
+          {sub.label[lang]}
+        </span>
+        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+          {sub.videos.length}
+        </span>
+        <ChevronDown
+          size={18}
+          className={'text-gray-400 transition-transform ' + (open ? 'rotate-180' : '')}
+        />
+      </button>
+      {open && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sub.videos.map((v) => (
+            <VideoCard key={v.youtubeId} video={v} lang={lang} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Main Page ── */
+
 export default function NavigatorPage() {
   const { lang } = useLanguage();
 
@@ -113,10 +279,11 @@ export default function NavigatorPage() {
         </div>
       </section>
 
-      {/* Categories */}
       <section className="max-w-5xl mx-auto px-4 py-10 md:py-14">
-        <div className="space-y-12">
-          {categories.map((cat) => {
+        <div className="space-y-14">
+
+          {/* Resource categories (Education, etc.) */}
+          {resourceCategories.map((cat) => {
             const CatIcon = cat.icon;
             return (
               <div key={cat.key}>
@@ -176,6 +343,27 @@ export default function NavigatorPage() {
                     );
                   })}
                 </div>
+              </div>
+            );
+          })}
+
+          {/* Video categories (Holidays → Purim, etc.) */}
+          {videoCategories.map((cat) => {
+            const CatIcon = cat.icon;
+            return (
+              <div key={cat.key}>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <CatIcon size={22} className="text-amber-600" />
+                  </div>
+                  <h2 className="text-xl md:text-2xl font-display font-bold text-gray-900">
+                    {cat.label[lang]}
+                  </h2>
+                </div>
+
+                {cat.subcategories.map((sub) => (
+                  <SubcategorySection key={sub.key} sub={sub} lang={lang} />
+                ))}
               </div>
             );
           })}
