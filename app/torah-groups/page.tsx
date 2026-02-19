@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, MessageCircle, Send, Users, Globe, Plus } from 'lucide-react';
+import { Search, MessageCircle, Send, Users, Globe, Plus, MapPin } from 'lucide-react';
 
 interface TorahGroup {
   id: string;
@@ -13,6 +13,14 @@ interface TorahGroup {
   language?: string;
   adminContact?: string;
   adminContactType?: string;
+}
+
+type PlaceCategory = 'synagogues' | 'mikvahs' | 'batei-midrash';
+
+interface PlaceItem {
+  name: string;
+  area: string;
+  note: string;
 }
 
 const languages = [
@@ -29,12 +37,37 @@ const platforms = [
   { id: 'facebook', name: 'Facebook', icon: Users },
 ];
 
+const placeTabs: { id: PlaceCategory; label: string }[] = [
+  { id: 'synagogues', label: 'Синагоги Crown Heights' },
+  { id: 'mikvahs', label: 'Миквы' },
+  { id: 'batei-midrash', label: 'Бейт мидраши' },
+];
+
+const placesByCategory: Record<PlaceCategory, PlaceItem[]> = {
+  synagogues: [
+    { name: '770 Eastern Parkway', area: 'Crown Heights', note: 'Центральная синагога и место молитвы.' },
+    { name: 'Local Neighborhood Shul', area: 'Crown Heights', note: 'Добавьте адрес и контакт раввина.' },
+    { name: 'Community Minyan', area: 'Crown Heights', note: 'Добавьте расписание шихурим и миньянов.' },
+  ],
+  mikvahs: [
+    { name: 'Women’s Mikvah', area: 'Crown Heights', note: 'Добавьте часы работы и номер для записи.' },
+    { name: 'Men’s Mikvah', area: 'Crown Heights', note: 'Добавьте точный адрес и время открытия.' },
+    { name: 'Additional Mikvah Listing', area: 'Brooklyn', note: 'Добавьте детали для публикации.' },
+  ],
+  'batei-midrash': [
+    { name: 'Beit Midrash - Main', area: 'Crown Heights', note: 'Добавьте расписание уроков и язык.' },
+    { name: 'Evening Learning Hall', area: 'Crown Heights', note: 'Добавьте контакт координатора.' },
+    { name: 'Shiurim Center', area: 'Brooklyn', note: 'Добавьте адрес и формат занятий.' },
+  ],
+};
+
 export default function TorahGroupsPage() {
   const [groups, setGroups] = useState<TorahGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPlaceTab, setSelectedPlaceTab] = useState<PlaceCategory>('synagogues');
 
   useEffect(() => {
     fetch('/api/groups')
@@ -62,13 +95,11 @@ export default function TorahGroupsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary-900 mb-2">📚 Изучение Торы</h1>
           <p className="text-gray-600 text-lg">Группы для изучения Торы в WhatsApp, Telegram и Facebook</p>
         </div>
 
-        {/* Featured */}
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <a href="https://edonthego.org" target="_blank" rel="noopener noreferrer"
             className="block p-6 bg-gradient-to-br from-purple-900 to-indigo-800 rounded-2xl text-white hover:shadow-xl transition-all">
@@ -84,7 +115,34 @@ export default function TorahGroupsPage() {
           </a>
         </div>
 
-        {/* Filters */}
+        <section className="bg-white rounded-2xl p-6 shadow-sm mb-8 border border-blue-100">
+          <h2 className="text-2xl font-bold text-primary-900 mb-2">Crown Heights Directory</h2>
+          <p className="text-gray-600 mb-4">Синагоги, миквы и бейт мидраши в одном месте.</p>
+
+          <div className="flex flex-wrap gap-2 mb-5">
+            {placeTabs.map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSelectedPlaceTab(tab.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition ${selectedPlaceTab === tab.id ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {placesByCategory[selectedPlaceTab].map((place, idx) => (
+              <article key={place.name + idx} className="rounded-xl border border-gray-200 p-4 bg-gray-50">
+                <h3 className="font-semibold text-gray-900 mb-2">{place.name}</h3>
+                <p className="text-sm text-gray-700 mb-2 inline-flex items-center gap-1"><MapPin size={14} />{place.area}</p>
+                <p className="text-sm text-gray-600">{place.note}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <div className="bg-white rounded-2xl p-6 shadow-sm mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
@@ -115,7 +173,6 @@ export default function TorahGroupsPage() {
           </div>
         </div>
 
-        {/* Groups */}
         {loading ? (
           <div className="text-center py-12">
             <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4" />
@@ -160,7 +217,6 @@ export default function TorahGroupsPage() {
           </div>
         )}
 
-        {/* CTA */}
         <div className="mt-8 text-center p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-dashed border-blue-200">
           <h3 className="text-xl font-bold text-primary-900 mb-2">Знаете хорошую группу?</h3>
           <p className="text-gray-600 mb-4">Поделитесь с сообществом!</p>

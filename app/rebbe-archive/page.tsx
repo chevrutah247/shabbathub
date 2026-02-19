@@ -42,6 +42,7 @@ export default function RebbeArchivePage() {
         <p className="mt-3 text-gray-600">Разделы: Дом Ребе, Огел и Кабинет Ребе.</p>
       </div>
 
+      <div className="mb-4 text-sm font-semibold uppercase tracking-wide text-primary-700">Вкладки архива</div>
       <div className="flex flex-wrap gap-3 mb-8">
         {(Object.keys(tabLabels) as ArchiveTab[]).map((tab) => (
           <button
@@ -49,10 +50,10 @@ export default function RebbeArchivePage() {
             type="button"
             onClick={() => setActiveTab(tab)}
             className={
-              'px-4 py-2 rounded-lg text-sm md:text-base transition ' +
+              'px-4 py-2 rounded-lg border text-sm md:text-base transition ' +
               (activeTab === tab
-                ? 'bg-primary-600 text-white shadow'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200')
+                ? 'bg-primary-600 border-primary-600 text-white shadow'
+                : 'bg-white border-gray-300 text-gray-800 hover:bg-gray-50')
             }
           >
             {tabLabels[tab]}
