@@ -18,7 +18,6 @@ const translations = {
   // ===== Навигация =====
   nav: {
     catalog: { ru: 'Каталог', en: 'Catalog', he: 'קטלוג', uk: 'Каталог' },
-    photoArchive: { ru: 'Архив фото', en: 'Photo archive', he: 'ארכיון תמונות', uk: 'Архів фото' },
     leaders: { ru: 'Лидеры', en: 'Leaders', he: 'מובילים', uk: 'Лідери' },
     about: { ru: 'О проекте', en: 'About', he: 'אודות', uk: 'Про проект' },
     donate: { ru: 'Поддержать', en: 'Donate', he: 'תרומה', uk: 'Підтримати' },
