@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check } from 'lucide-react';
+import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check, Store, Images } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { trackEvent } from '@/lib/analytics';
 
 const parshaToLocal: Record<string, Record<string, string>> = {
   'Bereishit': { ru: 'Берешит', uk: 'Берешит', he: 'בראשית' },
@@ -197,9 +198,28 @@ export default function Header() {
 
   const handleShare = async () => {
     if (!user) return;
-    const url = window.location.origin + '?ref=' + user.id;
-    if (navigator.share) { try { await navigator.share({ title: 'ShabbatHub', url }); return; } catch {} }
-    try { await navigator.clipboard.writeText(url); } catch { const i = document.createElement('input'); i.value = url; document.body.appendChild(i); i.select(); document.execCommand('copy'); document.body.removeChild(i); }
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', user.id);
+    const url = shareUrl.toString();
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'ShabbatHub', url });
+        trackEvent('referral_share', { method: 'native_share' });
+        return;
+      } catch {}
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      trackEvent('referral_share', { method: 'copy_link' });
+    } catch {
+      const i = document.createElement('input');
+      i.value = url;
+      document.body.appendChild(i);
+      i.select();
+      document.execCommand('copy');
+      document.body.removeChild(i);
+      trackEvent('referral_share', { method: 'copy_link_fallback' });
+    }
     setCopied(true); setTimeout(() => setCopied(false), 2000);
   };
 
@@ -221,6 +241,8 @@ export default function Header() {
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>
+            <Link href="/rebbe-archive" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Images size={18} />{t('nav.photoArchive', lang)}</Link>
+            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />Маркет</Link>
             <Link href="/leaders" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Trophy size={18} />{t('nav.leaders', lang)}</Link>
             <Link href="/about" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Info size={18} />{t('nav.about', lang)}</Link>
             <Link href="/donate" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Heart size={18} />{t('nav.donate', lang)}</Link>
@@ -278,6 +300,8 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t"><nav className="flex flex-col p-4 gap-3">
           <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><BookOpen size={20} />{t('nav.catalog', lang)}</Link>
+          <Link href="/rebbe-archive" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Images size={20} />{t('nav.photoArchive', lang)}</Link>
+          <Link href="/marketplace" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Store size={20} />Маркет</Link>
           <Link href="/leaders" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Trophy size={20} />{t('nav.leaders', lang)}</Link>
           <Link href="/about" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Info size={20} />{t('nav.about', lang)}</Link>
           <Link href="/donate" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Heart size={20} />{t('nav.donate', lang)}</Link>
