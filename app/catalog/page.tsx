@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check } from 'lucide-react';
+import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check, Calendar, Star } from 'lucide-react';
 import SubscribeBlock from '@/components/SubscribeBlock';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
@@ -224,6 +224,9 @@ function CatalogContent() {
   const [expandedLoading, setExpandedLoading] = useState(false);
   const [popularWeek, setPopularWeek] = useState<RecommendationIssue[]>([]);
   const [forYouIssues, setForYouIssues] = useState<RecommendationIssue[]>([]);
+  const [selectedHebrewYear, setSelectedHebrewYear] = useState<number | null>(null);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   const categoryParam = searchParams.get('category');
   const categoryPubIds = categoryParam ? getPublicationIdsForCategory(categoryParam) : null;
@@ -357,6 +360,9 @@ function CatalogContent() {
     if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
+    if (selectedHebrewYear) url += '&hebrew_year=eq.' + selectedHebrewYear;
+    if (dateFrom) url += '&gregorian_date=gte.' + dateFrom;
+    if (dateTo) url += '&gregorian_date=lte.' + dateTo;
     // Language filter: use direct language field on issues table
     if (selectedPubLangs.length > 0) {
       url += '&language=in.(' + selectedPubLangs.join(',') + ')';
@@ -364,7 +370,7 @@ function CatalogContent() {
     // Category filter: use publication IDs
     if (categoryPubIds && categoryPubIds.length > 0) url += '&publication_id=in.(' + categoryPubIds.join(',') + ')';
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, initialized, sortOrder, categoryPubIds, selectedPubLangs]);
+  }, [page, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, categoryPubIds, selectedPubLangs]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -422,7 +428,7 @@ function CatalogContent() {
     setPage(0);
     if (searchInput.trim()) trackEvent('catalog_search', { query_length: searchInput.trim().length });
   };
-  const hasFilters = searchQuery || selectedParsha || selectedEvent || selectedPubLangs.length > 0;
+  const hasFilters = searchQuery || selectedParsha || selectedEvent || selectedPubLangs.length > 0 || selectedHebrewYear || dateFrom || dateTo;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   const handlePubSelect = async (pubId: string) => {
@@ -455,7 +461,7 @@ function CatalogContent() {
     setSelectedPubLangs((prev) => prev.includes(langId) ? prev.filter((x) => x !== langId) : [...prev, langId]);
     setPage(0);
   };
-  const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setSelectedPubLangs([]); setPage(0); };
+  const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setSelectedPubLangs([]); setSelectedHebrewYear(null); setDateFrom(''); setDateTo(''); setPage(0); };
 
   return (
     <div dir={dir}>
@@ -505,16 +511,52 @@ function CatalogContent() {
               )}
             </form>
             {showFilters && viewMode === 'issues' && (
-              <div className="flex flex-wrap gap-3 pt-4 mt-4 border-t" style={{ borderColor: 'rgba(180,150,100,0.2)' }}>
-                <select value={selectedParsha || ''} onChange={(e) => { setSelectedParsha(e.target.value ? Number(e.target.value) : null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
-                  <option value="">{t('catalog.allParshiot', lang)}</option>
-                  {parshiot.map(p => (<option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' \u2605' : ''}</option>))}
-                </select>
-                <select value={selectedEvent || ''} onChange={(e) => { setSelectedEvent(e.target.value || null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
-                  <option value="">{t('catalog.allEvents', lang)}</option>
-                  {events.map(e => (<option key={e.id} value={e.id}>{e.name_ru}</option>))}
-                </select>
-                {hasFilters && <button onClick={clearFilters} className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium" style={{ color: '#96693a', fontFamily: "'DM Sans', sans-serif" }}><X size={14} /> {t('reset', lang)}</button>}
+              <div className="pt-4 mt-4 border-t space-y-4" style={{ borderColor: 'rgba(180,150,100,0.2)' }}>
+                {/* Row 1: Parsha + Event dropdowns */}
+                <div className="flex flex-wrap gap-3">
+                  <select value={selectedParsha || ''} onChange={(e) => { setSelectedParsha(e.target.value ? Number(e.target.value) : null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
+                    <option value="">{t('catalog.allParshiot', lang)}</option>
+                    {parshiot.map(p => (<option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' \u2605' : ''}</option>))}
+                  </select>
+                  <select value={selectedEvent || ''} onChange={(e) => { setSelectedEvent(e.target.value || null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
+                    <option value="">{t('catalog.allEvents', lang)}</option>
+                    {events.map(e => (<option key={e.id} value={e.id}>{e.name_ru}</option>))}
+                  </select>
+                  <select value={selectedHebrewYear || ''} onChange={(e) => { setSelectedHebrewYear(e.target.value ? Number(e.target.value) : null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[140px] text-sm">
+                    <option value="">{lang === 'he' ? 'כל השנים' : lang === 'en' ? 'All years' : 'Все годы'}</option>
+                    <option value="5786">{lang === 'he' ? 'תשפ"ו' : '5786 (2025-26)'}</option>
+                    <option value="5785">{lang === 'he' ? 'תשפ"ה' : '5785 (2024-25)'}</option>
+                    <option value="5784">{lang === 'he' ? 'תשפ"ד' : '5784 (2023-24)'}</option>
+                    <option value="5783">{lang === 'he' ? 'תשפ"ג' : '5783 (2022-23)'}</option>
+                  </select>
+                  {hasFilters && <button onClick={clearFilters} className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium" style={{ color: '#96693a', fontFamily: "'DM Sans', sans-serif" }}><X size={14} /> {t('reset', lang)}</button>}
+                </div>
+                {/* Row 2: Holiday quick chips */}
+                <div className="flex items-center flex-wrap gap-2">
+                  <span className="text-xs text-stone-500 flex items-center gap-1" style={{ fontFamily: "'DM Sans', sans-serif" }}><Star size={12} /> {lang === 'he' ? 'חגים:' : lang === 'en' ? 'Holidays:' : 'Праздники:'}</span>
+                  {events.map(ev => (
+                    <button
+                      key={ev.id}
+                      onClick={() => { setSelectedEvent(selectedEvent === ev.id ? null : ev.id); setPage(0); }}
+                      className={'inline-flex items-center px-3 py-1.5 rounded-lg text-xs border cursor-pointer transition-all ' + (selectedEvent === ev.id ? 'text-white' : 'text-stone-600 hover:text-stone-800')}
+                      style={selectedEvent === ev.id ? { background: 'linear-gradient(135deg, #96693a, #b8854a)', borderColor: '#96693a' } : { borderColor: 'rgba(180,150,100,0.3)', background: '#fdfaf5' }}
+                    >
+                      {ev.name_ru}
+                    </button>
+                  ))}
+                </div>
+                {/* Row 3: Date range */}
+                <div className="flex items-center flex-wrap gap-3">
+                  <span className="text-xs text-stone-500 flex items-center gap-1" style={{ fontFamily: "'DM Sans', sans-serif" }}><Calendar size={12} /> {lang === 'he' ? 'תאריך:' : lang === 'en' ? 'Date:' : 'Дата:'}</span>
+                  <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm" />
+                  <span className="text-xs text-stone-400">—</span>
+                  <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm" />
+                  {(dateFrom || dateTo) && (
+                    <button onClick={() => { setDateFrom(''); setDateTo(''); setPage(0); }} className="text-xs text-stone-400 hover:text-stone-600">
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
