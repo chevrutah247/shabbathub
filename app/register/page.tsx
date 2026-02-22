@@ -3,12 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/language-context';
-import { useAuth } from '@/lib/auth-context';
 import { Mail, Lock, User, UserPlus, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 export default function RegisterPage() {
   const { lang } = useLanguage();
-  const { signUp } = useAuth();
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -24,6 +22,38 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
 
+    // Block + in email (anti-alias spam)
+    if (email.includes('+')) {
+      setError(
+        lang === 'ru' ? 'Email не может содержать символ +' :
+        lang === 'en' ? 'Email cannot contain the + symbol' :
+        'אימייל לא יכול להכיל את הסימן +'
+      );
+      setLoading(false);
+      return;
+    }
+
+    // Validate names (letters only, if provided)
+    const nameRegex = /^[\p{L}\s'-]*$/u;
+    if (firstName && !nameRegex.test(firstName)) {
+      setError(
+        lang === 'ru' ? 'Имя может содержать только буквы' :
+        lang === 'en' ? 'Name can only contain letters' :
+        'שם יכול להכיל רק אותיות'
+      );
+      setLoading(false);
+      return;
+    }
+    if (lastName && !nameRegex.test(lastName)) {
+      setError(
+        lang === 'ru' ? 'Фамилия может содержать только буквы' :
+        lang === 'en' ? 'Last name can only contain letters' :
+        'שם משפחה יכול להכיל רק אותיות'
+      );
+      setLoading(false);
+      return;
+    }
+
     if (password.length < 6) {
       setError(
         lang === 'ru' ? 'Пароль должен быть не менее 6 символов' :
@@ -34,17 +64,25 @@ export default function RegisterPage() {
       return;
     }
 
-    const { error } = await signUp(email, password, firstName, lastName);
-    
-    if (error) {
+    const res = await fetch('/api/auth/sign-up', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, firstName, lastName }),
+    });
+    const payload = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
       setError(
-        lang === 'ru' ? 'Ошибка регистрации. Возможно, email уже используется.' :
-        lang === 'en' ? 'Registration error. Email may already be in use.' :
-        'שגיאת הרשמה. ייתכן שהדוא"ל כבר בשימוש.'
+        payload?.error || (
+          lang === 'ru' ? 'Ошибка регистрации. Попробуйте позже.' :
+          lang === 'en' ? 'Registration error. Please try again later.' :
+          'שגיאת הרשמה. נסה שוב מאוחר יותר.'
+        )
       );
       setLoading(false);
     } else {
       setSuccess(true);
+      setLoading(false);
     }
   };
 
