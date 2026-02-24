@@ -13,8 +13,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 export default function AddPublicationPage() {
   const router = useRouter();
   const { lang } = useLanguage();
-  const isEn = lang === 'en';
-  const tr = (ru: string, en: string) => (isEn ? en : ru);
+  const tr = (ru: string, en: string) => (lang === 'ru' ? ru : en);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

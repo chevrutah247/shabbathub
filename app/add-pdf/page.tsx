@@ -116,8 +116,7 @@ function buildHebcalParshaUrl(yy: number, mm: number): string {
 export default function AddPdfPage() {
   const router = useRouter();
   const { lang } = useLanguage();
-  const isEn = lang === 'en';
-  const tr = (ru: string, en: string) => (isEn ? en : ru);
+  const tr = (ru: string, en: string) => (lang === 'ru' ? ru : en);
   const [publications, setPublications] = useState<Publication[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
@@ -685,7 +684,7 @@ export default function AddPdfPage() {
                       onMouseEnter={(e) => (e.currentTarget.style.background = '#faf6ee')}
                       onMouseLeave={(e) => (e.currentTarget.style.background = publicationId === p.id ? '#faf6ee' : 'transparent')}
                     >
-                      {(isEn ? (p.title_en || p.title_ru || p.title_he) : (p.title_ru || p.title_en || p.title_he)) || '—'}
+                      {((lang === 'ru' ? (p.title_ru || p.title_en || p.title_he) : lang === 'he' ? (p.title_he || p.title_en || p.title_ru) : (p.title_en || p.title_ru || p.title_he))) || '—'}
                     </button>
                   ))}
                   {publications.filter(p => { const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase(); return !pubSearch || name.includes(pubSearch.toLowerCase()); }).length === 0 && (
