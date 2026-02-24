@@ -34,7 +34,7 @@ export default function RegisterPage() {
     }
 
     // Validate names (letters only, if provided)
-    const nameRegex = /^[\p{L}\s'-]*$/u;
+    const nameRegex = /^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s'-]*$/;
     if (firstName && !nameRegex.test(firstName)) {
       setError(
         lang === 'ru' ? 'Имя может содержать только буквы' :
