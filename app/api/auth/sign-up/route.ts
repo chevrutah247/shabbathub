@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     }
 
     // Validate names (letters only)
-    const nameRegex = /^[\p{L}\s'-]*$/u;
+    const nameRegex = /^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s'-]*$/;
     if (firstName && !nameRegex.test(firstName)) {
       return NextResponse.json({ error: 'Name can only contain letters' }, { status: 400 });
     }
