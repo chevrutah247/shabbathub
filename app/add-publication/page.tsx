@@ -1,15 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Library, Loader2, Check, AlertCircle, Globe, Mail, MessageCircle } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export default function AddPublicationPage() {
   const router = useRouter();
+  const { lang } = useLanguage();
+  const isEn = lang === 'en';
+  const tr = (ru: string, en: string) => (isEn ? en : ru);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -28,18 +33,48 @@ export default function AddPublicationPage() {
   const [rabbiName, setRabbiName] = useState('');
   const [rabbiWebsite, setRabbiWebsite] = useState('');
 
+  useEffect(() => {
+    if (lang === 'en') setPrimaryLanguage('en');
+    if (lang === 'he') setPrimaryLanguage('he');
+    if (lang === 'uk') setPrimaryLanguage('uk');
+    if (lang === 'ru') setPrimaryLanguage('ru');
+  }, [lang]);
+
+  const normalizeTitle = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/&#\d+;/g, ' ')
+      .replace(/[^a-z0-9а-яёא-ת]+/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
 
     if (!titleRu && !titleEn && !titleHe) {
-      setError('Введите название публикации хотя бы на одном языке');
+      setError(tr('Введите название публикации хотя бы на одном языке', 'Enter publication title in at least one language'));
       setSubmitting(false);
       return;
     }
 
     try {
+      const candidateTitles = [titleRu, titleEn, titleHe].map(normalizeTitle).filter(Boolean);
+      const { data: existingPubs } = await supabase
+        .from('publications')
+        .select('id,title_ru,title_en,title_he,is_active')
+        .eq('is_active', true)
+        .limit(5000);
+      const duplicate = (existingPubs || []).find((pub: any) => {
+        const existingTitles = [pub.title_ru, pub.title_en, pub.title_he].map((x: string) => normalizeTitle(x || '')).filter(Boolean);
+        return existingTitles.some((et: string) => candidateTitles.includes(et));
+      });
+      if (duplicate) {
+        const duplicateTitle = duplicate.title_ru || duplicate.title_en || duplicate.title_he || tr('Без названия', 'Untitled');
+        throw new Error(tr('Дубликат публикации: «', 'Duplicate publication: "') + duplicateTitle + tr('». Сначала используйте существующую публикацию.', '". Please use the existing publication first.'));
+      }
+
       const res = await fetch(SUPABASE_URL + '/rest/v1/publications', {
         method: 'POST',
         headers: {
@@ -66,6 +101,10 @@ export default function AddPublicationPage() {
       if (!res.ok) {
         const err = await res.json();
         console.error('[ShabbatHub] Publication create error:', err);
+        const raw = (err.message || err.details || err.hint || '').toString().toLowerCase();
+        if (raw.includes('uq_publications_active_norm_title') || raw.includes('duplicate key value violates unique constraint "uq_publications_active_norm_title"')) {
+          throw new Error(tr('Публикация с таким названием уже существует.', 'A publication with this title already exists.'));
+        }
         throw new Error(err.message || err.details || err.hint || JSON.stringify(err));
       }
 
@@ -83,8 +122,8 @@ export default function AddPublicationPage() {
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
           <Check size={64} className="mx-auto text-green-500 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Публикация создана!</h2>
-          <p className="text-gray-600">Теперь добавьте PDF...</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{tr('Публикация создана!', 'Publication created!')}</h2>
+          <p className="text-gray-600">{tr('Теперь добавьте PDF...', 'Now add a PDF...')}</p>
         </div>
       </div>
     );
@@ -95,14 +134,16 @@ export default function AddPublicationPage() {
       <div className="max-w-2xl mx-auto px-4 py-8">
         <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-6">
           <ArrowLeft size={20} />
-          Назад в каталог
+          {tr('Назад в каталог', 'Back to catalog')}
         </Link>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Создать публикацию</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">{tr('Создать публикацию', 'Create publication')}</h1>
           <p className="text-gray-600 text-sm mb-6">
-            Публикация — это издание (газета, журнал, листок), которое выходит регулярно. 
-            После создания публикации вы сможете добавлять отдельные выпуски (PDF).
+            {tr(
+              'Публикация — это издание (газета, журнал, листок), которое выходит регулярно. После создания публикации вы сможете добавлять отдельные выпуски (PDF).',
+              'A publication is a recurring edition (newspaper, magazine, leaflet). After creating a publication, you can add individual PDF issues.'
+            )}
           </p>
 
           {error && (
@@ -116,13 +157,13 @@ export default function AddPublicationPage() {
             {/* Названия */}
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium text-gray-900">Название публикации</h3>
-                <p className="text-xs text-gray-500 mt-1">Заполните хотя бы на одном языке *</p>
+                <h3 className="font-medium text-gray-900">{tr('Название публикации', 'Publication title')}</h3>
+                <p className="text-xs text-gray-500 mt-1">{tr('Заполните хотя бы на одном языке *', 'Fill at least one language *')}</p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На русском
+                  {tr('На русском', 'In Russian')}
                 </label>
                 <input
                   type="text"
@@ -135,7 +176,7 @@ export default function AddPublicationPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На английском
+                  {tr('На английском', 'In English')}
                 </label>
                 <input
                   type="text"
@@ -148,7 +189,7 @@ export default function AddPublicationPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  На иврите
+                  {tr('На иврите', 'In Hebrew')}
                 </label>
                 <input
                   type="text"
@@ -164,13 +205,13 @@ export default function AddPublicationPage() {
             {/* Описание */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Описание
+                {tr('Описание', 'Description')}
               </label>
               <textarea
                 value={descriptionRu}
                 onChange={(e) => setDescriptionRu(e.target.value)}
                 rows={3}
-                placeholder="Краткое описание публикации..."
+                placeholder={tr('Краткое описание публикации...', 'Short publication description...')}
                 className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none"
               />
             </div>
@@ -179,14 +220,14 @@ export default function AddPublicationPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Основной язык
+                  {tr('Основной язык', 'Primary language')}
                 </label>
                 <select
                   value={primaryLanguage}
                   onChange={(e) => setPrimaryLanguage(e.target.value)}
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
                 >
-                  <option value="ru">🇷🇺 Русский</option>
+                  <option value="ru">{tr('🇷🇺 Русский', '🇷🇺 Russian')}</option>
                   <option value="en">🇺🇸 English</option>
                   <option value="he">🇮🇱 עברית</option>
                 </select>
@@ -194,29 +235,29 @@ export default function AddPublicationPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Периодичность
+                  {tr('Периодичность', 'Frequency')}
                 </label>
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value)}
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none bg-white"
                 >
-                  <option value="weekly">Еженедельно</option>
-                  <option value="monthly">Ежемесячно</option>
-                  <option value="daily">Ежедневно</option>
-                  <option value="irregular">Нерегулярно / По праздникам</option>
+                  <option value="weekly">{tr('Еженедельно', 'Weekly')}</option>
+                  <option value="monthly">{tr('Ежемесячно', 'Monthly')}</option>
+                  <option value="daily">{tr('Ежедневно', 'Daily')}</option>
+                  <option value="irregular">{tr('Нерегулярно / По праздникам', 'Irregular / Holiday-based')}</option>
                 </select>
               </div>
             </div>
 
             {/* Контакты */}
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900 pt-2">Контактная информация</h3>
+              <h3 className="font-medium text-gray-900 pt-2">{tr('Контактная информация', 'Contact information')}</h3>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   <Globe size={14} className="inline mr-1" />
-                  Сайт издания
+                  {tr('Сайт издания', 'Publication website')}
                 </label>
                 <input
                   type="url"
@@ -230,7 +271,7 @@ export default function AddPublicationPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   <Mail size={14} className="inline mr-1" />
-                  Email издательства
+                  {tr('Email издательства', 'Publisher email')}
                 </label>
                 <input
                   type="email"
@@ -274,25 +315,25 @@ export default function AddPublicationPage() {
 
             {/* Раввин */}
             <div className="space-y-4">
-              <h3 className="font-medium text-gray-900 pt-2">Ответственный раввин (опционально)</h3>
+              <h3 className="font-medium text-gray-900 pt-2">{tr('Ответственный раввин (опционально)', 'Responsible rabbi (optional)')}</h3>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Имя раввина
+                    {tr('Имя раввина', 'Rabbi name')}
                   </label>
                   <input
                     type="text"
                     value={rabbiName}
                     onChange={(e) => setRabbiName(e.target.value)}
-                    placeholder="Рав Моше Коэн"
+                    placeholder={tr('Рав Моше Коэн', 'Rabbi Moshe Cohen')}
                     className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Сайт / Новости раввина
+                    {tr('Сайт / Новости раввина', 'Rabbi website / news')}
                   </label>
                   <input
                     type="url"
@@ -314,12 +355,12 @@ export default function AddPublicationPage() {
               {submitting ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
-                  Сохранение...
+                  {tr('Сохранение...', 'Saving...')}
                 </>
               ) : (
                 <>
                   <Library size={20} />
-                  Создать публикацию
+                  {tr('Создать публикацию', 'Create publication')}
                 </>
               )}
             </button>

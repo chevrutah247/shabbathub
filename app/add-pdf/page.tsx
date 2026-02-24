@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Upload, Loader2, Check, AlertCircle, FileText, X, Link as LinkIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -12,6 +13,14 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 interface Publication { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; }
 interface Parsha { id: number; name_ru: string; order_num: number; }
 interface Event { id: string; name_ru: string; }
+interface DuplicateCandidate {
+  id: string;
+  title: string;
+  thumbnail_url?: string | null;
+  pdf_url?: string | null;
+  created_at?: string;
+  reason: string;
+}
 
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
@@ -63,6 +72,15 @@ function generateUniqueFilename(originalName: string, ext: string = 'pdf'): stri
   return (cleanName || 'doc') + '-' + timestamp + '-' + random + '.' + ext;
 }
 
+function normalizeIssueTitle(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/&#\d+;/g, ' ')
+    .replace(/[^a-z0-9а-яёא-ת]+/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 async function generateThumbnailFromPdf(file: File): Promise<Blob | null> {
   try {
     const pdfjsLib = await import('pdfjs-dist');
@@ -97,6 +115,9 @@ function buildHebcalParshaUrl(yy: number, mm: number): string {
 
 export default function AddPdfPage() {
   const router = useRouter();
+  const { lang } = useLanguage();
+  const isEn = lang === 'en';
+  const tr = (ru: string, en: string) => (isEn ? en : ru);
   const [publications, setPublications] = useState<Publication[]>([]);
   const [parshiot, setParshiot] = useState<Parsha[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
@@ -128,8 +149,19 @@ export default function AddPdfPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [generatingThumb, setGeneratingThumb] = useState(false);
+  const [hardDuplicateWarnings, setHardDuplicateWarnings] = useState<string[]>([]);
+  const [reviewCandidates, setReviewCandidates] = useState<DuplicateCandidate[]>([]);
+  const [reviewDecision, setReviewDecision] = useState<'duplicate' | 'not_duplicate' | null>(null);
+  const [checkingDuplicates, setCheckingDuplicates] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pubDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (lang === 'en') setPdfLanguage('en');
+    if (lang === 'he') setPdfLanguage('he');
+    if (lang === 'uk') setPdfLanguage('uk');
+    if (lang === 'ru') setPdfLanguage('ru');
+  }, [lang]);
 
   // Закрытие dropdown при клике вне
   useEffect(() => {
@@ -255,6 +287,82 @@ export default function AddPdfPage() {
     return () => { cancelled = true; };
   }, [selectedFile]);
 
+  useEffect(() => {
+    let cancelled = false;
+    async function checkPotentialDuplicates() {
+      const hardWarnings: string[] = [];
+      const candidates: DuplicateCandidate[] = [];
+      const normalizedTitle = normalizeIssueTitle(title || '');
+      if (!normalizedTitle && !publicationId && !issueNumber && !pdfUrl) {
+        setHardDuplicateWarnings([]);
+        setReviewCandidates([]);
+        setReviewDecision(null);
+        return;
+      }
+      setCheckingDuplicates(true);
+      try {
+        if (uploadMode === 'url' && pdfUrl) {
+          const { data } = await supabase
+            .from('issues')
+            .select('id,title,thumbnail_url,pdf_url,created_at')
+            .eq('is_active', true)
+            .eq('pdf_url', pdfUrl)
+            .limit(1);
+          if (data && data.length > 0) {
+            hardWarnings.push(tr('Этот PDF URL уже есть в библиотеке: ', 'This PDF URL already exists in the library: ') + (data[0].title || data[0].id));
+          }
+        }
+
+        if (publicationId && issueNumber) {
+          const { data } = await supabase
+            .from('issues')
+            .select('id,title,thumbnail_url,pdf_url,created_at')
+            .eq('is_active', true)
+            .eq('publication_id', publicationId)
+            .eq('issue_number', issueNumber)
+            .limit(1);
+          if (data && data.length > 0) {
+            hardWarnings.push(tr('В этой публикации уже есть выпуск с таким номером: ', 'This publication already has an issue with number: ') + issueNumber);
+          }
+        }
+
+        if (publicationId && gregorianDate && normalizedTitle) {
+          const { data } = await supabase
+            .from('issues')
+            .select('id,title,thumbnail_url,pdf_url,created_at')
+            .eq('is_active', true)
+            .eq('publication_id', publicationId)
+            .eq('gregorian_date', gregorianDate)
+            .limit(50);
+          for (const item of data || []) {
+            if (normalizeIssueTitle(item.title || '') === normalizedTitle) {
+              candidates.push({
+                id: item.id,
+                title: item.title || item.id,
+                thumbnail_url: item.thumbnail_url,
+                pdf_url: item.pdf_url,
+                created_at: item.created_at,
+                reason: tr('Совпадает название + дата + публикация', 'Same title + date + publication'),
+              });
+            }
+          }
+        }
+      } catch {
+        // ignore duplicate check failures
+      } finally {
+        if (!cancelled) {
+          setHardDuplicateWarnings(hardWarnings);
+          setReviewCandidates(candidates);
+          setReviewDecision(null);
+          setCheckingDuplicates(false);
+        }
+      }
+    }
+
+    const timer = setTimeout(checkPotentialDuplicates, 350);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [uploadMode, pdfUrl, publicationId, issueNumber, gregorianDate, title]);
+
   const handleDragOver = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }, []);
   const handleDragLeave = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }, []);
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -263,13 +371,13 @@ export default function AddPdfPage() {
     if (file && file.type === 'application/pdf') {
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
-    } else { setError('Можно загружать только PDF файлы'); }
+    } else { setError(tr('Можно загружать только PDF файлы', 'Only PDF files are allowed')); }
   }, [title]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type !== 'application/pdf') { setError('Можно загружать только PDF файлы'); return; }
+      if (file.type !== 'application/pdf') { setError(tr('Можно загружать только PDF файлы', 'Only PDF files are allowed')); return; }
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
     }
@@ -288,7 +396,7 @@ export default function AddPdfPage() {
     const progressInterval = setInterval(() => { setUploadProgress(prev => Math.min(prev + 10, 90)); }, 200);
     const { error } = await supabase.storage.from('pdfs').upload(filePath, file, { contentType: 'application/pdf', upsert: false });
     clearInterval(progressInterval); setUploadProgress(100);
-    if (error) { setUploading(false); throw new Error('Ошибка загрузки: ' + error.message); }
+    if (error) { setUploading(false); throw new Error(tr('Ошибка загрузки: ', 'Upload error: ') + error.message); }
     const { data: urlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
     setUploading(false);
     return urlData.publicUrl;
@@ -298,21 +406,24 @@ export default function AddPdfPage() {
     const filename = generateUniqueFilename(originalName, 'jpg');
     const filePath = 'thumbnails/' + filename;
     const { error } = await supabase.storage.from('pdfs').upload(filePath, blob, { contentType: 'image/jpeg', upsert: false });
-    if (error) throw new Error('Ошибка загрузки превью: ' + error.message);
+    if (error) throw new Error(tr('Ошибка загрузки превью: ', 'Thumbnail upload error: ') + error.message);
     const { data: urlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
     return urlData.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError(null); setSubmitting(true);
-    if (!title) { setError('Укажите название'); setSubmitting(false); return; }
-    if (uploadMode === 'file' && !selectedFile) { setError('Выберите PDF файл'); setSubmitting(false); return; }
-    if (uploadMode === 'url' && !pdfUrl) { setError('Укажите ссылку на PDF'); setSubmitting(false); return; }
+    if (!title) { setError(tr('Укажите название', 'Enter title')); setSubmitting(false); return; }
+    if (uploadMode === 'file' && !selectedFile) { setError(tr('Выберите PDF файл', 'Select a PDF file')); setSubmitting(false); return; }
+    if (uploadMode === 'url' && !pdfUrl) { setError(tr('Укажите ссылку на PDF', 'Enter PDF URL')); setSubmitting(false); return; }
+    if (hardDuplicateWarnings.length > 0) { setError(hardDuplicateWarnings[0]); setSubmitting(false); return; }
+    if (reviewCandidates.length > 0 && reviewDecision === null) { setError(tr('Найдены похожие материалы. Выберите: ДУБЛИКАТ или НЕ ДУБЛИКАТ.', 'Similar items found. Choose: DUPLICATE or NOT A DUPLICATE.')); setSubmitting(false); return; }
+    if (reviewCandidates.length > 0 && reviewDecision === 'duplicate') { setError(tr('Материал помечен как дубликат и не был опубликован.', 'The item is marked as duplicate and was not published.')); setSubmitting(false); return; }
 
     try {
       // Get current user for uploaded_by
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setError('Необходимо войти в систему'); setSubmitting(false); return; }
+      if (!user) { setError(tr('Необходимо войти в систему', 'You need to sign in')); setSubmitting(false); return; }
 
       let finalPdfUrl = pdfUrl;
       let finalThumbnailUrl = thumbnailUrl;
@@ -324,6 +435,31 @@ export default function AddPdfPage() {
             const thumbBlob = await generateThumbnailFromPdf(selectedFile);
             if (thumbBlob) { finalThumbnailUrl = await uploadThumbnail(thumbBlob, selectedFile.name); }
           } catch (err) { console.error('Thumbnail upload error:', err); }
+        }
+      }
+
+      if (uploadMode === 'url' && finalPdfUrl) {
+        const { data: sameUrl } = await supabase
+          .from('issues')
+          .select('id,title')
+          .eq('is_active', true)
+          .eq('pdf_url', finalPdfUrl)
+          .limit(1);
+        if (sameUrl && sameUrl.length > 0) {
+          throw new Error(tr('Этот PDF уже добавлен: ', 'This PDF is already added: ') + (sameUrl[0].title || sameUrl[0].id));
+        }
+      }
+
+      if (publicationId && issueNumber) {
+        const { data: sameNumber } = await supabase
+          .from('issues')
+          .select('id,title')
+          .eq('is_active', true)
+          .eq('publication_id', publicationId)
+          .eq('issue_number', issueNumber)
+          .limit(1);
+        if (sameNumber && sameNumber.length > 0) {
+          throw new Error(tr('Дубликат: в этой публикации уже есть выпуск с номером ', 'Duplicate: this publication already has issue number ') + issueNumber);
         }
       }
 
@@ -354,7 +490,18 @@ export default function AddPdfPage() {
         })
       });
 
-      if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'Ошибка сохранения'); }
+      if (!res.ok) {
+        const err = await res.json();
+        const raw = (err.message || err.details || err.hint || '').toString();
+        const lower = raw.toLowerCase();
+        if (lower.includes('uq_issues_active_pdf_url') || lower.includes('duplicate key value violates unique constraint "uq_issues_active_pdf_url"')) {
+          throw new Error(tr('Этот PDF уже добавлен в библиотеку.', 'This PDF is already in the library.'));
+        }
+        if (lower.includes('uq_issues_active_pub_issue_number') || lower.includes('duplicate key value violates unique constraint "uq_issues_active_pub_issue_number"')) {
+          throw new Error(tr('В этой публикации уже существует выпуск с таким номером.', 'This publication already has an issue with this number.'));
+        }
+        throw new Error(err.message || tr('Ошибка сохранения', 'Save error'));
+      }
       const savedData = await res.json();
       if (publicationId) {
         try {
@@ -382,8 +529,8 @@ export default function AddPdfPage() {
     <div className="min-h-screen bg-cream flex items-center justify-center">
       <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
         <Check size={64} className="mx-auto text-green-500 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Материал добавлен!</h2>
-        <p className="text-gray-600">Перенаправление в каталог...</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{tr('Материал добавлен!', 'Item added!')}</h2>
+        <p className="text-gray-600">{tr('Перенаправление в каталог...', 'Redirecting to catalog...')}</p>
       </div>
     </div>
   );
@@ -409,34 +556,117 @@ export default function AddPdfPage() {
       `}</style>
       <div className="max-w-2xl mx-auto px-4 py-10" style={{ minHeight: '100vh' }}>
         <Link href="/catalog" className="inline-flex items-center gap-2 mb-6 text-sm hover:opacity-80 transition-opacity" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
-          <ArrowLeft size={16} /> Вернуться в каталог
+          <ArrowLeft size={16} /> {tr('Вернуться в каталог', 'Back to catalog')}
         </Link>
         <div className="lib-card p-8 pt-10 pb-10 relative">
           <div className="watermark-add">+</div>
           <div className="text-center mb-6">
-            <p className="f-label" style={{ marginBottom: '4px', textAlign: 'center' }}>Карточка нового материала · ShabbatHub Library</p>
+            <p className="f-label" style={{ marginBottom: '4px', textAlign: 'center' }}>{tr('Карточка нового материала · ShabbatHub Library', 'New item card · ShabbatHub Library')}</p>
             <div className="w-16 h-[1px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #b8860b, transparent)' }} />
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#1e3a6e', marginTop: '12px' }}>Добавить материал</h1>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#1e3a6e', marginTop: '12px' }}>{tr('Добавить материал', 'Add item')}</h1>
           </div>
           {error && (
             <div className="mb-6 px-4 py-3 rounded-lg flex items-center gap-2 text-sm" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontFamily: "'Source Serif 4', serif" }}>
               <AlertCircle size={16} />{error}
             </div>
           )}
+          {hardDuplicateWarnings.length > 0 && (
+            <div className="mb-6 px-4 py-3 rounded-lg text-sm" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontFamily: "'Source Serif 4', serif" }}>
+              <div className="flex items-center gap-2 mb-1"><AlertCircle size={16} />{tr('Жесткий дубликат', 'Hard duplicate')}</div>
+              {hardDuplicateWarnings.map((w, i) => <p key={i} className="text-xs">{w}</p>)}
+            </div>
+          )}
+          {reviewCandidates.length > 0 && (
+            <div className="mb-6 p-4 rounded-xl" style={{ background: '#fff7ed', border: '1px solid #fed7aa' }}>
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: '#9a3412', fontFamily: "'Source Serif 4', serif" }}>{tr('Проверка на дубликат', 'Duplicate check')}</p>
+                  <p className="text-xs" style={{ color: '#9a3412', fontFamily: "'Source Serif 4', serif" }}>{tr('Сравни новый файл с найденными похожими и выбери решение.', 'Compare the new file with similar matches and choose a decision.')}</p>
+                </div>
+                <Link href="/admin/duplicates" className="text-xs underline" style={{ color: '#9a3412', fontFamily: "'Source Serif 4', serif" }}>{tr('Проверить в админке', 'Review in admin')}</Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                <div className="rounded-lg p-3 bg-white border" style={{ borderColor: '#fed7aa' }}>
+                  <p className="text-xs mb-2" style={{ color: '#7c2d12', fontFamily: "'Source Serif 4', serif" }}>{tr('Новый файл', 'New file')}</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden border">
+                      {(uploadMode === 'file' ? thumbnailPreview : (thumbnailUrl || (autoThumbnail && pdfUrl ? generateGdriveThumbnailUrl(pdfUrl) : ''))) ? (
+                        <img
+                          src={(uploadMode === 'file' ? thumbnailPreview : (thumbnailUrl || (autoThumbnail && pdfUrl ? generateGdriveThumbnailUrl(pdfUrl) : ''))) as string}
+                          alt="new preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center"><FileText size={16} className="text-gray-400" /></div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm truncate" style={{ color: '#111827', fontFamily: "'Source Serif 4', serif" }}>{title || tr('Без названия', 'Untitled')}</p>
+                      {selectedFile && <p className="text-xs text-gray-500 truncate">{selectedFile.name}</p>}
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2 max-h-52 overflow-auto pr-1">
+                  {reviewCandidates.map((c) => (
+                    <div key={c.id} className="rounded-lg p-3 bg-white border" style={{ borderColor: '#fed7aa' }}>
+                      <div className="flex items-center gap-3">
+                        <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden border">
+                          {c.thumbnail_url ? (
+                            <img src={c.thumbnail_url} alt={c.title} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center"><FileText size={16} className="text-gray-400" /></div>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm truncate" style={{ color: '#111827', fontFamily: "'Source Serif 4', serif" }}>{c.title}</p>
+                          <p className="text-xs text-gray-500">{c.reason}</p>
+                          {c.pdf_url && <a href={c.pdf_url} target="_blank" rel="noopener noreferrer" className="text-xs underline text-blue-600">{tr('Открыть файл', 'Open file')}</a>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setReviewDecision('duplicate'); setError(tr('Материал помечен как дубликат. Новый файл не будет опубликован.', 'The item is marked as duplicate. The new file will not be published.')); }}
+                  className="px-3 py-2 rounded-lg text-xs font-medium"
+                  style={{ background: reviewDecision === 'duplicate' ? '#dc2626' : '#fee2e2', color: reviewDecision === 'duplicate' ? '#fff' : '#991b1b', fontFamily: "'Source Serif 4', serif" }}
+                >
+                  {tr('ДУБЛИКАТ', 'DUPLICATE')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setReviewDecision('not_duplicate'); setError(null); }}
+                  className="px-3 py-2 rounded-lg text-xs font-medium"
+                  style={{ background: reviewDecision === 'not_duplicate' ? '#16a34a' : '#dcfce7', color: reviewDecision === 'not_duplicate' ? '#fff' : '#166534', fontFamily: "'Source Serif 4', serif" }}
+                >
+                  {tr('НЕ ДУБЛИКАТ', 'NOT A DUPLICATE')}
+                </button>
+              </div>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="f-label">Название *</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Шомрей Шабос №805 Мишпатим" className="f-input" required />
+              <label className="f-label">{tr('Название *', 'Title *')}</label>
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={tr('Например: Шомрей Шабос №805 Мишпатим', 'For example: Shomrei Shabbos #805 Mishpatim')} className="f-input" required />
             </div>
             <div className="section-divider" />
             <div ref={pubDropdownRef} style={{ position: 'relative' }}>
-              <label className="f-label">Публикация (издание)</label>
+              <label className="f-label">{tr('Публикация (издание)', 'Publication')}</label>
               <input
                 type="text"
-                value={pubSearch || (publicationId ? (() => { const p = publications.find(p => p.id === publicationId); return p?.title_ru || p?.title_en || p?.title_he || ''; })() : '')}
+                value={pubSearch || (publicationId ? (() => {
+                  const p = publications.find((x) => x.id === publicationId);
+                  if (!p) return '';
+                  if (lang === 'en') return p.title_en || p.title_ru || p.title_he || '';
+                  if (lang === 'he') return p.title_he || p.title_ru || p.title_en || '';
+                  return p.title_ru || p.title_en || p.title_he || '';
+                })() : '')}
                 onChange={(e) => { setPubSearch(e.target.value); setPubDropdownOpen(true); if (!e.target.value) setPublicationId(''); }}
                 onFocus={() => setPubDropdownOpen(true)}
-                placeholder="Начните вводить название..."
+                placeholder={tr('Начните вводить название...', 'Start typing the title...')}
                 className="f-input"
                 autoComplete="off"
               />
@@ -455,52 +685,52 @@ export default function AddPdfPage() {
                       onMouseEnter={(e) => (e.currentTarget.style.background = '#faf6ee')}
                       onMouseLeave={(e) => (e.currentTarget.style.background = publicationId === p.id ? '#faf6ee' : 'transparent')}
                     >
-                      {p.title_ru || p.title_en || p.title_he || '—'}
+                      {(isEn ? (p.title_en || p.title_ru || p.title_he) : (p.title_ru || p.title_en || p.title_he)) || '—'}
                     </button>
                   ))}
                   {publications.filter(p => { const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase(); return !pubSearch || name.includes(pubSearch.toLowerCase()); }).length === 0 && (
-                    <p style={{ padding: '8px 14px', fontSize: '0.9rem', color: '#a09580', margin: 0 }}>Не найдено</p>
+                    <p style={{ padding: '8px 14px', fontSize: '0.9rem', color: '#a09580', margin: 0 }}>{tr('Не найдено', 'Not found')}</p>
                   )}
                 </div>
               )}
-              <Link href="/add-publication" className="text-xs mt-1.5 inline-block hover:opacity-80" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Создать новую публикацию</Link>
+              <Link href="/add-publication" className="text-xs mt-1.5 inline-block hover:opacity-80" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>{tr('+ Создать новую публикацию', '+ Create a new publication')}</Link>
             </div>
             <div>
-              <label className="f-label">Номер выпуска (опц.)</label>
+              <label className="f-label">{tr('Номер выпуска (опц.)', 'Issue number (optional)')}</label>
               <input type="text" value={issueNumber} onChange={(e) => setIssueNumber(e.target.value)} placeholder="805" className="f-input" />
             </div>
             <div className="section-divider" />
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="f-label">Дата выхода</label>
+                <label className="f-label">{tr('Дата выхода', 'Release date')}</label>
                 <input type="date" value={gregorianDate} onChange={(e) => setGregorianDate(e.target.value)} className="f-input" />
               </div>
               <div>
-                <label className="f-label">Еврейская дата</label>
-                <input type="text" value={hebrewDate} readOnly className="f-input" style={{ background: '#faf6ee', color: '#8a7d6b' }} placeholder="Авто" />
+                <label className="f-label">{tr('Еврейская дата', 'Hebrew date')}</label>
+                <input type="text" value={hebrewDate} readOnly className="f-input" style={{ background: '#faf6ee', color: '#8a7d6b' }} placeholder={tr('Авто', 'Auto')} />
               </div>
             </div>
             <div>
-              <label className="f-label">Недельная глава</label>
+              <label className="f-label">{tr('Недельная глава', 'Weekly portion')}</label>
               <select value={parshaId || ''} onChange={(e) => setParshaId(e.target.value ? Number(e.target.value) : null)} className="f-select">
-                <option value="">— Не указана —</option>
+                <option value="">{tr('— Не указана —', '— Not set —')}</option>
                 {parshiot.map(p => (
                   <option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' ✦' : ''}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="f-label">Событие / Праздник (опц.)</label>
+              <label className="f-label">{tr('Событие / Праздник (опц.)', 'Event / Holiday (optional)')}</label>
               <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="f-select">
-                <option value="">— Не указано —</option>
+                <option value="">{tr('— Не указано —', '— Not set —')}</option>
                 {events.map(ev => <option key={ev.id} value={ev.id}>{ev.name_ru}</option>)}
               </select>
             </div>
             <div>
-              <label className="f-label">Язык материала</label>
+              <label className="f-label">{tr('Язык материала', 'Material language')}</label>
               <select value={pdfLanguage} onChange={(e) => setPdfLanguage(e.target.value)} className="f-select">
-                <option value="ru">Русский</option>
-                <option value="he">עברית (Иврит)</option>
+                <option value="ru">{tr('Русский', 'Russian')}</option>
+                <option value="he">{tr('עברית (Иврит)', 'עברית (Hebrew)')}</option>
                 <option value="en">English</option>
                 <option value="uk">Українська</option>
               </select>
@@ -508,13 +738,13 @@ export default function AddPdfPage() {
             <div className="section-divider" />
             {/* PDF файл */}
             <div>
-              <label className="f-label">PDF файл *</label>
+              <label className="f-label">{tr('PDF файл *', 'PDF file *')}</label>
               <div className="flex gap-2 mb-3">
                 <button type="button" onClick={() => setUploadMode('file')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm transition-colors ' + (uploadMode === 'file' ? 'text-white' : '')} style={uploadMode === 'file' ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5f8a)', fontFamily: "'Source Serif 4', serif", fontWeight: 600 } : { background: '#faf6ee', border: '1px solid #e0d8c8', color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
-                  <Upload size={15} /> Загрузить файл
+                  <Upload size={15} /> {tr('Загрузить файл', 'Upload file')}
                 </button>
                 <button type="button" onClick={() => setUploadMode('url')} className={'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm transition-colors ' + (uploadMode === 'url' ? 'text-white' : '')} style={uploadMode === 'url' ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5f8a)', fontFamily: "'Source Serif 4', serif", fontWeight: 600 } : { background: '#faf6ee', border: '1px solid #e0d8c8', color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>
-                  <LinkIcon size={15} /> Вставить ссылку
+                  <LinkIcon size={15} /> {tr('Вставить ссылку', 'Paste URL')}
                 </button>
               </div>
 
@@ -524,9 +754,9 @@ export default function AddPdfPage() {
                     <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()}
                       className="rounded-xl p-8 text-center cursor-pointer transition-all" style={{ border: isDragging ? '2px dashed #b8860b' : '2px dashed #e0d8c8', background: isDragging ? '#faf6ee' : '#fffdf7' }}>
                       <Upload className="mx-auto mb-3" size={36} style={{ color: isDragging ? '#b8860b' : '#c9b896' }} />
-                      <p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontWeight: 500 }} className="mb-1">{isDragging ? 'Отпустите файл' : 'Перетащите PDF сюда'}</p>
-                      <p className="text-sm" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>или <span style={{ color: '#b8860b', textDecoration: 'underline' }}>выберите файл</span> с компьютера</p>
-                      <p className="text-xs mt-2" style={{ color: '#c9b896' }}>Только PDF, до 50 MB</p>
+                      <p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontWeight: 500 }} className="mb-1">{isDragging ? tr('Отпустите файл', 'Drop the file') : tr('Перетащите PDF сюда', 'Drag PDF here')}</p>
+                      <p className="text-sm" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>{tr('или ', 'or ')}<span style={{ color: '#b8860b', textDecoration: 'underline' }}>{tr('выберите файл', 'choose file')}</span>{tr(' с компьютера', ' from your computer')}</p>
+                      <p className="text-xs mt-2" style={{ color: '#c9b896' }}>{tr('Только PDF, до 50 MB', 'PDF only, up to 50 MB')}</p>
                       <input ref={fileInputRef} type="file" accept=".pdf,application/pdf" onChange={handleFileSelect} className="hidden" />
                     </div>
                   ) : (
@@ -544,8 +774,8 @@ export default function AddPdfPage() {
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-gray-900 truncate">{selectedFile.name}</p>
                           <p className="text-sm text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(1)} MB</p>
-                          {generatingThumb && <p className="text-xs text-primary-600 mt-1">Генерация превью...</p>}
-                          {thumbnailPreview && !generatingThumb && <p className="text-xs text-green-600 mt-1">Превью создано ✓</p>}
+                          {generatingThumb && <p className="text-xs text-primary-600 mt-1">{tr('Генерация превью...', 'Generating preview...')}</p>}
+                          {thumbnailPreview && !generatingThumb && <p className="text-xs text-green-600 mt-1">{tr('Превью создано ✓', 'Preview generated ✓')}</p>}
                         </div>
                         {uploading ? (
                           <div className="w-20">
@@ -564,7 +794,7 @@ export default function AddPdfPage() {
               ) : (
                 <div>
                   <input type="url" value={pdfUrl} onChange={(e) => setPdfUrl(e.target.value)} placeholder="https://drive.google.com/file/d/..." className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
-                  <p className="text-xs text-gray-500 mt-1">Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга</p>
+                  <p className="text-xs text-gray-500 mt-1">{tr('Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга', 'Paste a PDF URL from Google Drive, Dropbox, or another host')}</p>
                 </div>
               )}
             </div>
@@ -572,14 +802,14 @@ export default function AddPdfPage() {
             {uploadMode === 'url' && (
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-sm font-medium text-gray-700">Превью (обложка)</label>
+                  <label className="block text-sm font-medium text-gray-700">{tr('Превью (обложка)', 'Preview (cover)')}</label>
                   <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                     <input type="checkbox" checked={autoThumbnail} onChange={(e) => setAutoThumbnail(e.target.checked)} className="rounded" />
-                    Авто из Google Drive
+                    {tr('Авто из Google Drive', 'Auto from Google Drive')}
                   </label>
                 </div>
                 <div className="flex gap-3">
-                  <input type="url" value={thumbnailUrl} onChange={(e) => { setThumbnailUrl(e.target.value); setAutoThumbnail(false); }} placeholder="https://... (URL картинки)" className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
+                  <input type="url" value={thumbnailUrl} onChange={(e) => { setThumbnailUrl(e.target.value); setAutoThumbnail(false); }} placeholder={tr('https://... (URL картинки)', 'https://... (image URL)')} className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none" />
                   {thumbnailUrl && (
                     <div className="w-16 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                       <img src={thumbnailUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
@@ -590,19 +820,19 @@ export default function AddPdfPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Описание (опционально)</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Краткое описание содержимого..." className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">{tr('Описание (опционально)', 'Description (optional)')}</label>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder={tr('Краткое описание содержимого...', 'Short description...')} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none" />
             </div>
 
-            <button type="submit" disabled={submitting || uploading} className="gold-submit w-full py-3 rounded-xl flex items-center justify-center gap-2 text-sm">
+            <button type="submit" disabled={submitting || uploading || checkingDuplicates} className="gold-submit w-full py-3 rounded-xl flex items-center justify-center gap-2 text-sm">
               {submitting || uploading ? (
-                <><Loader2 className="animate-spin" size={18} />{uploading ? 'Загрузка файла...' : 'Сохранение...'}</>
+                <><Loader2 className="animate-spin" size={18} />{uploading ? tr('Загрузка файла...', 'Uploading file...') : tr('Сохранение...', 'Saving...')}</>
               ) : (
-                <><Upload size={18} />Добавить в библиотеку</>
+                <><Upload size={18} />{checkingDuplicates ? tr('Проверка...', 'Checking...') : tr('Добавить в библиотеку', 'Add to library')}</>
               )}
             </button>
           </form>
-          <div className="text-center mt-6"><p className="f-label" style={{ fontSize: '0.55rem', textAlign: 'center' }}>ShabbatHub Digital Library · Формуляр загрузки</p></div>
+          <div className="text-center mt-6"><p className="f-label" style={{ fontSize: '0.55rem', textAlign: 'center' }}>{tr('ShabbatHub Digital Library · Формуляр загрузки', 'ShabbatHub Digital Library · Upload form')}</p></div>
         </div>
       </div>
     </div>
