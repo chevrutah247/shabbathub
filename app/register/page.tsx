@@ -2,11 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 import { Mail, Lock, User, UserPlus, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 export default function RegisterPage() {
   const { lang } = useLanguage();
+  const searchParams = useSearchParams();
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -24,11 +27,7 @@ export default function RegisterPage() {
 
     // Block + in email (anti-alias spam)
     if (email.includes('+')) {
-      setError(
-        lang === 'ru' ? 'Email не может содержать символ +' :
-        lang === 'en' ? 'Email cannot contain the + symbol' :
-        'אימייל לא יכול להכיל את הסימן +'
-      );
+      setError(t('auth.emailNoPlus', lang));
       setLoading(false);
       return;
     }
@@ -36,30 +35,18 @@ export default function RegisterPage() {
     // Validate names (letters only, if provided)
     const nameRegex = /^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s'-]*$/;
     if (firstName && !nameRegex.test(firstName)) {
-      setError(
-        lang === 'ru' ? 'Имя может содержать только буквы' :
-        lang === 'en' ? 'Name can only contain letters' :
-        'שם יכול להכיל רק אותיות'
-      );
+      setError(t('auth.nameLettersOnly', lang));
       setLoading(false);
       return;
     }
     if (lastName && !nameRegex.test(lastName)) {
-      setError(
-        lang === 'ru' ? 'Фамилия может содержать только буквы' :
-        lang === 'en' ? 'Last name can only contain letters' :
-        'שם משפחה יכול להכיל רק אותיות'
-      );
+      setError(t('auth.surnameLettersOnly', lang));
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError(
-        lang === 'ru' ? 'Пароль должен быть не менее 6 символов' :
-        lang === 'en' ? 'Password must be at least 6 characters' :
-        'הסיסמה חייבת להכיל לפחות 6 תווים'
-      );
+      setError(t('auth.passwordMin6', lang));
       setLoading(false);
       return;
     }
@@ -67,18 +54,18 @@ export default function RegisterPage() {
     const res = await fetch('/api/auth/sign-up', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, firstName, lastName }),
+      body: JSON.stringify({
+        email,
+        password,
+        firstName,
+        lastName,
+        referrerId: searchParams.get('ref') || localStorage.getItem('pending_referrer_id'),
+      }),
     });
     const payload = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      setError(
-        payload?.error || (
-          lang === 'ru' ? 'Ошибка регистрации. Попробуйте позже.' :
-          lang === 'en' ? 'Registration error. Please try again later.' :
-          'שגיאת הרשמה. נסה שוב מאוחר יותר.'
-        )
-      );
+      setError(payload?.error || t('auth.registerError', lang));
       setLoading(false);
     } else {
       setSuccess(true);
@@ -92,16 +79,14 @@ export default function RegisterPage() {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center">
           <CheckCircle size={64} className="mx-auto text-green-500 mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {lang === 'ru' ? 'Проверьте почту!' : lang === 'en' ? 'Check your email!' : 'בדוק את הדוא"ל שלך!'}
+            {t('auth.checkEmail', lang)}
           </h2>
           <p className="text-gray-600 mb-6">
-            {lang === 'ru' ? 'Мы отправили ссылку для подтверждения на' : 
-             lang === 'en' ? 'We sent a confirmation link to' : 
-             'שלחנו קישור אימות אל'}<br />
+            {t('auth.confirmSent', lang)}<br />
             <strong>{email}</strong>
           </p>
           <Link href="/login" className="text-primary-600 hover:underline font-medium">
-            {lang === 'ru' ? 'Перейти к входу' : lang === 'en' ? 'Go to Login' : 'עבור להתחברות'}
+            {t('auth.goToLogin', lang)}
           </Link>
         </div>
       </div>
@@ -116,18 +101,16 @@ export default function RegisterPage() {
           className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6"
         >
           <ArrowLeft size={20} />
-          {lang === 'ru' ? 'На главную' : lang === 'en' ? 'Back to Home' : 'חזרה לדף הבית'}
+          {t('auth.backHome', lang)}
         </Link>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-display font-bold text-gray-800">
-              {lang === 'ru' ? 'Регистрация' : lang === 'en' ? 'Sign Up' : 'הרשמה'}
+              {t('auth.register', lang)}
             </h1>
             <p className="text-gray-500 mt-2">
-              {lang === 'ru' ? 'Создайте аккаунт для загрузки материалов' : 
-               lang === 'en' ? 'Create an account to upload materials' : 
-               'צור חשבון כדי להעלות חומרים'}
+              {t('auth.registerDesc', lang)}
             </p>
           </div>
 
@@ -141,7 +124,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {lang === 'ru' ? 'Имя' : lang === 'en' ? 'First Name' : 'שם פרטי'}
+                  {t('auth.name', lang)}
                 </label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -155,7 +138,7 @@ export default function RegisterPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {lang === 'ru' ? 'Фамилия' : lang === 'en' ? 'Last Name' : 'שם משפחה'}
+                  {t('auth.surname', lang)}
                 </label>
                 <input
                   type="text"
@@ -167,7 +150,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('auth.email', lang)} *</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 <input
@@ -183,7 +166,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {lang === 'ru' ? 'Пароль' : lang === 'en' ? 'Password' : 'סיסמה'} *
+                {t('auth.password', lang)} *
               </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -204,7 +187,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {lang === 'ru' ? 'Минимум 6 символов' : lang === 'en' ? 'Minimum 6 characters' : 'מינימום 6 תווים'}
+                {t('auth.minChars', lang)}
               </p>
             </div>
 
@@ -214,20 +197,20 @@ export default function RegisterPage() {
               className="w-full flex items-center justify-center gap-2 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 text-white rounded-xl font-medium transition-colors mt-6"
             >
               {loading ? (
-                <span className="animate-spin">⏳</span>
+                <><span className="animate-spin">⏳</span> {t('auth.creating', lang)}</>
               ) : (
                 <>
                   <UserPlus size={20} />
-                  {lang === 'ru' ? 'Создать аккаунт' : lang === 'en' ? 'Create Account' : 'צור חשבון'}
+                  {t('auth.createAccount', lang)}
                 </>
               )}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-500">
-            {lang === 'ru' ? 'Уже есть аккаунт?' : lang === 'en' ? 'Already have an account?' : 'כבר יש לך חשבון?'}{' '}
+            {t('auth.haveAccount', lang)}{' '}
             <Link href="/login" className="text-primary-600 hover:underline font-medium">
-              {lang === 'ru' ? 'Войти' : lang === 'en' ? 'Sign In' : 'התחבר'}
+              {t('auth.signIn', lang)}
             </Link>
           </div>
         </div>

@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Search, Edit2, Trash2, X, Save, ChevronLeft, ChevronRight, FileText, AlertCircle, CheckCircle, Filter } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage, type Lang } from '@/lib/language-context';
 
 
 const PARSHAS = [
@@ -36,16 +38,17 @@ function isDocComplete(doc: any): boolean {
 }
 
 // Какие поля не заполнены
-function getMissingFields(doc: any): string[] {
+function getMissingFields(doc: any, lang: Lang): string[] {
   const missing: string[] = [];
-  if (!doc.publication_id) missing.push('публикация');
-  if (!doc.issue_number) missing.push('номер');
-  if (!doc.gregorian_date) missing.push('дата');
-  if (!doc.parsha_id) missing.push('глава');
+  if (!doc.publication_id) missing.push(t('admin.publication', lang));
+  if (!doc.issue_number) missing.push(t('admin.number', lang));
+  if (!doc.gregorian_date) missing.push(t('admin.date', lang));
+  if (!doc.parsha_id) missing.push(t('admin.parsha', lang));
   return missing;
 }
 
 export default function AdminDocuments() {
+  const { lang } = useLanguage();
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -55,6 +58,7 @@ export default function AdminDocuments() {
   const [pubSearch, setPubSearch] = useState('');
   const [pubDropdown, setPubDropdown] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [publications, setPublications] = useState<{ id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null }[]>([]);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [reviewCount, setReviewCount] = useState(0);
@@ -114,21 +118,42 @@ export default function AdminDocuments() {
   const handleSave = async () => {
     if (!editingDoc) return;
     setSaving(true);
-    await supabase.from('issues').update({
+    setSaveError(null);
+    const { data, error } = await supabase.from('issues').update({
       title: editingDoc.title,
       issue_number: editingDoc.issue_number,
       parsha_id: editingDoc.parsha_id || null,
       publication_id: editingDoc.publication_id || null,
       gregorian_date: editingDoc.gregorian_date || null,
       is_active: editingDoc.is_active,
-    }).eq('id', editingDoc.id);
+    }).eq('id', editingDoc.id).select('id');
+
+    if (error) {
+      const msg = error.message || '';
+      if (error.code === '23505' || msg.includes('uq_issues_active_pub_issue_number')) {
+        setSaveError(t('admin.error', lang) + ' Duplicate issue number');
+      } else if (error.code === '42501') {
+        setSaveError(t('admin.error', lang) + ' RLS permission denied');
+      } else {
+        setSaveError(t('admin.error', lang) + ' ' + msg);
+      }
+      setSaving(false);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      setSaveError(t('admin.error', lang) + ' RLS block');
+      setSaving(false);
+      return;
+    }
+
     setEditingDoc(null);
-    fetchDocuments();
+    await fetchDocuments();
     setSaving(false);
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Скрыть документ?')) return;
+    if (!confirm(t('admin.hide', lang) + '?')) return;
     await supabase.from('issues').update({ is_active: false }).eq('id', id);
     fetchDocuments();
   };
@@ -144,8 +169,8 @@ export default function AdminDocuments() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Документы</h1>
-        <span className="text-gray-500">{totalCount.toLocaleString()} всего</span>
+        <h1 className="text-3xl font-bold">{t('admin.documents', lang)}</h1>
+        <span className="text-gray-500">{totalCount.toLocaleString()} {t('admin.total', lang)}</span>
       </div>
 
       {/* Фильтры */}
@@ -154,14 +179,14 @@ export default function AdminDocuments() {
           onClick={() => { setFilterMode('all'); setPage(0); }}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterMode === 'all' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border hover:bg-gray-50'}`}
         >
-          Все
+          {t('admin.all', lang)}
         </button>
         <button
           onClick={() => { setFilterMode('review'); setPage(0); }}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${filterMode === 'review' ? 'bg-amber-500 text-white' : 'bg-white text-amber-600 border border-amber-300 hover:bg-amber-50'}`}
         >
           <AlertCircle size={16} />
-          На проверке
+          {t('admin.onReview', lang)}
           {reviewCount > 0 && (
             <span className={`px-2 py-0.5 text-xs rounded-full ${filterMode === 'review' ? 'bg-white/30' : 'bg-amber-100'}`}>
               {reviewCount.toLocaleString()}
@@ -173,37 +198,37 @@ export default function AdminDocuments() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${filterMode === 'complete' ? 'bg-green-600 text-white' : 'bg-white text-green-600 border border-green-300 hover:bg-green-50'}`}
         >
           <CheckCircle size={16} />
-          Заполнены
+          {t('admin.filled', lang)}
         </button>
       </div>
 
       <div className="mb-6 relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-        <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} placeholder="Поиск..." className="w-full pl-12 pr-4 py-3 border rounded-xl"/>
+        <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} placeholder={t('admin.searchPlaceholder', lang)} className="w-full pl-12 pr-4 py-3 border rounded-xl"/>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Документ</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Публикация</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Номер</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Дата</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Глава</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Статус</th>
-              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Действия</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.document', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.publication', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.number', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.date', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.parsha', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.status', lang)}</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">{t('admin.actionsCol', lang)}</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {loading ? (
-              <tr><td colSpan={7} className="px-4 py-8 text-center">Загрузка...</td></tr>
+              <tr><td colSpan={7} className="px-4 py-8 text-center">{t('loading', lang)}</td></tr>
             ) : documents.length === 0 ? (
               <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">
-                {filterMode === 'review' ? 'Все документы заполнены!' : filterMode === 'complete' ? 'Нет полностью заполненных документов' : 'Нет документов'}
+                {filterMode === 'review' ? t('admin.allFilled', lang) : filterMode === 'complete' ? t('admin.noFilled', lang) : t('admin.noDocuments', lang)}
               </td></tr>
             ) : documents.map((doc) => {
-              const missing = getMissingFields(doc);
+              const missing = getMissingFields(doc, lang);
               const complete = missing.length === 0;
               const pubName = getPublicationName(doc.publication_id);
 
@@ -245,18 +270,18 @@ export default function AdminDocuments() {
                   </td>
                   <td className="px-4 py-3">
                     {!doc.is_active ? (
-                      <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">Скрыт</span>
+                      <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">{t('admin.hiddenStatus', lang)}</span>
                     ) : complete ? (
-                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">✓ Заполнен</span>
+                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">✓ {t('admin.filled', lang)}</span>
                     ) : (
                       <div>
-                        <span className="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">На проверке</span>
-                        <p className="text-xs text-gray-400 mt-1">Нет: {missing.join(', ')}</p>
+                        <span className="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">{t('admin.onReview', lang)}</span>
+                        <p className="text-xs text-gray-400 mt-1">{t('admin.notFilled', lang)} {missing.join(', ')}</p>
                       </div>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
-                    <button onClick={() => { setEditingDoc({...doc}); setPubSearch(''); setPubDropdown(false); }} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
+                    <button onClick={() => { setEditingDoc({...doc}); setPubSearch(''); setPubDropdown(false); setSaveError(null); }} className="p-2 text-gray-400 hover:text-primary-600"><Edit2 size={18}/></button>
                     <button onClick={() => handleDelete(doc.id)} className="p-2 text-gray-400 hover:text-red-600"><Trash2 size={18}/></button>
                   </td>
                 </tr>
@@ -266,7 +291,7 @@ export default function AdminDocuments() {
         </table>
         {totalPages > 1 && (
           <div className="px-4 py-3 border-t flex items-center justify-between">
-            <span className="text-sm text-gray-500">Стр. {page + 1} из {totalPages}</span>
+            <span className="text-sm text-gray-500">{t('admin.page', lang)} {page + 1} {t('admin.of', lang)} {totalPages}</span>
             <div className="flex gap-2">
               <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 rounded border disabled:opacity-50"><ChevronLeft size={20}/></button>
               <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 rounded border disabled:opacity-50"><ChevronRight size={20}/></button>
@@ -281,24 +306,29 @@ export default function AdminDocuments() {
           <div className="bg-white rounded-2xl w-full max-w-lg mx-4">
             <div className="p-6 border-b flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold">Редактировать</h2>
-                {getMissingFields(editingDoc).length > 0 && (
+                <h2 className="text-xl font-bold">{t('admin.edit', lang)}</h2>
+                {getMissingFields(editingDoc, lang).length > 0 && (
                   <p className="text-sm text-amber-600 mt-1 flex items-center gap-1">
                     <AlertCircle size={14} />
-                    Не заполнено: {getMissingFields(editingDoc).join(', ')}
+                    {t('admin.notFilled', lang)} {getMissingFields(editingDoc, lang).join(', ')}
                   </p>
                 )}
               </div>
               <button onClick={() => { setEditingDoc(null); setPubDropdown(false); }}><X size={24}/></button>
             </div>
             <div className="p-6 space-y-4">
+              {saveError && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {saveError}
+                </div>
+              )}
               <div>
-                <label className="block text-sm font-medium mb-1">Название</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.issueTitle', lang)}</label>
                 <input type="text" value={editingDoc.title} onChange={(e) => setEditingDoc({...editingDoc, title: e.target.value})} className="w-full px-4 py-2 border rounded-lg"/>
               </div>
               <div className="relative">
                 <label className="block text-sm font-medium mb-1">
-                  Публикация
+                  {t('admin.publication', lang)}
                   {!editingDoc.publication_id && <span className="text-amber-500 ml-1">⚠</span>}
                 </label>
                 <input
@@ -306,7 +336,7 @@ export default function AdminDocuments() {
                   value={pubSearch || (editingDoc.publication_id ? (() => { const p = publications.find(p => p.id === editingDoc.publication_id); return p?.title_ru || p?.title_en || p?.title_he || ''; })() : '')}
                   onChange={(e) => { setPubSearch(e.target.value); setPubDropdown(true); if (!e.target.value) setEditingDoc({...editingDoc, publication_id: null}); }}
                   onFocus={() => setPubDropdown(true)}
-                  placeholder="Начните вводить название..."
+                  placeholder={t('admin.searchPlaceholder', lang)}
                   className={`w-full px-4 py-2 border rounded-lg ${!editingDoc.publication_id ? 'border-amber-300 bg-amber-50' : ''}`}
                 />
                 {editingDoc.publication_id && <button type="button" onClick={() => { setEditingDoc({...editingDoc, publication_id: null}); setPubSearch(''); }} className="absolute right-3 top-8 text-gray-400 hover:text-red-500"><X size={16}/></button>}
@@ -323,21 +353,21 @@ export default function AdminDocuments() {
                       </button>
                     ))}
                     {publications.filter(p => { const name = (p.title_ru || p.title_en || p.title_he || '').toLowerCase(); return !pubSearch || name.includes(pubSearch.toLowerCase()); }).length === 0 && (
-                      <p className="px-4 py-2 text-sm text-gray-400">Не найдено</p>
+                      <p className="px-4 py-2 text-sm text-gray-400">{t('admin.notFound', lang)}</p>
                     )}
                   </div>
                 )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Номер выпуска
+                  {t('admin.issueNumber', lang)}
                   {!editingDoc.issue_number && <span className="text-amber-500 ml-1">⚠</span>}
                 </label>
                 <input type="text" value={editingDoc.issue_number || ''} onChange={(e) => setEditingDoc({...editingDoc, issue_number: e.target.value})} className={`w-full px-4 py-2 border rounded-lg ${!editingDoc.issue_number ? 'border-amber-300 bg-amber-50' : ''}`}/>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Глава
+                  {t('admin.parsha', lang)}
                   {!editingDoc.parsha_id && <span className="text-amber-500 ml-1">⚠</span>}
                 </label>
                 <select value={editingDoc.parsha_id || ''} onChange={(e) => setEditingDoc({...editingDoc, parsha_id: e.target.value ? parseInt(e.target.value) : null})} className={`w-full px-4 py-2 border rounded-lg ${!editingDoc.parsha_id ? 'border-amber-300 bg-amber-50' : ''}`}>
@@ -347,20 +377,20 @@ export default function AdminDocuments() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Дата
+                  {t('admin.date', lang)}
                   {!editingDoc.gregorian_date && <span className="text-amber-500 ml-1">⚠</span>}
                 </label>
                 <input type="date" value={editingDoc.gregorian_date || ''} onChange={(e) => setEditingDoc({...editingDoc, gregorian_date: e.target.value})} className={`w-full px-4 py-2 border rounded-lg ${!editingDoc.gregorian_date ? 'border-amber-300 bg-amber-50' : ''}`}/>
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" checked={editingDoc.is_active} onChange={(e) => setEditingDoc({...editingDoc, is_active: e.target.checked})}/>
-                <label>Активен</label>
+                <label>{t('admin.isActive', lang)}</label>
               </div>
             </div>
             <div className="p-6 border-t flex justify-end gap-3">
-              <button onClick={() => setEditingDoc(null)} className="px-4 py-2 text-gray-600">Отмена</button>
+              <button onClick={() => setEditingDoc(null)} className="px-4 py-2 text-gray-600">{t('admin.cancelBtn', lang)}</button>
               <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2">
-                <Save size={18}/>{saving ? 'Сохранение...' : 'Сохранить'}
+                <Save size={18}/>{saving ? t('admin.savingBtn', lang) : t('admin.saveBtn', lang)}
               </button>
             </div>
           </div>

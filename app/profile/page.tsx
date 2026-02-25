@@ -7,9 +7,9 @@ import { User, Mail, Globe, Bell, BellOff, BookOpen, FileText, Edit2, Save, X, L
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
-const LANGS: Record<string, string> = { ru: 'Русский', en: 'English', he: 'עברית', uk: 'Українська' };
-const ROLES: Record<string, string> = { admin: 'Администратор', editor: 'Редактор', author: 'Автор', subscriber: 'Читатель' };
+const LOCALE_MAP: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
 
 interface Subscription { id: string; publication_id: string; language: string; is_active: boolean; created_at: string; pub_title?: string; }
 interface UploadedDoc { id: string; title: string; created_at: string; thumbnail_url: string | null; view_count: number; }
@@ -18,12 +18,6 @@ interface Achievement { id: string; title: string; hint: string; unlocked: boole
 export default function ProfilePage() {
   const { user, profile, signOut } = useAuth();
   const { lang } = useLanguage();
-  const tr = (ru: string, en: string, he?: string, uk?: string) => {
-    if (lang === 'ru') return ru;
-    if (lang === 'he') return he || en;
-    if (lang === 'uk') return uk || en;
-    return en;
-  };
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -37,7 +31,11 @@ export default function ProfilePage() {
   const [loadingSubs, setLoadingSubs] = useState(true);
   const [loadingUploads, setLoadingUploads] = useState(true);
   const [referralCount, setReferralCount] = useState(0);
+  const [volunteerReferralCount, setVolunteerReferralCount] = useState(0);
   const [saveMsg, setSaveMsg] = useState('');
+  const tv = (ru: string, en: string, he: string, uk: string) => (
+    lang === 'ru' ? ru : lang === 'he' ? he : lang === 'uk' ? uk : en
+  );
 
   useEffect(() => {
     if (!user) { router.push('/login'); return; }
@@ -58,12 +56,12 @@ export default function ProfilePage() {
         const pubIds = Array.from(new Set(subs.map(s => s.publication_id).filter(Boolean)));
         let pubMap: Record<string, string> = {};
         if (pubIds.length > 0) { const { data: pubs } = await supabase.from('publications').select('id, title_ru, title_en, title_he').in('id', pubIds); pubs?.forEach(p => { pubMap[p.id] = p.title_ru || p.title_en || p.title_he || '—'; }); }
-        setSubscriptions(subs.map(s => ({ ...s, pub_title: pubMap[s.publication_id] || 'Все публикации' })));
+        setSubscriptions(subs.map(s => ({ ...s, pub_title: pubMap[s.publication_id] || t('profile.allPublications', lang) })));
       }
       setLoadingSubs(false);
     }
     fetchSubs();
-  }, [user]);
+  }, [user, lang]);
 
   useEffect(() => {
     if (!user) return;
@@ -85,6 +83,28 @@ export default function ProfilePage() {
         .select('*', { count: 'exact', head: true })
         .eq('referrer_id', userId);
       setReferralCount(count || 0);
+
+      try {
+        const { data: refs } = await supabase
+          .from('referrals')
+          .select('referred_user_id')
+          .eq('referrer_id', userId)
+          .not('referred_user_id', 'is', null);
+        const referredIds = (refs || []).map((r: any) => r.referred_user_id).filter(Boolean);
+        if (referredIds.length === 0) {
+          setVolunteerReferralCount(0);
+          return;
+        }
+        const { count: volunteers } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .in('id', referredIds)
+          .eq('role', 'volunteer');
+        setVolunteerReferralCount(volunteers || 0);
+      } catch {
+        // referrals.referred_user_id may be absent before migration
+        setVolunteerReferralCount(0);
+      }
     }
     fetchReferrals();
   }, [user]);
@@ -93,7 +113,7 @@ export default function ProfilePage() {
     if (!user) return;
     setSaving(true); setSaveMsg('');
     const { error } = await supabase.from('profiles').update({ first_name: firstName, last_name: lastName, display_name: [firstName, lastName].filter(Boolean).join(' '), preferred_language: prefLang, email_notifications: emailNotif }).eq('id', user.id);
-    if (error) { setSaveMsg('Ошибка сохранения'); } else { setSaveMsg('Сохранено!'); setEditing(false); }
+    if (error) { setSaveMsg(t('profile.errorSaving', lang)); } else { setSaveMsg(t('profile.saved', lang)); setEditing(false); }
     setSaving(false); setTimeout(() => setSaveMsg(''), 3000);
   };
   const handleUnsubscribe = async (subId: string) => { await supabase.from('subscriptions').update({ is_active: false }).eq('id', subId); setSubscriptions(prev => prev.map(s => s.id === subId ? { ...s, is_active: false } : s)); };
@@ -102,14 +122,16 @@ export default function ProfilePage() {
   if (!user) return null;
   const p = profile as any;
   const role = p?.role || 'subscriber';
-  const memberSince = p?.created_at ? new Date(p.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long' }) : '';
+  const isVolunteer = role === 'volunteer';
+  const locale = LOCALE_MAP[lang] || 'en-US';
+  const memberSince = p?.created_at ? new Date(p.created_at).toLocaleDateString(locale, { year: 'numeric', month: 'long' }) : '';
   const initials = [(p?.first_name || '')[0], (p?.last_name || '')[0]].filter(Boolean).join('').toUpperCase() || (user.email || '?')[0].toUpperCase();
   const activeSubs = subscriptions.filter(s => s.is_active).length;
   const achievements: Achievement[] = [
-    { id: 'starter', title: 'Starter', hint: 'Оформить 1 подписку', unlocked: activeSubs >= 1, progress: `${Math.min(activeSubs, 1)}/1` },
-    { id: 'collector', title: 'Collector', hint: '5 активных подписок', unlocked: activeSubs >= 5, progress: `${Math.min(activeSubs, 5)}/5` },
-    { id: 'contributor', title: 'Contributor', hint: 'Загрузить 1 материал', unlocked: uploads.length >= 1, progress: `${Math.min(uploads.length, 1)}/1` },
-    { id: 'ambassador', title: 'Ambassador', hint: 'Пригласить 10 друзей', unlocked: referralCount >= 10, progress: `${Math.min(referralCount, 10)}/10` },
+    { id: 'starter', title: 'Starter', hint: t('profile.achSub1', lang), unlocked: activeSubs >= 1, progress: `${Math.min(activeSubs, 1)}/1` },
+    { id: 'collector', title: 'Collector', hint: t('profile.achSub5', lang), unlocked: activeSubs >= 5, progress: `${Math.min(activeSubs, 5)}/5` },
+    { id: 'contributor', title: 'Contributor', hint: t('profile.achUpload1', lang), unlocked: uploads.length >= 1, progress: `${Math.min(uploads.length, 1)}/1` },
+    { id: 'ambassador', title: 'Ambassador', hint: t('profile.achRef10', lang), unlocked: referralCount >= 10, progress: `${Math.min(referralCount, 10)}/10` },
   ];
 
   return (
@@ -144,7 +166,7 @@ export default function ProfilePage() {
         <div className="library-card p-8 pt-10 pb-10 mb-8 relative">
           <div className="watermark">SH</div>
           <div className="text-center mb-2">
-            <p className="field-label mb-1">Читательский билет · ShabbatHub Library</p>
+            <p className="field-label mb-1">{t('profile.libraryCard', lang)} · ShabbatHub Library</p>
             <div className="w-16 h-[1px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #b8860b, transparent)' }} />
           </div>
           <div className="flex items-center gap-6 mt-6">
@@ -152,17 +174,30 @@ export default function ProfilePage() {
               <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 700, color: '#1e3a6e' }}>{initials}</span>
             </div>
             <div className="flex-1">
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', fontWeight: 700, color: '#1e3a6e', lineHeight: 1.2 }}>{p?.display_name || 'Читатель'}</h1>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', fontWeight: 700, color: '#1e3a6e', lineHeight: 1.2 }}>{p?.display_name || t('profile.reader', lang)}</h1>
               <p className="mt-1 text-sm" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>{user.email}</p>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ background: role === 'admin' ? '#fef2f2' : '#f0f4ff', color: role === 'admin' ? '#991b1b' : '#1e3a6e', border: '1px solid', borderColor: role === 'admin' ? '#fecaca' : '#c7d6f0' }}>{ROLES[role] || 'Читатель'}</span>
-                {memberSince && <span className="text-xs flex items-center gap-1" style={{ color: '#a09580' }}><Calendar size={11} /> С {memberSince}</span>}
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ background: role === 'admin' ? '#fef2f2' : '#f0f4ff', color: role === 'admin' ? '#991b1b' : '#1e3a6e', border: '1px solid', borderColor: role === 'admin' ? '#fecaca' : '#c7d6f0' }}>{t(`roles.${role}`, lang) !== `roles.${role}` ? t(`roles.${role}`, lang) : t('profile.reader', lang)}</span>
+                {memberSince && <span className="text-xs flex items-center gap-1" style={{ color: '#a09580' }}><Calendar size={11} /> {t('profile.memberSince', lang)} {memberSince}</span>}
               </div>
             </div>
-            <button onClick={() => { signOut(); router.push('/'); }} className="self-start p-2 rounded-lg hover:bg-red-50 transition-colors group" title="Выйти"><LogOut size={18} className="text-gray-300 group-hover:text-red-500 transition-colors" /></button>
+            <button onClick={() => { signOut(); router.push('/'); }} className="self-start p-2 rounded-lg hover:bg-red-50 transition-colors group" title={t('profile.logout', lang)}><LogOut size={18} className="text-gray-300 group-hover:text-red-500 transition-colors" /></button>
           </div>
           <div className="flex justify-center gap-8 mt-6 pt-5" style={{ borderTop: '1px dashed #e0d8c8' }}>
-            {[{ label: 'Подписок', value: activeSubs }, { label: 'Загрузок', value: uploads.length }, { label: 'Приглашений', value: referralCount }, { label: 'Язык', value: LANGS[prefLang] || prefLang }].map((s, i) => (
+            {(
+              isVolunteer
+                ? [
+                    { label: tv('Приглашений', 'Referrals', 'הפניות', 'Запрошень'), value: referralCount },
+                    { label: tv('Волонтеров', 'Volunteer referrals', 'הפניות מתנדבים', 'Запрошені волонтери'), value: volunteerReferralCount },
+                    { label: t('profile.langLabel', lang), value: t(`langNames.${prefLang}`, lang) !== `langNames.${prefLang}` ? t(`langNames.${prefLang}`, lang) : prefLang },
+                  ]
+                : [
+                    { label: t('profile.subscriptions', lang), value: activeSubs },
+                    { label: t('profile.uploads', lang), value: uploads.length },
+                    { label: t('profile.referrals', lang), value: referralCount },
+                    { label: t('profile.langLabel', lang), value: t(`langNames.${prefLang}`, lang) !== `langNames.${prefLang}` ? t(`langNames.${prefLang}`, lang) : prefLang },
+                  ]
+            ).map((s, i) => (
               <div key={i} className="text-center">
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#1e3a6e' }}>{s.value}</p>
                 <p className="field-label mt-0.5">{s.label}</p>
@@ -173,15 +208,19 @@ export default function ProfilePage() {
 
         {/* Tabs */}
         <div className="flex justify-center gap-2 mb-6" style={{ borderBottom: '1px solid #e0d8c8' }}>
-          {([{ id: 'info', label: tr('Личные данные', 'Personal info', 'מידע אישי', 'Особисті дані'), icon: <User size={15} /> }, { id: 'subscriptions', label: tr('Подписки', 'Subscriptions', 'מנויים', 'Підписки'), icon: <Bell size={15} /> }, { id: 'uploads', label: tr('Загрузки', 'Uploads', 'העלאות', 'Завантаження'), icon: <FileText size={15} /> }] as const).map(tab => (
+          {([
+            { id: 'info', label: t('profile.tabInfo', lang), icon: <User size={15} /> },
+            ...(!isVolunteer ? [{ id: 'subscriptions', label: t('profile.tabSubscriptions', lang), icon: <Bell size={15} /> }, { id: 'uploads', label: t('profile.tabUploads', lang), icon: <FileText size={15} /> }] as const : []),
+          ] as const).map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`tab-lib flex items-center gap-2 ${activeTab === tab.id ? 'active' : ''}`}>{tab.icon} {tab.label}</button>
           ))}
         </div>
 
-        <div className="card-section p-4 mb-6">
+        {!isVolunteer && (
+          <div className="card-section p-4 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Trophy size={16} style={{ color: '#b8860b' }} />
-            <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#1e3a6e', fontWeight: 600 }}>Достижения</h3>
+            <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#1e3a6e', fontWeight: 600 }}>{t('profile.achievements', lang)}</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {achievements.map((item) => (
@@ -199,53 +238,54 @@ export default function ProfilePage() {
               </div>
             ))}
           </div>
-        </div>
+          </div>
+        )}
 
         {/* INFO */}
         {activeTab === 'info' && (
           <div className="card-section p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>Учётная карточка</h2>
-              {!editing ? <button onClick={() => setEditing(true)} className="flex items-center gap-1.5 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}><Edit2 size={13} /> Редактировать</button>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>{t('profile.accountCard', lang)}</h2>
+              {!editing ? <button onClick={() => setEditing(true)} className="flex items-center gap-1.5 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}><Edit2 size={13} /> {t('profile.edit', lang)}</button>
                 : <button onClick={() => setEditing(false)} className="p-1 rounded hover:bg-gray-100"><X size={16} className="text-gray-400" /></button>}
             </div>
-            {saveMsg && <p className={`mb-4 text-sm ${saveMsg.includes('Ошибка') ? 'text-red-600' : 'text-green-600'}`}>{saveMsg}</p>}
+            {saveMsg && <p className={`mb-4 text-sm ${saveMsg === t('profile.errorSaving', lang) ? 'text-red-600' : 'text-green-600'}`}>{saveMsg}</p>}
             <div className="space-y-5">
               <div className="grid grid-cols-2 gap-5">
-                <div><p className="field-label mb-1.5">Имя</p>{editing ? <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="edit-input" placeholder="Введите имя" /> : <p className="field-value">{firstName || '—'}</p>}</div>
-                <div><p className="field-label mb-1.5">Фамилия</p>{editing ? <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="edit-input" placeholder="Введите фамилию" /> : <p className="field-value">{lastName || '—'}</p>}</div>
+                <div><p className="field-label mb-1.5">{t('profile.firstName', lang)}</p>{editing ? <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="edit-input" placeholder={t('profile.firstName', lang)} /> : <p className="field-value">{firstName || '—'}</p>}</div>
+                <div><p className="field-label mb-1.5">{t('profile.lastName', lang)}</p>{editing ? <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="edit-input" placeholder={t('profile.lastName', lang)} /> : <p className="field-value">{lastName || '—'}</p>}</div>
               </div>
-              <div><p className="field-label mb-1.5">Электронная почта</p><p className="field-value flex items-center gap-2"><Mail size={14} style={{ color: '#a09580' }} />{user.email}</p></div>
-              <div><p className="field-label mb-1.5">Язык интерфейса</p>{editing ? <select value={prefLang} onChange={e => setPrefLang(e.target.value)} className="edit-input" style={{ cursor: 'pointer' }}>{Object.entries(LANGS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select> : <p className="field-value flex items-center gap-2"><Globe size={14} style={{ color: '#a09580' }} />{LANGS[prefLang]}</p>}</div>
-              <div><p className="field-label mb-1.5">Уведомления</p>{editing ? <button onClick={() => setEmailNotif(!emailNotif)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm sub-card`} style={{ fontFamily: "'Source Serif 4', serif", color: emailNotif ? '#1e3a6e' : '#8a7d6b' }}>{emailNotif ? <Bell size={15} className="text-amber-600" /> : <BellOff size={15} />}{emailNotif ? 'Включены' : 'Выключены'}</button> : <p className="field-value flex items-center gap-2">{emailNotif ? <Bell size={14} className="text-amber-600" /> : <BellOff size={14} style={{ color: '#a09580' }} />}{emailNotif ? 'Включены' : 'Выключены'}</p>}</div>
-              {editing && <button onClick={handleSave} disabled={saving} className="gold-btn flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}{saving ? 'Сохранение...' : 'Сохранить'}</button>}
+              <div><p className="field-label mb-1.5">{t('profile.emailLabel', lang)}</p><p className="field-value flex items-center gap-2"><Mail size={14} style={{ color: '#a09580' }} />{user.email}</p></div>
+              <div><p className="field-label mb-1.5">{t('profile.interfaceLang', lang)}</p>{editing ? <select value={prefLang} onChange={e => setPrefLang(e.target.value)} className="edit-input" style={{ cursor: 'pointer' }}>{(['ru', 'en', 'he', 'uk'] as const).map(k => <option key={k} value={k}>{t(`langNames.${k}`, lang)}</option>)}</select> : <p className="field-value flex items-center gap-2"><Globe size={14} style={{ color: '#a09580' }} />{t(`langNames.${prefLang}`, lang)}</p>}</div>
+              <div><p className="field-label mb-1.5">{t('profile.notifications', lang)}</p>{editing ? <button onClick={() => setEmailNotif(!emailNotif)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm sub-card`} style={{ fontFamily: "'Source Serif 4', serif", color: emailNotif ? '#1e3a6e' : '#8a7d6b' }}>{emailNotif ? <Bell size={15} className="text-amber-600" /> : <BellOff size={15} />}{emailNotif ? t('profile.enabled', lang) : t('profile.disabled', lang)}</button> : <p className="field-value flex items-center gap-2">{emailNotif ? <Bell size={14} className="text-amber-600" /> : <BellOff size={14} style={{ color: '#a09580' }} />}{emailNotif ? t('profile.enabled', lang) : t('profile.disabled', lang)}</p>}</div>
+              {editing && <button onClick={handleSave} disabled={saving} className="gold-btn flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}{saving ? t('profile.saving', lang) : t('save', lang)}</button>}
             </div>
           </div>
         )}
 
         {/* SUBSCRIPTIONS */}
-        {activeTab === 'subscriptions' && (
+        {!isVolunteer && activeTab === 'subscriptions' && (
           <div className="card-section p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>Мои подписки</h2>
-              <Link href="/subscribe" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Новая подписка</Link>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>{t('profile.mySubscriptions', lang)}</h2>
+              <Link href="/subscribe" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>{t('profile.newSubscription', lang)}</Link>
             </div>
             {loadingSubs ? <div className="flex justify-center py-8"><Loader2 className="animate-spin" size={24} style={{ color: '#c9b896' }} /></div>
             : subscriptions.length === 0 ? (
               <div className="text-center py-10">
                 <div className="stamp-circle mx-auto mb-4" style={{ width: 70, height: 70 }}><Bell size={28} style={{ color: '#c9b896' }} /></div>
-                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">Вы пока не подписаны на издания</p>
-                <Link href="/subscribe" className="gold-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><Bell size={15} /> Подписаться</Link>
+                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">{t('profile.noSubscriptions', lang)}</p>
+                <Link href="/subscribe" className="gold-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><Bell size={15} /> {t('profile.subscribe', lang)}</Link>
               </div>
             ) : (
               <div className="space-y-3">{subscriptions.map(sub => (
                 <div key={sub.id} className={`sub-card flex items-center justify-between p-4 ${!sub.is_active ? 'opacity-50' : ''}`}>
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: sub.is_active ? '#f0f4ff' : '#f5f5f5' }}><BookOpen size={16} style={{ color: sub.is_active ? '#1e3a6e' : '#aaa' }} /></div>
-                    <div><p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontSize: '0.95rem' }} className="font-medium">{sub.pub_title}</p><p className="field-label" style={{ fontSize: '0.6rem' }}>{LANGS[sub.language] || sub.language} · {sub.is_active ? 'Активна' : 'Приостановлена'}</p></div>
+                    <div><p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontSize: '0.95rem' }} className="font-medium">{sub.pub_title}</p><p className="field-label" style={{ fontSize: '0.6rem' }}>{t(`langNames.${sub.language}`, lang) !== `langNames.${sub.language}` ? t(`langNames.${sub.language}`, lang) : sub.language} · {sub.is_active ? t('profile.active', lang) : t('profile.paused', lang)}</p></div>
                   </div>
-                  {sub.is_active ? <button onClick={() => handleUnsubscribe(sub.id)} className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50" style={{ fontFamily: "'Source Serif 4', serif" }}>Отписаться</button>
-                    : <button onClick={() => handleResubscribe(sub.id)} className="text-xs px-3 py-1.5 rounded-lg border hover:bg-green-50" style={{ fontFamily: "'Source Serif 4', serif", borderColor: '#b8860b', color: '#b8860b' }}>Возобновить</button>}
+                  {sub.is_active ? <button onClick={() => handleUnsubscribe(sub.id)} className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50" style={{ fontFamily: "'Source Serif 4', serif" }}>{t('profile.unsubscribe', lang)}</button>
+                    : <button onClick={() => handleResubscribe(sub.id)} className="text-xs px-3 py-1.5 rounded-lg border hover:bg-green-50" style={{ fontFamily: "'Source Serif 4', serif", borderColor: '#b8860b', color: '#b8860b' }}>{t('profile.resume', lang)}</button>}
                 </div>
               ))}</div>
             )}
@@ -253,18 +293,18 @@ export default function ProfilePage() {
         )}
 
         {/* UPLOADS */}
-        {activeTab === 'uploads' && (
+        {!isVolunteer && activeTab === 'uploads' && (
           <div className="card-section p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>{tr('Загруженные материалы', 'Uploaded materials', 'חומרים שהועלו', 'Завантажені матеріали')}</h2>
-              <Link href="/add-pdf" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ {tr('Загрузить', 'Upload', 'העלה', 'Завантажити')}</Link>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>{t('profile.uploadedMaterials', lang)}</h2>
+              <Link href="/add-pdf" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ {t('profile.uploadBtn', lang)}</Link>
             </div>
             {loadingUploads ? <div className="flex justify-center py-8"><Loader2 className="animate-spin" size={24} style={{ color: '#c9b896' }} /></div>
             : uploads.length === 0 ? (
               <div className="text-center py-10">
                 <div className="stamp-circle mx-auto mb-4" style={{ width: 70, height: 70 }}><FileText size={28} style={{ color: '#c9b896' }} /></div>
-                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">{tr('Вы ещё не загружали материалы', 'You have not uploaded materials yet', 'עדיין לא העלית חומרים', 'Ви ще не завантажували матеріали')}</p>
-                <Link href="/add-pdf" className="navy-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><FileText size={15} /> {tr('Загрузить PDF', 'Upload PDF', 'העלה PDF', 'Завантажити PDF')}</Link>
+                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">{t('profile.noUploadedMaterials', lang)}</p>
+                <Link href="/add-pdf" className="navy-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><FileText size={15} /> {t('profile.uploadPdf', lang)}</Link>
               </div>
             ) : (
               <div className="space-y-3">{uploads.map(doc => (
@@ -273,7 +313,7 @@ export default function ProfilePage() {
                     : <div className="w-11 h-14 rounded-lg flex items-center justify-center" style={{ background: '#f5f0e8', border: '1px solid #e0d8c8' }}><FileText size={16} style={{ color: '#c9b896' }} /></div>}
                   <div className="flex-1 min-w-0">
                     <p className="truncate" style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontSize: '0.9rem', fontWeight: 500 }}>{doc.title}</p>
-                    <p className="field-label" style={{ fontSize: '0.6rem' }}>{new Date(doc.created_at).toLocaleDateString('ru-RU')} · {doc.view_count || 0} просмотров</p>
+                    <p className="field-label" style={{ fontSize: '0.6rem' }}>{new Date(doc.created_at).toLocaleDateString(locale)} · {doc.view_count || 0} {t('profile.views', lang)}</p>
                   </div>
                 </Link>
               ))}</div>
@@ -281,7 +321,7 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <div className="text-center mt-8 mb-4"><p className="field-label" style={{ fontSize: '0.55rem' }}>ShabbatHub Digital Library · Билет #{user.id?.substring(0, 8).toUpperCase()}</p></div>
+        <div className="text-center mt-8 mb-4"><p className="field-label" style={{ fontSize: '0.55rem' }}>ShabbatHub Digital Library · {t('profile.ticket', lang)} #{user.id?.substring(0, 8).toUpperCase()}</p></div>
       </div>
     </div>
   );

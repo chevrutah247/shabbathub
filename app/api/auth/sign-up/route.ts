@@ -6,6 +6,10 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAdmin = serviceKey
+  ? createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, serviceKey)
+  : null;
 
 const GENERIC_ERROR = 'Не удалось выполнить регистрацию. Попробуйте позже.';
 const TOO_MANY = 'Слишком много попыток регистрации. Подождите 1 час.';
@@ -17,6 +21,7 @@ export async function POST(request: Request) {
     const password = String(body?.password || '');
     const firstName = String(body?.firstName || '').trim();
     const lastName = String(body?.lastName || '').trim();
+    const referrerId = String(body?.referrerId || '').trim();
 
     if (!email || password.length < 6) {
       return NextResponse.json({ error: GENERIC_ERROR }, { status: 400 });
@@ -48,6 +53,7 @@ export async function POST(request: Request) {
         data: {
           first_name: firstName || null,
           last_name: lastName || null,
+          role: 'volunteer',
         },
       },
     });
@@ -56,9 +62,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: GENERIC_ERROR }, { status: 400 });
     }
 
+    // Optional hardening: set volunteer role + mark successful referral using service role.
+    // Works only when SUPABASE_SERVICE_ROLE_KEY is configured.
+    const userId = data.user?.id || null;
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (supabaseAdmin && userId) {
+      try {
+        await supabaseAdmin.from('profiles').update({ role: 'volunteer' }).eq('id', userId);
+        if (uuidRe.test(referrerId) && referrerId !== userId) {
+          const { error: refErr } = await supabaseAdmin.from('referrals').insert({
+            referrer_id: referrerId,
+            referred_user_id: userId,
+            registered_at: new Date().toISOString(),
+          });
+          if (refErr) {
+            // Backward compatibility for old referrals schema (without referred_user_id)
+            await supabaseAdmin.from('referrals').insert({ referrer_id: referrerId });
+          }
+        }
+      } catch {
+        // noop: signup must not fail because of referral/logging side effects
+      }
+    }
+
     return NextResponse.json({
       ok: true,
-      userId: data.user?.id || null,
+      userId,
       email,
     });
   } catch {
