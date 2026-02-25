@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { User, Mail, Globe, Bell, BellOff, BookOpen, FileText, Edit2, Save, X, LogOut, Calendar, Loader2 } from 'lucide-react';
+import { User, Mail, Globe, Bell, BellOff, BookOpen, FileText, Edit2, Save, X, LogOut, Calendar, Loader2, Users, Trophy, Sparkles } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage } from '@/lib/language-context';
@@ -13,10 +13,17 @@ const ROLES: Record<string, string> = { admin: 'Администратор', edi
 
 interface Subscription { id: string; publication_id: string; language: string; is_active: boolean; created_at: string; pub_title?: string; }
 interface UploadedDoc { id: string; title: string; created_at: string; thumbnail_url: string | null; view_count: number; }
+interface Achievement { id: string; title: string; hint: string; unlocked: boolean; progress: string; }
 
 export default function ProfilePage() {
   const { user, profile, signOut } = useAuth();
   const { lang } = useLanguage();
+  const tr = (ru: string, en: string, he?: string, uk?: string) => {
+    if (lang === 'ru') return ru;
+    if (lang === 'he') return he || en;
+    if (lang === 'uk') return uk || en;
+    return en;
+  };
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -29,6 +36,7 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'info' | 'subscriptions' | 'uploads'>('info');
   const [loadingSubs, setLoadingSubs] = useState(true);
   const [loadingUploads, setLoadingUploads] = useState(true);
+  const [referralCount, setReferralCount] = useState(0);
   const [saveMsg, setSaveMsg] = useState('');
 
   useEffect(() => {
@@ -68,6 +76,19 @@ export default function ProfilePage() {
     fetchUploads();
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+    const userId = user.id;
+    async function fetchReferrals() {
+      const { count } = await supabase
+        .from('referrals')
+        .select('*', { count: 'exact', head: true })
+        .eq('referrer_id', userId);
+      setReferralCount(count || 0);
+    }
+    fetchReferrals();
+  }, [user]);
+
   const handleSave = async () => {
     if (!user) return;
     setSaving(true); setSaveMsg('');
@@ -83,6 +104,13 @@ export default function ProfilePage() {
   const role = p?.role || 'subscriber';
   const memberSince = p?.created_at ? new Date(p.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long' }) : '';
   const initials = [(p?.first_name || '')[0], (p?.last_name || '')[0]].filter(Boolean).join('').toUpperCase() || (user.email || '?')[0].toUpperCase();
+  const activeSubs = subscriptions.filter(s => s.is_active).length;
+  const achievements: Achievement[] = [
+    { id: 'starter', title: 'Starter', hint: 'Оформить 1 подписку', unlocked: activeSubs >= 1, progress: `${Math.min(activeSubs, 1)}/1` },
+    { id: 'collector', title: 'Collector', hint: '5 активных подписок', unlocked: activeSubs >= 5, progress: `${Math.min(activeSubs, 5)}/5` },
+    { id: 'contributor', title: 'Contributor', hint: 'Загрузить 1 материал', unlocked: uploads.length >= 1, progress: `${Math.min(uploads.length, 1)}/1` },
+    { id: 'ambassador', title: 'Ambassador', hint: 'Пригласить 10 друзей', unlocked: referralCount >= 10, progress: `${Math.min(referralCount, 10)}/10` },
+  ];
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #f5f0e8 0%, #ebe4d6 100%)' }}>
@@ -134,7 +162,7 @@ export default function ProfilePage() {
             <button onClick={() => { signOut(); router.push('/'); }} className="self-start p-2 rounded-lg hover:bg-red-50 transition-colors group" title="Выйти"><LogOut size={18} className="text-gray-300 group-hover:text-red-500 transition-colors" /></button>
           </div>
           <div className="flex justify-center gap-8 mt-6 pt-5" style={{ borderTop: '1px dashed #e0d8c8' }}>
-            {[{ label: 'Подписок', value: subscriptions.filter(s => s.is_active).length }, { label: 'Загрузок', value: uploads.length }, { label: 'Язык', value: LANGS[prefLang] || prefLang }].map((s, i) => (
+            {[{ label: 'Подписок', value: activeSubs }, { label: 'Загрузок', value: uploads.length }, { label: 'Приглашений', value: referralCount }, { label: 'Язык', value: LANGS[prefLang] || prefLang }].map((s, i) => (
               <div key={i} className="text-center">
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#1e3a6e' }}>{s.value}</p>
                 <p className="field-label mt-0.5">{s.label}</p>
@@ -145,9 +173,32 @@ export default function ProfilePage() {
 
         {/* Tabs */}
         <div className="flex justify-center gap-2 mb-6" style={{ borderBottom: '1px solid #e0d8c8' }}>
-          {([{ id: 'info', label: 'Личные данные', icon: <User size={15} /> }, { id: 'subscriptions', label: 'Подписки', icon: <Bell size={15} /> }, { id: 'uploads', label: 'Загрузки', icon: <FileText size={15} /> }] as const).map(tab => (
+          {([{ id: 'info', label: tr('Личные данные', 'Personal info', 'מידע אישי', 'Особисті дані'), icon: <User size={15} /> }, { id: 'subscriptions', label: tr('Подписки', 'Subscriptions', 'מנויים', 'Підписки'), icon: <Bell size={15} /> }, { id: 'uploads', label: tr('Загрузки', 'Uploads', 'העלאות', 'Завантаження'), icon: <FileText size={15} /> }] as const).map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`tab-lib flex items-center gap-2 ${activeTab === tab.id ? 'active' : ''}`}>{tab.icon} {tab.label}</button>
           ))}
+        </div>
+
+        <div className="card-section p-4 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Trophy size={16} style={{ color: '#b8860b' }} />
+            <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#1e3a6e', fontWeight: 600 }}>Достижения</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {achievements.map((item) => (
+              <div key={item.id} className="sub-card p-3 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium" style={{ color: item.unlocked ? '#1e3a6e' : '#8a7d6b' }}>{item.title}</p>
+                  <p className="text-xs" style={{ color: '#a09580' }}>{item.hint}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-semibold" style={{ color: item.unlocked ? '#0f766e' : '#8a7d6b' }}>{item.progress}</p>
+                  <div className="flex items-center justify-end mt-0.5">
+                    {item.unlocked ? <Sparkles size={13} className="text-emerald-600" /> : <Users size={13} className="text-gray-400" />}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* INFO */}
@@ -205,15 +256,15 @@ export default function ProfilePage() {
         {activeTab === 'uploads' && (
           <div className="card-section p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>Загруженные материалы</h2>
-              <Link href="/add-pdf" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ Загрузить</Link>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 600, color: '#1e3a6e' }}>{tr('Загруженные материалы', 'Uploaded materials', 'חומרים שהועלו', 'Завантажені матеріали')}</h2>
+              <Link href="/add-pdf" className="flex items-center gap-1 text-sm" style={{ color: '#b8860b', fontFamily: "'Source Serif 4', serif" }}>+ {tr('Загрузить', 'Upload', 'העלה', 'Завантажити')}</Link>
             </div>
             {loadingUploads ? <div className="flex justify-center py-8"><Loader2 className="animate-spin" size={24} style={{ color: '#c9b896' }} /></div>
             : uploads.length === 0 ? (
               <div className="text-center py-10">
                 <div className="stamp-circle mx-auto mb-4" style={{ width: 70, height: 70 }}><FileText size={28} style={{ color: '#c9b896' }} /></div>
-                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">Вы ещё не загружали материалы</p>
-                <Link href="/add-pdf" className="navy-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><FileText size={15} /> Загрузить PDF</Link>
+                <p style={{ fontFamily: "'Source Serif 4', serif", color: '#8a7d6b' }} className="mb-4">{tr('Вы ещё не загружали материалы', 'You have not uploaded materials yet', 'עדיין לא העלית חומרים', 'Ви ще не завантажували матеріали')}</p>
+                <Link href="/add-pdf" className="navy-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm"><FileText size={15} /> {tr('Загрузить PDF', 'Upload PDF', 'העלה PDF', 'Завантажити PDF')}</Link>
               </div>
             ) : (
               <div className="space-y-3">{uploads.map(doc => (
