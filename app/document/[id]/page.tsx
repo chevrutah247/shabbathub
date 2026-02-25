@@ -6,6 +6,10 @@ import Link from 'next/link';
 import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell, Printer, User } from 'lucide-react';
 import ShareButtons from '@/components/ShareButtons';
 import { trackEvent } from '@/lib/analytics';
+import { useAuth } from '@/lib/auth-context';
+import { secureDownloadIssue } from '@/lib/download-client';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -69,6 +73,8 @@ function getDirectViewerUrl(url: string): string {
 }
 
 export default function DocumentPage() {
+  const { session } = useAuth();
+  const { lang } = useLanguage();
   const params = useParams();
   const id = params.id as string;
   const [issue, setIssue] = useState<Issue | null>(null);
@@ -81,6 +87,7 @@ export default function DocumentPage() {
   const [pubName, setPubName] = useState('');
   const [relatedIssues, setRelatedIssues] = useState<RelatedIssue[]>([]);
   const [uploader, setUploader] = useState<UploaderProfile | null>(null);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -89,7 +96,7 @@ export default function DocumentPage() {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.length === 0) setError('Документ не найден');
+        if (data.length === 0) setError(t('doc.notFound', lang));
         else {
           const doc = data[0];
           setIssue(doc);
@@ -102,7 +109,7 @@ export default function DocumentPage() {
           }).catch(() => {});
         }
       })
-      .catch(() => setError('Ошибка загрузки'))
+      .catch(() => setError(t('docExtra.loadError', lang)))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -188,8 +195,8 @@ export default function DocumentPage() {
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
           <FileText size={64} className="mx-auto text-gray-300 mb-4" />
-          <h1 className="text-2xl font-bold text-gray-700 mb-2">{error || 'Документ не найден'}</h1>
-          <Link href="/catalog" className="text-primary-600 hover:underline">Вернуться в каталог</Link>
+          <h1 className="text-2xl font-bold text-gray-700 mb-2">{error || t('doc.notFound', lang)}</h1>
+          <Link href="/catalog" className="text-primary-600 hover:underline">{t('doc.backToCatalog', lang)}</Link>
         </div>
       </div>
     );
@@ -245,7 +252,7 @@ export default function DocumentPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600">
-            <ArrowLeft size={20} /> Назад в каталог
+            <ArrowLeft size={20} /> {t('doc.backToCatalog', lang)}
           </Link>
         </div>
       </div>
@@ -259,14 +266,14 @@ export default function DocumentPage() {
                 <div className="flex gap-2">
                   <button onClick={() => setViewerMode('embed')}
                     className={'px-3 py-1 text-xs rounded-md ' + (viewerMode === 'embed' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300')}>
-                    Встроенный
+                    {t('doc.embedded', lang)}
                   </button>
                   <button onClick={() => setViewerMode('google')}
                     className={'px-3 py-1 text-xs rounded-md ' + (viewerMode === 'google' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300')}>
-                    Google Viewer
+                    {t('doc.googleViewer', lang)}
                   </button>
                 </div>
-                <button onClick={() => setFullscreen(true)} className="p-1.5 text-gray-500 hover:text-primary-600" title="На весь экран">
+                <button onClick={() => setFullscreen(true)} className="p-1.5 text-gray-500 hover:text-primary-600" title={t('docExtra.fullscreen', lang)}>
                   <Maximize2 size={18} />
                 </button>
               </div>
@@ -275,9 +282,9 @@ export default function DocumentPage() {
                 <object data={viewerUrl} type="application/pdf" className="w-full" style={{ height: '80vh' }}>
                   <div className="flex flex-col items-center justify-center py-20 text-gray-500">
                     <FileText size={48} className="mb-4 text-gray-300" />
-                    <p className="mb-3">Не удалось отобразить PDF</p>
+                    <p className="mb-3">{t('doc.cantDisplay', lang)}</p>
                     <button onClick={() => setViewerMode('google')} className="text-primary-600 hover:underline text-sm">
-                      Попробовать Google Viewer
+                      {t('doc.tryGoogle', lang)}
                     </button>
                   </div>
                 </object>
@@ -316,14 +323,14 @@ export default function DocumentPage() {
                   </div>
                 )}
                 {issue.page_count && (
-                  <div className="flex items-center gap-2"><FileText size={16} className="text-gray-400" />{issue.page_count} страниц</div>
+                  <div className="flex items-center gap-2"><FileText size={16} className="text-gray-400" />{issue.page_count} {t('doc.pages', lang)}</div>
                 )}
                 {uploader && (
                   <div className="flex items-center gap-2">
                     <User size={16} className="text-gray-400" />
-                    <span className="text-gray-500">Загрузил:</span>
+                    <span className="text-gray-500">{t('docExtra.uploadedBy', lang)}</span>
                     <Link href={'/uploader/' + uploader.id} className="text-primary-600 hover:underline font-medium">
-                      {uploader.display_name || [uploader.first_name, uploader.last_name].filter(Boolean).join(' ') || 'Пользователь'}
+                      {uploader.display_name || [uploader.first_name, uploader.last_name].filter(Boolean).join(' ') || t('docExtra.user', lang)}
                     </Link>
                   </div>
                 )}
@@ -334,28 +341,32 @@ export default function DocumentPage() {
               <a href={issue.pdf_url} target="_blank" rel="noopener noreferrer"
                 onClick={() => trackEvent('document_pdf_open', { document_id: issue.id })}
                 className="flex items-center justify-center gap-2 w-full bg-primary-600 text-white py-3 rounded-xl font-medium hover:bg-primary-700 transition">
-                <ExternalLink size={20} />Открыть PDF
+                <ExternalLink size={20} />{t('doc.openPdf', lang)}
               </a>
-              <a href={issue.pdf_url} download
-                onClick={() => {
+              <button
+                type="button"
+                disabled={downloading}
+                onClick={async () => {
+                  setDownloading(true);
                   trackEvent('document_download', { document_id: issue.id });
-                  // Increment download count (fire and forget)
-                  fetch(SUPABASE_URL + '/rest/v1/issues?id=eq.' + id, {
-                    method: 'PATCH',
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ download_count: (issue.download_count || 0) + 1 })
-                  }).catch(() => {});
+                  const result = await secureDownloadIssue({
+                    issueId: issue.id,
+                    title: issue.title,
+                    accessToken: session?.access_token || null,
+                  });
+                  if (!result.ok) alert(result.message);
+                  setDownloading(false);
                 }}
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
-                <Download size={20} />Скачать
-              </a>
+                <Download size={20} />{downloading ? t('docExtra.downloading', lang) : t('actions.download', lang)}
+              </button>
               <button
                 onClick={() => {
                   const w = window.open(issue.pdf_url, '_blank');
                   if (w) { w.addEventListener('load', () => { try { w.print(); } catch {} }); }
                 }}
                 className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
-                <Printer size={20} />Печать
+                <Printer size={20} />{t('actions.print', lang)}
               </button>
               <div className="flex items-center justify-center pt-2">
                 <ShareButtons url={`https://shabbathub.com/document/${id}`} title={issue.title} />
@@ -366,7 +377,7 @@ export default function DocumentPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <Link href={'/subscribe' + (issue.publication_id ? '?pub=' + issue.publication_id : '')}
                 className="flex items-center justify-center gap-2 w-full bg-amber-500 text-white py-3 rounded-xl font-medium hover:bg-amber-600 transition">
-                <Bell size={20} />Подписаться на обновления
+                <Bell size={20} />{t('doc.subscribe', lang)}
               </Link>
             </div>
           </div>
@@ -374,7 +385,7 @@ export default function DocumentPage() {
 
         {relatedIssues.length > 0 && (
           <div className="mt-10">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Похожие материалы</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">{t('docExtra.similarMaterials', lang)}</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {relatedIssues.map((doc) => (
                 <Link

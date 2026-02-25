@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { Heart, Mail, Github } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
 
 export default function Footer() {
+  const { lang } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -17,8 +22,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-blue-200 mb-4 max-w-md">
-              Бесплатный онлайн-архив материалов к Шаббату. 
-              Делаем еврейское знание доступным для всех.
+              {t('footer.desc', lang)}
             </p>
             <div className="flex items-center gap-4">
               <a 
@@ -33,21 +37,21 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4 text-gold-400">Навигация</h3>
+            <h3 className="font-semibold mb-4 text-gold-400">{t('footer.navigation', lang)}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/catalog" className="text-blue-200 hover:text-white transition-colors">
-                  Каталог
+                  {t('footer.catalog', lang)}
                 </Link>
               </li>
               <li>
                 <Link href="/catalog" className="text-blue-200 hover:text-white transition-colors">
-                  Последние выпуски
+                  {t('footer.latestIssues', lang)}
                 </Link>
               </li>
               <li>
                 <Link href="/catalog" className="text-blue-200 hover:text-white transition-colors">
-                  Поиск
+                  {t('footer.searchLabel', lang)}
                 </Link>
               </li>
             </ul>
@@ -55,21 +59,21 @@ export default function Footer() {
 
           {/* Info */}
           <div>
-            <h3 className="font-semibold mb-4 text-gold-400">Информация</h3>
+            <h3 className="font-semibold mb-4 text-gold-400">{t('footer.info', lang)}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
-                  О проекте
+                  {t('footer.aboutProject', lang)}
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
-                  Поддержать проект
+                  {t('footer.support', lang)}
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
-                  Контакты
+                  {t('footer.contactUs', lang)}
                 </Link>
               </li>
             </ul>
@@ -80,10 +84,10 @@ export default function Footer() {
         <div className="pt-8 border-t border-blue-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-blue-300 text-sm">
-              © {currentYear} ShabbatHub. Все материалы распространяются бесплатно.
+              © {currentYear} {t('footer.copyright', lang)}
             </p>
             <p className="text-blue-300 text-sm flex items-center gap-1">
-              Сделано с <Heart size={14} className="text-red-400" /> для еврейской общины
+              {t('footer.madeWith', lang)} <Heart size={14} className="text-red-400" /> {t('footer.forCommunity', lang)}
             </p>
           </div>
         </div>

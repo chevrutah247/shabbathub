@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { MessageCircle, Trash2, RefreshCw, Clock, User, Mail, Phone } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
 
 interface ContactMessage {
   id: string;
@@ -14,6 +16,7 @@ interface ContactMessage {
 }
 
 export default function AdminMessages() {
+  const { lang } = useLanguage();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -31,7 +34,7 @@ export default function AdminMessages() {
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Удалить это сообщение?')) return;
+    if (!confirm(t('admin.deleteMessage', lang))) return;
     setDeleting(id);
     await supabase.from('contact_messages').delete().eq('id', id);
     setMessages(prev => prev.filter(m => m.id !== id));
@@ -52,27 +55,27 @@ export default function AdminMessages() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Сообщения</h1>
-          <p className="text-gray-500 mt-1">Обращения через форму обратной связи</p>
+          <h1 className="text-3xl font-bold">{t('admin.messagesNav', lang)}</h1>
+          <p className="text-gray-500 mt-1">{t('admin.contactMessages', lang)}</p>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-gray-500">{messages.length} всего</span>
+          <span className="text-gray-500">{messages.length} {t('admin.total', lang)}</span>
           <button
             onClick={fetchMessages}
             className="px-4 py-2 bg-white border rounded-lg flex items-center gap-2 hover:bg-gray-50"
           >
             <RefreshCw size={18} />
-            Обновить
+            {t('admin.refresh', lang)}
           </button>
         </div>
       </div>
 
       {loading ? (
-        <div className="bg-white rounded-xl p-8 text-center text-gray-500">Загрузка...</div>
+        <div className="bg-white rounded-xl p-8 text-center text-gray-500">{t('loading', lang)}</div>
       ) : messages.length === 0 ? (
         <div className="bg-white rounded-xl p-12 text-center">
           <MessageCircle size={48} className="mx-auto text-gray-300 mb-4" />
-          <p className="text-gray-500">Сообщений пока нет</p>
+          <p className="text-gray-500">{t('admin.noMessages', lang)}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -115,7 +118,7 @@ export default function AdminMessages() {
                   onClick={() => handleDelete(msg.id)}
                   disabled={deleting === msg.id}
                   className="p-2 text-gray-300 hover:text-red-500 transition flex-shrink-0 disabled:opacity-50"
-                  title="Удалить"
+                  title={t('admin.delete', lang)}
                 >
                   <Trash2 size={18} />
                 </button>

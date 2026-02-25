@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
-import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail, MessageCircle } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
+import { LayoutDashboard, FileText, Users, BookOpen, LogOut, ChevronLeft, Copy, Mail, MessageCircle, Shield } from 'lucide-react';
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isAdmin, setIsAdmin] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     async function checkAdmin() {
@@ -65,40 +68,44 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-6">
           <Link href="/" className="flex items-center gap-2 text-white/70 hover:text-white mb-6">
             <ChevronLeft size={20} />
-            <span>На сайт</span>
+            <span>{t('admin.backToSite', lang)}</span>
           </Link>
           <h1 className="text-xl font-bold">ShabbatHub</h1>
-          <p className="text-sm text-white/60">Админ-панель</p>
+          <p className="text-sm text-white/60">{t('admin.panel', lang)}</p>
         </div>
 
         <nav className="mt-6">
           <Link href="/admin" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <LayoutDashboard size={20} />
-            Обзор
+            {t('admin.overview', lang)}
           </Link>
           <Link href="/admin/documents" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <FileText size={20} />
-            Документы
+            {t('admin.documents', lang)}
           </Link>
           <Link href="/admin/publications" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <BookOpen size={20} />
-            Публикации
+            {t('admin.publications', lang)}
           </Link>
           <Link href="/admin/duplicates" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Copy size={20} />
-            Дубликаты
+            {t('admin.duplicates', lang)}
           </Link>
           <Link href="/admin/users" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Users size={20} />
-            Пользователи
+            {t('admin.users', lang)}
           </Link>
           <Link href="/admin/subscribers" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <Mail size={20} />
-            Подписчики
+            {t('admin.subscribers', lang)}
           </Link>
           <Link href="/admin/messages" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
             <MessageCircle size={20} />
-            Сообщения
+            {t('admin.messagesNav', lang)}
+          </Link>
+          <Link href="/admin/security" className="flex items-center gap-3 px-6 py-3 text-white/80 hover:bg-white/10 hover:text-white">
+            <Shield size={20} />
+            {t('admin.monitoring', lang)}
           </Link>
         </nav>
 
@@ -106,7 +113,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="text-sm text-white/60 mb-2 truncate">{userEmail}</div>
           <button onClick={handleLogout} className="flex items-center gap-2 text-white/70 hover:text-white">
             <LogOut size={18} />
-            Выйти
+            {t('admin.signOut', lang)}
           </button>
         </div>
       </aside>

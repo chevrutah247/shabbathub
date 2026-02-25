@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Search, Edit2, Plus, X, Save, ChevronLeft, ChevronRight, BookOpen, FileText, ExternalLink, Trash2, AlertTriangle, ArrowRightLeft } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
 
 interface Publication {
   id: string;
@@ -34,16 +36,16 @@ const EMPTY_PUBLICATION: Partial<Publication> = {
   cover_image_url: '', is_active: true,
 };
 
-const FREQUENCIES = [
-  { value: 'weekly', label: 'Еженедельно' },
-  { value: 'monthly', label: 'Ежемесячно' },
-  { value: 'daily', label: 'Ежедневно' },
-  { value: 'irregular', label: 'Нерегулярно' },
+const FREQUENCY_KEYS: { value: string; key: string }[] = [
+  { value: 'weekly', key: 'admin.weekly' },
+  { value: 'monthly', key: 'admin.monthly' },
+  { value: 'daily', key: 'admin.daily' },
+  { value: 'irregular', key: 'admin.irregular' },
 ];
-const LANGUAGES = [
-  { value: 'ru', label: 'Русский' },
-  { value: 'he', label: 'Иврит' },
-  { value: 'en', label: 'Английский' },
+const LANGUAGE_KEYS: { value: string; key: string }[] = [
+  { value: 'ru', key: 'admin.russian' },
+  { value: 'he', key: 'admin.hebrew' },
+  { value: 'en', key: 'admin.english' },
 ];
 
 const PAGE_SIZE = 20;
@@ -74,7 +76,16 @@ function isSimilar(a: string, b: string, threshold = 3): boolean {
   return levenshtein(na, nb) <= threshold;
 }
 
+function prettyPublicationError(errorMessage: string, lang: string): string {
+  const msg = (errorMessage || '').toLowerCase();
+  if (msg.includes('uq_publications_active_norm_title')) {
+    return t('admin.alreadyExists', lang as any);
+  }
+  return errorMessage;
+}
+
 export default function AdminPublications() {
+  const { lang } = useLanguage();
   const [publications, setPublications] = useState<Publication[]>([]);
   const [allPublications, setAllPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(true);
@@ -157,10 +168,10 @@ export default function AdminPublications() {
     };
     if (isNew) {
       const { error } = await supabase.from('publications').insert(payload);
-      if (error) { alert('Ошибка: ' + error.message); setSaving(false); return; }
+      if (error) { alert(t('admin.error', lang) + ' ' + prettyPublicationError(error.message, lang)); setSaving(false); return; }
     } else {
       const { error } = await supabase.from('publications').update(payload).eq('id', editingPub.id);
-      if (error) { alert('Ошибка: ' + error.message); setSaving(false); return; }
+      if (error) { alert(t('admin.error', lang) + ' ' + prettyPublicationError(error.message, lang)); setSaving(false); return; }
     }
     setEditingPub(null);
     setIsNew(false);
@@ -171,27 +182,25 @@ export default function AdminPublications() {
 
   const handleDelete = async (pub: Publication) => {
     const issuesCount = pub.total_issues || 0;
+    const title = pub.title_ru || pub.title_en || pub.title_he || '';
     const msg = issuesCount > 0
-      ? `Удалить "${pub.title_ru}"?\n\nУ неё ${issuesCount} выпусков — они потеряют привязку.\n\nДействие необратимо!`
-      : `Удалить "${pub.title_ru}"?\n\nДействие необратимо!`;
+      ? t('admin.confirmDeleteWithIssues', lang).replace(/%s/g, title).replace(/%n/g, String(issuesCount))
+      : t('admin.confirmDelete', lang).replace(/%s/g, title);
     if (!confirm(msg)) return;
 
     setDeleting(pub.id);
 
-    // Открепить выпуски
     if (issuesCount > 0) {
       await supabase.from('issues').update({ publication_id: null }).eq('publication_id', pub.id);
     }
 
-    // Попробовать полное удаление
     const { error } = await supabase.from('publications').delete().eq('id', pub.id);
     if (error) {
-      // Fallback: скрыть
       const { error: e2 } = await supabase.from('publications').update({ is_active: false }).eq('id', pub.id);
       if (e2) {
-        alert('Ошибка: ' + e2.message + '\n\nНужна RLS-политика DELETE для publications. Выполни в Supabase SQL Editor:\n\nCREATE POLICY "Admins can delete publications" ON publications FOR DELETE USING (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role IN (\'admin\')));');
+        alert(t('admin.error', lang) + ' ' + e2.message);
       } else {
-        alert('Публикация скрыта (для полного удаления нужна RLS-политика DELETE)');
+        alert(t('admin.pubHidden', lang));
       }
     }
 
@@ -199,9 +208,10 @@ export default function AdminPublications() {
     refreshAll();
   };
 
-  // Объединение публикаций
   const handleMerge = async (source: Publication, target: Publication) => {
-    if (!confirm(`Объединить "${source.title_ru}" → "${target.title_ru}"?\n\nВсе выпуски будут перенесены в "${target.title_ru}", а "${source.title_ru}" будет удалена.`)) return;
+    const srcTitle = source.title_ru || source.title_en || source.title_he || '';
+    const tgtTitle = target.title_ru || target.title_en || target.title_he || '';
+    if (!confirm(t('admin.confirmMerge', lang).replace(/%s/g, srcTitle).replace(/%t/g, tgtTitle))) return;
 
     // Перенести issues
     await supabase.from('issues').update({ publication_id: target.id }).eq('publication_id', source.id);
@@ -236,41 +246,41 @@ export default function AdminPublications() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Публикации</h1>
+        <h1 className="text-3xl font-bold">{t('admin.publications', lang)}</h1>
         <div className="flex items-center gap-4">
-          <span className="text-gray-500">{totalCount} всего</span>
+          <span className="text-gray-500">{totalCount} {t('admin.total', lang)}</span>
           <button
             onClick={() => { setEditingPub({ ...EMPTY_PUBLICATION }); setIsNew(true); setSimilarPubs([]); }}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2 hover:bg-primary-700"
           >
             <Plus size={18} />
-            Добавить
+            {t('admin.add', lang)}
           </button>
         </div>
       </div>
 
       <div className="mb-6 relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-        <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} placeholder="Поиск по названию..." className="w-full pl-12 pr-4 py-3 border rounded-xl" />
+        <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} placeholder={t('admin.searchByTitle', lang)} className="w-full pl-12 pr-4 py-3 border rounded-xl" />
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Публикация</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Язык</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Частота</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Выпусков</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Статус</th>
-              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Действия</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.publication', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.language', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.frequency', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.issuesCount', lang)}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">{t('admin.status', lang)}</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">{t('admin.actionsCol', lang)}</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {loading ? (
-              <tr><td colSpan={6} className="px-4 py-8 text-center">Загрузка...</td></tr>
+              <tr><td colSpan={6} className="px-4 py-8 text-center">{t('loading', lang)}</td></tr>
             ) : publications.length === 0 ? (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Нет публикаций</td></tr>
+              <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">{t('admin.noData', lang)}</td></tr>
             ) : publications.map((pub) => (
               <tr key={pub.id} className={`hover:bg-gray-50 ${!pub.is_active ? 'opacity-50' : ''}`}>
                 <td className="px-4 py-3">
@@ -286,17 +296,17 @@ export default function AdminPublications() {
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-gray-600">{LANGUAGES.find(l => l.value === pub.primary_language)?.label || '—'}</td>
-                <td className="px-4 py-3 text-gray-600">{FREQUENCIES.find(f => f.value === pub.frequency)?.label || pub.frequency || '—'}</td>
+                <td className="px-4 py-3 text-gray-600">{LANGUAGE_KEYS.find(l => l.value === pub.primary_language) ? t(LANGUAGE_KEYS.find(l => l.value === pub.primary_language)!.key, lang) : '—'}</td>
+                <td className="px-4 py-3 text-gray-600">{FREQUENCY_KEYS.find(f => f.value === pub.frequency) ? t(FREQUENCY_KEYS.find(f => f.value === pub.frequency)!.key, lang) : pub.frequency || '—'}</td>
                 <td className="px-4 py-3">
                   <button onClick={() => viewIssues(pub.id, pub.title_ru)} className="text-primary-600 hover:underline font-medium">{pub.total_issues || 0}</button>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-1 text-xs rounded-full ${pub.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{pub.is_active ? 'Активна' : 'Скрыта'}</span>
+                  <span className={`px-2 py-1 text-xs rounded-full ${pub.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{pub.is_active ? t('admin.activeStatus', lang) : t('admin.hiddenStatus', lang)}</span>
                 </td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
-                  <button onClick={() => { setEditingPub({ ...pub }); setIsNew(false); setSimilarPubs([]); }} className="p-2 text-gray-400 hover:text-primary-600" title="Редактировать"><Edit2 size={18} /></button>
-                  <button onClick={() => handleDelete(pub)} disabled={deleting === pub.id} className="p-2 text-gray-400 hover:text-red-600 disabled:opacity-50" title="Удалить"><Trash2 size={18} /></button>
+                  <button onClick={() => { setEditingPub({ ...pub }); setIsNew(false); setSimilarPubs([]); }} className="p-2 text-gray-400 hover:text-primary-600" title={t('admin.edit', lang)}><Edit2 size={18} /></button>
+                  <button onClick={() => handleDelete(pub)} disabled={deleting === pub.id} className="p-2 text-gray-400 hover:text-red-600 disabled:opacity-50" title={t('admin.delete', lang)}><Trash2 size={18} /></button>
                 </td>
               </tr>
             ))}
@@ -304,7 +314,7 @@ export default function AdminPublications() {
         </table>
         {totalPages > 1 && (
           <div className="px-4 py-3 border-t flex items-center justify-between">
-            <span className="text-sm text-gray-500">Стр. {page + 1} из {totalPages}</span>
+            <span className="text-sm text-gray-500">{t('admin.page', lang)} {page + 1} {t('admin.of', lang)} {totalPages}</span>
             <div className="flex gap-2">
               <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 rounded border disabled:opacity-50"><ChevronLeft size={20} /></button>
               <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 rounded border disabled:opacity-50"><ChevronRight size={20} /></button>
@@ -318,7 +328,7 @@ export default function AdminPublications() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-y-auto">
           <div className="bg-white rounded-2xl w-full max-w-2xl mx-4 my-8">
             <div className="p-6 border-b flex items-center justify-between">
-              <h2 className="text-xl font-bold">{isNew ? 'Новая публикация' : 'Редактировать'}</h2>
+              <h2 className="text-xl font-bold">{isNew ? t('admin.newPublication', lang) : t('admin.edit', lang)}</h2>
               <button onClick={() => { setEditingPub(null); setIsNew(false); setSimilarPubs([]); }}><X size={24} /></button>
             </div>
             <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
@@ -328,22 +338,21 @@ export default function AdminPublications() {
                 <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
                   <div className="flex items-center gap-2 text-amber-700 font-medium mb-2">
                     <AlertTriangle size={18} />
-                    Найдены похожие публикации ({similarPubs.length})
+                    {t('admin.similarFound', lang)} ({similarPubs.length})
                   </div>
-                  <p className="text-sm text-amber-600 mb-3">Возможно, такая уже есть. Можно открыть существующую или объединить.</p>
                   <div className="space-y-2">
                     {similarPubs.map(sp => (
                       <div key={sp.id} className="flex items-center justify-between bg-white rounded-lg p-3 border border-amber-200">
                         <div>
                           <p className="font-medium text-sm">{sp.title_ru}</p>
-                          <p className="text-xs text-gray-500">{sp.total_issues || 0} выпусков · {sp.is_active ? 'Активна' : 'Скрыта'}</p>
+                          <p className="text-xs text-gray-500">{sp.total_issues || 0} {t('admin.issuesCount', lang).toLowerCase()} · {sp.is_active ? t('admin.activeStatus', lang) : t('admin.hiddenStatus', lang)}</p>
                         </div>
                         <button
                           onClick={() => { setEditingPub({ ...sp }); setIsNew(false); setSimilarPubs([]); }}
                           className="px-3 py-1 text-sm bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 flex items-center gap-1"
                         >
                           <ArrowRightLeft size={14} />
-                          Открыть
+                          {t('open', lang)}
                         </button>
                       </div>
                     ))}
@@ -353,40 +362,40 @@ export default function AdminPublications() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Название (рус)</label>
-                  <input type="text" value={editingPub.title_ru || ''} onChange={(e) => setEditingPub({ ...editingPub, title_ru: e.target.value })} className="w-full px-4 py-2 border rounded-lg" placeholder="Шомрей Шабос" />
+                  <label className="block text-sm font-medium mb-1">{t('admin.titleRu', lang)}</label>
+                  <input type="text" value={editingPub.title_ru || ''} onChange={(e) => setEditingPub({ ...editingPub, title_ru: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Название (англ)</label>
+                  <label className="block text-sm font-medium mb-1">{t('admin.titleEn', lang)}</label>
                   <input type="text" value={editingPub.title_en || ''} onChange={(e) => setEditingPub({ ...editingPub, title_en: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Название (ивр)</label>
+                  <label className="block text-sm font-medium mb-1">{t('admin.titleHe', lang)}</label>
                   <input type="text" value={editingPub.title_he || ''} onChange={(e) => setEditingPub({ ...editingPub, title_he: e.target.value })} className="w-full px-4 py-2 border rounded-lg" dir="rtl" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Описание (рус)</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.descRu', lang)}</label>
                 <textarea value={editingPub.description_ru || ''} onChange={(e) => setEditingPub({ ...editingPub, description_ru: e.target.value })} className="w-full px-4 py-2 border rounded-lg" rows={3} />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Описание (англ)</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.descEn', lang)}</label>
                 <textarea value={editingPub.description_en || ''} onChange={(e) => setEditingPub({ ...editingPub, description_en: e.target.value })} className="w-full px-4 py-2 border rounded-lg" rows={3} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Основной язык</label>
+                  <label className="block text-sm font-medium mb-1">{t('admin.mainLang', lang)}</label>
                   <select value={editingPub.primary_language || 'ru'} onChange={(e) => setEditingPub({ ...editingPub, primary_language: e.target.value })} className="w-full px-4 py-2 border rounded-lg">
-                    {LANGUAGES.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
+                    {LANGUAGE_KEYS.map(l => <option key={l.value} value={l.value}>{t(l.key, lang)}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Периодичность</label>
+                  <label className="block text-sm font-medium mb-1">{t('admin.periodicity', lang)}</label>
                   <select value={editingPub.frequency || ''} onChange={(e) => setEditingPub({ ...editingPub, frequency: e.target.value })} className="w-full px-4 py-2 border rounded-lg">
                     <option value="">—</option>
-                    {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
+                    {FREQUENCY_KEYS.map(f => <option key={f.value} value={f.value}>{t(f.key, lang)}</option>)}
                   </select>
                 </div>
               </div>
@@ -397,7 +406,7 @@ export default function AdminPublications() {
                   <input type="email" value={editingPub.email || ''} onChange={(e) => setEditingPub({ ...editingPub, email: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Сайт</label>
+                  <label className="block text-sm font-medium mb-1">{t('pub.site', lang)}</label>
                   <input type="url" value={editingPub.website_url || ''} onChange={(e) => setEditingPub({ ...editingPub, website_url: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
                 </div>
               </div>
@@ -413,19 +422,19 @@ export default function AdminPublications() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">URL обложки</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.coverUrl', lang)}</label>
                 <input type="url" value={editingPub.cover_image_url || ''} onChange={(e) => setEditingPub({ ...editingPub, cover_image_url: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
               </div>
 
               <div className="flex items-center gap-2">
                 <input type="checkbox" checked={editingPub.is_active ?? true} onChange={(e) => setEditingPub({ ...editingPub, is_active: e.target.checked })} />
-                <label>Активна</label>
+                <label>{t('admin.activeStatus', lang)}</label>
               </div>
             </div>
             <div className="p-6 border-t flex justify-end gap-3">
-              <button onClick={() => { setEditingPub(null); setIsNew(false); setSimilarPubs([]); }} className="px-4 py-2 text-gray-600">Отмена</button>
+              <button onClick={() => { setEditingPub(null); setIsNew(false); setSimilarPubs([]); }} className="px-4 py-2 text-gray-600">{t('admin.cancelBtn', lang)}</button>
               <button onClick={handleSave} disabled={saving || (!editingPub.title_ru && !editingPub.title_en && !editingPub.title_he)} className="px-4 py-2 bg-primary-600 text-white rounded-lg flex items-center gap-2 disabled:opacity-50 hover:bg-primary-700">
-                <Save size={18} />{saving ? 'Сохранение...' : 'Сохранить'}
+                <Save size={18} />{saving ? t('admin.savingBtn', lang) : t('admin.saveBtn', lang)}
               </button>
             </div>
           </div>
@@ -437,14 +446,14 @@ export default function AdminPublications() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-y-auto">
           <div className="bg-white rounded-2xl w-full max-w-3xl mx-4 my-8">
             <div className="p-6 border-b flex items-center justify-between">
-              <h2 className="text-xl font-bold">Выпуски: {viewingIssues.pubTitle}</h2>
+              <h2 className="text-xl font-bold">{t('admin.showIssues', lang)} {viewingIssues.pubTitle}</h2>
               <button onClick={() => setViewingIssues(null)}><X size={24} /></button>
             </div>
             <div className="max-h-[70vh] overflow-y-auto">
               {issuesLoading ? (
-                <div className="p-8 text-center">Загрузка...</div>
+                <div className="p-8 text-center">{t('loading', lang)}</div>
               ) : viewingIssues.issues.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">Нет привязанных выпусков</div>
+                <div className="p-8 text-center text-gray-500">{t('admin.noIssues', lang)}</div>
               ) : (
                 <div className="divide-y">
                   {viewingIssues.issues.map((issue) => (
@@ -452,16 +461,16 @@ export default function AdminPublications() {
                       {issue.thumbnail_url ? <img src={issue.thumbnail_url} alt="" className="w-10 h-14 object-cover rounded" /> : <div className="w-10 h-14 bg-gray-200 rounded flex items-center justify-center"><FileText className="text-gray-400" size={16} /></div>}
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{issue.title}</p>
-                        <p className="text-sm text-gray-500">{issue.issue_number && `№${issue.issue_number} · `}{issue.gregorian_date ? new Date(issue.gregorian_date).toLocaleDateString('ru-RU') : ''}</p>
+                        <p className="text-sm text-gray-500">{issue.issue_number && `№${issue.issue_number} · `}{issue.gregorian_date ? new Date(issue.gregorian_date).toLocaleDateString(lang === 'he' ? 'he-IL' : lang === 'en' ? 'en-US' : lang === 'uk' ? 'uk-UA' : 'ru-RU') : ''}</p>
                       </div>
-                      <span className={`px-2 py-1 text-xs rounded-full ${issue.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{issue.is_active ? 'Активен' : 'Скрыт'}</span>
+                      <span className={`px-2 py-1 text-xs rounded-full ${issue.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{issue.is_active ? t('admin.activeStatus', lang) : t('admin.hiddenStatus', lang)}</span>
                       {issue.pdf_url && <a href={issue.pdf_url} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-primary-600"><ExternalLink size={18} /></a>}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <div className="p-4 border-t text-center text-sm text-gray-500">Показано до 50 выпусков</div>
+            <div className="p-4 border-t text-center text-sm text-gray-500">{t('admin.shownUpTo', lang)}</div>
           </div>
         </div>
       )}

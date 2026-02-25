@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { FileText, Trash2, Check, ExternalLink, ChevronDown, ChevronUp, Eye, X } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
+
+const LOCALE_MAP: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
 
 interface DuplicateGroup {
   title: string;
@@ -11,6 +15,7 @@ interface DuplicateGroup {
 }
 
 export default function AdminDuplicates() {
+  const { lang } = useLanguage();
   const [groups, setGroups] = useState<DuplicateGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
@@ -20,7 +25,7 @@ export default function AdminDuplicates() {
 
   const fetchDuplicates = async () => {
     setLoading(true);
-    
+
     const { data: allDocs } = await supabase
       .from('issues')
       .select('id, title, pdf_url, thumbnail_url, created_at, gregorian_date')
@@ -55,14 +60,23 @@ export default function AdminDuplicates() {
   useEffect(() => { fetchDuplicates(); }, []);
 
   const handleHide = async (id: string) => {
-    if (!confirm('Скрыть этот документ?')) return;
+    if (!confirm(t('admin.confirmHideDoc', lang))) return;
     await supabase.from('issues').update({ is_active: false }).eq('id', id);
     fetchDuplicates();
   };
 
   const handleKeepOne = async (keepId: string, group: DuplicateGroup) => {
-    if (!confirm('Оставить только этот и скрыть остальные?')) return;
+    if (!confirm(t('admin.confirmKeepOne', lang))) return;
     const idsToHide = group.items.filter(item => item.id !== keepId).map(item => item.id);
+    await supabase.from('issues').update({ is_active: false }).in('id', idsToHide);
+    fetchDuplicates();
+  };
+
+  const handleHideAllDuplicates = async () => {
+    if (!groups.length) return;
+    if (!confirm(t('admin.confirmHideAllDuplicates', lang))) return;
+    const idsToHide = groups.flatMap((group) => group.items.slice(1).map((item) => item.id));
+    if (idsToHide.length === 0) return;
     await supabase.from('issues').update({ is_active: false }).in('id', idsToHide);
     fetchDuplicates();
   };
@@ -84,18 +98,23 @@ export default function AdminDuplicates() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Дубликаты</h1>
-          <p className="text-gray-500 mt-1">{groups.length} групп · {totalDuplicates} лишних</p>
+          <h1 className="text-3xl font-bold">{t('admin.duplicates', lang)}</h1>
+          <p className="text-gray-500 mt-1">{groups.length} {t('admin.groups', lang)} · {totalDuplicates} {t('admin.extras', lang)}</p>
         </div>
-        <button onClick={fetchDuplicates} className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
-          Обновить
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleHideAllDuplicates} className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
+            {t('admin.hideAllDuplicates', lang)}
+          </button>
+          <button onClick={fetchDuplicates} className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+            {t('admin.refresh', lang)}
+          </button>
+        </div>
       </div>
 
       {groups.length === 0 ? (
         <div className="bg-white rounded-xl p-12 text-center">
           <Check className="mx-auto text-green-500 mb-4" size={48} />
-          <h2 className="text-xl font-bold">Дубликатов нет!</h2>
+          <h2 className="text-xl font-bold">{t('admin.noDuplicates', lang)}</h2>
         </div>
       ) : (
         <div className="space-y-4">
@@ -111,20 +130,20 @@ export default function AdminDuplicates() {
                 </div>
                 {expandedGroup === group.title ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </button>
-              
+
               {expandedGroup === group.title && (
                 <div className="border-t px-6 py-4 space-y-3">
                   {group.items.map((item, index) => (
                     <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                       {item.thumbnail_url ? (
-                        <img 
-                          src={item.thumbnail_url} 
-                          alt="" 
-                          className="w-16 h-20 object-cover rounded cursor-pointer hover:opacity-80" 
+                        <img
+                          src={item.thumbnail_url}
+                          alt=""
+                          className="w-16 h-20 object-cover rounded cursor-pointer hover:opacity-80"
                           onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
                         />
                       ) : (
-                        <div 
+                        <div
                           className="w-16 h-20 bg-gray-200 rounded flex items-center justify-center cursor-pointer hover:bg-gray-300"
                           onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
                         >
@@ -133,25 +152,25 @@ export default function AdminDuplicates() {
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-gray-500">
-                          #{index + 1} · Добавлен: {new Date(item.created_at).toLocaleDateString('ru-RU')}
+                          #{index + 1} · {t('admin.added', lang)} {new Date(item.created_at).toLocaleDateString(LOCALE_MAP[lang] || 'en-US')}
                         </p>
                         <p className="text-xs text-gray-400 truncate mt-1">{item.pdf_url}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button 
-                          onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)} 
+                        <button
+                          onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
                           className="p-2 text-gray-400 hover:text-primary-600"
-                          title="Просмотреть"
+                          title={t('admin.view', lang)}
                         >
                           <Eye size={18} />
                         </button>
-                        <a href={item.pdf_url} target="_blank" className="p-2 text-gray-400 hover:text-primary-600" title="Открыть в новой вкладке">
+                        <a href={item.pdf_url} target="_blank" className="p-2 text-gray-400 hover:text-primary-600" title={t('admin.openNewTab', lang)}>
                           <ExternalLink size={18} />
                         </a>
                         <button onClick={() => handleKeepOne(item.id, group)} className="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200">
-                          Оставить
+                          {t('admin.keep', lang)}
                         </button>
-                        <button onClick={() => handleHide(item.id)} className="p-2 text-gray-400 hover:text-red-600" title="Скрыть">
+                        <button onClick={() => handleHide(item.id)} className="p-2 text-gray-400 hover:text-red-600" title={t('admin.hide', lang)}>
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -171,12 +190,12 @@ export default function AdminDuplicates() {
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="font-bold text-lg truncate">{viewingTitle}</h3>
               <div className="flex items-center gap-2">
-                <a 
-                  href={viewingPdf} 
-                  target="_blank" 
+                <a
+                  href={viewingPdf}
+                  target="_blank"
                   className="px-3 py-1 bg-gray-100 rounded text-sm hover:bg-gray-200"
                 >
-                  Открыть в новой вкладке
+                  {t('admin.openNewTab', lang)}
                 </a>
                 <button onClick={() => setViewingPdf(null)} className="p-2 hover:bg-gray-100 rounded">
                   <X size={24} />
@@ -184,8 +203,8 @@ export default function AdminDuplicates() {
               </div>
             </div>
             <div className="flex-1 p-2">
-              <iframe 
-                src={viewingPdf} 
+              <iframe
+                src={viewingPdf}
                 className="w-full h-full rounded border"
                 title="PDF Viewer"
               />

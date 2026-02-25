@@ -229,8 +229,8 @@ export default function Header() {
         <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
           {fDate}{fDate && fParsha && <span className="mx-2">•</span>}
           {fParsha && <span>{t('parsha.prefix', lang)}{fParsha}{t('parsha.suffix', lang)}</span>}
-          {candleLighting && <><span className="mx-2">•</span><span>🕯 Зажигание: {candleLighting}</span></>}
-          {havdalah && <><span className="mx-1"> · </span><span>Авдала: {havdalah}</span></>}
+          {candleLighting && <><span className="mx-2">•</span><span>🕯 {t('shabbat.candleLighting', lang)}: {candleLighting}</span></>}
+          {havdalah && <><span className="mx-1"> · </span><span>{t('shabbat.havdalah', lang)}: {havdalah}</span></>}
           {shabbatCity && <span className="ml-1 text-blue-200">({shabbatCity})</span>}
         </div>
       )}
@@ -240,7 +240,7 @@ export default function Header() {
             <span className="text-primary-600">Shabbat</span><span className="text-gold-500">Hub</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />{lang === 'ru' ? 'Маркет' : lang === 'uk' ? 'Маркет' : lang === 'he' ? 'מרקט' : 'Market'}</Link>
+            <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />{t('market.title', lang)}</Link>
             <Link href="/leaders" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Trophy size={18} />{t('nav.leaders', lang)}</Link>
             <Link href="/navigator" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Compass size={18} />{t('nav.navigator', lang)}</Link>
             <Link href="/about" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Info size={18} />{t('nav.about', lang)}</Link>
@@ -269,7 +269,7 @@ export default function Header() {
                 </button>
                 {isUserMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsUserMenuOpen(false)} /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
                   <div className="px-4 py-2 border-b"><p className="text-sm font-medium truncate">{user.email}</p><p className="text-xs text-gray-500">{userRole === 'admin' ? t('roles.admin', lang) : userRole === 'editor' ? t('roles.editor', lang) : t('roles.user', lang)}</p></div>
-                  <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><User size={16} />{lang === 'ru' ? 'Профиль' : lang === 'uk' ? 'Профіль' : lang === 'he' ? 'פרופיל' : 'Profile'}</Link>
+                  <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><User size={16} />{t('nav.profile', lang)}</Link>
                   {(userRole === 'superadmin' || userRole === 'admin') && <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><BookOpen size={16} />{t('nav.admin', lang)}</Link>}
                   <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full"><LogOut size={16} />{t('nav.logout', lang)}</button>
                 </div></>)}
@@ -298,7 +298,7 @@ export default function Header() {
       {/* Mobile */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t"><nav className="flex flex-col p-4 gap-3">
-          <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><BookOpen size={20} />{t('nav.catalog', lang)}</Link>          <Link href="/marketplace" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Store size={20} />{lang === 'ru' ? 'Маркет' : lang === 'uk' ? 'Маркет' : lang === 'he' ? 'מרקט' : 'Market'}</Link>
+          <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><BookOpen size={20} />{t('nav.catalog', lang)}</Link>          <Link href="/marketplace" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Store size={20} />{t('market.title', lang)}</Link>
           <Link href="/leaders" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Trophy size={20} />{t('nav.leaders', lang)}</Link>
           <Link href="/navigator" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Compass size={20} />{t('nav.navigator', lang)}</Link>
           <Link href="/about" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Info size={20} />{t('nav.about', lang)}</Link>

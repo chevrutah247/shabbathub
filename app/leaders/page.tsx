@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { Trophy, Upload, ArrowLeft, Users } from 'lucide-react';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/lib/language-context';
 
 interface UploadLeader {
   id: string;
@@ -30,7 +32,16 @@ const MEDAL_BG = [
   'bg-amber-50 border-amber-200',
 ];
 
+function referralBadge(count: number) {
+  if (count >= 50) return { label: 'Ambassador', className: 'bg-purple-100 text-purple-700 border-purple-200' };
+  if (count >= 20) return { label: 'Builder', className: 'bg-blue-100 text-blue-700 border-blue-200' };
+  if (count >= 10) return { label: 'Connector', className: 'bg-green-100 text-green-700 border-green-200' };
+  if (count >= 3) return { label: 'Starter', className: 'bg-amber-100 text-amber-700 border-amber-200' };
+  return { label: 'New', className: 'bg-gray-100 text-gray-600 border-gray-200' };
+}
+
 export default function LeadersPage() {
+  const { lang } = useLanguage();
   const [uploadLeaders, setUploadLeaders] = useState<UploadLeader[]>([]);
   const [referralLeaders, setReferralLeaders] = useState<ReferralLeader[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,13 +79,13 @@ export default function LeadersPage() {
 
         const profileMap: Record<string, string> = {};
         for (const p of profiles || []) {
-          profileMap[p.id] = p.display_name || p.email?.split('@')[0] || 'Аноним';
+          profileMap[p.id] = p.display_name || p.email?.split('@')[0] || t('leaders.anonymous', lang);
         }
 
         const refLeaders: ReferralLeader[] = referrerIds
           .map(id => ({
             referrer_id: id,
-            display_name: profileMap[id] || 'Аноним',
+            display_name: profileMap[id] || t('leaders.anonymous', lang),
             referral_count: countMap[id],
           }))
           .sort((a, b) => b.referral_count - a.referral_count);
@@ -86,7 +97,7 @@ export default function LeadersPage() {
     }
 
     fetchData();
-  }, []);
+  }, [lang]);
 
   const getInitials = (name: string) => {
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
@@ -110,14 +121,14 @@ export default function LeadersPage() {
         <div className="mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-6">
             <ArrowLeft size={18} />
-            На главную
+            {t('leaders.backHome', lang)}
           </Link>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
               <Trophy className="text-primary-600" size={32} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Доска почёта</h1>
-            <p className="text-gray-500">Лидеры нашего сообщества</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('leaders.title', lang)}</h1>
+            <p className="text-gray-500">{t('leaders.subtitle', lang)}</p>
           </div>
         </div>
 
@@ -132,7 +143,7 @@ export default function LeadersPage() {
             }`}
           >
             <Upload size={18} />
-            По загрузкам
+            {t('leaders.byUploads', lang)}
             <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === 'uploads' ? 'bg-white/20' : 'bg-gray-100'}`}>
               {totalUploads.toLocaleString()}
             </span>
@@ -146,7 +157,7 @@ export default function LeadersPage() {
             }`}
           >
             <Users size={18} />
-            По приглашениям
+            {t('leaders.byReferrals', lang)}
             <span className={`px-2 py-0.5 text-xs rounded-full ${activeTab === 'referrals' ? 'bg-white/20' : 'bg-gray-100'}`}>
               {totalReferrals}
             </span>
@@ -157,7 +168,7 @@ export default function LeadersPage() {
         {activeTab === 'uploads' && (
           <>
             {uploadLeaders.length === 0 ? (
-              <div className="text-center py-16 text-gray-500">Пока нет загрузок</div>
+              <div className="text-center py-16 text-gray-500">{t('leaders.noUploads', lang)}</div>
             ) : (
               <>
                 {/* Подиум топ-3 */}
@@ -175,7 +186,7 @@ export default function LeadersPage() {
                       <div className="text-2xl mb-1">🥈</div>
                       <p className="font-semibold text-gray-800 truncate">{uploadLeaders[1].display_name}</p>
                       <p className="text-2xl font-bold text-gray-600 mt-1">{uploadLeaders[1].upload_count.toLocaleString()}</p>
-                      <p className="text-xs text-gray-400">документов</p>
+                      <p className="text-xs text-gray-400">{t('leaders.documents', lang)}</p>
                     </div>
 
                     {/* 1 место */}
@@ -191,7 +202,7 @@ export default function LeadersPage() {
                       <div className="text-2xl mb-1">🥇</div>
                       <p className="font-bold text-gray-900 truncate">{uploadLeaders[0].display_name}</p>
                       <p className="text-3xl font-bold text-gray-800 mt-1">{uploadLeaders[0].upload_count.toLocaleString()}</p>
-                      <p className="text-xs text-gray-500">документов</p>
+                      <p className="text-xs text-gray-500">{t('leaders.documents', lang)}</p>
                     </div>
 
                     {/* 3 место */}
@@ -206,7 +217,7 @@ export default function LeadersPage() {
                       <div className="text-2xl mb-1">🥉</div>
                       <p className="font-semibold text-gray-800 truncate">{uploadLeaders[2].display_name}</p>
                       <p className="text-2xl font-bold text-gray-600 mt-1">{uploadLeaders[2].upload_count.toLocaleString()}</p>
-                      <p className="text-xs text-gray-400">документов</p>
+                      <p className="text-xs text-gray-400">{t('leaders.documents', lang)}</p>
                     </div>
                   </div>
                 )}
@@ -214,7 +225,7 @@ export default function LeadersPage() {
                 {/* Таблица */}
                 <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
                   <div className="px-6 py-4 border-b bg-gray-50">
-                    <h2 className="font-semibold text-gray-700">Полный рейтинг по загрузкам</h2>
+                    <h2 className="font-semibold text-gray-700">{t('leaders.fullUploadRank', lang)}</h2>
                   </div>
                   <div className="divide-y">
                     {uploadLeaders.map((leader, idx) => (
@@ -245,7 +256,7 @@ export default function LeadersPage() {
                             <Upload size={14} className="text-gray-400" />
                             <span className={`font-bold ${idx < 3 ? 'text-xl text-gray-900' : 'text-lg text-gray-600'}`}>{leader.upload_count.toLocaleString()}</span>
                           </div>
-                          <p className="text-xs text-gray-400">документов</p>
+                          <p className="text-xs text-gray-400">{t('leaders.documents', lang)}</p>
                         </div>
                       </div>
                     ))}
@@ -262,8 +273,8 @@ export default function LeadersPage() {
             {referralLeaders.length === 0 ? (
               <div className="text-center py-16">
                 <Users className="mx-auto text-gray-300 mb-4" size={48} />
-                <p className="text-gray-500 mb-2">Пока нет приглашений</p>
-                <p className="text-sm text-gray-400">Поделитесь ссылкой на сайт — и ваши приглашения будут засчитаны!</p>
+                <p className="text-gray-500 mb-2">{t('leaders.noReferrals', lang)}</p>
+                <p className="text-sm text-gray-400">{t('leaders.shareHint', lang)}</p>
               </div>
             ) : (
               <>
@@ -276,8 +287,11 @@ export default function LeadersPage() {
                       </div>
                       <div className="text-2xl mb-1">🥈</div>
                       <p className="font-semibold text-gray-800 truncate">{referralLeaders[1].display_name}</p>
+                      <span className={`inline-flex mt-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${referralBadge(referralLeaders[1].referral_count).className}`}>
+                        {referralBadge(referralLeaders[1].referral_count).label}
+                      </span>
                       <p className="text-2xl font-bold text-gray-600 mt-1">{referralLeaders[1].referral_count}</p>
-                      <p className="text-xs text-gray-400">приглашений</p>
+                      <p className="text-xs text-gray-400">{t('leaders.referralsCount', lang)}</p>
                     </div>
                     <div className={`rounded-2xl border p-6 text-center ${MEDAL_BG[0]} shadow-lg`}>
                       <div className="text-3xl mb-2">👑</div>
@@ -286,8 +300,11 @@ export default function LeadersPage() {
                       </div>
                       <div className="text-2xl mb-1">🥇</div>
                       <p className="font-bold text-gray-900 truncate">{referralLeaders[0].display_name}</p>
+                      <span className={`inline-flex mt-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${referralBadge(referralLeaders[0].referral_count).className}`}>
+                        {referralBadge(referralLeaders[0].referral_count).label}
+                      </span>
                       <p className="text-3xl font-bold text-gray-800 mt-1">{referralLeaders[0].referral_count}</p>
-                      <p className="text-xs text-gray-500">приглашений</p>
+                      <p className="text-xs text-gray-500">{t('leaders.referralsCount', lang)}</p>
                     </div>
                     <div className={`rounded-2xl border p-6 text-center mt-12 ${MEDAL_BG[2]}`}>
                       <div className={`w-14 h-14 mx-auto rounded-full bg-gradient-to-br ${MEDAL_COLORS[2]} flex items-center justify-center text-white font-bold text-lg mb-3`}>
@@ -295,8 +312,11 @@ export default function LeadersPage() {
                       </div>
                       <div className="text-2xl mb-1">🥉</div>
                       <p className="font-semibold text-gray-800 truncate">{referralLeaders[2].display_name}</p>
+                      <span className={`inline-flex mt-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${referralBadge(referralLeaders[2].referral_count).className}`}>
+                        {referralBadge(referralLeaders[2].referral_count).label}
+                      </span>
                       <p className="text-2xl font-bold text-gray-600 mt-1">{referralLeaders[2].referral_count}</p>
-                      <p className="text-xs text-gray-400">приглашений</p>
+                      <p className="text-xs text-gray-400">{t('leaders.referralsCount', lang)}</p>
                     </div>
                   </div>
                 )}
@@ -304,7 +324,7 @@ export default function LeadersPage() {
                 {/* Таблица приглашений */}
                 <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
                   <div className="px-6 py-4 border-b bg-gray-50">
-                    <h2 className="font-semibold text-gray-700">Полный рейтинг по приглашениям</h2>
+                    <h2 className="font-semibold text-gray-700">{t('leaders.fullReferralRank', lang)}</h2>
                   </div>
                   <div className="divide-y">
                     {referralLeaders.map((leader, idx) => (
@@ -325,13 +345,16 @@ export default function LeadersPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className={`font-medium truncate ${idx < 3 ? 'text-gray-900' : 'text-gray-700'}`}>{leader.display_name}</p>
+                          <span className={`inline-flex mt-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${referralBadge(leader.referral_count).className}`}>
+                            {referralBadge(leader.referral_count).label}
+                          </span>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center gap-1.5">
                             <Users size={14} className="text-gray-400" />
                             <span className={`font-bold ${idx < 3 ? 'text-xl text-gray-900' : 'text-lg text-gray-600'}`}>{leader.referral_count}</span>
                           </div>
-                          <p className="text-xs text-gray-400">приглашений</p>
+                          <p className="text-xs text-gray-400">{t('leaders.referralsCount', lang)}</p>
                         </div>
                       </div>
                     ))}
