@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, FileText, Loader2, ChevronLeft, ChevronRight, BookOpen, Filter, X, Scroll, Library, FolderOpen, Share2, Check, Calendar, Star } from 'lucide-react';
 import SubscribeBlock from '@/components/SubscribeBlock';
 import { useLanguage, Lang } from '@/lib/language-context';
 import { t } from '@/lib/translations';
-import { getPublicationIdsForCategory, categoryNames, getCategoryForPublication, orderedCategories } from '@/lib/category-mapping';
+import { tagNames, orderedTags, getTagName } from '@/lib/category-mapping';
 import { trackEvent } from '@/lib/analytics';
 import { useAuth } from '@/lib/auth-context';
 
@@ -15,10 +16,10 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const PAGE_SIZE = 50;
 
-interface Document { id: string; title: string; pdf_url: string; gregorian_date: string; publication_id: string; thumbnail_url: string; parsha_id: number; event_id: string; issue_number: string; }
+interface Document { id: string; title: string; pdf_url: string; gregorian_date: string; publication_id: string; thumbnail_url: string; parsha_id: number; event_id: string; issue_number: string; ai_summary?: string; rank?: number; }
 interface Parsha { id: number; name_ru: string; name_en: string; order_num: number; }
 interface Publication { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; }
-interface PublicationFull { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; cover_image_url?: string | null; total_issues: number; frequency: string; primary_language: string; description_ru?: string | null; }
+interface PublicationFull { id: string; title_ru?: string | null; title_en?: string | null; title_he?: string | null; cover_image_url?: string | null; total_issues: number; frequency: string; primary_language: string; description_ru?: string | null; tags?: string[]; }
 interface Event { id: string; name_ru: string; }
 interface RecommendationIssue { id: string; title: string; pdf_url: string; thumbnail_url: string; gregorian_date: string; publication_id: string; parsha_id: number; event_id: string; issue_number: string; }
 
@@ -79,14 +80,27 @@ const parshaNameToId: Record<string, number> = {
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
 };
 
+const contentTopics: { id: string; keywords: string[]; label: Record<string, string> }[] = [
+  { id: 'shabbat', keywords: ['шабб', 'шабат', 'shabb', 'שבת', 'субботн'], label: { ru: 'Шаббат', en: 'Shabbat', he: 'שבת', uk: 'Шаббат' } },
+  { id: 'holidays', keywords: ['праздни', 'пурим', 'песах', 'ханук', 'суккот', 'рош а-шан', 'purim', 'pesach', 'chanuk', 'sukkot', 'rosh', 'holiday', 'פורים', 'פסח', 'חנוכ', 'סוכות', 'ראש השנה'], label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' } },
+  { id: 'chassidut', keywords: ['хасид', 'хасидут', 'chassid', 'חסיד', 'тания', 'tanya', 'תניא', 'маамар', 'maamar', 'ликутей', 'likutei'], label: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' } },
+  { id: 'rebbe', keywords: ['ребе', 'rebbe', 'רבי', 'любавич', 'lubavitch', 'хабад', 'chabad', 'игрот кодеш', 'igros kodesh'], label: { ru: 'Учение Ребе', en: 'The Rebbe', he: 'הרבי', uk: 'Вчення Ребе' } },
+  { id: 'moshiach', keywords: ['мошиах', 'mashiach', 'moshiach', 'משיח', 'геула', 'geula', 'גאולה', 'избавлен', 'redemption'], label: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' } },
+  { id: 'halacha', keywords: ['галах', 'halacha', 'הלכ', 'закон', 'шулхан', 'shulchan'], label: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' } },
+  { id: 'family', keywords: ['семь', 'воспитан', 'дет', 'family', 'children', 'chinuch', 'חינוך', 'שלום בית', 'шалом байт', 'шалом-байт'], label: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: "Сім'я" } },
+  { id: 'stories', keywords: ['истори', 'рассказ', 'story', 'stories', 'סיפור', 'sippur'], label: { ru: 'Истории', en: 'Stories', he: 'סיפורים', uk: 'Історії' } },
+  { id: 'emunah', keywords: ['вер', 'emunah', 'אמונ', 'битахон', 'bitachon', 'ביטחון', 'доверие', 'упован'], label: { ru: 'Эмуна', en: 'Emunah', he: 'אמונה', uk: 'Емуна' } },
+  { id: 'prayer', keywords: ['молитв', 'prayer', 'תפיל', 'теилим', 'tehillim', 'תהילים'], label: { ru: 'Молитва', en: 'Prayer', he: 'תפילה', uk: 'Молитва' } },
+];
+
 function formatDate(dateString: string | null, lang: Lang): string {
   if (!dateString) return '';
   const locale = lang === 'he' ? 'he-IL' : lang === 'uk' ? 'uk-UA' : lang === 'en' ? 'en-US' : 'ru-RU';
   return new Date(dateString).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang }: {
-  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>; eventMap: Record<string, string>; lang: Lang;
+function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang, showSummary }: {
+  doc: Document; currentParshaId: number | null; parshaMap: Record<number, string>; pubMap: Record<string, string>; eventMap: Record<string, string>; lang: Lang; showSummary?: boolean;
 }) {
   const [imgError, setImgError] = useState(false);
   const parshaName = doc.parsha_id ? parshaMap[doc.parsha_id] : null;
@@ -105,7 +119,7 @@ function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang 
           <div className="absolute inset-y-0 left-0 w-3 z-10" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.08) 40%, transparent 100%)' }} />
           <div className="absolute inset-x-0 top-0 h-1/3 z-10 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,248,230,0.15) 0%, transparent 100%)' }} />
           {doc.thumbnail_url && !imgError ? (
-            <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" referrerPolicy="no-referrer" onError={() => setImgError(true)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <Image src={doc.thumbnail_url} alt={doc.title} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 16vw" onError={() => setImgError(true)} className="object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center" style={{ background: 'linear-gradient(145deg, #d4a574 0%, #b8854a 50%, #96693a 100%)' }}>
               <BookOpen size={28} className="text-amber-100/60 mb-2" />
@@ -122,6 +136,7 @@ function DocumentCard({ doc, currentParshaId, parshaMap, pubMap, eventMap, lang 
         <div className="mt-3 px-0.5">
           <h3 className="text-sm font-semibold text-stone-800 line-clamp-2 leading-snug group-hover:text-amber-800 transition-colors" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{doc.title}</h3>
           {infoParts.length > 0 && <p className="text-[11px] text-stone-500 mt-1 line-clamp-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{infoParts.join(' \u00b7 ')}</p>}
+          {showSummary && doc.ai_summary && <p className="text-[11px] text-stone-600 mt-1 line-clamp-3 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{doc.ai_summary}</p>}
           {doc.gregorian_date && <p className="text-[10px] text-stone-400 mt-0.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>{formatDate(doc.gregorian_date, lang)}</p>}
         </div>
       </Link>
@@ -161,7 +176,7 @@ function PublicationCard({ pub, lang, onSelect, isExpanded }: { pub: Publication
         <div className="book-cover relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
           <div className="absolute inset-y-0 left-0 w-3 z-10" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.08) 40%, transparent 100%)' }} />
           {pub.cover_image_url && !imgError ? (
-            <img src={pub.cover_image_url} alt={title} loading="lazy" referrerPolicy="no-referrer" onError={() => setImgError(true)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <Image src={pub.cover_image_url} alt={title} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 16vw" onError={() => setImgError(true)} className="object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center" style={{ background: 'linear-gradient(145deg, #1e3a6e 0%, #2c5282 50%, #1a365d 100%)' }}>
               <FolderOpen size={32} className="text-blue-200/50 mb-2" />
@@ -227,10 +242,11 @@ function CatalogContent() {
   const [selectedHebrewYear, setSelectedHebrewYear] = useState<number | null>(null);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedContentTopic, setSelectedContentTopic] = useState<string | null>(null);
 
   const categoryParam = searchParams.get('category');
-  const categoryPubIds = categoryParam ? getPublicationIdsForCategory(categoryParam) : null;
-  const categoryName = categoryParam && categoryNames[categoryParam] ? (categoryNames[categoryParam][lang] || categoryNames[categoryParam]['ru']) : null;
+  const initialTag = categoryParam && orderedTags.includes(categoryParam as any) ? categoryParam : null;
 
   useEffect(() => {
     setSelectedPubLangs([]);
@@ -262,7 +278,7 @@ function CatalogContent() {
     (async () => {
       try {
         const fetchPromises: [Promise<PublicationFull[]>, Promise<Record<string, string>>] = [
-          fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru', { headers: { apikey: SUPABASE_KEY } }).then(r => r.json()),
+          fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he,cover_image_url,total_issues,frequency,primary_language,description_ru,tags', { headers: { apikey: SUPABASE_KEY } }).then(r => r.json()),
           viewMode === 'publications' ? fetchLatestIssueThumbMap() : Promise.resolve({} as Record<string, string>),
         ];
         const [pubs, thumbMap] = await Promise.all(fetchPromises);
@@ -284,10 +300,21 @@ function CatalogContent() {
   }, [viewMode]);
 
   // Extra backfill for publications still without cover after bulk fetch
+  // Use a ref to track which publications we've already attempted to backfill
+  // to prevent infinite re-render loop (setPublicationsList triggers this effect)
+  const backfilledRef = useRef<Set<string>>(new Set());
+  const publicationsListRef = useRef(publicationsList);
+  publicationsListRef.current = publicationsList;
   useEffect(() => {
     if (viewMode !== 'publications') return;
-    const missing = publicationsList.filter((p) => !p.cover_image_url || !p.cover_image_url.trim());
+    const missing = publicationsList.filter(
+      (p) => (!p.cover_image_url || !p.cover_image_url.trim()) && !backfilledRef.current.has(p.id)
+    );
     if (missing.length === 0) return;
+
+    // Mark these as attempted immediately to prevent re-runs
+    for (const p of missing) backfilledRef.current.add(p.id);
+
     let cancelled = false;
 
     async function fillMissingCovers() {
@@ -337,8 +364,9 @@ function CatalogContent() {
     };
   }, [publicationsList, viewMode]);
 
+  const activeTags = useMemo(() => selectedTags.length > 0 ? selectedTags : (initialTag ? [initialTag] : []), [selectedTags, initialTag]);
   const filteredPubs = publicationsList.filter(p => {
-    if (categoryPubIds && !categoryPubIds.includes(p.id)) return false;
+    if (activeTags.length > 0 && !(p.tags || []).some(t => activeTags.includes(t))) return false;
     if (selectedPubLangs.length > 0 && !selectedPubLangs.includes(p.primary_language)) return false;
     if (!pubsSearchInput) return true;
     const q = pubsSearchInput.toLowerCase();
@@ -356,8 +384,19 @@ function CatalogContent() {
   const fetchDocuments = useCallback(async () => {
     if (!initialized) return; setLoading(true);
     const from = page * PAGE_SIZE; const to = from + PAGE_SIZE - 1;
+
+    // Use full-text search API when searching
+    if (searchQuery) {
+      try {
+        const res = await fetch('/api/search?q=' + encodeURIComponent(searchQuery) + '&limit=' + PAGE_SIZE + '&offset=' + from);
+        const { results, total } = await res.json();
+        setDocuments(results || []);
+        setTotalCount(total || 0);
+      } catch (err) { console.error('Search error:', err); } finally { setLoading(false); }
+      return;
+    }
+
     let url = SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=' + (sortOrder === 'oldest' ? 'created_at.asc' : 'created_at.desc');
-    if (searchQuery) url += '&title=ilike.*' + encodeURIComponent(searchQuery) + '*';
     if (selectedParsha) url += '&parsha_id=eq.' + selectedParsha;
     if (selectedEvent) url += '&event_id=eq.' + selectedEvent;
     if (selectedHebrewYear) url += '&hebrew_year=eq.' + selectedHebrewYear;
@@ -367,10 +406,22 @@ function CatalogContent() {
     if (selectedPubLangs.length > 0) {
       url += '&language=in.(' + selectedPubLangs.join(',') + ')';
     }
-    // Category filter: use publication IDs
-    if (categoryPubIds && categoryPubIds.length > 0) url += '&publication_id=in.(' + categoryPubIds.join(',') + ')';
-    try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, categoryPubIds, selectedPubLangs]);
+    // Tag filter: filter issues by publication_ids that have selected tags
+    if (activeTags.length > 0) {
+      const tagPubIds = publicationsListRef.current.filter(p => (p.tags || []).some(t => activeTags.includes(t))).map(p => p.id);
+      if (tagPubIds.length > 0) url += '&publication_id=in.(' + tagPubIds.join(',') + ')';
+      else url += '&publication_id=eq.none'; // no matches
+    }
+    // Content topic filter: filter by keywords in ai_summary
+    if (selectedContentTopic) {
+      const topic = contentTopics.find(ct => ct.id === selectedContentTopic);
+      if (topic) {
+        const orParts = topic.keywords.map(kw => 'ai_summary.ilike.*' + encodeURIComponent(kw) + '*');
+        url += '&or=(' + orParts.join(',') + ')';
+      }
+    }
+    try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number,ai_summary', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
+  }, [page, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, activeTags, selectedPubLangs, selectedContentTopic]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -428,7 +479,7 @@ function CatalogContent() {
     setPage(0);
     if (searchInput.trim()) trackEvent('catalog_search', { query_length: searchInput.trim().length });
   };
-  const hasFilters = searchQuery || selectedParsha || selectedEvent || selectedPubLangs.length > 0 || selectedHebrewYear || dateFrom || dateTo;
+  const hasFilters = searchQuery || selectedParsha || selectedEvent || selectedPubLangs.length > 0 || selectedHebrewYear || dateFrom || dateTo || activeTags.length > 0 || selectedContentTopic;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   const handlePubSelect = async (pubId: string) => {
@@ -444,13 +495,21 @@ function CatalogContent() {
     } catch { setExpandedIssues([]); }
     finally { setExpandedLoading(false); }
   };
-  const groupedPubs = orderedCategories.map((category) => {
-    const items = filteredPubs.filter((pub) => {
-      const mapped = getCategoryForPublication(pub.id);
-      return (mapped || 'other') === category;
-    });
-    return { category, items };
-  }).filter((group) => group.items.length > 0);
+  const groupedPubs = (() => {
+    const used = new Set<string>();
+    const groups = orderedTags.map((tag) => {
+      const items = filteredPubs.filter((pub) => {
+        if (used.has(pub.id)) return false;
+        return (pub.tags || []).includes(tag);
+      });
+      items.forEach(p => used.add(p.id));
+      return { category: tag, items };
+    }).filter(g => g.items.length > 0);
+    // Any remaining untagged publications
+    const uncategorized = filteredPubs.filter(p => !used.has(p.id));
+    if (uncategorized.length > 0) groups.push({ category: 'other', items: uncategorized });
+    return groups;
+  })();
   const pubLangOptions = [
     { id: 'ru', label: '\u{1F1F7}\u{1F1FA} \u0420\u0443\u0441\u0441\u043A\u0438\u0439' },
     { id: 'en', label: '\u{1F1FA}\u{1F1F8} English' },
@@ -461,7 +520,11 @@ function CatalogContent() {
     setSelectedPubLangs((prev) => prev.includes(langId) ? prev.filter((x) => x !== langId) : [...prev, langId]);
     setPage(0);
   };
-  const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setSelectedPubLangs([]); setSelectedHebrewYear(null); setDateFrom(''); setDateTo(''); setPage(0); };
+  const clearFilters = () => { setSearchQuery(''); setSearchInput(''); setSelectedParsha(null); setSelectedEvent(null); setSelectedPubLangs([]); setSelectedTags([]); setSelectedContentTopic(null); setSelectedHebrewYear(null); setDateFrom(''); setDateTo(''); setPage(0); };
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+    setPage(0);
+  };
 
   return (
     <div dir={dir}>
@@ -514,11 +577,11 @@ function CatalogContent() {
               <div className="pt-4 mt-4 border-t space-y-4" style={{ borderColor: 'rgba(180,150,100,0.2)' }}>
                 {/* Row 1: Parsha + Event dropdowns */}
                 <div className="flex flex-wrap gap-3">
-                  <select value={selectedParsha || ''} onChange={(e) => { setSelectedParsha(e.target.value ? Number(e.target.value) : null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
+                  <select value={selectedParsha || ''} onChange={(e) => { setSelectedParsha(e.target.value ? Number(e.target.value) : null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-0 w-full sm:min-w-[180px] sm:w-auto text-sm">
                     <option value="">{t('catalog.allParshiot', lang)}</option>
                     {parshiot.map(p => (<option key={p.id} value={p.id}>{p.name_ru}{p.id === currentParshaId ? ' \u2605' : ''}</option>))}
                   </select>
-                  <select value={selectedEvent || ''} onChange={(e) => { setSelectedEvent(e.target.value || null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-[180px] text-sm">
+                  <select value={selectedEvent || ''} onChange={(e) => { setSelectedEvent(e.target.value || null); setPage(0); }} className="px-4 py-2.5 rounded-xl filter-select outline-none min-w-0 w-full sm:min-w-[180px] sm:w-auto text-sm">
                     <option value="">{t('catalog.allEvents', lang)}</option>
                     {events.map(e => (<option key={e.id} value={e.id}>{e.name_ru}</option>))}
                   </select>
@@ -546,11 +609,13 @@ function CatalogContent() {
                   ))}
                 </div>
                 {/* Row 3: Date range */}
-                <div className="flex items-center flex-wrap gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2 sm:gap-3">
                   <span className="text-xs text-stone-500 flex items-center gap-1" style={{ fontFamily: "'DM Sans', sans-serif" }}><Calendar size={12} /> {lang === 'he' ? 'תאריך:' : lang === 'en' ? 'Date:' : 'Дата:'}</span>
-                  <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm" />
-                  <span className="text-xs text-stone-400">—</span>
-                  <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm" />
+                  <div className="flex items-center gap-2">
+                    <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm w-full sm:w-auto" />
+                    <span className="text-xs text-stone-400">—</span>
+                    <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(0); }} className="px-3 py-2 rounded-xl filter-select outline-none text-sm w-full sm:w-auto" />
+                  </div>
                   {(dateFrom || dateTo) && (
                     <button onClick={() => { setDateFrom(''); setDateTo(''); setPage(0); }} className="text-xs text-stone-400 hover:text-stone-600">
                       <X size={14} />
@@ -561,17 +626,53 @@ function CatalogContent() {
             )}
           </div>
 
-          {/* Category badge */}
-          {categoryName && (
-            <div className="flex items-center gap-2 mb-4">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white" style={{ background: 'linear-gradient(135deg, #96693a, #b8854a)' }}>
-                <Library size={14} /> {categoryName}
-              </span>
-              <Link href="/catalog" className="text-sm text-stone-400 hover:text-stone-600 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                <X size={16} />
-              </Link>
-            </div>
-          )}
+          {/* Tag filter chips */}
+          <div className="flex items-center flex-wrap gap-2 mb-4">
+            <span className="text-xs text-stone-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              {lang === 'he' ? 'נושאים:' : lang === 'en' ? 'Topics:' : lang === 'uk' ? 'Теми:' : 'Темы:'}
+            </span>
+            <button
+              onClick={() => { setSelectedTags([]); setPage(0); }}
+              className={'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs border cursor-pointer transition-all ' + (activeTags.length === 0 ? 'text-white' : 'text-stone-600')}
+              style={activeTags.length === 0 ? { background: 'linear-gradient(135deg, #96693a, #b8854a)', borderColor: '#96693a' } : { borderColor: 'rgba(180,150,100,0.3)', background: '#fdfaf5' }}
+            >
+              {lang === 'he' ? 'הכל' : lang === 'en' ? 'All' : lang === 'uk' ? 'Всі' : 'Все'}
+            </button>
+            {orderedTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs border cursor-pointer transition-all ' + (activeTags.includes(tag) ? 'text-white' : 'text-stone-600 hover:text-stone-800')}
+                style={activeTags.includes(tag) ? { background: 'linear-gradient(135deg, #96693a, #b8854a)', borderColor: '#96693a' } : { borderColor: 'rgba(180,150,100,0.3)', background: '#fdfaf5' }}
+              >
+                {getTagName(tag, lang)}
+              </button>
+            ))}
+          </div>
+
+          {/* Content topic filter (by ai_summary keywords) */}
+          <div className="flex items-center flex-wrap gap-2 mb-4">
+            <span className="text-xs text-stone-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              {lang === 'he' ? 'לפי תוכן:' : lang === 'en' ? 'By content:' : lang === 'uk' ? 'За змістом:' : 'По содержанию:'}
+            </span>
+            <button
+              onClick={() => { setSelectedContentTopic(null); setPage(0); }}
+              className={'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs border cursor-pointer transition-all ' + (!selectedContentTopic ? 'text-white' : 'text-stone-600')}
+              style={!selectedContentTopic ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5282)', borderColor: '#1e3a6e' } : { borderColor: 'rgba(180,150,100,0.3)', background: '#fdfaf5' }}
+            >
+              {lang === 'he' ? 'הכל' : lang === 'en' ? 'All' : lang === 'uk' ? 'Всі' : 'Все'}
+            </button>
+            {contentTopics.map((ct) => (
+              <button
+                key={ct.id}
+                onClick={() => { setSelectedContentTopic(selectedContentTopic === ct.id ? null : ct.id); setPage(0); }}
+                className={'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs border cursor-pointer transition-all ' + (selectedContentTopic === ct.id ? 'text-white' : 'text-stone-600 hover:text-stone-800')}
+                style={selectedContentTopic === ct.id ? { background: 'linear-gradient(135deg, #1e3a6e, #2c5282)', borderColor: '#1e3a6e' } : { borderColor: 'rgba(180,150,100,0.3)', background: '#fdfaf5' }}
+              >
+                {ct.label[lang] || ct.label['en']}
+              </button>
+            ))}
+          </div>
 
           {/* View mode toggle + Sort */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -587,17 +688,15 @@ function CatalogContent() {
                 <Library size={15} /> {t('catalog.publications', lang)}
               </button>
             </div>
-            {viewMode === 'issues' && (
-              <div className="flex gap-2">
-                {["newest","oldest"].map(s => (
-                  <button key={s} onClick={() => { setSortOrder(s); setPage(0); }}
-                    className={"px-4 py-2 rounded-xl text-sm font-medium transition-all " + (sortOrder === s ? "text-white" : "filter-select text-stone-600")}
-                    style={sortOrder === s ? { background: "linear-gradient(135deg, #96693a, #b8854a)" } : {}}>
-                    {t('catalog.' + (s === 'newest' ? 'newest' : 'oldest'), lang)}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="flex gap-2">
+              {["newest","oldest"].map(s => (
+                <button key={s} onClick={() => { setSortOrder(s); setPage(0); }}
+                  className={"px-4 py-2 rounded-xl text-sm font-medium transition-all " + (sortOrder === s ? "text-white" : "filter-select text-stone-600")}
+                  style={sortOrder === s ? { background: "linear-gradient(135deg, #96693a, #b8854a)" } : {}}>
+                  {t('catalog.' + (s === 'newest' ? 'newest' : 'oldest'), lang)}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Language filter */}
@@ -692,16 +791,14 @@ function CatalogContent() {
                     return chunks.map((chunk, ci) => (
                       <div key={ci}>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-8">
-                          {chunk.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} eventMap={eventMap} lang={lang} />))}
+                          {chunk.map((doc) => (<DocumentCard key={doc.id} doc={doc} currentParshaId={currentParshaId} parshaMap={parshaMap} pubMap={pubMap} eventMap={eventMap} lang={lang} showSummary={!!searchQuery} />))}
                         </div>
-                        {ci < chunks.length - 1 && (
-                          <div className="my-8 max-w-2xl mx-auto">
-                            <SubscribeBlock />
-                          </div>
-                        )}
                       </div>
                     ));
                   })()}
+                  <div className="my-8 max-w-2xl mx-auto">
+                    <SubscribeBlock />
+                  </div>
                   {/* Wooden shelf */}
                   <div className="mt-6 h-3 rounded-full mx-auto" style={{ background: 'linear-gradient(180deg, #b8854a 0%, #96693a 60%, #7a5530 100%)', boxShadow: '0 4px 12px rgba(120,80,40,0.2), inset 0 1px 0 rgba(255,255,255,0.15)', maxWidth: '95%' }} />
                   {/* Pagination */}
@@ -744,7 +841,7 @@ function CatalogContent() {
                       <section key={category}>
                         <div className="flex items-center justify-between mb-3">
                           <h3 className="text-lg font-semibold text-stone-800" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                            {categoryNames[category]?.[lang] || categoryNames[category]?.ru || category}
+                            {getTagName(category, lang)}
                           </h3>
                           <span className="text-xs text-stone-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>{items.length}</span>
                         </div>
@@ -777,9 +874,9 @@ function CatalogContent() {
                                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-4 gap-y-5 pt-3 pb-1">
                                       {expandedIssues.map(issue => (
                                         <Link key={issue.id} href={'/document/' + issue.id} className="book-card group block">
-                                          <div className="book-cover rounded overflow-hidden" style={{ aspectRatio: '3/4' }}>
+                                          <div className="book-cover rounded overflow-hidden relative" style={{ aspectRatio: '3/4' }}>
                                             {issue.thumbnail_url ? (
-                                              <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                              <Image src={issue.thumbnail_url} alt={issue.title} fill sizes="(max-width: 640px) 33vw, 16vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                                             ) : (
                                               <div className="w-full h-full flex items-center justify-center bg-stone-100"><FileText size={18} className="text-stone-300" /></div>
                                             )}
