@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles, BookMarked, Flame, Scale, Smile, Crown, FolderOpen, Heart } from 'lucide-react';
+import Image from 'next/image';
+import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles, BookMarked, Flame, Scale, Smile, Crown, FolderOpen, Heart, RefreshCw } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 interface Doc { id: string; title: string; thumbnail_url: string; gregorian_date: string; publication_id: string; }
+interface SpotlightDoc { id: string; title: string; thumbnail_url: string; ai_summary: string; publication_id: string; }
 
 const t: Record<string, Record<string, string>> = {
   heroTitle1: { ru: 'Крупнейшая', en: 'The Largest', he: 'הארכיון הדיגיטלי', uk: 'Найбільша' },
@@ -44,6 +46,9 @@ const t: Record<string, Record<string, string>> = {
   networkSub: { ru: 'Экосистема еврейских проектов', en: 'Jewish Projects Ecosystem', he: 'אקו-סיסטם של פרויקטים יהודיים', uk: 'Екосистема єврейських проєктів' },
   ctaTitle: { ru: 'Получайте свежие выпуски первыми', en: 'Get fresh issues first', he: 'קבלו גיליונות חדשים ראשונים', uk: 'Отримуйте свіжі випуски першими' },
   ctaSub: { ru: 'Подпишитесь и получайте новые материалы прямо на почту', en: 'Subscribe and receive new materials directly to your email', he: 'הירשמו וקבלו חומרים חדשים ישירות למייל', uk: 'Підпишіться та отримуйте нові матеріали прямо на пошту' },
+  spotlight: { ru: 'Рекомендуем прочитать', en: 'Recommended Reading', he: 'מומלץ לקריאה', uk: 'Рекомендуємо прочитати' },
+  spotlightSub: { ru: 'Интересные выпуски из нашего архива', en: 'Interesting issues from our archive', he: 'גיליונות מעניינים מהארכיון שלנו', uk: 'Цікаві випуски з нашого архіву' },
+  readNow: { ru: 'Читать', en: 'Read', he: 'קרא', uk: 'Читати' },
 };
 
 function AnimateIn({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -83,12 +88,57 @@ export default function HomePage() {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [totalCount, setTotalCount] = useState(4044);
+  const [pubCount, setPubCount] = useState(442);
+  const [spotlightDocs, setSpotlightDocs] = useState<SpotlightDoc[]>([]);
+  const [spotlightIdx, setSpotlightIdx] = useState(0);
+  const [spotlightFade, setSpotlightFade] = useState(true);
+  const [pubMap, setPubMap] = useState<Record<string, string>>({});
+
+  // Fetch random spotlight docs with ai_summary
+  useEffect(() => {
+    // Fetch a batch of random interesting issues
+    const offset = Math.floor(Math.random() * 200);
+    fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&ai_summary=not.is.null&thumbnail_url=not.is.null&order=view_count.desc.nullslast&select=id,title,thumbnail_url,ai_summary,publication_id', { headers: { 'apikey': SUPABASE_KEY, 'Range': offset + '-' + (offset + 29) } })
+      .then(r => r.json()).then(d => {
+        if (Array.isArray(d) && d.length > 0) {
+          // Filter for good summaries (not just auto-generated topic lists)
+          const good = d.filter((x: SpotlightDoc) => x.ai_summary && x.ai_summary.length > 60 && !x.ai_summary.startsWith('Выпуск:'));
+          // Shuffle
+          for (let i = good.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [good[i], good[j]] = [good[j], good[i]]; }
+          setSpotlightDocs(good.length > 0 ? good.slice(0, 12) : d.slice(0, 12));
+        }
+      });
+    // Fetch publication names for spotlight
+    fetch(SUPABASE_URL + '/rest/v1/publications?select=id,title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } })
+      .then(r => r.json()).then(d => {
+        if (Array.isArray(d)) {
+          const m: Record<string, string> = {};
+          d.forEach((p: any) => { m[p.id] = p.title_ru || p.title_en || p.title_he || ''; });
+          setPubMap(m);
+        }
+      });
+  }, []);
+
+  // Rotate spotlight every 10 seconds
+  useEffect(() => {
+    if (spotlightDocs.length < 2) return;
+    const timer = setInterval(() => {
+      setSpotlightFade(false);
+      setTimeout(() => {
+        setSpotlightIdx(i => (i + 1) % spotlightDocs.length);
+        setSpotlightFade(true);
+      }, 400);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, [spotlightDocs]);
 
   useEffect(() => {
     fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&thumbnail_url=not.is.null&order=created_at.desc&limit=12&select=id,title,thumbnail_url,gregorian_date,publication_id', { headers: { 'apikey': SUPABASE_KEY } })
       .then(r => r.json()).then(d => { if (Array.isArray(d)) setDocs(d); });
     fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' } })
       .then(r => { const c = r.headers.get('content-range'); if (c) setTotalCount(parseInt(c.split('/')[1])); });
+    fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&total_issues=gt.0&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' } })
+      .then(r => { const c = r.headers.get('content-range'); if (c) setPubCount(parseInt(c.split('/')[1])); });
   }, []);
 
   const handleSearch = (e: React.FormEvent) => { e.preventDefault(); if (searchInput.trim()) window.location.href = '/catalog?search=' + encodeURIComponent(searchInput); };
@@ -143,10 +193,13 @@ export default function HomePage() {
           background: white;
           border: 1px solid rgba(0,0,0,0.06);
           border-radius: 4px 4px 16px 16px;
-          padding: 2.5rem 1.75rem 1.75rem;
+          padding: 1.5rem 1rem 1.25rem;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           cursor: pointer;
           overflow: visible;
+        }
+        @media (min-width: 640px) {
+          .folder-card { padding: 2.5rem 1.75rem 1.75rem; }
         }
         .folder-tab {
           position: absolute;
@@ -260,8 +313,8 @@ export default function HomePage() {
 
       {/* ═══════ HERO ═══════ */}
       <section className="hero-warm min-h-[80vh] flex items-center">
-        <div className="relative max-w-7xl mx-auto px-6 py-16 md:py-24 w-full">
-          <div className="max-w-3xl">
+        <div className="relative max-w-7xl mx-auto px-6 py-16 md:py-24 w-full flex items-center">
+          <div className="max-w-3xl flex-1">
             <AnimateIn>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center accent-gradient">
@@ -286,7 +339,7 @@ export default function HomePage() {
             </AnimateIn>
 
             <AnimateIn delay={320}>
-              <form onSubmit={handleSearch} className="mt-8 flex gap-3 max-w-lg">
+              <form onSubmit={handleSearch} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-lg">
                 <div className="relative flex-1">
                   <Search className={'absolute top-1/2 -translate-y-1/2 text-stone-300 ' + (dir === 'rtl' ? 'right-4' : 'left-4')} size={20} />
                   <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
@@ -302,10 +355,10 @@ export default function HomePage() {
             </AnimateIn>
 
             <AnimateIn delay={440}>
-              <div className="mt-12 flex gap-10 md:gap-14">
+              <div className="mt-12 flex flex-wrap gap-4 sm:gap-10 md:gap-14">
                 {[
                   { num: totalCount.toLocaleString(), label: g('materials') },
-                  { num: '434', label: g('publications') },
+                  { num: pubCount.toLocaleString(), label: g('publications') },
                   { num: '4', label: g('languages') },
                   { num: '15+', label: g('yearsArchive') },
                 ].map((s, i) => (
@@ -315,6 +368,11 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
+            </AnimateIn>
+          </div>
+          <div className="hidden lg:flex flex-shrink-0 items-start justify-center ml-12 -mt-8">
+            <AnimateIn delay={300}>
+              <Image src="/shabbathub-logo-vertical.png" alt="ShabbatHub" width={450} height={310} className="w-80 xl:w-96 h-auto drop-shadow-lg" />
             </AnimateIn>
           </div>
         </div>
@@ -339,9 +397,9 @@ export default function HomePage() {
             {docs.map((doc, i) => (
               <AnimateIn key={doc.id} delay={i * 60}>
                 <Link href={'/document/' + doc.id} className="book-card block">
-                  <div className="book-shadow" style={{ aspectRatio: '3/4' }}>
+                  <div className="book-shadow relative" style={{ aspectRatio: '3/4' }}>
                     {doc.thumbnail_url ? (
-                      <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                      <Image src={doc.thumbnail_url} alt={doc.title} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 16vw" className="object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-stone-100">
                         <BookOpen size={24} className="text-stone-300" />
@@ -355,6 +413,61 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════ SPOTLIGHT / RECOMMENDED ═══════ */}
+      {spotlightDocs.length > 0 && (() => {
+        const doc = spotlightDocs[spotlightIdx];
+        const pubName = pubMap[doc?.publication_id] || '';
+        const summary = (doc?.ai_summary || '').replace(/^Выпуск:.*?\./, '').replace(/Темы:.*?\./,'').replace(/Поисковые термины:.*$/,'').trim();
+        return (
+          <section className="section-cream py-12 md:py-16 px-6 border-y border-stone-100">
+            <div className="max-w-7xl mx-auto">
+              <AnimateIn>
+                <div className="flex items-end justify-between mb-8">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles size={16} className="text-amber-500" />
+                      <span className="text-xs font-bold tracking-widest uppercase text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('spotlight')}</span>
+                    </div>
+                    <p className="text-xs text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('spotlightSub')}</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {spotlightDocs.slice(0, 8).map((_, i) => (
+                      <button key={i} onClick={() => { setSpotlightFade(false); setTimeout(() => { setSpotlightIdx(i); setSpotlightFade(true); }, 200); }}
+                        className={'w-2 h-2 rounded-full transition-all duration-300 ' + (i === spotlightIdx ? 'bg-blue-700 w-5' : 'bg-stone-300 hover:bg-stone-400')} />
+                    ))}
+                  </div>
+                </div>
+              </AnimateIn>
+
+              <div className={'transition-all duration-400 ' + (spotlightFade ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2')} style={{ transition: 'opacity 0.4s ease, transform 0.4s ease' }}>
+                {doc && (
+                  <Link href={'/document/' + doc.id} className="group block">
+                    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+                      {/* Thumbnail */}
+                      <div className="relative flex-shrink-0 w-full md:w-56 aspect-[3/4] md:aspect-[3/4] rounded-xl overflow-hidden shadow-lg">
+                        <Image src={doc.thumbnail_url} alt={doc.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 100vw, 224px" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 py-2">
+                        {pubName && <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{pubName}</p>}
+                        <h3 className="text-xl md:text-2xl font-semibold text-stone-800 mb-3 group-hover:text-blue-800 transition-colors line-clamp-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{doc.title}</h3>
+                        <p className="text-sm text-stone-500 leading-relaxed line-clamp-4 md:line-clamp-5 mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {summary.slice(0, 300)}{summary.length > 300 ? '...' : ''}
+                        </p>
+                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 group-hover:gap-2.5 transition-all" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {g('readNow')} <ArrowRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ═══════ LIBRARY SECTIONS ═══════ */}
       <section className="section-cream py-16 md:py-20 px-6">
