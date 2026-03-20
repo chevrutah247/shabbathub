@@ -80,17 +80,20 @@ const parshaNameToId: Record<string, number> = {
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54,
 };
 
-const contentTopics: { id: string; keywords: string[]; label: Record<string, string> }[] = [
-  { id: 'shabbat', keywords: ['шабб', 'шабат', 'shabb', 'שבת'], label: { ru: 'Шаббат', en: 'Shabbat', he: 'שבת', uk: 'Шаббат' } },
-  { id: 'holidays', keywords: ['праздни', 'пурим', 'песах', 'ханук', 'суккот', 'purim', 'pesach', 'chanuk', 'sukkot', 'holiday'], label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' } },
-  { id: 'chassidut', keywords: ['хасид', 'chassid', 'חסיד', 'тания', 'tanya', 'תניא', 'маамар'], label: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' } },
-  { id: 'rebbe', keywords: ['ребе', 'rebbe', 'רבי', 'любавич', 'lubavitch', 'хабад', 'chabad'], label: { ru: 'Учение Ребе', en: 'The Rebbe', he: 'הרבי', uk: 'Вчення Ребе' } },
-  { id: 'moshiach', keywords: ['мошиах', 'mashiach', 'moshiach', 'משיח', 'геула', 'geula', 'גאולה'], label: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' } },
-  { id: 'halacha', keywords: ['галах', 'halacha', 'הלכ', 'шулхан', 'shulchan'], label: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' } },
-  { id: 'family', keywords: ['воспитан', 'family', 'children', 'chinuch', 'חינוך', 'שלום בית', 'шалом байт'], label: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: "Сім'я" } },
-  { id: 'stories', keywords: ['истори', 'рассказ', 'story', 'stories', 'סיפור'], label: { ru: 'Истории', en: 'Stories', he: 'סיפורים', uk: 'Історії' } },
-  { id: 'emunah', keywords: ['emunah', 'אמונ', 'битахон', 'bitachon', 'ביטחון'], label: { ru: 'Эмуна', en: 'Emunah', he: 'אמונה', uk: 'Емуна' } },
-  { id: 'prayer', keywords: ['молитв', 'prayer', 'תפיל', 'теилим', 'tehillim', 'תהילים'], label: { ru: 'Молитва', en: 'Prayer', he: 'תפילה', uk: 'Молитва' } },
+const contentTopics: { id: string; label: Record<string, string> }[] = [
+  { id: 'shabbat', label: { ru: 'Шаббат', en: 'Shabbat', he: 'שבת', uk: 'Шаббат' } },
+  { id: 'holidays', label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' } },
+  { id: 'chassidut', label: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' } },
+  { id: 'rebbe', label: { ru: 'Учение Ребе', en: 'The Rebbe', he: 'הרבי', uk: 'Вчення Ребе' } },
+  { id: 'moshiach', label: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' } },
+  { id: 'halacha', label: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' } },
+  { id: 'family', label: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: "Сім'я" } },
+  { id: 'stories', label: { ru: 'Истории', en: 'Stories', he: 'סיפורים', uk: 'Історії' } },
+  { id: 'emunah', label: { ru: 'Эмуна', en: 'Emunah', he: 'אמונה', uk: 'Емуна' } },
+  { id: 'prayer', label: { ru: 'Молитва', en: 'Prayer', he: 'תפילה', uk: 'Молитва' } },
+  { id: 'modesty', label: { ru: 'Цниют', en: 'Modesty', he: 'צניעות', uk: 'Цніют' } },
+  { id: 'mussar', label: { ru: 'Мусар', en: 'Mussar', he: 'מוסר', uk: 'Мусар' } },
+  { id: 'parsha', label: { ru: 'Парша', en: 'Parsha', he: 'פרשה', uk: 'Парша' } },
 ];
 
 function formatDate(dateString: string | null, lang: Lang): string {

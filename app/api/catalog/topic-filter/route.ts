@@ -6,17 +6,26 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const topicKeywords: Record<string, string[]> = {
-  shabbat: ['шабб', 'шабат', 'shabb', 'שבת'],
-  holidays: ['праздни', 'пурим', 'песах', 'ханук', 'суккот', 'purim', 'pesach', 'chanuk', 'sukkot', 'holiday'],
-  chassidut: ['хасид', 'chassid', 'חסיד', 'тания', 'tanya', 'תניא', 'маамар'],
-  rebbe: ['ребе', 'rebbe', 'רבי', 'любавич', 'lubavitch', 'хабад', 'chabad'],
-  moshiach: ['мошиах', 'mashiach', 'moshiach', 'משיח', 'геула', 'geula', 'גאולה'],
-  halacha: ['галах', 'halacha', 'הלכ', 'шулхан', 'shulchan'],
-  family: ['воспитан', 'family', 'children', 'chinuch', 'חינוך', 'שלום בית', 'шалом байт'],
-  stories: ['истори', 'рассказ', 'story', 'stories', 'סיפור'],
-  emunah: ['emunah', 'אמונ', 'битахон', 'bitachon', 'ביטחון'],
-  prayer: ['молитв', 'prayer', 'תפיל', 'теилим', 'tehillim', 'תהילים'],
+// Map UI topic IDs to database topic_keys
+const topicToKeys: Record<string, string[]> = {
+  shabbat: ['shabbat_laws'],
+  holidays: ['holidays'],
+  chassidut: ['chassidus_hashkafa'],
+  rebbe: ['rebbe_teachings'],
+  moshiach: ['moshiach_geula'],
+  halacha: ['halacha', 'kashrut'],
+  family: ['family_education', 'relationships_shalom_bayit'],
+  stories: ['stories_history'],
+  emunah: ['emunah_bitachon'],
+  prayer: ['prayer_tefilah'],
+  mussar: ['mussar_middot'],
+  kabbalah: ['kabbalah'],
+  modesty: ['women_modesty'],
+  community: ['community'],
+  health: ['health_mind'],
+  torah_study: ['torah_study'],
+  israel: ['eretz_yisrael'],
+  parsha: ['parsha_commentary'],
 };
 
 export async function GET(request: NextRequest) {
@@ -27,16 +36,16 @@ export async function GET(request: NextRequest) {
   const sort = searchParams.get('sort') || 'newest';
   const lang = searchParams.get('lang');
 
-  if (!topic || !topicKeywords[topic]) {
+  if (!topic || !topicToKeys[topic]) {
     return NextResponse.json({ error: 'Invalid topic' }, { status: 400 });
   }
 
-  const keywords = topicKeywords[topic];
+  const keys = topicToKeys[topic];
   const from = page * pageSize;
   const to = from + pageSize - 1;
 
-  // Build OR condition for ilike on ai_summary
-  const orConditions = keywords.map(kw => `ai_summary.ilike.%${kw}%`).join(',');
+  // Use topic_keys array contains filter — fast GIN index lookup
+  const orConditions = keys.map(k => `topic_keys.cs.{${k}}`).join(',');
 
   let query = supabase
     .from('issues')
