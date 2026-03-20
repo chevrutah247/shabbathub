@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Search, Menu, X, BookOpen, Info, Heart, Globe, Plus, FileText, Library, User, LogOut, Trophy, Share2, Check, Store, Compass } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage, Lang } from '@/lib/language-context';
@@ -94,6 +95,7 @@ export default function Header() {
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [parshaEng, setParshaEng] = useState('');
   const [hebrewDateRaw, setHebrewDateRaw] = useState<{ hd: number; hm: string; hy: number } | null>(null);
+  const [bannerReady, setBannerReady] = useState(false);
   const [copied, setCopied] = useState(false);
   const [candleLighting, setCandleLighting] = useState('');
   const [havdalah, setHavdalah] = useState('');
@@ -107,75 +109,106 @@ export default function Header() {
   useEffect(() => {
     async function fetchHebrewInfo() {
       try {
-        const today = new Date();
-        const dateRes = await fetch(
-          'https://www.hebcal.com/converter?cfg=json&gy=' + today.getFullYear() + '&gm=' + (today.getMonth() + 1) + '&gd=' + today.getDate() + '&g2h=1'
-        );
-        if (dateRes.ok) {
-          const dateData = await dateRes.json();
-          setHebrewDateRaw({ hd: dateData.hd, hm: dateData.hm, hy: dateData.hy });
+        const cached = sessionStorage.getItem('shabbathub-header-banner');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed?.hebrewDateRaw) setHebrewDateRaw(parsed.hebrewDateRaw);
+          if (parsed?.parshaEng) setParshaEng(parsed.parshaEng);
+          if (parsed?.candleLighting) setCandleLighting(parsed.candleLighting);
+          if (parsed?.havdalah) setHavdalah(parsed.havdalah);
+          if (parsed?.shabbatCity) setShabbatCity(parsed.shabbatCity);
+          setBannerReady(true);
+          return;
         }
-        const parshaRes = await fetch(
-          'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=' + today.getFullYear() + '&month=' + (today.getMonth() + 1) + '&ss=off&mf=off&c=off&s=on'
-        );
-        if (parshaRes.ok) {
-          const parshaData = await parshaRes.json();
+
+        const today = new Date();
+        let nextHebrewDateRaw: { hd: number; hm: string; hy: number } | null = null;
+        let nextParshaEng = '';
+        let nextCandleLighting = '';
+        let nextHavdalah = '';
+        let nextShabbatCity = '';
+
+        // Fetch Hebrew date + parsha + geolocation in PARALLEL
+        const [dateResult, parshaResult, geoResult] = await Promise.allSettled([
+          fetch('https://www.hebcal.com/converter?cfg=json&gy=' + today.getFullYear() + '&gm=' + (today.getMonth() + 1) + '&gd=' + today.getDate() + '&g2h=1')
+            .then(r => r.ok ? r.json() : null),
+          fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=off&min=off&mod=off&nx=off&year=' + today.getFullYear() + '&month=' + (today.getMonth() + 1) + '&ss=off&mf=off&c=off&s=on')
+            .then(r => r.ok ? r.json() : null),
+          (navigator.geolocation
+            ? new Promise<GeolocationPosition>((resolve, reject) =>
+                navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 })
+              ).then(async pos => {
+                const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                let city = '';
+                try {
+                  const geoRes = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lng + '&format=json&accept-language=ru');
+                  if (geoRes.ok) {
+                    const geoData = await geoRes.json();
+                    city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.state || '';
+                  }
+                } catch {}
+                return { lat, lng, tzid, city };
+              }).catch(() => ({ lat: 40.7128, lng: -74.006, tzid: 'America/New_York', city: 'New York' }))
+            : Promise.resolve({ lat: 40.7128, lng: -74.006, tzid: 'America/New_York', city: 'New York' })
+          ),
+        ]);
+
+        // Process date
+        if (dateResult.status === 'fulfilled' && dateResult.value) {
+          const d = dateResult.value;
+          nextHebrewDateRaw = { hd: d.hd, hm: d.hm, hy: d.hy };
+        }
+        // Process parsha
+        if (parshaResult.status === 'fulfilled' && parshaResult.value) {
+          const parshaData = parshaResult.value;
           const parashat = parshaData.items?.find((item: any) => {
             if (item.category !== 'parashat') return false;
             const itemDate = new Date(item.date);
             const dayDiff = (itemDate.getTime() - today.getTime()) / (24*60*60*1000); return dayDiff >= -1 && dayDiff <= 6;
           });
-          if (parashat) setParshaEng(parashat.title?.replace('Parashat ', ''));
+          if (parashat) nextParshaEng = parashat.title?.replace('Parashat ', '') || '';
         }
-      } catch (err) { console.error('Error fetching Hebrew info:', err); }
-    }
-    fetchHebrewInfo();
 
-    // Fetch Shabbat times based on geolocation
-    async function fetchZmanim() {
-      try {
-        let lat = 40.7128, lng = -74.006, tzid = 'America/New_York', city = 'New York';
-        if (navigator.geolocation) {
-          try {
-            const pos = await new Promise<GeolocationPosition>((resolve, reject) => 
-              navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
-            );
-            lat = pos.coords.latitude;
-            lng = pos.coords.longitude;
-            // Get timezone
-            tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            // Get city name from reverse geocoding
-            try {
-              const geoRes = await fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lng + '&format=json&accept-language=ru');
-              if (geoRes.ok) {
-                const geoData = await geoRes.json();
-                city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.state || city;
-              }
-            } catch {}
-          } catch {
-            // Geolocation denied — use defaults
-          }
-        }
+        // Show date/parsha immediately (don't wait for shabbat times)
+        if (nextHebrewDateRaw) setHebrewDateRaw(nextHebrewDateRaw);
+        if (nextParshaEng) setParshaEng(nextParshaEng);
+        setBannerReady(true);
+
+        // Fetch Shabbat times (depends on geolocation result)
+        const geo = geoResult.status === 'fulfilled' ? geoResult.value : { lat: 40.7128, lng: -74.006, tzid: 'America/New_York', city: 'New York' };
         const res = await fetch(
-          'https://www.hebcal.com/shabbat?cfg=json&geo=pos&latitude=' + lat + '&longitude=' + lng + '&tzid=' + tzid
+          'https://www.hebcal.com/shabbat?cfg=json&geo=pos&latitude=' + geo.lat + '&longitude=' + geo.lng + '&tzid=' + geo.tzid
         );
         if (res.ok) {
           const data = await res.json();
           const candle = data.items?.find((i: any) => i.category === 'candles');
           const havd = data.items?.find((i: any) => i.category === 'havdalah');
-          if (candle) {
-            const cTime = new Date(candle.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            setCandleLighting(cTime);
-          }
-          if (havd) {
-            const hTime = new Date(havd.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            setHavdalah(hTime);
-          }
-          setShabbatCity(city);
+          if (candle) nextCandleLighting = new Date(candle.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+          if (havd) nextHavdalah = new Date(havd.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+          nextShabbatCity = geo.city || 'New York';
         }
-      } catch (err) { console.error('Zmanim error:', err); }
+
+        if (nextCandleLighting) setCandleLighting(nextCandleLighting);
+        if (nextHavdalah) setHavdalah(nextHavdalah);
+        if (nextShabbatCity) setShabbatCity(nextShabbatCity);
+        sessionStorage.setItem(
+          'shabbathub-header-banner',
+          JSON.stringify({
+            hebrewDateRaw: nextHebrewDateRaw,
+            parshaEng: nextParshaEng,
+            candleLighting: nextCandleLighting,
+            havdalah: nextHavdalah,
+            shabbatCity: nextShabbatCity,
+          })
+        );
+      } catch (err) {
+        console.error('Header info fetch error:', err);
+      } finally {
+        setBannerReady(true);
+      }
     }
-    fetchZmanim();
+    fetchHebrewInfo();
   }, []);
 
   const getDate = () => {
@@ -225,19 +258,23 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      {(fDate || fParsha) && (
-        <div className="bg-primary-900 text-white text-center py-1.5 text-sm">
-          {fDate}{fDate && fParsha && <span className="mx-2">•</span>}
-          {fParsha && <span>{t('parsha.prefix', lang)}{fParsha}{t('parsha.suffix', lang)}</span>}
-          {candleLighting && <><span className="mx-2">•</span><span>🕯 {t('shabbat.candleLighting', lang)}: {candleLighting}</span></>}
-          {havdalah && <><span className="mx-1"> · </span><span>{t('shabbat.havdalah', lang)}: {havdalah}</span></>}
-          {shabbatCity && <span className="ml-1 text-blue-200">({shabbatCity})</span>}
-        </div>
-      )}
+      <div className="bg-primary-900 text-white text-center py-1.5 text-xs sm:text-sm min-h-[33px]">
+        {bannerReady && (fDate || fParsha) ? (
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-1 gap-y-0.5 px-2">
+            {fDate}{fDate && fParsha && <span className="mx-1 sm:mx-2">•</span>}
+            {fParsha && <span>{t('parsha.prefix', lang)}{fParsha}{t('parsha.suffix', lang)}</span>}
+            {candleLighting && <><span className="mx-1 sm:mx-2">•</span><span>🕯 {t('shabbat.candleLighting', lang)}: {candleLighting}</span></>}
+            {havdalah && <><span className="mx-0.5 sm:mx-1"> · </span><span>{t('shabbat.havdalah', lang)}: {havdalah}</span></>}
+            {shabbatCity && <span className="ml-1 text-blue-200">({shabbatCity})</span>}
+          </span>
+        ) : (
+          <span className="opacity-0">.</span>
+        )}
+      </div>
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
-          <Link href="/" className="text-2xl font-display font-bold">
-            <span className="text-primary-600">Shabbat</span><span className="text-gold-500">Hub</span>
+          <Link href="/" className="flex items-center">
+            <Image src="/shabbathub-logo-light.png" alt="ShabbatHub" width={220} height={48} className="h-11 md:h-12 w-auto" priority />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />{t('market.title', lang)}</Link>
@@ -256,7 +293,7 @@ export default function Header() {
               <button onClick={() => setIsAddMenuOpen(!isAddMenuOpen)} className="flex items-center gap-1.5 bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-primary-700">
                 <Plus size={16} />{t('nav.add', lang)}
               </button>
-              {isAddMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsAddMenuOpen(false)} /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
+              {isAddMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsAddMenuOpen(false)} role="presentation" /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
                 <Link href="/add-pdf" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAddMenuOpen(false)}><FileText size={16} />{t('nav.addPdf', lang)}</Link>
                 <Link href="/add-publication" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAddMenuOpen(false)}><Library size={16} />{t('nav.addPublication', lang)}</Link>
               </div></>)}
@@ -264,10 +301,10 @@ export default function Header() {
             <button className="flex items-center gap-1.5 text-gray-500 hover:text-primary-600 text-sm"><Search size={18} />{t('search', lang)}</button>
             {user ? (
               <div className="relative">
-                <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} aria-label={t('nav.profile', lang)} className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                   <span className="text-primary-700 font-medium text-sm">{(user.email || '?')[0].toUpperCase()}</span>
                 </button>
-                {isUserMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsUserMenuOpen(false)} /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
+                {isUserMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsUserMenuOpen(false)} role="presentation" /><div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
                   <div className="px-4 py-2 border-b"><p className="text-sm font-medium truncate">{user.email}</p><p className="text-xs text-gray-500">{userRole === 'admin' ? t('roles.admin', lang) : userRole === 'editor' ? t('roles.editor', lang) : t('roles.user', lang)}</p></div>
                   <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><User size={16} />{t('nav.profile', lang)}</Link>
                   {(userRole === 'superadmin' || userRole === 'admin') && <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsUserMenuOpen(false)}><BookOpen size={16} />{t('nav.admin', lang)}</Link>}
@@ -282,7 +319,7 @@ export default function Header() {
               <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-1 text-gray-500 hover:text-primary-600 text-sm px-2 py-1 rounded-md hover:bg-gray-50">
                 <Globe size={18} />{langLabels[lang]}
               </button>
-              {isLangMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsLangMenuOpen(false)} /><div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border py-1 z-50">
+              {isLangMenuOpen && (<><div className="fixed inset-0" onClick={() => setIsLangMenuOpen(false)} role="presentation" /><div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border py-1 z-50">
                 {langOrder.map(l => (
                   <button key={l} onClick={() => { setLang(l); setIsLangMenuOpen(false); }}
                     className={'flex items-center justify-between w-full px-4 py-2 text-sm hover:bg-gray-50 ' + (lang === l ? 'text-primary-600 font-medium bg-primary-50' : 'text-gray-700')}>
@@ -292,12 +329,12 @@ export default function Header() {
               </div></>)}
             </div>
           </div>
-          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</button>
+          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} aria-expanded={isMenuOpen}>{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</button>
         </div>
       </div>
       {/* Mobile */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t"><nav className="flex flex-col p-4 gap-3">
+        <div className="md:hidden bg-white border-t max-h-[80vh] overflow-y-auto"><nav className="flex flex-col p-4 gap-3">
           <Link href="/catalog" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><BookOpen size={20} />{t('nav.catalog', lang)}</Link>          <Link href="/marketplace" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Store size={20} />{t('market.title', lang)}</Link>
           <Link href="/leaders" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Trophy size={20} />{t('nav.leaders', lang)}</Link>
           <Link href="/navigator" className="flex items-center gap-2 text-gray-600 py-2" onClick={() => setIsMenuOpen(false)}><Compass size={20} />{t('nav.navigator', lang)}</Link>
