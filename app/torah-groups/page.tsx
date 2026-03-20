@@ -21,6 +21,7 @@ interface PlaceItem {
   name: string;
   area: string;
   note: string;
+  link?: string;
 }
 
 const languages = [
@@ -50,9 +51,9 @@ const placesByCategory: Record<PlaceCategory, PlaceItem[]> = {
     { name: 'Community Minyan', area: 'Crown Heights', note: 'Добавьте расписание шихурим и миньянов.' },
   ],
   mikvahs: [
-    { name: 'Women’s Mikvah', area: 'Crown Heights', note: 'Добавьте часы работы и номер для записи.' },
-    { name: 'Men’s Mikvah', area: 'Crown Heights', note: 'Добавьте точный адрес и время открытия.' },
-    { name: 'Additional Mikvah Listing', area: 'Brooklyn', note: 'Добавьте детали для публикации.' },
+    { name: 'Mikvah.org', area: 'Worldwide', note: 'Глобальный каталог микв — найдите микву в любом городе мира.', link: 'https://www.mikvah.org' },
+    { name: "Women's Mikvah", area: 'Crown Heights', note: 'Добавьте часы работы и номер для записи.' },
+    { name: "Men's Mikvah", area: 'Crown Heights', note: 'Добавьте точный адрес и время открытия.' },
   ],
   'batei-midrash': [
     { name: 'Beit Midrash - Main', area: 'Crown Heights', note: 'Добавьте расписание уроков и язык.' },
@@ -132,8 +133,20 @@ export default function TorahGroupsPage() {
             ))}
           </div>
 
+          {selectedPlaceTab === 'mikvahs' && (
+            <a
+              href="https://www.mikvah.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full mb-4 rounded-xl border-2 border-blue-300 bg-blue-50 p-5 text-center hover:bg-blue-100 transition"
+            >
+              <span className="text-xl font-bold text-blue-800">Mikvah.org</span>
+              <span className="block text-sm text-blue-600 mt-1">Глобальный каталог микв — найдите микву в любом городе мира</span>
+            </a>
+          )}
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {placesByCategory[selectedPlaceTab].map((place, idx) => (
+            {placesByCategory[selectedPlaceTab].filter(p => !p.link).map((place, idx) => (
               <article key={place.name + idx} className="rounded-xl border border-gray-200 p-4 bg-gray-50">
                 <h3 className="font-semibold text-gray-900 mb-2">{place.name}</h3>
                 <p className="text-sm text-gray-700 mb-2 inline-flex items-center gap-1"><MapPin size={14} />{place.area}</p>
