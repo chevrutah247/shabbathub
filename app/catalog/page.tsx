@@ -81,15 +81,15 @@ const parshaNameToId: Record<string, number> = {
 };
 
 const contentTopics: { id: string; keywords: string[]; label: Record<string, string> }[] = [
-  { id: 'shabbat', keywords: ['шабб', 'шабат', 'shabb', 'שבת', 'субботн'], label: { ru: 'Шаббат', en: 'Shabbat', he: 'שבת', uk: 'Шаббат' } },
-  { id: 'holidays', keywords: ['праздни', 'пурим', 'песах', 'ханук', 'суккот', 'рош а-шан', 'purim', 'pesach', 'chanuk', 'sukkot', 'rosh', 'holiday', 'פורים', 'פסח', 'חנוכ', 'סוכות', 'ראש השנה'], label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' } },
-  { id: 'chassidut', keywords: ['хасид', 'хасидут', 'chassid', 'חסיד', 'тания', 'tanya', 'תניא', 'маамар', 'maamar', 'ликутей', 'likutei'], label: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' } },
-  { id: 'rebbe', keywords: ['ребе', 'rebbe', 'רבי', 'любавич', 'lubavitch', 'хабад', 'chabad', 'игрот кодеш', 'igros kodesh'], label: { ru: 'Учение Ребе', en: 'The Rebbe', he: 'הרבי', uk: 'Вчення Ребе' } },
-  { id: 'moshiach', keywords: ['мошиах', 'mashiach', 'moshiach', 'משיח', 'геула', 'geula', 'גאולה', 'избавлен', 'redemption'], label: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' } },
-  { id: 'halacha', keywords: ['галах', 'halacha', 'הלכ', 'закон', 'шулхан', 'shulchan'], label: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' } },
-  { id: 'family', keywords: ['семь', 'воспитан', 'дет', 'family', 'children', 'chinuch', 'חינוך', 'שלום בית', 'шалом байт', 'шалом-байт'], label: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: "Сім'я" } },
-  { id: 'stories', keywords: ['истори', 'рассказ', 'story', 'stories', 'סיפור', 'sippur'], label: { ru: 'Истории', en: 'Stories', he: 'סיפורים', uk: 'Історії' } },
-  { id: 'emunah', keywords: ['вер', 'emunah', 'אמונ', 'битахон', 'bitachon', 'ביטחון', 'доверие', 'упован'], label: { ru: 'Эмуна', en: 'Emunah', he: 'אמונה', uk: 'Емуна' } },
+  { id: 'shabbat', keywords: ['шабб', 'шабат', 'shabb', 'שבת'], label: { ru: 'Шаббат', en: 'Shabbat', he: 'שבת', uk: 'Шаббат' } },
+  { id: 'holidays', keywords: ['праздни', 'пурим', 'песах', 'ханук', 'суккот', 'purim', 'pesach', 'chanuk', 'sukkot', 'holiday'], label: { ru: 'Праздники', en: 'Holidays', he: 'חגים', uk: 'Свята' } },
+  { id: 'chassidut', keywords: ['хасид', 'chassid', 'חסיד', 'тания', 'tanya', 'תניא', 'маамар'], label: { ru: 'Хасидут', en: 'Chassidut', he: 'חסידות', uk: 'Хасидут' } },
+  { id: 'rebbe', keywords: ['ребе', 'rebbe', 'רבי', 'любавич', 'lubavitch', 'хабад', 'chabad'], label: { ru: 'Учение Ребе', en: 'The Rebbe', he: 'הרבי', uk: 'Вчення Ребе' } },
+  { id: 'moshiach', keywords: ['мошиах', 'mashiach', 'moshiach', 'משיח', 'геула', 'geula', 'גאולה'], label: { ru: 'Мошиах', en: 'Moshiach', he: 'משיח', uk: 'Мошіах' } },
+  { id: 'halacha', keywords: ['галах', 'halacha', 'הלכ', 'шулхан', 'shulchan'], label: { ru: 'Галаха', en: 'Halacha', he: 'הלכה', uk: 'Галаха' } },
+  { id: 'family', keywords: ['воспитан', 'family', 'children', 'chinuch', 'חינוך', 'שלום בית', 'шалом байт'], label: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: "Сім'я" } },
+  { id: 'stories', keywords: ['истори', 'рассказ', 'story', 'stories', 'סיפור'], label: { ru: 'Истории', en: 'Stories', he: 'סיפורים', uk: 'Історії' } },
+  { id: 'emunah', keywords: ['emunah', 'אמונ', 'битахон', 'bitachon', 'ביטחון'], label: { ru: 'Эмуна', en: 'Emunah', he: 'אמונה', uk: 'Емуна' } },
   { id: 'prayer', keywords: ['молитв', 'prayer', 'תפיל', 'теилим', 'tehillim', 'תהילים'], label: { ru: 'Молитва', en: 'Prayer', he: 'תפילה', uk: 'Молитва' } },
 ];
 
@@ -412,13 +412,18 @@ function CatalogContent() {
       if (tagPubIds.length > 0) url += '&publication_id=in.(' + tagPubIds.join(',') + ')';
       else url += '&publication_id=eq.none'; // no matches
     }
-    // Content topic filter: filter by keywords in ai_summary
+    // Content topic filter: use server API for keyword search in ai_summary
     if (selectedContentTopic) {
-      const topic = contentTopics.find(ct => ct.id === selectedContentTopic);
-      if (topic) {
-        const orParts = topic.keywords.map(kw => 'ai_summary.ilike.*' + encodeURIComponent(kw) + '*');
-        url += '&or=(' + orParts.join(',') + ')';
-      }
+      try {
+        const params = new URLSearchParams({ topic: selectedContentTopic, page: String(page), pageSize: String(PAGE_SIZE), sort: sortOrder });
+        if (selectedPubLangs.length > 0) params.set('lang', selectedPubLangs.join(','));
+        const res = await fetch('/api/catalog/topic-filter?' + params.toString());
+        const { results, total } = await res.json();
+        setDocuments(results || []);
+        setTotalCount(total || 0);
+      } catch (err) { console.error('Topic filter error:', err); }
+      finally { setLoading(false); }
+      return;
     }
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number,ai_summary', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
   }, [page, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, activeTags, selectedPubLangs, selectedContentTopic]);
