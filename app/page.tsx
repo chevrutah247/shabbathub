@@ -179,7 +179,7 @@ export default function HomePage() {
       .then(r => { const c = r.headers.get('content-range'); if (c) setPubCount(parseInt(c.split('/')[1])); });
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => { e.preventDefault(); if (searchInput.trim()) window.location.href = '/catalog?search=' + encodeURIComponent(searchInput); };
+  const handleSearch = (e: React.FormEvent) => { e.preventDefault(); window.location.href = searchInput.trim() ? '/catalog?search=' + encodeURIComponent(searchInput) : '/catalog'; };
 
   return (
     <div dir={dir}>
@@ -438,10 +438,10 @@ export default function HomePage() {
                     className={'w-full py-3.5 rounded-xl search-card text-stone-700 placeholder-stone-300 outline-none text-sm ' + (dir === 'rtl' ? 'pr-12 pl-4' : 'pl-12 pr-4')}
                     style={{ fontFamily: "'DM Sans', sans-serif" }} />
                 </div>
-                <Link href="/catalog" className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 accent-gradient"
+                <button type="submit" className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 accent-gradient cursor-pointer"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  {g('explore')} <ArrowRight size={15} />
-                </Link>
+                  <Search size={15} /> {g('explore')}
+                </button>
               </form>
             </AnimateIn>
 
