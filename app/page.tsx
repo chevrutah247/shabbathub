@@ -102,6 +102,20 @@ export default function HomePage() {
   const [pubMap, setPubMap] = useState<Record<string, string>>({});
 
   // Check if today is 1-12 Nissan and show Nossi
+  const STORAGE = SUPABASE_URL + '/storage/v1/object/public/pdfs/uploads';
+  const nossiPdfs: Record<number, string> = {
+    1: STORAGE + '/Nossi-1-Nissan-1--1773976918697-mpkkpe.pdf',
+    2: STORAGE + '/Nosi-Nissan-4-1773977063823-owf7mj.pdf',
+    3: STORAGE + '/nossi-nissan-3.pdf',
+    4: STORAGE + '/nossi-nissan-4.pdf',
+    5: STORAGE + '/nossi-nissan-5.pdf',
+    6: STORAGE + '/nossi-nissan-6.pdf',
+    8: STORAGE + '/nossi-nissan-8.pdf',
+    9: STORAGE + '/nossi-nissan-9.pdf',
+    10: STORAGE + '/nossi-nissan-10.pdf',
+    11: STORAGE + '/nossi-nissan-11.pdf',
+    12: STORAGE + '/nossi-nissan-12.pdf',
+  };
   useEffect(() => {
     const today = new Date();
     fetch('https://www.hebcal.com/converter?cfg=json&gy=' + today.getFullYear() + '&gm=' + (today.getMonth() + 1) + '&gd=' + today.getDate() + '&g2h=1')
@@ -109,29 +123,10 @@ export default function HomePage() {
       .then(data => {
         if (data.hm === 'Nisan' && data.hd >= 1 && data.hd <= 12) {
           setNossiDay(data.hd);
-          // Fetch the corresponding Nossi issue
-          fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&title=ilike.*nossi*nissan*' + data.hd + '*&select=id,title,pdf_url,thumbnail_url&limit=1', { headers: { 'apikey': SUPABASE_KEY } })
-            .then(r => r.json())
-            .then(issues => {
-              if (Array.isArray(issues) && issues.length > 0) {
-                setNossiIssue(issues[0]);
-              } else {
-                // Try broader search
-                fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&publication_id=eq.49ea2b5f-9875-435e-8f10-e272429c1a04&select=id,title,pdf_url,thumbnail_url&order=title', { headers: { 'apikey': SUPABASE_KEY } })
-                  .then(r => r.json())
-                  .then(all => {
-                    if (Array.isArray(all)) {
-                      // Try to match by day number in title
-                      const match = all.find((i: any) => {
-                        const t = (i.title || '').toLowerCase();
-                        return t.includes(String(data.hd)) || t.includes('nissan ' + data.hd) || t.includes('nissan-' + data.hd);
-                      });
-                      if (match) setNossiIssue(match);
-                      else if (all[data.hd - 1]) setNossiIssue(all[data.hd - 1]); // fallback by index
-                    }
-                  });
-              }
-            });
+          const pdfUrl = nossiPdfs[data.hd];
+          if (pdfUrl) {
+            setNossiIssue({ id: 'nossi-' + data.hd, title: 'Nossi - ' + data.hd + ' Nissan', pdf_url: pdfUrl });
+          }
         }
       })
       .catch(() => {});
