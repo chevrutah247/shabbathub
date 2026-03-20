@@ -274,7 +274,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           <Link href="/" className="flex items-center">
-            <Image src="/shabbathub-logo-light.png" alt="ShabbatHub" width={200} height={40} className="h-10 w-auto" priority />
+            <Image src="/shabbathub-logo-light.png" alt="ShabbatHub" width={180} height={36} className="h-8 w-auto max-h-8" priority />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/catalog" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><BookOpen size={18} />{t('nav.catalog', lang)}</Link>            <Link href="/marketplace" className="flex items-center gap-1.5 text-gray-600 hover:text-primary-600 text-sm"><Store size={18} />{t('market.title', lang)}</Link>
