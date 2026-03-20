@@ -46,6 +46,11 @@ const t: Record<string, Record<string, string>> = {
   networkSub: { ru: 'Экосистема еврейских проектов', en: 'Jewish Projects Ecosystem', he: 'אקו-סיסטם של פרויקטים יהודיים', uk: 'Екосистема єврейських проєктів' },
   ctaTitle: { ru: 'Получайте свежие выпуски первыми', en: 'Get fresh issues first', he: 'קבלו גיליונות חדשים ראשונים', uk: 'Отримуйте свіжі випуски першими' },
   ctaSub: { ru: 'Подпишитесь и получайте новые материалы прямо на почту', en: 'Subscribe and receive new materials directly to your email', he: 'הירשמו וקבלו חומרים חדשים ישירות למייל', uk: 'Підпишіться та отримуйте нові матеріали прямо на пошту' },
+  nossiToday: { ru: 'Сегодня читаем', en: 'Today we read', he: 'היום קוראים', uk: 'Сьогодні читаємо' },
+  nossiTitle: { ru: 'Носси', en: 'Nossi', he: 'נשיא', uk: 'Носсі' },
+  nossiDay: { ru: 'день Нисана', en: 'of Nissan', he: 'ניסן', uk: 'день Нісана' },
+  nossiRead: { ru: 'Читать Носси', en: 'Read Nossi', he: 'קרא נשיא', uk: 'Читати Носсі' },
+  nossiDesc: { ru: 'Каждый день с 1 по 12 Нисана мы читаем главу о приношении Носи (главы колен Израиля)', en: 'Each day from 1-12 Nissan we read the chapter about the offering of the Nasi (tribal leaders)', he: 'בכל יום מא\' עד י"ב ניסן קוראים את פרשת הנשיא של אותו יום', uk: 'Щодня з 1 по 12 Нісана ми читаємо главу про приношення Носі' },
   spotlight: { ru: 'Рекомендуем прочитать', en: 'Recommended Reading', he: 'מומלץ לקריאה', uk: 'Рекомендуємо прочитати' },
   spotlightSub: { ru: 'Интересные выпуски из нашего архива', en: 'Interesting issues from our archive', he: 'גיליונות מעניינים מהארכיון שלנו', uk: 'Цікаві випуски з нашого архіву' },
   readNow: { ru: 'Читать', en: 'Read', he: 'קרא', uk: 'Читати' },
@@ -89,10 +94,48 @@ export default function HomePage() {
   const [searchInput, setSearchInput] = useState('');
   const [totalCount, setTotalCount] = useState(4044);
   const [pubCount, setPubCount] = useState(442);
+  const [nossiDay, setNossiDay] = useState<number | null>(null);
+  const [nossiIssue, setNossiIssue] = useState<{ id: string; title: string; pdf_url: string; thumbnail_url?: string } | null>(null);
   const [spotlightDocs, setSpotlightDocs] = useState<SpotlightDoc[]>([]);
   const [spotlightIdx, setSpotlightIdx] = useState(0);
   const [spotlightFade, setSpotlightFade] = useState(true);
   const [pubMap, setPubMap] = useState<Record<string, string>>({});
+
+  // Check if today is 1-12 Nissan and show Nossi
+  useEffect(() => {
+    const today = new Date();
+    fetch('https://www.hebcal.com/converter?cfg=json&gy=' + today.getFullYear() + '&gm=' + (today.getMonth() + 1) + '&gd=' + today.getDate() + '&g2h=1')
+      .then(r => r.json())
+      .then(data => {
+        if (data.hm === 'Nisan' && data.hd >= 1 && data.hd <= 12) {
+          setNossiDay(data.hd);
+          // Fetch the corresponding Nossi issue
+          fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&title=ilike.*nossi*nissan*' + data.hd + '*&select=id,title,pdf_url,thumbnail_url&limit=1', { headers: { 'apikey': SUPABASE_KEY } })
+            .then(r => r.json())
+            .then(issues => {
+              if (Array.isArray(issues) && issues.length > 0) {
+                setNossiIssue(issues[0]);
+              } else {
+                // Try broader search
+                fetch(SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&publication_id=eq.49ea2b5f-9875-435e-8f10-e272429c1a04&select=id,title,pdf_url,thumbnail_url&order=title', { headers: { 'apikey': SUPABASE_KEY } })
+                  .then(r => r.json())
+                  .then(all => {
+                    if (Array.isArray(all)) {
+                      // Try to match by day number in title
+                      const match = all.find((i: any) => {
+                        const t = (i.title || '').toLowerCase();
+                        return t.includes(String(data.hd)) || t.includes('nissan ' + data.hd) || t.includes('nissan-' + data.hd);
+                      });
+                      if (match) setNossiIssue(match);
+                      else if (all[data.hd - 1]) setNossiIssue(all[data.hd - 1]); // fallback by index
+                    }
+                  });
+              }
+            });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Fetch random spotlight docs with ai_summary
   useEffect(() => {
@@ -310,6 +353,59 @@ export default function HomePage() {
         .section-white { background: #ffffff; }
         .section-blue { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); }
       `}</style>
+
+      {/* ═══════ NOSSI BANNER (1-12 Nissan) ═══════ */}
+      {nossiDay && (
+        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-400 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-blue-400 rounded-full blur-3xl" />
+          </div>
+          <div className="relative max-w-5xl mx-auto px-6 py-8 md:py-12">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+              {/* Nossi thumbnail */}
+              {nossiIssue?.thumbnail_url && (
+                <div className="flex-shrink-0 w-32 md:w-40 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border-2 border-amber-400/30">
+                  <Image src={nossiIssue.thumbnail_url} alt={nossiIssue.title} width={160} height={213} className="w-full h-full object-cover" />
+                </div>
+              )}
+              {/* Content */}
+              <div className="flex-1 text-center md:text-start">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)' }}>
+                  <span className="text-amber-400 text-lg">✡</span>
+                  <span className="text-amber-300 text-xs font-bold uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    {nossiDay} {g('nossiDay')}
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                  {g('nossiToday')} <span className="text-amber-400">{g('nossiTitle')} {nossiDay}</span>
+                </h2>
+                <p className="text-blue-200/70 text-sm md:text-base mb-5 max-w-lg" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {g('nossiDesc')}
+                </p>
+                {nossiIssue && (
+                  <a
+                    href={nossiIssue.pdf_url || ('/document/' + nossiIssue.id)}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#1a1a2e', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 4px 20px rgba(245,158,11,0.3)' }}
+                  >
+                    <FileText size={18} />
+                    {g('nossiRead')} — {g('nossiTitle')} {nossiDay}
+                  </a>
+                )}
+              </div>
+              {/* Big day number */}
+              <div className="hidden md:flex flex-shrink-0 items-center justify-center">
+                <div className="text-8xl lg:text-9xl font-bold text-amber-400/20" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                  {nossiDay}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ═══════ HERO ═══════ */}
       <section className="hero-warm min-h-[80vh] flex items-center">
