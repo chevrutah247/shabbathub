@@ -587,6 +587,43 @@ export default function HomePage() {
         );
       })()}
 
+      {/* ═══════ LIBRARY SECTIONS ═══════ */}
+      <section className="section-cream py-16 md:py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <AnimateIn>
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('catTitle')}</h2>
+              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3 mb-3" />
+              <p className="text-sm text-stone-400 max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('catSub')}</p>
+            </div>
+          </AnimateIn>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:gap-6">
+            {libraryFolders.map((folder, i) => (
+              <AnimateIn key={folder.slug} delay={i * 80} className="w-[calc(50%-10px)] sm:w-[calc(33.333%-14px)] lg:w-[calc(25%-18px)]">
+                <Link href={'/catalog?category=' + folder.slug} className="folder-card block h-full">
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', borderRadius: '4px 4px 0 0', background: folder.accent }} />
+                  <div className="folder-tab" style={{ background: folder.accent }}>
+                    <folder.icon size={11} />
+                    <span>{g(folder.title)}</span>
+                  </div>
+                  <div className="folder-icon" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <folder.icon size={22} />
+                  </div>
+                  <h3 className="text-base font-semibold text-stone-800 mb-1.5" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g(folder.title)}</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", paddingRight: dir === 'rtl' ? 0 : '1.5rem', paddingLeft: dir === 'rtl' ? '1.5rem' : 0 }}>{g(folder.desc)}</p>
+                  <div className="folder-arrow" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <ArrowRight size={14} />
+                  </div>
+                </Link>
+              </AnimateIn>
+            ))}
+          </div>
+
+          <div className="library-shelf max-w-[90%] mx-auto" />
+        </div>
+      </section>
+
       {/* ═══════ GETASHIDDUCH KNOWLEDGE HUB ═══════ */}
       <section className="relative overflow-hidden py-16 md:py-20 px-6" style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fcd34d 60%, #f59e0b 100%)' }}>
         <div className="absolute inset-0 opacity-10">
@@ -651,43 +688,6 @@ export default function HomePage() {
               <ExternalLink size={12} />
             </a>
           </div>
-        </div>
-      </section>
-
-      {/* ═══════ LIBRARY SECTIONS ═══════ */}
-      <section className="section-cream py-16 md:py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <AnimateIn>
-            <div className="text-center mb-4">
-              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('catTitle')}</h2>
-              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3 mb-3" />
-              <p className="text-sm text-stone-400 max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('catSub')}</p>
-            </div>
-          </AnimateIn>
-
-          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:gap-6">
-            {libraryFolders.map((folder, i) => (
-              <AnimateIn key={folder.slug} delay={i * 80} className="w-[calc(50%-10px)] sm:w-[calc(33.333%-14px)] lg:w-[calc(25%-18px)]">
-                <Link href={'/catalog?category=' + folder.slug} className="folder-card block h-full">
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', borderRadius: '4px 4px 0 0', background: folder.accent }} />
-                  <div className="folder-tab" style={{ background: folder.accent }}>
-                    <folder.icon size={11} />
-                    <span>{g(folder.title)}</span>
-                  </div>
-                  <div className="folder-icon" style={{ background: folder.accentLight, color: folder.accent }}>
-                    <folder.icon size={22} />
-                  </div>
-                  <h3 className="text-base font-semibold text-stone-800 mb-1.5" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g(folder.title)}</h3>
-                  <p className="text-xs text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", paddingRight: dir === 'rtl' ? 0 : '1.5rem', paddingLeft: dir === 'rtl' ? '1.5rem' : 0 }}>{g(folder.desc)}</p>
-                  <div className="folder-arrow" style={{ background: folder.accentLight, color: folder.accent }}>
-                    <ArrowRight size={14} />
-                  </div>
-                </Link>
-              </AnimateIn>
-            ))}
-          </div>
-
-          <div className="library-shelf max-w-[90%] mx-auto" />
         </div>
       </section>
 
