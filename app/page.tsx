@@ -622,7 +622,7 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-              <a href="https://getashidduch.org/ru/knowledge" target="_blank" rel="noopener"
+              <a href="https://getashidduch.org/ru/journal" target="_blank" rel="noopener"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105"
                 style={{ background: '#92400e', color: 'white', fontFamily: "'DM Sans', sans-serif" }}>
                 {g('shidduchCta')} <ArrowRight size={15} />
@@ -632,11 +632,11 @@ export default function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {[
-              { title: { ru: '5 вещей, которые Ребе советует перед шиддухом', en: '5 Things the Rebbe Advises Before Shidduchim', he: '5 דברים שהרבי ממליץ לפני שידוכים', uk: '5 речей, які Ребе радить перед шидухом' }, tag: { ru: 'Подготовка', en: 'Preparation', he: 'הכנה', uk: 'Підготовка' }, img: '/images/knowledge/article1.png', url: 'https://getashidduch.org/ru/knowledge' },
-              { title: { ru: 'Почему поиск пары — это поиск потерянной вещи?', en: 'Why Finding a Spouse Is Like a Lost Item', he: 'למה חיפוש זיווג כמו אבידה?', uk: 'Чому пошук пари — це пошук загубленої речі?' }, tag: { ru: 'Мудрость', en: 'Wisdom', he: 'חכמה', uk: 'Мудрість' }, img: '/images/knowledge/article2.png', url: 'https://getashidduch.org/ru/knowledge' },
-              { title: { ru: 'Правило двух встреч', en: 'The Two Dates Rule', he: 'כלל שתי הפגישות', uk: 'Правило двох зустрічей' }, tag: { ru: 'Совет', en: 'Advice', he: 'עצה', uk: 'Порада' }, img: '/images/knowledge/article3.png', url: 'https://getashidduch.org/ru/knowledge' },
-              { title: { ru: '10 советов для успешного шиддуха', en: '10 Tips for Successful Shidduch', he: '10 טיפים לשידוך מוצלח', uk: '10 порад для успішного шидуху' }, tag: { ru: '10 советов', en: '10 Tips', he: '10 טיפים', uk: '10 порад' }, img: '/images/knowledge/article4.png', url: 'https://getashidduch.org/ru/knowledge' },
-              { title: { ru: 'Брак — не проект по переделке партнёра', en: "Don't Try to Change Your Partner", he: 'אל תנסו לשנות את בן הזוג', uk: 'Шлюб — не проект з переробки партнера' }, tag: { ru: 'Важно', en: 'Important', he: 'חשוב', uk: 'Важливо' }, img: '/images/knowledge/article5.png', url: 'https://getashidduch.org/ru/knowledge' },
+              { title: { ru: '5 вещей, которые Ребе советует перед шиддухом', en: '5 Things the Rebbe Advises Before Shidduchim', he: '5 דברים שהרבי ממליץ לפני שידוכים', uk: '5 речей, які Ребе радить перед шидухом' }, tag: { ru: 'Подготовка', en: 'Preparation', he: 'הכנה', uk: 'Підготовка' }, img: '/images/knowledge/article1.png', url: 'https://getashidduch.org/ru/journal' },
+              { title: { ru: 'Почему поиск пары — это поиск потерянной вещи?', en: 'Why Finding a Spouse Is Like a Lost Item', he: 'למה חיפוש זיווג כמו אבידה?', uk: 'Чому пошук пари — це пошук загубленої речі?' }, tag: { ru: 'Мудрость', en: 'Wisdom', he: 'חכמה', uk: 'Мудрість' }, img: '/images/knowledge/article2.png', url: 'https://getashidduch.org/ru/journal' },
+              { title: { ru: 'Правило двух встреч', en: 'The Two Dates Rule', he: 'כלל שתי הפגישות', uk: 'Правило двох зустрічей' }, tag: { ru: 'Совет', en: 'Advice', he: 'עצה', uk: 'Порада' }, img: '/images/knowledge/article3.png', url: 'https://getashidduch.org/ru/journal' },
+              { title: { ru: '10 советов для успешного шиддуха', en: '10 Tips for Successful Shidduch', he: '10 טיפים לשידוך מוצלח', uk: '10 порад для успішного шидуху' }, tag: { ru: '10 советов', en: '10 Tips', he: '10 טיפים', uk: '10 порад' }, img: '/images/knowledge/article4.png', url: 'https://getashidduch.org/ru/journal' },
+              { title: { ru: 'Брак — не проект по переделке партнёра', en: "Don't Try to Change Your Partner", he: 'אל תנסו לשנות את בן הזוג', uk: 'Шлюб — не проект з переробки партнера' }, tag: { ru: 'Важно', en: 'Important', he: 'חשוב', uk: 'Важливо' }, img: '/images/knowledge/article5.png', url: 'https://getashidduch.org/ru/journal' },
             ].map((article, i) => (
               <AnimateIn key={i} delay={i * 80}>
                 <a href={article.url} target="_blank" rel="noopener"
