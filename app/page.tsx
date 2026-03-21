@@ -394,11 +394,35 @@ export default function HomePage() {
                   </a>
                 )}
               </div>
-              {/* Big day number */}
-              <div className="hidden md:flex flex-shrink-0 items-center justify-center">
-                <div className="text-8xl lg:text-9xl font-bold text-amber-400/20" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
-                  {nossiDay}
+              {/* GetAShidduch articles */}
+              <div className="hidden lg:block flex-shrink-0 w-64 xl:w-72">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">💍</span>
+                  <span className="text-amber-300/80 text-xs font-bold uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>GetAShidduch</span>
                 </div>
+                <div className="space-y-2">
+                  {[
+                    { title: lang === 'he' ? '5 דברים לפני שידוכים' : lang === 'en' ? '5 Things Before Shidduchim' : '5 советов Ребе перед шиддухом', img: '/images/knowledge/article1.png' },
+                    { title: lang === 'he' ? 'חיפוש זיווג כמו אבידה' : lang === 'en' ? 'Finding a Spouse = Lost Item' : 'Поиск пары — потерянная вещь', img: '/images/knowledge/article2.png' },
+                    { title: lang === 'he' ? 'כלל שתי הפגישות' : lang === 'en' ? 'The Two Dates Rule' : 'Правило двух встреч', img: '/images/knowledge/article3.png' },
+                    { title: lang === 'he' ? '10 טיפים לשידוך מוצלח' : lang === 'en' ? '10 Tips for Shidduch' : '10 советов для шиддуха', img: '/images/knowledge/article4.png' },
+                    { title: lang === 'he' ? 'אל תשנו את בן הזוג' : lang === 'en' ? "Don't Change Your Partner" : 'Не переделывайте партнёра', img: '/images/knowledge/article5.png' },
+                  ].map((a, i) => (
+                    <a key={i} href={'https://getashidduch.org/' + lang + '/journal'} target="_blank" rel="noopener"
+                      className="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
+                        <Image src={a.img} alt={a.title} width={40} height={40} className="w-full h-full object-cover" />
+                      </div>
+                      <span className="text-xs text-blue-100/80 group-hover:text-amber-300 transition-colors leading-tight line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        {a.title}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+                <a href={'https://getashidduch.org/' + lang + '/journal'} target="_blank" rel="noopener"
+                  className="mt-3 inline-flex items-center gap-1 text-xs text-amber-400/60 hover:text-amber-300 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {lang === 'he' ? 'כל המאמרים' : lang === 'en' ? 'All articles' : 'Все статьи'} →
+                </a>
               </div>
             </div>
           </div>
@@ -563,43 +587,6 @@ export default function HomePage() {
         );
       })()}
 
-      {/* ═══════ LIBRARY SECTIONS ═══════ */}
-      <section className="section-cream py-16 md:py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <AnimateIn>
-            <div className="text-center mb-4">
-              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('catTitle')}</h2>
-              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3 mb-3" />
-              <p className="text-sm text-stone-400 max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('catSub')}</p>
-            </div>
-          </AnimateIn>
-
-          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:gap-6">
-            {libraryFolders.map((folder, i) => (
-              <AnimateIn key={folder.slug} delay={i * 80} className="w-[calc(50%-10px)] sm:w-[calc(33.333%-14px)] lg:w-[calc(25%-18px)]">
-                <Link href={'/catalog?category=' + folder.slug} className="folder-card block h-full">
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', borderRadius: '4px 4px 0 0', background: folder.accent }} />
-                  <div className="folder-tab" style={{ background: folder.accent }}>
-                    <folder.icon size={11} />
-                    <span>{g(folder.title)}</span>
-                  </div>
-                  <div className="folder-icon" style={{ background: folder.accentLight, color: folder.accent }}>
-                    <folder.icon size={22} />
-                  </div>
-                  <h3 className="text-base font-semibold text-stone-800 mb-1.5" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g(folder.title)}</h3>
-                  <p className="text-xs text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", paddingRight: dir === 'rtl' ? 0 : '1.5rem', paddingLeft: dir === 'rtl' ? '1.5rem' : 0 }}>{g(folder.desc)}</p>
-                  <div className="folder-arrow" style={{ background: folder.accentLight, color: folder.accent }}>
-                    <ArrowRight size={14} />
-                  </div>
-                </Link>
-              </AnimateIn>
-            ))}
-          </div>
-
-          <div className="library-shelf max-w-[90%] mx-auto" />
-        </div>
-      </section>
-
       {/* ═══════ GETASHIDDUCH KNOWLEDGE HUB ═══════ */}
       <section className="relative overflow-hidden py-16 md:py-20 px-6" style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fcd34d 60%, #f59e0b 100%)' }}>
         <div className="absolute inset-0 opacity-10">
@@ -664,6 +651,43 @@ export default function HomePage() {
               <ExternalLink size={12} />
             </a>
           </div>
+        </div>
+      </section>
+
+      {/* ═══════ LIBRARY SECTIONS ═══════ */}
+      <section className="section-cream py-16 md:py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <AnimateIn>
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-semibold text-stone-800" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g('catTitle')}</h2>
+              <div className="w-12 h-0.5 rounded-full accent-gradient mx-auto mt-3 mb-3" />
+              <p className="text-sm text-stone-400 max-w-md mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>{g('catSub')}</p>
+            </div>
+          </AnimateIn>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:gap-6">
+            {libraryFolders.map((folder, i) => (
+              <AnimateIn key={folder.slug} delay={i * 80} className="w-[calc(50%-10px)] sm:w-[calc(33.333%-14px)] lg:w-[calc(25%-18px)]">
+                <Link href={'/catalog?category=' + folder.slug} className="folder-card block h-full">
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', borderRadius: '4px 4px 0 0', background: folder.accent }} />
+                  <div className="folder-tab" style={{ background: folder.accent }}>
+                    <folder.icon size={11} />
+                    <span>{g(folder.title)}</span>
+                  </div>
+                  <div className="folder-icon" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <folder.icon size={22} />
+                  </div>
+                  <h3 className="text-base font-semibold text-stone-800 mb-1.5" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{g(folder.title)}</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", paddingRight: dir === 'rtl' ? 0 : '1.5rem', paddingLeft: dir === 'rtl' ? '1.5rem' : 0 }}>{g(folder.desc)}</p>
+                  <div className="folder-arrow" style={{ background: folder.accentLight, color: folder.accent }}>
+                    <ArrowRight size={14} />
+                  </div>
+                </Link>
+              </AnimateIn>
+            ))}
+          </div>
+
+          <div className="library-shelf max-w-[90%] mx-auto" />
         </div>
       </section>
 
