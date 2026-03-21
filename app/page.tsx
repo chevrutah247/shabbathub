@@ -51,6 +51,9 @@ const t: Record<string, Record<string, string>> = {
   nossiDay: { ru: 'день Нисана', en: 'of Nissan', he: 'ניסן', uk: 'день Нісана' },
   nossiRead: { ru: 'Читать Носси', en: 'Read Nossi', he: 'קרא נשיא', uk: 'Читати Носсі' },
   nossiDesc: { ru: 'Каждый день с 1 по 12 Нисана мы читаем главу о приношении Носи (главы колен Израиля)', en: 'Each day from 1-12 Nissan we read the chapter about the offering of the Nasi (tribal leaders)', he: 'בכל יום מא\' עד י"ב ניסן קוראים את פרשת הנשיא של אותו יום', uk: 'Щодня з 1 по 12 Нісана ми читаємо главу про приношення Носі' },
+  shidduchTitle: { ru: 'База знаний о шиддухе', en: 'Shidduch Knowledge Hub', he: 'מרכז ידע לשידוכים', uk: 'База знань про шидух' },
+  shidduchSub: { ru: 'Всё, что нужно знать о поиске пары — мудрость Торы и практические советы', en: 'Everything you need to know about finding your match — Torah wisdom and practical advice', he: 'כל מה שצריך לדעת על מציאת זיווג — חכמת התורה ועצות מעשיות', uk: 'Все, що потрібно знати про пошук пари' },
+  shidduchCta: { ru: 'Читать все статьи', en: 'Read all articles', he: 'קרא את כל המאמרים', uk: 'Читати всі статті' },
   spotlight: { ru: 'Рекомендуем прочитать', en: 'Recommended Reading', he: 'מומלץ לקריאה', uk: 'Рекомендуємо прочитати' },
   spotlightSub: { ru: 'Интересные выпуски из нашего архива', en: 'Interesting issues from our archive', he: 'גיליונות מעניינים מהארכיון שלנו', uk: 'Цікаві випуски з нашого архіву' },
   readNow: { ru: 'Читать', en: 'Read', he: 'קרא', uk: 'Читати' },
@@ -594,6 +597,73 @@ export default function HomePage() {
           </div>
 
           <div className="library-shelf max-w-[90%] mx-auto" />
+        </div>
+      </section>
+
+      {/* ═══════ GETASHIDDUCH KNOWLEDGE HUB ═══════ */}
+      <section className="relative overflow-hidden py-16 md:py-20 px-6" style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fcd34d 60%, #f59e0b 100%)' }}>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-300 rounded-full blur-3xl" />
+        </div>
+        <div className="relative max-w-7xl mx-auto">
+          <AnimateIn>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #92400e, #b45309)' }}>
+                  <span className="text-2xl">💍</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-amber-900" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                    {g('shidduchTitle')}
+                  </h2>
+                  <p className="text-sm text-amber-800/70 mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    {g('shidduchSub')}
+                  </p>
+                </div>
+              </div>
+              <a href="https://getashidduch.org/ru/knowledge" target="_blank" rel="noopener"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+                style={{ background: '#92400e', color: 'white', fontFamily: "'DM Sans', sans-serif" }}>
+                {g('shidduchCta')} <ArrowRight size={15} />
+              </a>
+            </div>
+          </AnimateIn>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { title: { ru: '5 вещей, которые Ребе советует перед шиддухом', en: '5 Things the Rebbe Advises Before Shidduchim', he: '5 דברים שהרבי ממליץ לפני שידוכים', uk: '5 речей, які Ребе радить перед шидухом' }, tag: { ru: 'Подготовка', en: 'Preparation', he: 'הכנה', uk: 'Підготовка' }, img: '/images/knowledge/article1.png', url: 'https://getashidduch.org/ru/knowledge' },
+              { title: { ru: 'Почему поиск пары — это поиск потерянной вещи?', en: 'Why Finding a Spouse Is Like a Lost Item', he: 'למה חיפוש זיווג כמו אבידה?', uk: 'Чому пошук пари — це пошук загубленої речі?' }, tag: { ru: 'Мудрость', en: 'Wisdom', he: 'חכמה', uk: 'Мудрість' }, img: '/images/knowledge/article2.png', url: 'https://getashidduch.org/ru/knowledge' },
+              { title: { ru: 'Правило двух встреч', en: 'The Two Dates Rule', he: 'כלל שתי הפגישות', uk: 'Правило двох зустрічей' }, tag: { ru: 'Совет', en: 'Advice', he: 'עצה', uk: 'Порада' }, img: '/images/knowledge/article3.png', url: 'https://getashidduch.org/ru/knowledge' },
+              { title: { ru: '10 советов для успешного шиддуха', en: '10 Tips for Successful Shidduch', he: '10 טיפים לשידוך מוצלח', uk: '10 порад для успішного шидуху' }, tag: { ru: '10 советов', en: '10 Tips', he: '10 טיפים', uk: '10 порад' }, img: '/images/knowledge/article4.png', url: 'https://getashidduch.org/ru/knowledge' },
+              { title: { ru: 'Брак — не проект по переделке партнёра', en: "Don't Try to Change Your Partner", he: 'אל תנסו לשנות את בן הזוג', uk: 'Шлюб — не проект з переробки партнера' }, tag: { ru: 'Важно', en: 'Important', he: 'חשוב', uk: 'Важливо' }, img: '/images/knowledge/article5.png', url: 'https://getashidduch.org/ru/knowledge' },
+            ].map((article, i) => (
+              <AnimateIn key={i} delay={i * 80}>
+                <a href={article.url} target="_blank" rel="noopener"
+                  className="group block bg-white/80 backdrop-blur rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 border border-amber-200/50">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image src={article.img} alt={article.title[lang]} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 50vw, 20vw" />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-900/80 text-amber-100">
+                      {article.tag[lang]}
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-xs font-semibold text-amber-900 leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      {article.title[lang]}
+                    </h3>
+                  </div>
+                </a>
+              </AnimateIn>
+            ))}
+          </div>
+
+          <div className="mt-6 text-center">
+            <a href="https://getashidduch.org" target="_blank" rel="noopener"
+              className="inline-flex items-center gap-2 text-amber-900/60 hover:text-amber-900 text-sm transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <span className="text-lg">💍</span> GetAShidduch.org — {lang === 'he' ? 'פלטפורמת שידוכים יהודית' : lang === 'en' ? 'Jewish Matchmaking Platform' : 'Еврейская платформа знакомств'}
+              <ExternalLink size={12} />
+            </a>
+          </div>
         </div>
       </section>
 
