@@ -97,12 +97,21 @@ export default function HomePage() {
   const [searchInput, setSearchInput] = useState('');
   const [totalCount, setTotalCount] = useState(4044);
   const [pubCount, setPubCount] = useState(442);
+  const [shidduchArticles, setShidduchArticles] = useState<any[]>([]);
   const [nossiDay, setNossiDay] = useState<number | null>(null);
   const [nossiIssue, setNossiIssue] = useState<{ id: string; title: string; pdf_url: string; thumbnail_url?: string } | null>(null);
   const [spotlightDocs, setSpotlightDocs] = useState<SpotlightDoc[]>([]);
   const [spotlightIdx, setSpotlightIdx] = useState(0);
   const [spotlightFade, setSpotlightFade] = useState(true);
   const [pubMap, setPubMap] = useState<Record<string, string>>({});
+
+  // Fetch GetAShidduch articles dynamically
+  useEffect(() => {
+    fetch('https://getashidduch.org/api/articles')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setShidduchArticles(data); })
+      .catch(() => {});
+  }, []);
 
   // Check if today is 1-12 Nissan and show Nossi
   const STORAGE = SUPABASE_URL + '/storage/v1/object/public/pdfs/uploads';
@@ -401,20 +410,14 @@ export default function HomePage() {
                   <span className="text-amber-300/80 text-xs font-bold uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>GetAShidduch</span>
                 </div>
                 <div className="space-y-2">
-                  {[
-                    { title: lang === 'he' ? '5 דברים לפני שידוכים' : lang === 'en' ? '5 Things Before Shidduchim' : '5 советов Ребе перед шиддухом', img: '/images/knowledge/article1.png' },
-                    { title: lang === 'he' ? 'חיפוש זיווג כמו אבידה' : lang === 'en' ? 'Finding a Spouse = Lost Item' : 'Поиск пары — потерянная вещь', img: '/images/knowledge/article2.png' },
-                    { title: lang === 'he' ? 'כלל שתי הפגישות' : lang === 'en' ? 'The Two Dates Rule' : 'Правило двух встреч', img: '/images/knowledge/article3.png' },
-                    { title: lang === 'he' ? '10 טיפים לשידוך מוצלח' : lang === 'en' ? '10 Tips for Shidduch' : '10 советов для шиддуха', img: '/images/knowledge/article4.png' },
-                    { title: lang === 'he' ? 'אל תשנו את בן הזוג' : lang === 'en' ? "Don't Change Your Partner" : 'Не переделывайте партнёра', img: '/images/knowledge/article5.png' },
-                  ].map((a, i) => (
-                    <a key={i} href={'https://getashidduch.org/' + lang + '/journal'} target="_blank" rel="noopener"
+                  {shidduchArticles.map((a: any, i: number) => (
+                    <a key={i} href={a.url?.replace('/ru/', '/' + lang + '/') || 'https://getashidduch.org/' + lang + '/journal'} target="_blank" rel="noopener"
                       className="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors">
                       <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
-                        <Image src={a.img} alt={a.title} width={40} height={40} className="w-full h-full object-cover" />
+                        <Image src={a.img} alt={a.title?.[lang] || a.title?.ru || ''} width={40} height={40} className="w-full h-full object-cover" />
                       </div>
                       <span className="text-xs text-blue-100/80 group-hover:text-amber-300 transition-colors leading-tight line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                        {a.title}
+                        {a.title?.[lang] || a.title?.ru || ''}
                       </span>
                     </a>
                   ))}
@@ -655,25 +658,19 @@ export default function HomePage() {
           </AnimateIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              { title: { ru: '5 вещей, которые Ребе советует перед шиддухом', en: '5 Things the Rebbe Advises Before Shidduchim', he: '5 דברים שהרבי ממליץ לפני שידוכים', uk: '5 речей, які Ребе радить перед шидухом' }, tag: { ru: 'Подготовка', en: 'Preparation', he: 'הכנה', uk: 'Підготовка' }, img: '/images/knowledge/article1.png', url: 'https://getashidduch.org/ru/journal' },
-              { title: { ru: 'Почему поиск пары — это поиск потерянной вещи?', en: 'Why Finding a Spouse Is Like a Lost Item', he: 'למה חיפוש זיווג כמו אבידה?', uk: 'Чому пошук пари — це пошук загубленої речі?' }, tag: { ru: 'Мудрость', en: 'Wisdom', he: 'חכמה', uk: 'Мудрість' }, img: '/images/knowledge/article2.png', url: 'https://getashidduch.org/ru/journal' },
-              { title: { ru: 'Правило двух встреч', en: 'The Two Dates Rule', he: 'כלל שתי הפגישות', uk: 'Правило двох зустрічей' }, tag: { ru: 'Совет', en: 'Advice', he: 'עצה', uk: 'Порада' }, img: '/images/knowledge/article3.png', url: 'https://getashidduch.org/ru/journal' },
-              { title: { ru: '10 советов для успешного шиддуха', en: '10 Tips for Successful Shidduch', he: '10 טיפים לשידוך מוצלח', uk: '10 порад для успішного шидуху' }, tag: { ru: '10 советов', en: '10 Tips', he: '10 טיפים', uk: '10 порад' }, img: '/images/knowledge/article4.png', url: 'https://getashidduch.org/ru/journal' },
-              { title: { ru: 'Брак — не проект по переделке партнёра', en: "Don't Try to Change Your Partner", he: 'אל תנסו לשנות את בן הזוג', uk: 'Шлюб — не проект з переробки партнера' }, tag: { ru: 'Важно', en: 'Important', he: 'חשוב', uk: 'Важливо' }, img: '/images/knowledge/article5.png', url: 'https://getashidduch.org/ru/journal' },
-            ].map((article, i) => (
+            {shidduchArticles.map((article: any, i: number) => (
               <AnimateIn key={i} delay={i * 80}>
-                <a href={article.url} target="_blank" rel="noopener"
+                <a href={article.url?.replace('/ru/', '/' + lang + '/') || 'https://getashidduch.org/' + lang + '/journal'} target="_blank" rel="noopener"
                   className="group block bg-white/80 backdrop-blur rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 border border-amber-200/50">
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image src={article.img} alt={article.title[lang]} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 50vw, 20vw" />
+                    <Image src={article.img} alt={article.title?.[lang] || article.title?.ru || ''} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 50vw, 20vw" />
                     <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-900/80 text-amber-100">
-                      {article.tag[lang]}
+                      {article.tag?.[lang] || article.tag?.ru || ''}
                     </div>
                   </div>
                   <div className="p-3">
                     <h3 className="text-xs font-semibold text-amber-900 leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                      {article.title[lang]}
+                      {article.title?.[lang] || article.title?.ru || ''}
                     </h3>
                   </div>
                 </a>
