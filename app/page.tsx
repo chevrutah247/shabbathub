@@ -73,7 +73,7 @@ const networkProjects = [
   { name: 'ShabbatHub', desc: { ru: 'Архив материалов к Шаббату', en: 'Shabbat Materials Archive', he: 'ארכיון חומרי שבת', uk: 'Архів матеріалів до Шаббату' }, url: '/', icon: '📚', accent: '#1e3a8a' },
   { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы онлайн', en: 'Torah Learning Online', he: 'לימוד תורה אונליין', uk: 'Вивчення Тори онлайн' }, url: 'https://edonthego.org', icon: '🎓', accent: '#065f46' },
   { name: 'CH Groups', desc: { ru: 'Группы изучения', en: 'Study Groups', he: 'קבוצות לימוד', uk: 'Групи вивчення' }, url: 'https://crownheightsgroups.com', icon: '👥', accent: '#92400e' },
-  { name: 'OpenHearts', desc: { ru: 'Дейтинг для всех', en: 'Dating for Everyone', he: 'היכרויות לכולם', uk: 'Дейтинг для всіх' }, url: 'https://openheartsdating.com', icon: '💙', accent: '#4338ca' },
+  { name: 'GetAShidduch', desc: { ru: 'Еврейские знакомства', en: 'Jewish Matchmaking', he: 'שידוכים יהודיים', uk: 'Єврейські знайомства' }, url: 'https://getashidduch.org', icon: '💍', accent: '#b45309' },
 ];
 
 const libraryFolders = [
