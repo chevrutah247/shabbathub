@@ -107,7 +107,7 @@ export default function HomePage() {
 
   // Fetch GetAShidduch articles dynamically
   useEffect(() => {
-    fetch('https://getashidduch.org/api/articles')
+    fetch('https://www.getashidduch.org/api/articles')
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setShidduchArticles(data); })
       .catch(() => {});
