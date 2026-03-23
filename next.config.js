@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'www.getashidduch.org',
       },
+      {
+        protocol: 'https',
+        hostname: 'backend.torahtable.com',
+      },
     ],
   },
   // For react-pdf
