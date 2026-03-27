@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { MetadataRoute } from 'next';
+import { articles } from '@/data/articles';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.shabbathub.com';
@@ -18,7 +19,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/marketplace`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/suggest-group`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/navigator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/articles`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
   ];
+
+  // Article pages
+  const articlePages: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: `${baseUrl}/articles/${article.slug}`,
+    lastModified: new Date(article.createdAt),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
 
   try {
     const supabase = createClient(
@@ -67,8 +77,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.55,
     }));
 
-    return [...staticPages, ...pubPages, ...docPages, ...uploaderPages];
+    return [...staticPages, ...articlePages, ...pubPages, ...docPages, ...uploaderPages];
   } catch {
-    return staticPages;
+    return [...staticPages, ...articlePages];
   }
 }
