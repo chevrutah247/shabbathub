@@ -180,6 +180,13 @@ export default function ArticlePage() {
           <p className="text-lg text-gray-500 leading-relaxed">{article.subtitle[lang]}</p>
         </header>
 
+        {/* Article image */}
+        {article.image && (
+          <div className="rounded-2xl overflow-hidden mb-8">
+            <img src={article.image} alt={article.title[lang]} className="w-full h-auto" />
+          </div>
+        )}
+
         {/* Decorative divider */}
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />

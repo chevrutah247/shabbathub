@@ -1,6 +1,7 @@
 export interface Article {
   id: string;
   slug: string;
+  image?: string;
   title: { ru: string; en: string; he: string; uk: string };
   subtitle: { ru: string; en: string; he: string; uk: string };
   content: { ru: string; en: string };
@@ -362,6 +363,7 @@ export const articles: Article[] = [
   {
     id: 'bitachon-1',
     slug: 'illyuziya-sobstvennosti-pochemu-vashi-dengi-vam-ne-prinadlezhat',
+    image: '/images/articles/bitachon-1.png',
     title: {
       ru: 'Иллюзия собственности: почему ваши деньги вам не принадлежат',
       en: 'The Illusion of Ownership: Why Your Money Doesn\'t Belong to You',
@@ -403,6 +405,7 @@ export const articles: Article[] = [
   {
     id: 'bitachon-2',
     slug: 'medicina-ili-fatalizm-kogda-vizit-k-vrachu-stanovitsya-grekhom',
+    image: '/images/articles/bitachon-2.png',
     title: {
       ru: 'Медицина или фатализм: когда визит к врачу становится грехом?',
       en: 'Medicine or Fatalism: When Does Visiting a Doctor Become a Sin?',
@@ -444,6 +447,7 @@ export const articles: Article[] = [
   {
     id: 'bitachon-3',
     slug: 'gorkaya-pravda-o-spravedlivosti-pochemu-podletsam-vezet',
+    image: '/images/articles/bitachon-3.png',
     title: {
       ru: 'Горькая правда о справедливости: почему подонкам везет?',
       en: 'The Bitter Truth About Justice: Why Do Scoundrels Prosper?',
@@ -495,6 +499,7 @@ export const articles: Article[] = [
   {
     id: 'bitachon-4',
     slug: 'dukhovnyy-shantazh-pochemu-fraza-snachala-zarabotayu-eto-lovushka',
+    image: '/images/articles/bitachon-4.png',
     title: {
       ru: 'Духовный шантаж: почему фраза «сначала заработаю, потом займусь душой» — это ловушка',
       en: 'Spiritual Blackmail: Why "I\'ll Earn First, Then Focus on My Soul" Is a Trap',
@@ -530,6 +535,7 @@ export const articles: Article[] = [
   {
     id: 'bitachon-5',
     slug: 'paradoks-usiliy-esli-vsyo-predopredeleno-zachem-khodit-na-rabotu',
+    image: '/images/articles/bitachon-5.png',
     title: {
       ru: 'Парадокс усилий: если всё предопределено, зачем вообще ходить на работу?',
       en: 'The Effort Paradox: If Everything Is Predetermined, Why Go to Work at All?',

@@ -162,15 +162,20 @@ export default function ArticlesPage() {
                 href={`/articles/${article.slug}`}
                 className="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-primary-200 transition-all duration-300"
               >
-                {/* Image placeholder */}
-                <div className="h-44 bg-gradient-to-br from-primary-100 via-blue-50 to-gold-400/20 flex items-center justify-center">
-                  <span className="text-5xl opacity-60">
-                    {article.tag.en === 'Shabbat' && '🕯️'}
-                    {article.tag.en === 'Halacha' && '📜'}
-                    {article.tag.en === 'Chassidus' && '✨'}
-                    {article.tag.en === 'Family' && '👨‍👩‍👧‍👦'}
-                    {article.tag.en === 'Holidays' && '🕎'}
-                  </span>
+                {/* Image */}
+                <div className="h-44 bg-gradient-to-br from-primary-100 via-blue-50 to-gold-400/20 flex items-center justify-center overflow-hidden">
+                  {article.image ? (
+                    <img src={article.image} alt={article.title[lang]} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-5xl opacity-60">
+                      {article.tag.en === 'Shabbat' && '🕯️'}
+                      {article.tag.en === 'Halacha' && '📜'}
+                      {article.tag.en === 'Chassidus' && '✨'}
+                      {article.tag.en === 'Family' && '👨‍👩‍👧‍👦'}
+                      {article.tag.en === 'Holidays' && '🕎'}
+                      {article.tag.en === 'Bitachon' && '🤲'}
+                    </span>
+                  )}
                 </div>
 
                 {/* Content */}
