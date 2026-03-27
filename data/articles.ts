@@ -570,6 +570,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-6',
+    image: '/images/articles/bitachon-6.png',
     slug: 'advokat-dyavola-pochemu-vash-zaklyatyy-vrag-eto-poslannik-svyshe',
     title: {
       ru: 'Адвокат дьявола: почему ваш заклятый враг — это посланник свыше?',
@@ -605,6 +606,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-7',
+    image: '/images/articles/bitachon-7.png',
     slug: 'geneticheskoye-rabstvo-ili-bozhestvennoye-prizvaniye',
     title: {
       ru: 'Генетическое рабство или божественное призвание: почему вы ненавидите свою работу?',
@@ -675,6 +677,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-9',
+    image: '/images/articles/bitachon-9.png',
     slug: 'blagosloveniye-odinochestva-pochemu-otsutstviye-druzey-eto-podarok',
     title: {
       ru: 'Благословение одиночества: почему отсутствие друзей — это подарок',
@@ -710,6 +713,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-10',
+    image: '/images/articles/bitachon-10.png',
     slug: 'dukhovnaya-naglost-pochemu-zanachka-na-starost-eto-grekh',
     title: {
       ru: 'Духовная наглость: почему «заначка» на старость — это грех',
@@ -745,6 +749,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-11',
+    image: '/images/articles/bitachon-11.png',
     slug: 'pochemu-vasha-blagodarnost-mozhet-byt-oskorbleniem-dlya-nebes',
     title: {
       ru: 'Почему ваша благодарность может быть оскорблением для небес?',
@@ -780,6 +785,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-12',
+    image: '/images/articles/bitachon-12.png',
     slug: 'lovushka-umnogo-biznesmena-pochemu-vashi-strategii-eto-illyuziya',
     title: {
       ru: 'Ловушка «умного» бизнесмена: почему ваши стратегии — это иллюзия',
@@ -815,6 +821,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-13',
+    image: '/images/articles/bitachon-13.png',
     slug: 'dukhovnoye-bezrassudstvo-kogda-upovaniye-na-chudo-eto-grekh',
     title: {
       ru: 'Духовное безрассудство: когда «упование на чудо» превращается в грех',
@@ -850,6 +857,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-14',
+    image: '/images/articles/bitachon-14.png',
     slug: 'detskiy-sad-dlya-dushi-pochemu-v-tore-pochti-nichego-ne-skazano-o-raye',
     title: {
       ru: 'Детский сад для души: почему в Торе почти ничего не сказано о Рае',
@@ -885,6 +893,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-15',
+    image: '/images/articles/bitachon-15.png',
     slug: 'blagotvoritelnost-kak-dolg-pochemu-vashe-dobroye-delo-eto-uplata-nalogov',
     title: {
       ru: 'Благотворительность как долг: почему ваше «доброе дело» — это просто уплата налогов',
@@ -920,6 +929,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-16',
+    image: '/images/articles/bitachon-16.png',
     slug: 'moyo-telo-ne-moyo-delo-pochemu-samoubiystvo-eto-krazha-u-boga',
     title: {
       ru: 'Моё тело — не моё дело: почему самоубийство и халатность — это кража у Бога',
@@ -955,6 +965,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-17',
+    image: '/images/articles/bitachon-17.png',
     slug: 'sekta-dvukh-gospod-pochemu-diversifikatsiya-very-vedyot-k-krakhu',
     title: {
       ru: 'Секта «двух господ»: почему попытка «диверсифицировать» веру ведет к краху',
@@ -990,6 +1001,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-18',
+    image: '/images/articles/bitachon-18.png',
     slug: 'rabstvo-u-zvyozd-pochemu-vash-goroskop-eto-prigovor-dlya-malovernykh',
     title: {
       ru: 'Рабство у звезд: почему ваш гороскоп — это приговор для маловерных',
@@ -1025,6 +1037,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-19',
+    image: '/images/articles/bitachon-19.png',
     slug: 'shantazh-nebes-pochemu-trebovat-garantiy-ot-boga-eto-derzost',
     title: {
       ru: 'Шантаж Небес: почему требовать гарантий от Бога — это дерзость',
