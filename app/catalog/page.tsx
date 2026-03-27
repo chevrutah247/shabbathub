@@ -14,7 +14,8 @@ import { useAuth } from '@/lib/auth-context';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const PAGE_SIZE = 50;
+const DEFAULT_PAGE_SIZE = 24;
+const PAGE_SIZE_OPTIONS = [24, 48, 96, 192, 384];
 
 interface Document { id: string; title: string; pdf_url: string; gregorian_date: string; publication_id: string; thumbnail_url: string; parsha_id: number; event_id: string; issue_number: string; ai_summary?: string; rank?: number; }
 interface Parsha { id: number; name_ru: string; name_en: string; order_num: number; }
@@ -224,6 +225,9 @@ function CatalogContent() {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [allDocuments, setAllDocuments] = useState<Document[]>([]);
+  const [visibleCount, setVisibleCount] = useState(DEFAULT_PAGE_SIZE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
@@ -386,12 +390,12 @@ function CatalogContent() {
 
   const fetchDocuments = useCallback(async () => {
     if (!initialized) return; setLoading(true);
-    const from = page * PAGE_SIZE; const to = from + PAGE_SIZE - 1;
+    const from = page * pageSize; const to = from + pageSize - 1;
 
     // Use full-text search API when searching
     if (searchQuery) {
       try {
-        const res = await fetch('/api/search?q=' + encodeURIComponent(searchQuery) + '&limit=' + PAGE_SIZE + '&offset=' + from);
+        const res = await fetch('/api/search?q=' + encodeURIComponent(searchQuery) + '&limit=' + pageSize + '&offset=' + from);
         const { results, total } = await res.json();
         setDocuments(results || []);
         setTotalCount(total || 0);
@@ -418,7 +422,7 @@ function CatalogContent() {
     // Content topic filter: use server API for keyword search in ai_summary
     if (selectedContentTopic) {
       try {
-        const params = new URLSearchParams({ topic: selectedContentTopic, page: String(page), pageSize: String(PAGE_SIZE), sort: sortOrder });
+        const params = new URLSearchParams({ topic: selectedContentTopic, page: String(page), pageSize: String(pageSize), sort: sortOrder });
         if (selectedPubLangs.length > 0) params.set('lang', selectedPubLangs.join(','));
         const res = await fetch('/api/catalog/topic-filter?' + params.toString());
         const { results, total } = await res.json();
@@ -429,7 +433,7 @@ function CatalogContent() {
       return;
     }
     try { const res = await fetch(url + '&select=id,title,pdf_url,gregorian_date,publication_id,thumbnail_url,parsha_id,event_id,issue_number,ai_summary', { headers: { 'apikey': SUPABASE_KEY, 'Range': from + '-' + to, 'Prefer': 'count=exact' } }); const data = await res.json(); const contentRange = res.headers.get('content-range'); setDocuments(data || []); setTotalCount(contentRange ? parseInt(contentRange.split('/')[1]) : 0); } catch (err) { console.error('Error:', err); } finally { setLoading(false); }
-  }, [page, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, activeTags, selectedPubLangs, selectedContentTopic]);
+  }, [page, pageSize, searchQuery, selectedParsha, selectedEvent, selectedHebrewYear, dateFrom, dateTo, initialized, sortOrder, activeTags, selectedPubLangs, selectedContentTopic]);
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
@@ -488,7 +492,8 @@ function CatalogContent() {
     if (searchInput.trim()) trackEvent('catalog_search', { query_length: searchInput.trim().length });
   };
   const hasFilters = searchQuery || selectedParsha || selectedEvent || selectedPubLangs.length > 0 || selectedHebrewYear || dateFrom || dateTo || activeTags.length > 0 || selectedContentTopic;
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const canLoadMore = documents.length > 0 && visibleCount < documents.length;
 
   const handlePubSelect = async (pubId: string) => {
     trackEvent('catalog_publication_expand', { publication_id: pubId });
@@ -771,10 +776,21 @@ function CatalogContent() {
                 </div>
               )}
 
-              {/* Counter */}
-              <div className="flex items-center justify-between mb-6">
+              {/* Counter + Page Size Selector */}
+              <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
                 <p className="text-stone-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t('catalog.found', lang)}: <span className="font-semibold text-stone-800">{totalCount.toLocaleString()}</span> {t('catalog.materials', lang)}</p>
-                {totalPages > 1 && <p className="text-stone-400 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t('catalog.page', lang)} {page + 1} {t('catalog.of', lang)} {totalPages}</p>}
+                <div className="flex items-center gap-2">
+                  <span className="text-stone-400 text-sm">{lang === 'ru' ? 'Показать' : lang === 'he' ? 'הצג' : 'Show'}:</span>
+                  {PAGE_SIZE_OPTIONS.map(size => (
+                    <button
+                      key={size}
+                      onClick={() => { setPageSize(size); setVisibleCount(size); setPage(0); }}
+                      className={`px-2.5 py-1 rounded-lg text-sm font-medium transition-colors ${pageSize === size ? 'bg-amber-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Issues Content */}
@@ -809,16 +825,22 @@ function CatalogContent() {
                   </div>
                   {/* Wooden shelf */}
                   <div className="mt-6 h-3 rounded-full mx-auto" style={{ background: 'linear-gradient(180deg, #b8854a 0%, #96693a 60%, #7a5530 100%)', boxShadow: '0 4px 12px rgba(120,80,40,0.2), inset 0 1px 0 rgba(255,255,255,0.15)', maxWidth: '95%' }} />
-                  {/* Pagination */}
+                  {/* Load More / Pagination */}
                   {totalPages > 1 && (
-                    <div className="mt-10 flex items-center justify-center gap-2">
-                      <button onClick={() => setPage(0)} disabled={page === 0} className="page-btn px-3 py-2 rounded-lg text-sm">{t('catalog.toStart', lang)}</button>
-                      <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="page-btn p-2 rounded-lg"><ChevronLeft size={18} /></button>
-                      <div className="flex gap-1">
-                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => { let pn; if (totalPages <= 5) pn = i; else if (page < 3) pn = i; else if (page > totalPages - 4) pn = totalPages - 5 + i; else pn = page - 2 + i; return (<button key={pn} onClick={() => setPage(pn)} className={'page-btn w-10 h-10 rounded-lg text-sm font-medium ' + (page === pn ? 'page-btn-active' : '')}>{pn + 1}</button>); })}
+                    <div className="mt-10 flex flex-col items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="page-btn p-2 rounded-lg"><ChevronLeft size={18} /></button>
+                        <span className="text-stone-500 text-sm px-3">{t('catalog.page', lang)} {page + 1} {t('catalog.of', lang)} {totalPages}</span>
+                        <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="page-btn p-2 rounded-lg"><ChevronRight size={18} /></button>
                       </div>
-                      <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="page-btn p-2 rounded-lg"><ChevronRight size={18} /></button>
-                      <button onClick={() => setPage(totalPages - 1)} disabled={page >= totalPages - 1} className="page-btn px-3 py-2 rounded-lg text-sm">{t('catalog.toEnd', lang)}</button>
+                      {page < totalPages - 1 && (
+                        <button
+                          onClick={() => setPage(p => p + 1)}
+                          className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition-colors shadow-lg"
+                        >
+                          {lang === 'ru' ? 'Показать ещё' : lang === 'he' ? 'הצג עוד' : lang === 'uk' ? 'Показати ще' : 'Show more'}
+                        </button>
+                      )}
                     </div>
                   )}
                 </>
