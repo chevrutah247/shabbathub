@@ -359,6 +359,244 @@ export const articles: Article[] = [
     tag: { ru: 'Семья', en: 'Family', he: 'משפחה', uk: 'Сім\'я' },
     createdAt: '2026-02-09',
   },
+  {
+    id: 'bitachon-1',
+    slug: 'illyuziya-sobstvennosti-pochemu-vashi-dengi-vam-ne-prinadlezhat',
+    title: {
+      ru: 'Иллюзия собственности: почему ваши деньги вам не принадлежат',
+      en: 'The Illusion of Ownership: Why Your Money Doesn\'t Belong to You',
+      he: 'אשליית הבעלות: למה הכסף שלך לא שייך לך',
+      uk: 'Ілюзія власності: чому ваші гроші вам не належать',
+    },
+    subtitle: {
+      ru: 'Богатство как чужой депозит и проклятие рассеивания мыслей',
+      en: 'Wealth as someone else\'s deposit and the curse of scattered thoughts',
+      he: 'עושר כפיקדון של אחרים וקללת פיזור המחשבות',
+      uk: 'Багатство як чужий депозит і прокляття розсіювання думок',
+    },
+    content: {
+      ru: `<p>Многие люди тратят жизнь на накопление капитала, считая его залогом своей безопасности. Однако, согласно источникам, вера в то, что богатство принадлежит человеку, — это опасное заблуждение.</p>
+
+<h3>Богатство как чужой депозит</h3>
+<p>На самом деле, деньги, которыми вы владеете, могут быть разделены на три категории: ваши личные средства на пропитание, средства для ваших иждивенцев и «чужой депозит». Часто человек копит огромные суммы, которые ему никогда не удастся потратить. В таком случае он является лишь временным охранником, оберегающим имущество, которое в итоге перейдет к его праведному наследнику или даже к его врагу.</p>
+
+<h3>Проклятие «рассеивания мыслей»</h3>
+<p>Богатство часто становится не благом, а источником стресса. В источниках упоминается понятие «рассеивание мыслей», когда активы человека разбросаны по разным местам, что лишает его сна и покоя. В то время как обычный рабочий спит спокойно, избыток имущества заставляет богача постоянно беспокоиться о сохранности своих накоплений.</p>
+
+<h3>Этическая ловушка</h3>
+<p>Самая большая ошибка — это высокомерие. Человек, накопивший богатство, часто ждет благодарности от тех, кому он помогает. Но источники утверждают: богатый должен сам благодарить Бога за то, что Тот выбрал его каналом (воронкой) для передачи благ другим. Если человек считает деньги своей заслугой, он совершает форму идолопоклонства, наделяя «средство» (деньги) силой «Причины» (Бога).</p>`,
+
+      en: `<p>Many people spend their lives accumulating capital, considering it the key to their security. However, according to Torah sources, the belief that wealth belongs to a person is a dangerous delusion.</p>
+
+<h3>Wealth as Someone Else's Deposit</h3>
+<p>In reality, the money you possess can be divided into three categories: your personal means for sustenance, means for your dependents, and "someone else's deposit." Often a person accumulates enormous sums they will never be able to spend. In such cases, they are merely a temporary guardian, protecting property that will ultimately pass to their righteous heir or even to their enemy.</p>
+
+<h3>The Curse of "Scattered Thoughts"</h3>
+<p>Wealth often becomes not a blessing but a source of stress. The sources mention the concept of "scattered thoughts," when a person's assets are spread across different places, robbing them of sleep and peace. While an ordinary worker sleeps peacefully, excess property forces the wealthy to constantly worry about the safety of their savings.</p>
+
+<h3>The Ethical Trap</h3>
+<p>The greatest mistake is arrogance. A person who has accumulated wealth often expects gratitude from those they help. But the sources state: the wealthy person should themselves thank God for choosing them as a channel (funnel) for transmitting blessings to others. If a person considers money their own merit, they commit a form of idolatry, endowing the "means" (money) with the power of the "Cause" (God).</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-2',
+    slug: 'medicina-ili-fatalizm-kogda-vizit-k-vrachu-stanovitsya-grekhom',
+    title: {
+      ru: 'Медицина или фатализм: когда визит к врачу становится грехом?',
+      en: 'Medicine or Fatalism: When Does Visiting a Doctor Become a Sin?',
+      he: 'רפואה או גורלנות: מתי ביקור אצל רופא הופך לחטא?',
+      uk: 'Медицина чи фаталізм: коли візит до лікаря стає гріхом?',
+    },
+    subtitle: {
+      ru: 'Баланс между упованием на Бога и обращением за медицинской помощью',
+      en: 'The balance between trusting God and seeking medical help',
+      he: 'האיזון בין ביטחון בה\' לבין פנייה לעזרה רפואית',
+      uk: 'Баланс між упованням на Бога та зверненням по медичну допомогу',
+    },
+    content: {
+      ru: `<p>Один из самых острых вопросов духовной жизни — баланс между упованием на Бога и обращением за медицинской помощью. Является ли поход к врачу признаком неверия?</p>
+
+<h3>Урок короля Асы</h3>
+<p>В источниках приводится история царя Иудеи Асы, который был наказан за то, что при болезни ног «взыскал не Господа, а врачей». Его ошибка заключалась не в самом обращении к медицине, а в том, что он партнерствовал Бога с людьми, полагая, что врачи могут исцелить его сами по себе, без божественной воли.</p>
+
+<h3>Врач как инструмент, а не спаситель</h3>
+<p>Согласно Торе, человеку дано разрешение и обязанность лечить и лечиться. Однако важно понимать, что врач — это лишь «сосуд» или проводник, через который Бог посылает исцеление. Если человек зацикливается на медицинских прогнозах и впадает в отчаяние, он ослабляет свою связь с Источником жизни, что может негативно сказаться на его удаче (мазаль) и процессе выздоровления.</p>
+
+<h3>Парадокс лекарств</h3>
+<p>Иногда Бог может исцелить человека даже с помощью того, что по природе вредно, как это было в истории пророка Елисея, который «исправил» воду, бросив в неё соль. Это доказывает, что исцеление — это не химический процесс, а воля Творца, облеченная в форму естественных средств.</p>`,
+
+      en: `<p>One of the sharpest questions in spiritual life is the balance between trusting God and seeking medical help. Is going to a doctor a sign of disbelief?</p>
+
+<h3>The Lesson of King Asa</h3>
+<p>The sources cite the story of Asa, king of Judah, who was punished because when his feet became diseased, "he sought not the Lord, but physicians." His mistake was not in seeking medical help itself, but in partnering God with people, believing that doctors could heal him on their own, without divine will.</p>
+
+<h3>The Doctor as an Instrument, Not a Savior</h3>
+<p>According to the Torah, a person is given both permission and obligation to heal and be healed. However, it is important to understand that a doctor is merely a "vessel" or conduit through which God sends healing. If a person becomes fixated on medical prognoses and falls into despair, they weaken their connection to the Source of life, which can negatively affect their fortune (mazal) and recovery process.</p>
+
+<h3>The Paradox of Medicine</h3>
+<p>Sometimes God can heal a person even through something that is naturally harmful, as in the story of the prophet Elisha who "fixed" the water by throwing salt into it. This proves that healing is not a chemical process, but the will of the Creator clothed in the form of natural means.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-3',
+    slug: 'gorkaya-pravda-o-spravedlivosti-pochemu-podletsam-vezet',
+    title: {
+      ru: 'Горькая правда о справедливости: почему подонкам везет?',
+      en: 'The Bitter Truth About Justice: Why Do Scoundrels Prosper?',
+      he: 'האמת המרה על צדק: למה לרשעים מזל?',
+      uk: 'Гірка правда про справедливість: чому негідникам щастить?',
+    },
+    subtitle: {
+      ru: 'Вопрос о том, почему праведники страдают, а грешники процветают',
+      en: 'Why the righteous suffer while sinners prosper',
+      he: 'למה צדיקים סובלים בעוד רשעים משגשגים',
+      uk: 'Чому праведники страждають, а грішники процвітають',
+    },
+    content: {
+      ru: `<p>Вопрос о том, почему праведники страдают, а грешники процветают, веками терзает человечество. Источники предлагают ответы, которые могут показаться провокационными для современного чувства справедливости.</p>
+
+<h3>Почему процветают злодеи?</h3>
+<p>Существует несколько причин, по которым Бог дает материальные блага нечестивым людям:</p>
+<p><strong>Плата за крупицы добра:</strong> Если злодей совершил хотя бы несколько хороших поступков, Бог вознаграждает его в этом мире, чтобы в будущем мире (Мире Грядущем) он не имел прав на награду и был полностью уничтожен.</p>
+<p><strong>Богатство как ловушка:</strong> Деньги могут быть даны злодею, чтобы усилить его гордыню, что в итоге станет прямой причиной его гибели.</p>
+<p><strong>Хранение для других:</strong> Злодей может быть лишь временным «сейфом», накапливающим богатство для праведного сына, который родится у него в будущем.</p>
+
+<h3>Почему страдают праведные?</h3>
+<p>Для страданий хороших людей также есть скрытые причины:</p>
+<p><strong>Искупление:</strong> Мелкие страдания в этом мире очищают душу праведника, избавляя его от необходимости наказания после смерти.</p>
+<p><strong>Испытание любви:</strong> Бог посылает испытания, чтобы проявить стойкость праведника и сделать его примером для других.</p>
+<p><strong>Пассивность:</strong> Праведник может страдать из-за того, что он не проявлял ревности к Богу и не протестовал против грехов своего поколения.</p>
+
+<p>Наша неспособность понять эти процессы проистекает из ограниченности человеческого интеллекта, который видит лишь малую часть огромного плана. Смерть — это не конец, а возвращение души в её естественное состояние, где истинная справедливость становится очевидной.</p>`,
+
+      en: `<p>The question of why the righteous suffer while sinners prosper has tormented humanity for centuries. Torah sources offer answers that may seem provocative to our modern sense of justice.</p>
+
+<h3>Why Do the Wicked Prosper?</h3>
+<p>There are several reasons why God gives material blessings to wicked people:</p>
+<p><strong>Payment for crumbs of good:</strong> If a villain performed even a few good deeds, God rewards them in this world so that in the World to Come they have no claim to reward and are completely destroyed.</p>
+<p><strong>Wealth as a trap:</strong> Money may be given to a villain to intensify their pride, which ultimately becomes the direct cause of their downfall.</p>
+<p><strong>Storage for others:</strong> The villain may merely be a temporary "safe," accumulating wealth for a righteous son who will be born to them in the future.</p>
+
+<h3>Why Do the Righteous Suffer?</h3>
+<p>There are also hidden reasons for the suffering of good people:</p>
+<p><strong>Atonement:</strong> Minor sufferings in this world purify the soul of the righteous, freeing them from the need for punishment after death.</p>
+<p><strong>Test of love:</strong> God sends trials to reveal the steadfastness of the righteous and make them an example for others.</p>
+<p><strong>Passivity:</strong> A righteous person may suffer because they did not show zealousness for God and did not protest against the sins of their generation.</p>
+
+<p>Our inability to understand these processes stems from the limitations of human intellect, which sees only a small part of a vast plan. Death is not the end, but the return of the soul to its natural state, where true justice becomes evident.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-4',
+    slug: 'dukhovnyy-shantazh-pochemu-fraza-snachala-zarabotayu-eto-lovushka',
+    title: {
+      ru: 'Духовный шантаж: почему фраза «сначала заработаю, потом займусь душой» — это ловушка',
+      en: 'Spiritual Blackmail: Why "I\'ll Earn First, Then Focus on My Soul" Is a Trap',
+      he: 'סחיטה רוחנית: למה "קודם ארוויח, אחר כך אטפל בנשמה" זה מלכודת',
+      uk: 'Духовний шантаж: чому фраза «спочатку заробіть, потім займусь душею» — це пастка',
+    },
+    subtitle: {
+      ru: 'Почему требование материальных гарантий перед духовным ростом — это вымогательство у Творца',
+      en: 'Why demanding material guarantees before spiritual growth is extortion from the Creator',
+      he: 'למה דרישת ערבויות חומריות לפני צמיחה רוחנית היא סחיטה מהבורא',
+      uk: 'Чому вимога матеріальних гарантій перед духовним зростанням — це вимагання у Творця',
+    },
+    content: {
+      ru: `<p>Многие современные люди живут с установкой: «Мне нужно сначала создать финансовую подушку безопасности, а уже потом я уделю время молитве, семье или самопознанию». В источниках такая позиция называется «сектой владельцев залогов».</p>
+
+<h3>Вымогательство у Творца</h3>
+<p>Человек, который требует от жизни материальных гарантий прежде, чем начнет исполнять свои духовные обязанности, ведет себя как наглый слуга, требующий плату вперед. Это выглядит абсурдно: мы уже пользуемся «кредитом» жизни, здоровьем и воздухом, за которые еще не расплатились, но требуем от Бога «залог» в виде богатства, чтобы просто начать вести себя достойно.</p>
+
+<h3>Иллюзия «спокойной пенсии»</h3>
+<p>Главный миф заключается в том, что богатство принесет покой. Источники утверждают обратное: умножение имущества лишь умножает беспокойство. Вместо того чтобы освободить мысли для высокого, накопленный капитал заставляет человека дрожать над курсом валют и сохранностью активов, превращая его жизнь в бесконечный стресс. Истинная безопасность — это не сумма на счету, а осознание того, что завтрашний день уже обеспечен Тем, Кто создал этот мир.</p>`,
+
+      en: `<p>Many modern people live with the mindset: "I need to create a financial safety net first, and only then will I dedicate time to prayer, family, or self-discovery." In the sources, this position is called "the sect of pledge holders."</p>
+
+<h3>Extortion from the Creator</h3>
+<p>A person who demands material guarantees from life before beginning to fulfill their spiritual duties behaves like an impudent servant demanding payment in advance. It looks absurd: we are already using the "credit" of life, health, and air for which we haven't yet paid, yet we demand from God a "pledge" in the form of wealth just to start behaving decently.</p>
+
+<h3>The Illusion of a "Peaceful Retirement"</h3>
+<p>The main myth is that wealth will bring peace. The sources assert the opposite: multiplying possessions only multiplies anxiety. Instead of freeing the mind for higher things, accumulated capital forces a person to tremble over exchange rates and asset safety, turning their life into endless stress. True security is not the sum in your account, but the awareness that tomorrow is already provided for by the One Who created this world.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-5',
+    slug: 'paradoks-usiliy-esli-vsyo-predopredeleno-zachem-khodit-na-rabotu',
+    title: {
+      ru: 'Парадокс усилий: если всё предопределено, зачем вообще ходить на работу?',
+      en: 'The Effort Paradox: If Everything Is Predetermined, Why Go to Work at All?',
+      he: 'פרדוקס המאמץ: אם הכל נקבע מראש, למה בכלל ללכת לעבודה?',
+      uk: 'Парадокс зусиль: якщо все визначено, навіщо взагалі ходити на роботу?',
+    },
+    subtitle: {
+      ru: 'Работа как маскировка чуда и лекарство от бунта',
+      en: 'Work as a disguise for miracles and a remedy against rebellion',
+      he: 'עבודה כהסוואה לנס ותרופה נגד מרד',
+      uk: 'Робота як маскування дива і ліки від бунту',
+    },
+    content: {
+      ru: `<p>Это один из самых «взрывоопасных» вопросов: если Бог уже решил в Рош а-Шана, сколько вы заработаете, то зачем вставать с дивана? Ответ источников переворачивает привычное понимание труда.</p>
+
+<h3>Работа как «маскировка» чуда</h3>
+<p>Ваши усилия — это не причина заработка, а всего лишь «сосуд» или декорация, в которую Бог упаковывает Своё благословение. Бог мог бы кормить нас манной, падающей с неба, но Он хочет, чтобы мы были Его партнерами в творении, скрывая чудеса под видом естественных процессов.</p>
+
+<h3>Труд как лекарство от бунта</h3>
+<p>Зачем Бог заставил человека трудиться в поте лица? Чтобы мы не сошли с ума от безделья. Если бы у человека было всё и сразу без усилий, его разум переключился бы на саморазрушение и низменные страсти. Работа — это предохранитель, удерживающий нас от духовного восстания против Творца и самих себя. Истинный успех приходит не к тому, кто «пашет» больше всех, а к тому, кто делает разумные усилия, сохраняя сердце свободным для Бога.</p>`,
+
+      en: `<p>This is one of the most "explosive" questions: if God has already decided on Rosh Hashanah how much you will earn, then why get off the couch? The answer from the sources turns the usual understanding of labor upside down.</p>
+
+<h3>Work as a "Disguise" for Miracles</h3>
+<p>Your efforts are not the cause of your earnings, but merely a "vessel" or decoration in which God packages His blessing. God could feed us with manna falling from the sky, but He wants us to be His partners in creation, hiding miracles under the guise of natural processes.</p>
+
+<h3>Labor as a Remedy Against Rebellion</h3>
+<p>Why did God make humans toil by the sweat of their brow? So we wouldn't go mad from idleness. If a person had everything at once without effort, their mind would switch to self-destruction and base passions. Work is a safeguard holding us back from spiritual rebellion against the Creator and ourselves. True success comes not to those who "grind" the hardest, but to those who make reasonable efforts while keeping their heart free for God.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-6',
+    slug: 'advokat-dyavola-pochemu-vash-zaklyatyy-vrag-eto-poslannik-svyshe',
+    title: {
+      ru: 'Адвокат дьявола: почему ваш заклятый враг — это посланник свыше?',
+      en: 'Devil\'s Advocate: Why Your Sworn Enemy Is a Messenger from Above?',
+      he: 'סנגור השטן: למה האויב המושבע שלך הוא שליח מלמעלה?',
+      uk: 'Адвокат диявола: чому ваш заклятий ворог — це посланець згори?',
+    },
+    subtitle: {
+      ru: 'Никто не может причинить вам вред, если это не было предписано Богом',
+      en: 'No one can harm you unless it was decreed by God',
+      he: 'אף אחד לא יכול להזיק לך אלא אם זה נגזר מלמעלה',
+      uk: 'Ніхто не може завдати вам шкоди, якщо це не було наказано Богом',
+    },
+    content: {
+      ru: `<p>Эта тема кажется невыносимой для эго: источники утверждают, что никто не может причинить вам вред, если это не было предписано Богом.</p>
+
+<h3>Враг как «хирургический скальпель»</h3>
+<p>Когда кто-то оскорбляет вас или вредит вашему бизнесу, этот человек — лишь инструмент в руках Провидения. Как бессмысленно злиться на палку, которой вас ударили, так же бессмысленно концентрировать ненависть на обидчике. Источники предлагают шокирующую практику: вместо того чтобы мстить, проанализируйте свои поступки. Возможно, этот «враг» был послан, чтобы вы искупили старый долг или осознали скрытый изъян в своем характере.</p>
+
+<h3>Любовь к «искрам»</h3>
+<p>Как можно любить того, кто тебя ненавидит? Секрет в разделении личности и её корня. Внутри самого ужасного негодяя есть Божественная искра, которая дает ему жизнь прямо сейчас. Мы можем ненавидеть его злые поступки, но обязаны сострадать его душе, которая оказалась в плену у зла. Тот, кто осознает это, обретает сверхчеловеческое спокойствие: его невозможно задеть, ведь он знает, что его судьба — в руках Любящего Отца, а не в руках завистливого соседа.</p>`,
+
+      en: `<p>This topic seems unbearable for the ego: the sources assert that no one can harm you unless it was decreed by God.</p>
+
+<h3>The Enemy as a "Surgical Scalpel"</h3>
+<p>When someone insults you or harms your business, that person is merely an instrument in the hands of Providence. Just as it is pointless to be angry at the stick that struck you, it is equally pointless to concentrate hatred on the offender. The sources propose a shocking practice: instead of taking revenge, analyze your own deeds. Perhaps this "enemy" was sent so that you might atone for an old debt or recognize a hidden flaw in your character.</p>
+
+<h3>Love for the "Sparks"</h3>
+<p>How can you love someone who hates you? The secret lies in separating the personality from its root. Inside the most terrible scoundrel there is a Divine spark that gives them life right now. We may hate their evil deeds, but we are obligated to have compassion for their soul, which has been captured by evil. One who realizes this attains superhuman tranquility: they cannot be hurt, for they know that their fate is in the hands of a Loving Father, not in the hands of an envious neighbor.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
