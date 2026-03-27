@@ -1108,6 +1108,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-21',
+    image: '/images/articles/bitachon-21.png',
     slug: 'nochnoy-depozit-pochemu-kazhdoye-utro-eto-chudo',
     title: {
       ru: 'Ночной депозит: почему каждое утро — это чудо, которое вы принимаете как должное',
@@ -1143,6 +1144,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-22',
+    image: '/images/articles/bitachon-22.png',
     slug: 'paradoks-vrazhdy-pochemu-vash-obidchik-eto-palka-v-rukakh-boga',
     title: {
       ru: 'Парадокс вражды: почему ваш обидчик — это лишь «палка» в руках Бога',
@@ -1178,6 +1180,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-23',
+    image: '/images/articles/bitachon-23.png',
     slug: 'dukhovnaya-alkhimiya-pochemu-professional-vsegda-proigryvayet-veruyushchemu',
     title: {
       ru: 'Духовная алхимия: почему профессионал всегда проигрывает верующему',
@@ -1248,6 +1251,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-25',
+    image: '/images/articles/bitachon-25.png',
     slug: 'telo-v-arendu-pochemu-moy-vybor-eto-prestupleniye-protiv-tvortsa',
     title: {
       ru: 'Тело в аренду: почему «мой выбор» — это преступление против Творца',
@@ -1283,6 +1287,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-26',
+    image: '/images/articles/bitachon-26.png',
     slug: 'detskiy-sad-dlya-dushi-pochemu-v-tore-pochti-net-slov-o-raye',
     title: {
       ru: 'Детский сад для души: почему в Торе почти нет слов о Рае',
@@ -1318,6 +1323,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-27',
+    image: '/images/articles/bitachon-27.png',
     slug: 'paradoks-vora-pochemu-mozhno-verit-v-boga-i-ostavatsya-prestupnikom',
     title: {
       ru: 'Парадокс вора: почему можно верить в Бога и оставаться преступником',
@@ -1388,6 +1394,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-29',
+    image: '/images/articles/bitachon-29.png',
     slug: 'proklyatiye-rasseivaniya-mysley-nevidimaya-tsena-vashego-uspekha',
     title: {
       ru: 'Проклятие «рассеивания мыслей»: невидимая цена вашего успеха',
@@ -1423,6 +1430,7 @@ export const articles: Article[] = [
   },
   {
     id: 'bitachon-30',
+    image: '/images/articles/bitachon-30.png',
     slug: 'revolyutsiya-truda-vy-ne-zarabatyvayete-dengi-vy-stroite-dekoratsii',
     title: {
       ru: 'Революция труда: вы не зарабатываете деньги, вы строите «декорации»',
