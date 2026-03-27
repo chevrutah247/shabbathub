@@ -877,6 +877,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-15',
+    slug: 'blagotvoritelnost-kak-dolg-pochemu-vashe-dobroye-delo-eto-uplata-nalogov',
+    title: {
+      ru: 'Благотворительность как долг: почему ваше «доброе дело» — это просто уплата налогов',
+      en: 'Charity as Debt: Why Your "Good Deed" Is Simply Paying Taxes',
+      he: 'צדקה כחוב: למה "המעשה הטוב" שלך הוא פשוט תשלום מסים',
+      uk: 'Благодійність як борг: чому ваша «добра справа» — це просто сплата податків',
+    },
+    subtitle: {
+      ru: 'Богатый человек — не владелец, а менеджер по распределению средств Творца',
+      en: 'A wealthy person is not an owner, but a manager distributing the Creator\'s funds',
+      he: 'אדם עשיר הוא לא בעלים, אלא מנהל חלוקת כספי הבורא',
+      uk: 'Багата людина — не власник, а менеджер з розподілу коштів Творця',
+    },
+    content: {
+      ru: `<p>Большинство людей, занимаясь благотворительностью, чувствуют себя героями и ждут особого признания. Однако источники утверждают: богатый человек — это не владелец, а всего лишь «менеджер по распределению средств» Творца.</p>
+
+<h3>Иллюзия щедрости</h3>
+<p>Само слово «цедака» (благотворительность) происходит от корня «цедек», что означает «справедливость» или «правосудие». Давать деньги нуждающимся — это не акт милосердия, а выплата долга. Считается, что Бог «депонирует» средства у богатого человека, чтобы тот передал их по назначению; поэтому дающий должен быть благодарен Богу за то, что его выбрали «каналом» (воронкой) для добра, а не требовать благодарности от бедняка.</p>
+
+<h3>Ловушка признания</h3>
+<p>Если человек ищет почета за свою щедрость, он «загрязняет» поступок и может лишиться небесной награды. Более того, если человек удерживает у себя излишки, предназначенные для других, он становится «нечестным хранителем», который присваивает чужое имущество, что в итоге приводит к потере всего капитала.</p>`,
+
+      en: `<p>Most people who engage in charity feel like heroes and expect special recognition. However, the sources assert: a wealthy person is not an owner, but merely a "fund distribution manager" for the Creator.</p>
+
+<h3>The Illusion of Generosity</h3>
+<p>The very word "tzedakah" (charity) comes from the root "tzedek," meaning "justice" or "righteousness." Giving money to the needy is not an act of mercy, but payment of a debt. It is believed that God "deposits" funds with a wealthy person so they can pass them on as intended; therefore, the giver should be grateful to God for being chosen as a "channel" (funnel) for good, rather than demanding gratitude from the poor.</p>
+
+<h3>The Recognition Trap</h3>
+<p>If a person seeks honor for their generosity, they "contaminate" the deed and may lose their heavenly reward. Moreover, if a person holds onto surpluses intended for others, they become a "dishonest custodian" who appropriates someone else's property, which ultimately leads to the loss of all capital.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-16',
+    slug: 'moyo-telo-ne-moyo-delo-pochemu-samoubiystvo-eto-krazha-u-boga',
+    title: {
+      ru: 'Моё тело — не моё дело: почему самоубийство и халатность — это кража у Бога',
+      en: 'My Body Is Not My Business: Why Suicide and Negligence Are Theft from God',
+      he: 'הגוף שלי לא העסק שלי: למה התאבדות ורשלנות הן גניבה מה\'',
+      uk: 'Моє тіло — не моя справа: чому самогубство та халатність — це крадіжка у Бога',
+    },
+    subtitle: {
+      ru: 'Человек не является хозяином собственной жизни или тела',
+      en: 'A person is not the master of their own life or body',
+      he: 'אדם אינו בעל חייו או גופו',
+      uk: 'Людина не є господарем власного життя або тіла',
+    },
+    content: {
+      ru: `<p>Современная концепция «моё тело — мой выбор» вступает в жесткое противоречие с духовной логикой. Согласно источникам, человек не является хозяином собственной жизни или тела.</p>
+
+<h3>Тело как священный депозит</h3>
+<p>Тело рассматривается как имущество Творца, переданное человеку во временное пользование для выполнения определенной миссии. Следовательно, самоубийство — это не просто личный выбор, а акт дезертирства и кражи. Человек, который обрывает свою жизнь, подобен слуге, который бросил пост до прихода сменщика, и он будет судим как убийца, несмотря на то, что «потерпевший» — он сам.</p>
+
+<h3>Преступная неосторожность</h3>
+<p>Упование на Бога не дает права на безрассудство. Тот, кто сознательно идет на риск — пьет яд, лезет в огонь или игнорирует болезни, надеясь на чудо, — совершает грех «испытания Бога». Творец повелел нам беречь жизнь, и тот, кто пренебрегает этим, несет полную ответственность за последствия, даже если исход был предписан свыше.</p>`,
+
+      en: `<p>The modern concept of "my body, my choice" comes into sharp conflict with spiritual logic. According to the sources, a person is not the master of their own life or body.</p>
+
+<h3>The Body as a Sacred Deposit</h3>
+<p>The body is viewed as the Creator's property, given to a person for temporary use to fulfill a certain mission. Therefore, suicide is not simply a personal choice, but an act of desertion and theft. A person who takes their own life is like a servant who abandoned their post before the replacement arrived, and they will be judged as a murderer, despite the "victim" being themselves.</p>
+
+<h3>Criminal Negligence</h3>
+<p>Trust in God does not give the right to recklessness. One who deliberately takes risks — drinking poison, walking into fire, or ignoring illness while hoping for a miracle — commits the sin of "testing God." The Creator commanded us to preserve life, and one who neglects this bears full responsibility for the consequences, even if the outcome was decreed from above.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-17',
+    slug: 'sekta-dvukh-gospod-pochemu-diversifikatsiya-very-vedyot-k-krakhu',
+    title: {
+      ru: 'Секта «двух господ»: почему попытка «диверсифицировать» веру ведет к краху',
+      en: 'The Sect of Two Masters: Why Trying to "Diversify" Faith Leads to Collapse',
+      he: 'כת "שני האדונים": למה ניסיון "לגוון" את האמונה מוביל לקריסה',
+      uk: 'Секта «двох панів»: чому спроба «диверсифікувати» віру веде до краху',
+    },
+    subtitle: {
+      ru: 'Упование на Бога работает только когда оно эксклюзивно',
+      en: 'Trust in God works only when it is exclusive',
+      he: 'ביטחון בה\' עובד רק כשהוא בלעדי',
+      uk: 'Уповання на Бога працює лише коли воно ексклюзивне',
+    },
+    content: {
+      ru: `<p>Многие пытаются подстраховаться: они молятся Богу, но при этом полагаются на «связи», взятки или манипуляции. Источники называют это «разрушением упования».</p>
+
+<h3>Правило исключительности</h3>
+<p>Упование на Бога работает только тогда, когда оно эксклюзивно. Если человек включает в свою систему безопасности кого-то еще (влиятельного друга, надежный банк или собственную хитрость), Бог убирает Своё прямое покровительство. Человек остается во власти того объекта или персоны, на которую он понадеялся.</p>
+
+<h3>Парадокс помощи</h3>
+<p>Когда мы полагаемся на людей, мы обрекаем себя на разочарование, потому что никто не может помочь или навредить нам без санкции Свыше. Попытка служить и Богу, и «мамоне» (деньгам) делает веру поверхностной и бесполезной. Истинное упование требует осознания: есть только одна Реальность, а все остальное — лишь декорации, которые Бог меняет по Своему усмотрению.</p>`,
+
+      en: `<p>Many try to hedge their bets: they pray to God but also rely on "connections," bribes, or manipulations. The sources call this "the destruction of trust."</p>
+
+<h3>The Rule of Exclusivity</h3>
+<p>Trust in God works only when it is exclusive. If a person includes someone else in their security system (an influential friend, a reliable bank, or their own cunning), God removes His direct patronage. The person remains at the mercy of the object or person they relied upon.</p>
+
+<h3>The Paradox of Help</h3>
+<p>When we rely on people, we doom ourselves to disappointment, because no one can help or harm us without sanction from Above. Attempting to serve both God and "mammon" (money) makes faith superficial and useless. True trust requires the realization: there is only one Reality, and everything else is merely scenery that God changes at His discretion.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-18',
+    slug: 'rabstvo-u-zvyozd-pochemu-vash-goroskop-eto-prigovor-dlya-malovernykh',
+    title: {
+      ru: 'Рабство у звезд: почему ваш гороскоп — это приговор для маловерных',
+      en: 'Slavery to the Stars: Why Your Horoscope Is a Verdict for the Faithless',
+      he: 'עבדות לכוכבים: למה ההורוסקופ שלך הוא גזר דין לחסרי אמונה',
+      uk: 'Рабство у зірок: чому ваш гороскоп — це вирок для маловірних',
+    },
+    subtitle: {
+      ru: 'Звезды влияют на судьбу, но только тех, кто в них верит',
+      en: 'Stars affect fate, but only for those who believe in them',
+      he: 'כוכבים משפיעים על הגורל, אבל רק של מי שמאמין בהם',
+      uk: 'Зірки впливають на долю, але лише тих, хто в них вірить',
+    },
+    content: {
+      ru: `<p>В мире, одержимом астрологией и предсказаниями, «Врата упования» делают шокирующее заявление: звезды действительно могут влиять на судьбу, но только тех, кто в них верит.</p>
+
+<h3>Выход из-под влияния систем</h3>
+<p>Существует концепция «Эйн мазаль ле-Исраэль» — над еврейским народом (и над человеком истинного упования) нет власти созвездий. Тот, кто искренне полагается на Творца, выходит за рамки естественных законов и «диктатуры природы». Бог может аннулировать любые астрологические знаки и изменить «судьбу», если человек приближается к Нему.</p>
+
+<h3>Цена суеверия</h3>
+<p>Если же человек начинает изучать гороскопы и строить свою жизнь на основе прогнозов, он добровольно отдает себя под власть этих сил. Бог снимает с такого человека Своё личное управление и оставляет его на произвол «случая» и движения светил. Таким образом, вера в гороскопы становится самоисполняющимся пророчеством, превращая свободную душу в раба физических процессов.</p>`,
+
+      en: `<p>In a world obsessed with astrology and predictions, the "Gate of Trust" makes a shocking statement: the stars can indeed influence fate, but only for those who believe in them.</p>
+
+<h3>Escaping the Influence of Systems</h3>
+<p>There exists a concept "Ein mazal le-Yisrael" — over the Jewish people (and over a person of true trust) the constellations have no power. One who sincerely relies on the Creator transcends natural laws and the "dictatorship of nature." God can annul any astrological signs and change "fate" if a person draws closer to Him.</p>
+
+<h3>The Price of Superstition</h3>
+<p>If, however, a person begins studying horoscopes and building their life based on predictions, they voluntarily submit to the power of these forces. God removes His personal governance from such a person and leaves them to the mercy of "chance" and the movement of celestial bodies. Thus, belief in horoscopes becomes a self-fulfilling prophecy, turning a free soul into a slave of physical processes.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
