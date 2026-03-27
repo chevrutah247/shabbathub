@@ -1157,6 +1157,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-23',
+    slug: 'dukhovnaya-alkhimiya-pochemu-professional-vsegda-proigryvayet-veruyushchemu',
+    title: {
+      ru: 'Духовная алхимия: почему профессионал всегда проигрывает верующему',
+      en: 'Spiritual Alchemy: Why the Professional Always Loses to the Believer',
+      he: 'אלכימיה רוחנית: למה המקצוען תמיד מפסיד למאמין',
+      uk: 'Духовна алхімія: чому професіонал завжди програє віруючому',
+    },
+    subtitle: {
+      ru: 'Шокирующее сравнение между алхимиком и человеком упования',
+      en: 'A shocking comparison between the alchemist and the person of trust',
+      he: 'השוואה מזעזעת בין האלכימאי לבעל הביטחון',
+      uk: 'Шокуюче порівняння між алхіміком і людиною уповання',
+    },
+    content: {
+      ru: `<p>В современном мире культ «хардовых навыков» и профессионализма считается единственным путем к успеху. Однако источники проводят шокирующее сравнение между алхимиком (человеком, обладающим уникальным навыком «создания золота») и человеком упования.</p>
+
+<h3>Уязвимость эксперта</h3>
+<p>Даже если алхимик добьется успеха, его жизнь — это кошмар. Ему нужны специфические редкие ингредиенты, которые не всегда под рукой. Он вынужден работать втайне, постоянно опасаясь, что его секрет раскроют и власти казнят его за фальшивомонетничество. Его здоровье подрывается вредными парами и дымом от работы. В итоге его мастерство не дает ему покоя, превращая его в вечного беглеца.</p>
+
+<h3>Превосходство упования</h3>
+<p>В отличие от «эксперта», человек упования не зависит от конкретных материалов или инструментов. Бог, Который создал само сырье, может прокормить его любым способом — даже вопреки законам природы, как это было с пророком Илией, которому еду приносили вороны. Верующий не боится раскрытия своих «секретов» — напротив, он гордится своим упованием и живет в мире с окружающими. Пока эксперт дрожит над своими формулами, человек упования спит спокойно, зная, что его «Источник» неисчерпаем.</p>`,
+
+      en: `<p>In the modern world, the cult of "hard skills" and professionalism is considered the only path to success. However, the sources draw a shocking comparison between an alchemist (a person with the unique skill of "creating gold") and a person of trust.</p>
+
+<h3>The Expert's Vulnerability</h3>
+<p>Even if the alchemist succeeds, his life is a nightmare. He needs specific rare ingredients that are not always at hand. He is forced to work in secret, constantly fearing that his secret will be discovered and the authorities will execute him for counterfeiting. His health is undermined by harmful fumes and smoke from his work. In the end, his mastery gives him no peace, turning him into an eternal fugitive.</p>
+
+<h3>The Superiority of Trust</h3>
+<p>Unlike the "expert," the person of trust does not depend on specific materials or instruments. God, Who created the raw materials themselves, can sustain them in any way — even contrary to the laws of nature, as with the prophet Elijah, whom ravens brought food. The believer is not afraid of revealing their "secrets" — on the contrary, they are proud of their trust and live in peace with those around them. While the expert trembles over formulas, the person of trust sleeps peacefully, knowing that their "Source" is inexhaustible.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-24',
+    slug: 'sekta-vladeltsev-zalogov-pochemu-strakhovka-eto-shantazh-boga',
+    title: {
+      ru: 'Секта «владельцев залогов»: почему ваша страховка — это форма шантажа Бога',
+      en: 'The Sect of Pledge Holders: Why Your Insurance Is a Form of Blackmailing God',
+      he: 'כת "בעלי הערבויות": למה הביטוח שלך הוא סחיטה של ה\'',
+      uk: 'Секта «власників застав»: чому ваша страховка — це форма шантажу Бога',
+    },
+    subtitle: {
+      ru: 'Попытка выторговать у Бога комфорт в обмен на духовность',
+      en: 'Trying to bargain comfort from God in exchange for spirituality',
+      he: 'ניסיון למסחר נוחות מה\' בתמורה לרוחניות',
+      uk: 'Спроба виторгувати у Бога комфорт в обмін на духовність',
+    },
+    content: {
+      ru: `<p>Самая распространенная ошибка современного человека — попытка выторговать у Бога комфорт в обмен на духовность. Источники жестко критикуют тех, кто говорит: «Я займусь душой, когда накоплю достаточно на старость». Таких людей называют «сектой владельцев залогов».</p>
+
+<h3>Дерзость слуги</h3>
+<p>Требовать материальных гарантий прежде, чем начнешь исполнять свой долг, — это высшая степень наглости. Это похоже на наемного рабочего, который требует оплату за годы вперед, прежде чем возьмется за лопату. Человек уже пользуется «кредитом» жизни, здоровьем и ресурсами, которые Бог дает ему авансом, но при этом смеет требовать еще и «залог» в виде богатства как условие своей верности.</p>
+
+<h3>Иллюзия безопасности</h3>
+<p>Ловушка в том, что «залог» (накопленный капитал) никогда не дает обещанного покоя. Напротив, чем больше у человека имущества, тем больше у него поводов для тревоги: инфляция, воры, кризисы. Источники утверждают: брать у Бога «залог» бессмысленно, потому что мы никогда не сможем расплатиться даже за один день своего существования. Истинная мудрость — служить сегодня, зная, что завтрашний день уже обеспечен Тем, Кто дает жизнь.</p>`,
+
+      en: `<p>The most common mistake of modern people is trying to bargain comfort from God in exchange for spirituality. The sources harshly criticize those who say: "I'll tend to my soul when I've saved enough for old age." Such people are called "the sect of pledge holders."</p>
+
+<h3>The Servant's Audacity</h3>
+<p>Demanding material guarantees before beginning to fulfill one's duty is the height of impudence. It is like a hired worker who demands payment for years in advance before picking up a shovel. A person already uses the "credit" of life, health, and resources that God gives them as an advance, yet dares to demand a "pledge" in the form of wealth as a condition of their loyalty.</p>
+
+<h3>The Illusion of Safety</h3>
+<p>The trap is that the "pledge" (accumulated capital) never delivers the promised peace. On the contrary, the more property a person has, the more reasons for anxiety: inflation, thieves, crises. The sources assert: taking a "pledge" from God is pointless, because we can never repay even a single day of our existence. True wisdom is to serve today, knowing that tomorrow is already provided for by the One Who gives life.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-25',
+    slug: 'telo-v-arendu-pochemu-moy-vybor-eto-prestupleniye-protiv-tvortsa',
+    title: {
+      ru: 'Тело в аренду: почему «мой выбор» — это преступление против Творца',
+      en: 'Body for Rent: Why "My Choice" Is a Crime Against the Creator',
+      he: 'גוף בשכירות: למה "הבחירה שלי" היא פשע נגד הבורא',
+      uk: 'Тіло в оренду: чому «мій вибір» — це злочин проти Творця',
+    },
+    subtitle: {
+      ru: 'Человек не является владельцем своего тела — он лишь его временный опекун',
+      en: 'A person is not the owner of their body — merely its temporary guardian',
+      he: 'אדם אינו בעל גופו — הוא רק אפוטרופוס זמני',
+      uk: 'Людина не є власником свого тіла — вона лише його тимчасовий опікун',
+    },
+    content: {
+      ru: `<p>Современная доктрина «Моё тело — моё дело» вступает в прямой конфликт с духовным правом собственности. Согласно источникам, человек не является владельцем своего тела — он лишь его временный опекун.</p>
+
+<h3>Дезертирство с поста</h3>
+<p>Тело рассматривается как священный депозит, переданный Богом человеку для выполнения определенной миссии. С этой точки зрения, самоубийство — это не личный выбор, а акт кражи чужого имущества и дезертирство. Человек, обрывающий свою жизнь, подобен слуге, который бросил доверенный ему пост до прихода сменщика. За это он будет судим как убийца, даже если «жертва» — он сам.</p>
+
+<h3>Преступная халатность</h3>
+<p>Упование на Бога не дает права на безрассудство в отношении здоровья. Тот, кто осознанно идет на риск, игнорирует болезни или лезет в огонь, надеясь на чудо, совершает грех «испытания Бога». Человек обязан заботиться о сосуде (теле), так как если сосуд разобьется по его вине, он ответит за уничтожение Божьего имущества, которое было дано ему в аренду на строго определенный срок.</p>`,
+
+      en: `<p>The modern doctrine "My body, my business" comes into direct conflict with spiritual property rights. According to the sources, a person is not the owner of their body — they are merely its temporary guardian.</p>
+
+<h3>Desertion from Post</h3>
+<p>The body is viewed as a sacred deposit, given by God to a person to fulfill a specific mission. From this perspective, suicide is not a personal choice, but an act of theft and desertion. A person who ends their life is like a servant who abandoned the post entrusted to them before the replacement arrived. For this they will be judged as a murderer, even if the "victim" is themselves.</p>
+
+<h3>Criminal Negligence</h3>
+<p>Trust in God does not give the right to recklessness regarding health. One who deliberately takes risks, ignores illness, or walks into fire hoping for a miracle commits the sin of "testing God." A person is obligated to care for the vessel (body), for if the vessel breaks through their fault, they will answer for the destruction of God's property, which was given to them for rent for a strictly defined period.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-26',
+    slug: 'detskiy-sad-dlya-dushi-pochemu-v-tore-pochti-net-slov-o-raye',
+    title: {
+      ru: 'Детский сад для души: почему в Торе почти нет слов о Рае',
+      en: 'Kindergarten for the Soul: Why the Torah Has Almost No Words About Paradise',
+      he: 'גן ילדים לנשמה: למה בתורה כמעט אין מילים על גן עדן',
+      uk: 'Дитячий садок для душі: чому в Торі майже немає слів про Рай',
+    },
+    subtitle: {
+      ru: 'Духовное младенчество человечества и педагогика сладостей',
+      en: 'Humanity\'s spiritual infancy and the pedagogy of sweets',
+      he: 'ינקות רוחנית של האנושות והפדגוגיה של הממתקים',
+      uk: 'Духовне дитинство людства та педагогіка солодощів',
+    },
+    content: {
+      ru: `<p>Многих удивляет провокационный факт: Пятикнижие обещает за соблюдение заповедей дожди, урожай и мир, но почти полностью игнорирует описание блаженства в Мире Грядущем. Источники объясняют это духовным младенчеством человечества.</p>
+
+<h3>Педагогика сладостей</h3>
+<p>Подобно тому, как мудрый отец обещает маленькому ребенку конфеты или красивую одежду за усердие в учебе, не имея возможности объяснить ему истинную ценность знаний, Бог говорил с народом на языке материальных благ. На момент получения Торы разум людей был слишком поглощен физической реальностью, чтобы осознать ценность бесплотного, духовного наслаждения. Если бы Бог сразу заговорил о Рае, люди просто не услышали бы Его.</p>
+
+<h3>Скрытая вершина</h3>
+<p>Материальное вознаграждение — это лишь «тренировочные колеса». Бог скрыл детали Грядущего мира, чтобы наша служба не превратилась в корыстную сделку. По мере духовного взросления человек должен понять: истинная награда — это не «конфеты» этого мира, а сама близость к Творцу и возможность быть Его партнером, что само по себе выше любого воображаемого рая.</p>`,
+
+      en: `<p>Many are surprised by the provocative fact that the Pentateuch promises rain, harvest, and peace for keeping the commandments, but almost completely ignores descriptions of bliss in the World to Come. The sources explain this by humanity's spiritual infancy.</p>
+
+<h3>The Pedagogy of Sweets</h3>
+<p>Just as a wise father promises a small child candy or beautiful clothes for diligence in studies, unable to explain the true value of knowledge, God spoke to the people in the language of material blessings. At the time of receiving the Torah, people's minds were too absorbed in physical reality to appreciate the value of incorporeal, spiritual pleasure. If God had spoken about Paradise right away, people simply would not have heard Him.</p>
+
+<h3>The Hidden Summit</h3>
+<p>Material reward is merely "training wheels." God concealed the details of the World to Come so that our service would not turn into a selfish transaction. As a person matures spiritually, they must understand: the true reward is not the "candies" of this world, but closeness to the Creator itself and the opportunity to be His partner, which in itself is higher than any imagined paradise.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
