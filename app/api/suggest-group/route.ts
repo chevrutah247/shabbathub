@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Redis } from '@upstash/redis';
+import { requireAdmin } from '@/lib/api-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -54,14 +55,17 @@ export async function POST(request: Request) {
       created_at: new Date().toISOString()
     });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: 'Failed to save suggestion' }, { status: 500 });
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Admin-only: view all suggestions
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.response;
   const { data, error } = await supabase
     .from('torah_group_suggestions')
     .select('*')
@@ -72,6 +76,10 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    // Admin-only: approve/reject suggestions
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
+
     const { id, action } = await request.json();
     
     if (action === 'approve') {
@@ -117,7 +125,7 @@ export async function PUT(request: Request) {
     }
     
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 import { Lang } from './language-context';
+import { escapeHtml } from './api-auth';
 
-const siteUrl = 'https://shabbathub.com';
+const siteUrl = 'https://www.shabbathub.com';
 
 const subjects = {
   confirmation: {
@@ -20,6 +21,12 @@ const subjects = {
     en: 'ShabbatHub News',
     he: 'ShabbatHub חדשות',
     uk: 'Новини ShabbatHub',
+  },
+  weeklyDigest: {
+    ru: 'Новые материалы за неделю',
+    en: 'New materials this week',
+    he: 'חומרים חדשים השבוע',
+    uk: 'Нові матеріали за тиждень',
   },
 };
 
@@ -142,14 +149,16 @@ export function confirmationEmail(lang: Lang, email: string) {
 }
 
 export function newIssueEmail(lang: Lang, email: string, pubTitle: string, issueTitle: string, pdfUrl: string, docUrl: string) {
+  const safePub = escapeHtml(pubTitle);
+  const safeIssue = escapeHtml(issueTitle);
   const content: Record<Lang, string> = {
     ru: `
       <h2 style="margin:0 0 16px;color:#111827;font-size:22px;">Новый выпуск! 📰</h2>
       <p style="color:#4b5563;font-size:15px;line-height:1.6;margin:0 0 8px;">
-        В публикации <strong>${pubTitle}</strong> появился новый выпуск:
+        В публикации <strong>${safePub}</strong> появился новый выпуск:
       </p>
       <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin:16px 0 24px;">
-        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${issueTitle}</p>
+        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${safeIssue}</p>
       </div>
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td align="center" style="padding:0 4px;">
@@ -166,10 +175,10 @@ export function newIssueEmail(lang: Lang, email: string, pubTitle: string, issue
     en: `
       <h2 style="margin:0 0 16px;color:#111827;font-size:22px;">New issue! 📰</h2>
       <p style="color:#4b5563;font-size:15px;line-height:1.6;margin:0 0 8px;">
-        A new issue has been published in <strong>${pubTitle}</strong>:
+        A new issue has been published in <strong>${safePub}</strong>:
       </p>
       <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin:16px 0 24px;">
-        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${issueTitle}</p>
+        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${safeIssue}</p>
       </div>
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td align="center" style="padding:0 4px;">
@@ -186,10 +195,10 @@ export function newIssueEmail(lang: Lang, email: string, pubTitle: string, issue
     he: `
       <h2 style="margin:0 0 16px;color:#111827;font-size:22px;">📰 !גיליון חדש</h2>
       <p style="color:#4b5563;font-size:15px;line-height:1.8;margin:0 0 8px;">
-        :גיליון חדש פורסם ב<strong>${pubTitle}</strong>
+        :גיליון חדש פורסם ב<strong>${safePub}</strong>
       </p>
       <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin:16px 0 24px;">
-        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${issueTitle}</p>
+        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${safeIssue}</p>
       </div>
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td align="center" style="padding:0 4px;">
@@ -206,10 +215,10 @@ export function newIssueEmail(lang: Lang, email: string, pubTitle: string, issue
     uk: `
       <h2 style="margin:0 0 16px;color:#111827;font-size:22px;">Новий випуск! 📰</h2>
       <p style="color:#4b5563;font-size:15px;line-height:1.6;margin:0 0 8px;">
-        У публікації <strong>${pubTitle}</strong> з'явився новий випуск:
+        У публікації <strong>${safePub}</strong> з'явився новий випуск:
       </p>
       <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin:16px 0 24px;">
-        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${issueTitle}</p>
+        <p style="margin:0;color:#1e40af;font-weight:600;font-size:17px;">${safeIssue}</p>
       </div>
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td align="center" style="padding:0 4px;">
@@ -237,5 +246,74 @@ export function newsletterEmail(lang: Lang, email: string, title: string, bodyHt
   return {
     subject: title || subjects.newsletter[lang],
     html: baseLayout(bodyHtml, lang, unsubUrl),
+  };
+}
+
+interface DigestItem {
+  id: string;
+  title: string;
+  publicationTitle: string;
+  createdAt: string;
+}
+
+function digestDate(date: string, lang: Lang) {
+  const locale = lang === 'he' ? 'he-IL' : lang === 'en' ? 'en-US' : lang === 'uk' ? 'uk-UA' : 'ru-RU';
+  return new Date(date).toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+}
+
+export function weeklyDigestEmail(lang: Lang, email: string, items: DigestItem[]) {
+  const ctaText: Record<Lang, string> = {
+    ru: 'Открыть каталог',
+    en: 'Open catalog',
+    he: 'לפתיחת הקטלוג',
+    uk: 'Відкрити каталог',
+  };
+
+  const title: Record<Lang, string> = {
+    ru: 'Главное за неделю',
+    en: 'Weekly highlights',
+    he: 'העיקר השבוע',
+    uk: 'Головне за тиждень',
+  };
+
+  const lead: Record<Lang, string> = {
+    ru: 'Мы собрали новые материалы, которые появились за последние 7 дней.',
+    en: 'Here are new materials published in the last 7 days.',
+    he: 'ריכזנו עבורך חומרים חדשים שעלו ב-7 הימים האחרונים.',
+    uk: 'Ми зібрали нові матеріали за останні 7 днів.',
+  };
+
+  const list = items
+    .map((item) => {
+      const url = `${siteUrl}/document/${item.id}`;
+      return `
+        <tr>
+          <td style="padding:10px 0;border-bottom:1px solid #eef2f7;">
+            <a href="${url}" style="font-size:15px;color:#1e40af;text-decoration:none;font-weight:600;">${escapeHtml(item.title)}</a>
+            <div style="font-size:12px;color:#6b7280;margin-top:4px;">
+              ${escapeHtml(item.publicationTitle)} · ${digestDate(item.createdAt, lang)}
+            </div>
+          </td>
+        </tr>`;
+    })
+    .join('');
+
+  const content = `
+    <h2 style="margin:0 0 12px;color:#111827;font-size:22px;">${title[lang]}</h2>
+    <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 16px;">${lead[lang]}</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      ${list}
+    </table>
+    <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+      <a href="${siteUrl}/catalog" style="display:inline-block;background:#1e40af;color:#ffffff;padding:14px 30px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;">
+        ${ctaText[lang]}
+      </a>
+    </td></tr></table>
+  `;
+
+  const unsubUrl = siteUrl + '/subscribe?email=' + encodeURIComponent(email);
+  return {
+    subject: subjects.weeklyDigest[lang],
+    html: baseLayout(content, lang, unsubUrl),
   };
 }

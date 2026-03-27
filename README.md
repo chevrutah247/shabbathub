@@ -7,6 +7,8 @@
 - 📰 **Публикации** — создание серий газет/журналов с метаданными
 - 📄 **Загрузка PDF** — привязка к недельным главам или праздникам
 - 🔍 **Поиск и фильтры** — по парашиот, датам, категориям
+- 🛡️ **Защита входа** — блокировка на 1 час после 3 неудачных попыток входа
+- 🛒 **Маркетплейс** — поиск по странам, городам, районам, блюдам и продуктам
 - 👤 **Личный кабинет** — избранное, мои загрузки, подписки
 - 🌐 **Мультиязычность** — Русский, English, עברית
 - 📱 **Адаптивный дизайн** — мобильные устройства и десктоп
@@ -48,6 +50,61 @@ npm run dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000)
+
+### Исправление превью (PDF и публикации)
+
+```bash
+# Сначала посмотреть, что будет исправлено
+npm run backfill:previews:dry
+
+# Применить изменения
+npm run backfill:previews
+```
+
+Требуется `pdftoppm` (Poppler):
+```bash
+brew install poppler
+```
+
+Важно:
+- для записи в Supabase скрипту нужен `SUPABASE_SERVICE_ROLE_KEY` в `.env.local`;
+- если включён RLS и используется только `NEXT_PUBLIC_SUPABASE_ANON_KEY`, обновления могут не примениться.
+
+Гарантированный вариант через SQL Editor:
+`database/fix-missing-previews.sql`
+
+### Удаление и предотвращение дубликатов
+
+SQL для безопасной дедупликации и уникальных ограничений:
+`database/dedupe-and-constraints.sql`
+
+### Маркетплейс (еда/товары)
+
+Создайте таблицы и индексы:
+`database/marketplace.sql`
+
+После этого доступно:
+- страница `/marketplace`
+- API поиска `/api/marketplace/search`
+
+Параметры поиска API:
+- `q`
+- `country`
+- `city`
+- `district`
+- `dishes` (через запятую)
+- `products` (через запятую)
+
+### Защита аккаунтов от перебора пароля
+
+Включено:
+- 3 неверных пароля подряд -> блок входа на 1 час
+- лимит по IP на попытки входа/регистрации
+- нейтральные сообщения об ошибке (без раскрытия деталей)
+
+Для надежного серверного rate-limit в проде добавьте Upstash KV:
+`KV_REST_API_URL`
+`KV_REST_API_TOKEN`
 
 ## 📁 Структура проекта
 
@@ -136,6 +193,11 @@ export const translations = {
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 NEXT_PUBLIC_SITE_URL (https://your-domain.com)
+NEXT_PUBLIC_GA_ID (optional, Google Analytics measurement ID)
+RESEND_API_KEY (for email notifications/digests)
+CRON_SECRET (optional, protects /api/cron/* routes)
+KV_REST_API_URL (optional, recommended for auth/contact rate-limit)
+KV_REST_API_TOKEN (optional, recommended for auth/contact rate-limit)
 ```
 
 ## 📝 TODO

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { newIssueEmail } from '@/lib/email-templates';
 import { Lang } from '@/lib/language-context';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/api-auth';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'ShabbatHub <noreply@shabbathub.com>';
@@ -26,6 +27,10 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Admin-only endpoint
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const { publication_id, pub_title, issue_title, pdf_url, doc_id } = body;
 
@@ -33,7 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'publication_id and issue_title required' }, { status: 400 });
     }
 
-    const siteUrl = 'https://shabbathub.com';
+    const siteUrl = 'https://www.shabbathub.com';
     const docUrl = doc_id ? siteUrl + '/document/' + doc_id : siteUrl + '/catalog';
     const downloadUrl = pdf_url || docUrl;
 
@@ -77,8 +82,8 @@ export async function POST(request: NextRequest) {
       await new Promise(r => setTimeout(r, 300));
     }
 
-    return NextResponse.json({ success: true, total: targetSubscribers.length, sent, failed, errors: errors.length > 0 ? errors : undefined });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success: true, total: targetSubscribers.length, sent, failed });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

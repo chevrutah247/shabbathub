@@ -145,6 +145,8 @@ const translations = {
     pubsTitle: { ru: 'Новые выпуски публикаций', en: 'New publication issues', he: 'גיליונות חדשים', uk: 'Нові випуски публікацій' },
     pubsDesc: { ru: 'Письмо со ссылкой на скачивание при загрузке нового выпуска', en: 'Email with download link when a new issue is uploaded', he: 'מייל עם קישור להורדה כשגיליון חדש עולה', uk: 'Лист із посиланням на завантаження при виході нового випуску' },
     selectPubs: { ru: 'Выберите публикации:', en: 'Select publications:', he: ':בחר פרסומים', uk: 'Оберіть публікації:' },
+    searchPubs: { ru: 'Поиск по названию...', en: 'Search by name...', he: '...חיפוש לפי שם', uk: 'Пошук за назвою...' },
+    noPubsFound: { ru: 'Ничего не найдено', en: 'No publications found', he: 'לא נמצאו פרסומים', uk: 'Нічого не знайдено' },
     selectAll: { ru: 'Выбрать все', en: 'Select all', he: 'בחר הכל', uk: 'Обрати все' },
     deselectAll: { ru: 'Снять все', en: 'Deselect all', he: 'בטל הכל', uk: 'Зняти все' },
     selected: { ru: 'Выбрано', en: 'Selected', he: 'נבחרו', uk: 'Обрано' },
@@ -336,6 +338,47 @@ const translations = {
     registerError: { ru: 'Ошибка регистрации. Попробуйте позже.', en: 'Registration error. Try again later.', he: 'שגיאה בהרשמה. נסה שוב מאוחר יותר.', uk: 'Помилка реєстрації. Спробуйте пізніше.' },
   },
 
+  // ===== Uploader page =====
+  uploader: {
+    notFound: { ru: 'Пользователь не найден', en: 'User not found', he: 'המשתמש לא נמצא', uk: 'Користувача не знайдено' },
+    loadError: { ru: 'Ошибка загрузки', en: 'Loading error', he: 'שגיאת טעינה', uk: 'Помилка завантаження' },
+    backToCatalog: { ru: 'Назад в каталог', en: 'Back to catalog', he: 'חזרה לקטלוג', uk: 'Назад до каталогу' },
+    backCatalog: { ru: 'Вернуться в каталог', en: 'Back to catalog', he: 'חזרה לקטלוג', uk: 'Повернутися до каталогу' },
+    user: { ru: 'Пользователь', en: 'User', he: 'משתמש', uk: 'Користувач' },
+    memberSince: { ru: 'На сайте с', en: 'Member since', he: 'חבר מאז', uk: 'На сайті з' },
+    documents: { ru: 'документов', en: 'documents', he: 'מסמכים', uk: 'документів' },
+    views: { ru: 'просмотров', en: 'views', he: 'צפיות', uk: 'переглядів' },
+    downloads: { ru: 'скачиваний', en: 'downloads', he: 'הורדות', uk: 'завантажень' },
+    noDocuments: { ru: 'Пользователь ещё не загрузил материалы', en: 'User has not uploaded materials yet', he: 'המשתמש עדיין לא העלה חומרים', uk: 'Користувач ще не завантажив матеріали' },
+  },
+
+  // ===== Search bar holidays =====
+  holidays: {
+    chanukah: { ru: 'Ханука', en: 'Chanukah', he: 'חנוכה', uk: 'Ханука' },
+    purim: { ru: 'Пурим', en: 'Purim', he: 'פורים', uk: 'Пурим' },
+    pesach: { ru: 'Песах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    shavuot: { ru: 'Шавуот', en: 'Shavuot', he: 'שבועות', uk: 'Шавуот' },
+    sukkot: { ru: 'Суккот', en: 'Sukkot', he: 'סוכות', uk: 'Суккот' },
+    roshHashana: { ru: 'Рош Ашана', en: 'Rosh Hashana', he: 'ראש השנה', uk: 'Рош Ашана' },
+    yomKippur: { ru: 'Йом Кипур', en: 'Yom Kippur', he: 'יום כיפור', uk: 'Йом Кіпур' },
+  },
+
+  // ===== Featured documents =====
+  featured: {
+    noDocuments: { ru: 'Документы не найдены', en: 'No documents found', he: 'לא נמצאו מסמכים', uk: 'Документи не знайдено' },
+  },
+
+  // ===== Catalog extras =====
+  catalogExtra: {
+    allYears: { ru: 'Все годы', en: 'All years', he: 'כל השנים', uk: 'Всі роки' },
+    holidaysLabel: { ru: 'Праздники:', en: 'Holidays:', he: ':חגים', uk: 'Свята:' },
+    dateLabel: { ru: 'Дата:', en: 'Date:', he: ':תאריך', uk: 'Дата:' },
+    forYou: { ru: 'Для вас', en: 'For you', he: 'בשבילך', uk: 'Для вас' },
+    bySubscriptions: { ru: 'По вашим подпискам', en: 'By subscriptions', he: 'לפי מנויים', uk: 'За підписками' },
+    popular7d: { ru: 'Популярное за 7 дней', en: 'Popular (7 days)', he: 'פופולרי (7 ימים)', uk: 'Популярне за 7 днів' },
+    weeklyTrends: { ru: 'Тренды недели', en: 'Weekly trends', he: 'טרנדים שבועיים', uk: 'Тренди тижня' },
+  },
+
   // ===== Документ (дополнительные) =====
   docExtra: {
     loadError: { ru: 'Ошибка загрузки', en: 'Loading error', he: 'שגיאה בטעינה', uk: 'Помилка завантаження' },
@@ -344,6 +387,7 @@ const translations = {
     downloading: { ru: 'Скачивание...', en: 'Downloading...', he: '...מוריד', uk: 'Завантаження...' },
     similarMaterials: { ru: 'Похожие материалы', en: 'Similar materials', he: 'חומרים דומים', uk: 'Схожі матеріали' },
     fullscreen: { ru: 'На весь экран', en: 'Fullscreen', he: 'מסך מלא', uk: 'На весь екран' },
+    detailedDescription: { ru: 'Детальное описание', en: 'Detailed description', he: 'תיאור מפורט', uk: 'Детальний опис' },
     errorNotFound: { ru: 'Возможно, документ был удалён или ссылка недействительна.', en: 'The document may have been removed or the link is invalid.', he: 'ייתכן שהמסמך הוסר או שהקישור אינו תקין.', uk: 'Можливо, документ було видалено або посилання недійсне.' },
     tryAgain: { ru: 'Попробовать снова', en: 'Try again', he: 'נסה שוב', uk: 'Спробувати знову' },
     toCatalog: { ru: 'В каталог', en: 'To catalog', he: 'לקטלוג', uk: 'До каталогу' },

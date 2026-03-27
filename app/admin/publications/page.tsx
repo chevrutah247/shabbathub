@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Search, Edit2, Plus, X, Save, ChevronLeft, ChevronRight, BookOpen, FileText, ExternalLink, Trash2, AlertTriangle, ArrowRightLeft } from 'lucide-react';
+import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/lib/language-context';
 
@@ -151,6 +152,7 @@ export default function AdminPublications() {
     if (!editingPub || (!editingPub.title_ru && !editingPub.title_en && !editingPub.title_he)) return;
     setSaving(true);
     const payload = {
+      id: isNew ? undefined : editingPub.id,
       title_ru: editingPub.title_ru || null,
       title_en: editingPub.title_en || null,
       title_he: editingPub.title_he || null,
@@ -166,13 +168,30 @@ export default function AdminPublications() {
       cover_image_url: editingPub.cover_image_url || '',
       is_active: editingPub.is_active ?? true,
     };
-    if (isNew) {
-      const { error } = await supabase.from('publications').insert(payload);
-      if (error) { alert(t('admin.error', lang) + ' ' + prettyPublicationError(error.message, lang)); setSaving(false); return; }
-    } else {
-      const { error } = await supabase.from('publications').update(payload).eq('id', editingPub.id);
-      if (error) { alert(t('admin.error', lang) + ' ' + prettyPublicationError(error.message, lang)); setSaving(false); return; }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      alert(t('admin.error', lang) + ' Unauthorized');
+      setSaving(false);
+      return;
     }
+
+    const response = await fetch('/api/admin/publications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      alert(t('admin.error', lang) + ' ' + prettyPublicationError(result?.error || 'Save failed', lang));
+      setSaving(false);
+      return;
+    }
+
     setEditingPub(null);
     setIsNew(false);
     setSimilarPubs([]);
@@ -286,7 +305,7 @@ export default function AdminPublications() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {pub.cover_image_url ? (
-                      <img src={pub.cover_image_url} alt="" className="w-10 h-14 object-cover rounded" />
+                      <Image src={pub.cover_image_url} alt="" width={40} height={56} className="object-cover rounded" />
                     ) : (
                       <div className="w-10 h-14 bg-gray-200 rounded flex items-center justify-center"><BookOpen className="text-gray-400" size={16} /></div>
                     )}
@@ -458,7 +477,7 @@ export default function AdminPublications() {
                 <div className="divide-y">
                   {viewingIssues.issues.map((issue) => (
                     <div key={issue.id} className="p-4 flex items-center gap-4 hover:bg-gray-50">
-                      {issue.thumbnail_url ? <img src={issue.thumbnail_url} alt="" className="w-10 h-14 object-cover rounded" /> : <div className="w-10 h-14 bg-gray-200 rounded flex items-center justify-center"><FileText className="text-gray-400" size={16} /></div>}
+                      {issue.thumbnail_url ? <Image src={issue.thumbnail_url} alt="" width={40} height={56} className="object-cover rounded" /> : <div className="w-10 h-14 bg-gray-200 rounded flex items-center justify-center"><FileText className="text-gray-400" size={16} /></div>}
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{issue.title}</p>
                         <p className="text-sm text-gray-500">{issue.issue_number && `№${issue.issue_number} · `}{issue.gregorian_date ? new Date(issue.gregorian_date).toLocaleDateString(lang === 'he' ? 'he-IL' : lang === 'en' ? 'en-US' : lang === 'uk' ? 'uk-UA' : 'ru-RU') : ''}</p>

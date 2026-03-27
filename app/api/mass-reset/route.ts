@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/api-auth';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || 'ShabbatHub <contact@chevrutah24x7.net>';
@@ -15,7 +16,7 @@ const supabaseAnon = createClient(
 );
 
 function resetEmailHtml(email: string) {
-  const siteUrl = 'https://shabbathub.com';
+  const siteUrl = 'https://www.shabbathub.com';
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif;">
@@ -55,8 +56,10 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Получить список всех пользователей через admin API
-    // Если нет service role key, используем список из body
+    // Admin-only endpoint
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const emails: string[] = body.emails || [];
 
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest) {
     for (const email of emails) {
       // Отправить Supabase reset (это создаёт настоящую ссылку сброса)
       const { error: resetError } = await supabaseAnon.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://shabbathub.com/reset-password',
+        redirectTo: 'https://www.shabbathub.com/reset-password',
       });
 
       if (resetError) {
@@ -90,8 +93,8 @@ export async function POST(request: NextRequest) {
       await new Promise(r => setTimeout(r, 500));
     }
 
-    return NextResponse.json({ success: true, total: emails.length, sent, failed, errors: errors.length > 0 ? errors : undefined });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success: true, total: emails.length, sent, failed });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

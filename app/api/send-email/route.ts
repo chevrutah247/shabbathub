@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { confirmationEmail, newIssueEmail } from '@/lib/email-templates';
 import { Lang } from '@/lib/language-context';
+import { requireAdmin } from '@/lib/api-auth';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'ShabbatHub <noreply@shabbathub.com>';
@@ -51,11 +52,16 @@ export async function POST(request: NextRequest) {
 
     const validLang: Lang = ['ru', 'en', 'he', 'uk'].includes(lang) ? lang : 'ru';
 
+    // Confirmation emails are public (sent after subscribe)
     if (type === 'confirmation') {
       const { subject, html } = confirmationEmail(validLang, email);
       const result = await sendEmail(email, subject, html);
       return NextResponse.json(result);
     }
+
+    // All other email types require admin auth
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
 
     if (type === 'new_issue') {
       const { pubTitle, issueTitle, pdfUrl, docUrl } = body;
@@ -68,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Unknown email type' }, { status: 400 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

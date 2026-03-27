@@ -144,17 +144,17 @@ async function delKeys(keys: string[]): Promise<void> {
 
 export function loginPolicy(): Policy {
   return {
-    maxFailures: Number(process.env.AUTH_LOGIN_MAX_FAILURES || 3),
-    windowSeconds: Number(process.env.AUTH_LOGIN_WINDOW_SECONDS || 3600),
-    blockSeconds: Number(process.env.AUTH_LOGIN_BLOCK_SECONDS || 3600),
+    maxFailures: Number(process.env.AUTH_LOGIN_MAX_FAILURES || 10),
+    windowSeconds: Number(process.env.AUTH_LOGIN_WINDOW_SECONDS || 900),
+    blockSeconds: Number(process.env.AUTH_LOGIN_BLOCK_SECONDS || 600),
   };
 }
 
 function signupPolicy(): Policy {
   return {
-    maxFailures: Number(process.env.AUTH_SIGNUP_MAX_ATTEMPTS || 5),
-    windowSeconds: Number(process.env.AUTH_SIGNUP_WINDOW_SECONDS || 3600),
-    blockSeconds: Number(process.env.AUTH_SIGNUP_BLOCK_SECONDS || 3600),
+    maxFailures: Number(process.env.AUTH_SIGNUP_MAX_ATTEMPTS || 10),
+    windowSeconds: Number(process.env.AUTH_SIGNUP_WINDOW_SECONDS || 900),
+    blockSeconds: Number(process.env.AUTH_SIGNUP_BLOCK_SECONDS || 600),
   };
 }
 
@@ -162,78 +162,97 @@ export async function ensureLoginAllowed(
   email: string,
   request: Request
 ): Promise<GuardResult> {
-  const ip = requestIp(request);
-  const [emailTtl, ipTtl] = await Promise.all([
-    getBlockTtl(loginBlockKeyEmail(email)),
-    getBlockTtl(loginBlockKeyIp(ip)),
-  ]);
-  const retryAfterSec = Math.max(emailTtl, ipTtl);
-  if (retryAfterSec > 0) return { allowed: false, retryAfterSec };
-  return { allowed: true };
+  try {
+    const ip = requestIp(request);
+    const [emailTtl, ipTtl] = await Promise.all([
+      getBlockTtl(loginBlockKeyEmail(email)),
+      getBlockTtl(loginBlockKeyIp(ip)),
+    ]);
+    const retryAfterSec = Math.max(emailTtl, ipTtl);
+    if (retryAfterSec > 0) return { allowed: false, retryAfterSec };
+    return { allowed: true };
+  } catch (e) {
+    console.error('[auth-throttle] ensureLoginAllowed error:', e);
+    return { allowed: true };
+  }
 }
 
 export async function recordLoginFailure(
   email: string,
   request: Request
 ): Promise<{ blocked: boolean; retryAfterSec?: number }> {
-  const ip = requestIp(request);
-  const policy = loginPolicy();
+  try {
+    const ip = requestIp(request);
+    const policy = loginPolicy();
 
-  const [emailCount, ipCount] = await Promise.all([
-    incrWithTtl(loginFailKeyEmail(email), policy.windowSeconds),
-    incrWithTtl(loginFailKeyIp(ip), policy.windowSeconds),
-  ]);
-
-  if (emailCount >= policy.maxFailures || ipCount >= policy.maxFailures) {
-    await Promise.all([
-      setBlock(loginBlockKeyEmail(email), policy.blockSeconds),
-      setBlock(loginBlockKeyIp(ip), policy.blockSeconds),
+    const [emailCount, ipCount] = await Promise.all([
+      incrWithTtl(loginFailKeyEmail(email), policy.windowSeconds),
+      incrWithTtl(loginFailKeyIp(ip), policy.windowSeconds),
     ]);
-    return { blocked: true, retryAfterSec: policy.blockSeconds };
-  }
 
-  return { blocked: false };
+    if (emailCount >= policy.maxFailures || ipCount >= policy.maxFailures) {
+      await Promise.all([
+        setBlock(loginBlockKeyEmail(email), policy.blockSeconds),
+        setBlock(loginBlockKeyIp(ip), policy.blockSeconds),
+      ]);
+      return { blocked: true, retryAfterSec: policy.blockSeconds };
+    }
+
+    return { blocked: false };
+  } catch (e) {
+    console.error('[auth-throttle] recordLoginFailure error:', e);
+    return { blocked: false };
+  }
 }
 
 export async function clearLoginFailures(
   email: string,
   request: Request
 ): Promise<void> {
-  const ip = requestIp(request);
-  await delKeys([
-    loginFailKeyEmail(email),
-    loginFailKeyIp(ip),
-    loginBlockKeyEmail(email),
-    loginBlockKeyIp(ip),
-  ]);
+  try {
+    const ip = requestIp(request);
+    await delKeys([
+      loginFailKeyEmail(email),
+      loginFailKeyIp(ip),
+      loginBlockKeyEmail(email),
+      loginBlockKeyIp(ip),
+    ]);
+  } catch (e) {
+    console.error('[auth-throttle] clearLoginFailures error:', e);
+  }
 }
 
 export async function ensureSignupAllowed(
   email: string,
   request: Request
 ): Promise<GuardResult> {
-  const ip = requestIp(request);
-  const policy = signupPolicy();
+  try {
+    const ip = requestIp(request);
+    const policy = signupPolicy();
 
-  const [emailBlocked, ipBlocked] = await Promise.all([
-    getBlockTtl(signupBlockKeyEmail(email)),
-    getBlockTtl(signupBlockKeyIp(ip)),
-  ]);
-  const blockedRetry = Math.max(emailBlocked, ipBlocked);
-  if (blockedRetry > 0) return { allowed: false, retryAfterSec: blockedRetry };
-
-  const [emailCount, ipCount] = await Promise.all([
-    incrWithTtl(signupAttemptKeyEmail(email), policy.windowSeconds),
-    incrWithTtl(signupAttemptKeyIp(ip), policy.windowSeconds),
-  ]);
-
-  if (emailCount > policy.maxFailures || ipCount > policy.maxFailures) {
-    await Promise.all([
-      setBlock(signupBlockKeyEmail(email), policy.blockSeconds),
-      setBlock(signupBlockKeyIp(ip), policy.blockSeconds),
+    const [emailBlocked, ipBlocked] = await Promise.all([
+      getBlockTtl(signupBlockKeyEmail(email)),
+      getBlockTtl(signupBlockKeyIp(ip)),
     ]);
-    return { allowed: false, retryAfterSec: policy.blockSeconds };
-  }
+    const blockedRetry = Math.max(emailBlocked, ipBlocked);
+    if (blockedRetry > 0) return { allowed: false, retryAfterSec: blockedRetry };
 
-  return { allowed: true };
+    const [emailCount, ipCount] = await Promise.all([
+      incrWithTtl(signupAttemptKeyEmail(email), policy.windowSeconds),
+      incrWithTtl(signupAttemptKeyIp(ip), policy.windowSeconds),
+    ]);
+
+    if (emailCount > policy.maxFailures || ipCount > policy.maxFailures) {
+      await Promise.all([
+        setBlock(signupBlockKeyEmail(email), policy.blockSeconds),
+        setBlock(signupBlockKeyIp(ip), policy.blockSeconds),
+      ]);
+      return { allowed: false, retryAfterSec: policy.blockSeconds };
+    }
+
+    return { allowed: true };
+  } catch (e) {
+    console.error('[auth-throttle] ensureSignupAllowed error:', e);
+    return { allowed: true };
+  }
 }

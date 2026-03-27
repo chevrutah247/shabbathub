@@ -7,6 +7,12 @@ import { useLanguage } from '@/lib/language-context';
 const content = {
   backHome: { ru: 'На главную', en: 'Home', he: 'דף הבית', uk: 'На головну' },
   title: { ru: 'О проекте ShabbatHub', en: 'About ShabbatHub', he: 'אודות ShabbatHub', uk: 'Про проект ShabbatHub' },
+  orgIntro: {
+    ru: 'ShabbatHub — это бесплатный проект цифровой библиотеки организации Education On The Go Corp, некоммерческой организации 501(c)(3). Наша миссия — сделать еврейские субботние публикации свободно доступными для мирового еврейского сообщества.',
+    en: 'ShabbatHub is a free digital library project of Education On The Go Corp, a 501(c)(3) nonprofit organization. Our mission is to make Jewish Shabbat publications freely accessible to the global Jewish community.',
+    he: 'ShabbatHub הוא פרויקט ספרייה דיגיטלית חינמית של Education On The Go Corp, ארגון ללא מטרות רווח 501(c)(3). המשימה שלנו היא להנגיש פרסומי שבת יהודיים לקהילה היהודית העולמית.',
+    uk: 'ShabbatHub — це безкоштовний проект цифрової бібліотеки організації Education On The Go Corp, некомерційної організації 501(c)(3). Наша місія — зробити єврейські суботні публікації вільно доступними для світової єврейської громади.',
+  },
   intro1: {
     ru: '<strong>ShabbatHub</strong> — это бесплатный онлайн-архив материалов к Шаббату.',
     en: '<strong>ShabbatHub</strong> is a free online archive of Shabbat materials.',
@@ -26,10 +32,10 @@ const content = {
   item4: { ru: '👥 Группы для изучения Торы', en: '👥 Torah study groups', he: '👥 קבוצות לימוד תורה', uk: '👥 Групи для вивчення Тори' },
   mission: { ru: 'Наша миссия', en: 'Our Mission', he: 'המשימה שלנו', uk: 'Наша місія' },
   missionText: {
-    ru: 'Мы верим, что доступ к еврейскому знанию должен быть свободным и удобным. ShabbatHub создан добровольцами для того, чтобы каждый мог найти материалы для изучения Торы и подготовки к Шаббату — в любое время, из любой точки мира.',
-    en: 'We believe that access to Jewish knowledge should be free and convenient. ShabbatHub was created by volunteers so that everyone can find materials for Torah study and Shabbat preparation — anytime, from anywhere in the world.',
-    he: 'אנו מאמינים שהגישה לידע יהודי צריכה להיות חופשית ונוחה. ShabbatHub נוצר על ידי מתנדבים כדי שכל אחד יוכל למצוא חומרים ללימוד תורה והכנה לשבת — בכל עת, מכל מקום בעולם.',
-    uk: 'Ми віримо, що доступ до єврейського знання має бути вільним та зручним. ShabbatHub створений волонтерами для того, щоб кожен міг знайти матеріали для вивчення Тори та підготовки до Шаббату — у будь-який час, з будь-якої точки світу.',
+    ru: 'Сохранять и распространять еврейские субботние публикации, материалы по Торе и образовательные ресурсы — обеспечивая каждой еврейской семье, независимо от местоположения или финансовых возможностей, доступ к содержательному субботнему чтению.',
+    en: 'To preserve and distribute Jewish Shabbat publications, Torah materials, and educational resources — ensuring that every Jewish family, regardless of location or financial means, has access to meaningful Shabbat reading.',
+    he: 'לשמר ולהפיץ פרסומי שבת יהודיים, חומרי תורה ומשאבים חינוכיים — כדי להבטיח שכל משפחה יהודית, ללא קשר למיקום או ליכולת כלכלית, תהיה לה גישה לקריאת שבת משמעותית.',
+    uk: 'Зберігати та поширювати єврейські суботні публікації, матеріали з Тори та освітні ресурси — забезпечуючи кожній єврейській родині, незалежно від місця проживання чи фінансових можливостей, доступ до змістовного суботнього читання.',
   },
   howToHelp: { ru: 'Как помочь проекту', en: 'How to help', he: 'איך לעזור', uk: 'Як допомогти проекту' },
   help1: {
@@ -58,6 +64,11 @@ const content = {
     uk: 'З питань співпраці пишіть на:',
   },
   donateBtn: { ru: 'Поддержать проект', en: 'Support the project', he: 'תמכו בפרויקט', uk: 'Підтримати проект' },
+  orgInfo: { ru: 'Об организации', en: 'Organization', he: 'אודות הארגון', uk: 'Про організацію' },
+  orgName: { ru: 'Организация', en: 'Organization', he: 'ארגון', uk: 'Організація' },
+  orgStatus: { ru: 'Статус', en: 'Status', he: 'סטטוס', uk: 'Статус' },
+  orgFounded: { ru: 'Основана', en: 'Founded', he: 'נוסד', uk: 'Заснована' },
+  orgHQ: { ru: 'Штаб-квартира', en: 'Headquarters', he: 'מטה', uk: 'Штаб-квартира' },
 };
 
 export default function AboutPage() {
@@ -75,6 +86,10 @@ export default function AboutPage() {
         <h1 className="text-4xl font-bold text-primary-900 mb-6">{c('title')}</h1>
 
         <div className="prose prose-lg text-gray-600">
+          <div className="bg-blue-50 border-l-4 border-primary-600 p-4 rounded-r-lg mb-6">
+            <p className="text-primary-900 font-medium">{c('orgIntro')}</p>
+          </div>
+
           <p dangerouslySetInnerHTML={{ __html: c('intro1') }} />
           <p>{c('intro2')}</p>
 
@@ -87,7 +102,9 @@ export default function AboutPage() {
           </ul>
 
           <h2 className="text-2xl font-bold text-primary-900 mt-8 mb-4">{c('mission')}</h2>
-          <p>{c('missionText')}</p>
+          <div className="bg-gold-50 border border-gold-200 rounded-xl p-5 italic text-primary-900">
+            {c('missionText')}
+          </div>
 
           <h2 className="text-2xl font-bold text-primary-900 mt-8 mb-4">{c('howToHelp')}</h2>
           <ul className="list-none space-y-3" style={{ paddingInlineStart: '0' }}>
@@ -102,9 +119,29 @@ export default function AboutPage() {
             </Link>
           </div>
 
+          <h2 className="text-2xl font-bold text-primary-900 mt-8 mb-4">{c('orgInfo')}</h2>
+          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-2 not-prose">
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500 font-medium">{c('orgName')}</span>
+              <span className="text-gray-800 font-semibold">Education On The Go Corp</span>
+            </div>
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500 font-medium">{c('orgStatus')}</span>
+              <span className="text-gray-800">501(c)(3) Nonprofit &middot; EIN: 92-1172505</span>
+            </div>
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500 font-medium">{c('orgFounded')}</span>
+              <span className="text-gray-800">2022</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-500 font-medium">{c('orgHQ')}</span>
+              <span className="text-gray-800">Brooklyn, New York</span>
+            </div>
+          </div>
+
           <h2 className="text-2xl font-bold text-primary-900 mt-8 mb-4">{c('contacts')}</h2>
           <p>
-            {c('contactText')} <a href="mailto:contact@chevrutah24x7.net" className="text-primary-600 hover:underline">contact@chevrutah24x7.net</a>
+            {c('contactText')} <a href="mailto:contact@edonthego.org" className="text-primary-600 hover:underline">contact@edonthego.org</a>
           </p>
         </div>
       </div>

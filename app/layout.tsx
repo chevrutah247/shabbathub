@@ -30,6 +30,7 @@ import ReferralTracker from '@/components/ReferralTracker';
 import SubscribePopup from '@/components/SubscribePopup';
 import FloatingContactSticker from '@/components/FloatingContactSticker';
 import Analytics from '@/components/Analytics';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   title: {
@@ -39,14 +40,21 @@ export const metadata: Metadata = {
   description: 'Бесплатный доступ к тысячам материалов о Шаббате: газеты, статьи, учебные материалы на русском, иврите и английском языках.',
   keywords: ['шаббат', 'шабос', 'тора', 'иудаизм', 'еврейство', 'chevrutah', 'шомрей шабос', 'parsha', 'weekly portion', 'jewish newspaper'],
   authors: [{ name: 'ShabbatHub' }],
-  metadataBase: new URL('https://shabbathub.com'),
+  metadataBase: new URL('https://www.shabbathub.com'),
   alternates: {
-    canonical: 'https://shabbathub.com',
+    canonical: '/',
+    languages: {
+      'ru': 'https://www.shabbathub.com',
+      'en': 'https://www.shabbathub.com',
+      'he': 'https://www.shabbathub.com',
+      'uk': 'https://www.shabbathub.com',
+      'x-default': 'https://www.shabbathub.com',
+    },
   },
   openGraph: {
     title: 'ShabbatHub — Архив материалов к Шаббату',
     description: 'Бесплатный доступ к тысячам материалов о Шаббате',
-    url: 'https://shabbathub.com',
+    url: 'https://www.shabbathub.com',
     siteName: 'ShabbatHub',
     locale: 'ru_RU',
     alternateLocale: ['en_US', 'he_IL'],
@@ -89,6 +97,11 @@ export default function RootLayout({
   return (
     <html lang="ru" dir="ltr" className={`${rubik.variable} ${playfair.variable} ${frankRuhl.variable}`}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://yvgcxmqgvxlvbxsszqcc.supabase.co" />
+        <link rel="dns-prefetch" href="https://www.hebcal.com" />
+        <link rel="preconnect" href="https://www.hebcal.com" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
@@ -103,12 +116,12 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'ShabbatHub',
-              url: 'https://shabbathub.com',
-              logo: 'https://shabbathub.com/icon-192.png',
+              url: 'https://www.shabbathub.com',
+              logo: 'https://www.shabbathub.com/icon-192.png',
               description: 'The largest free digital archive of Shabbat materials: newspapers, articles, and educational resources.',
               contactPoint: {
                 '@type': 'ContactPoint',
-                url: 'https://shabbathub.com/contact',
+                url: 'https://www.shabbathub.com/contact',
                 contactType: 'customer service',
               },
             }),
@@ -121,18 +134,62 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'ShabbatHub',
-              url: 'https://shabbathub.com',
+              url: 'https://www.shabbathub.com',
               potentialAction: {
                 '@type': 'SearchAction',
                 target: {
                   '@type': 'EntryPoint',
-                  urlTemplate: 'https://shabbathub.com/catalog?q={search_term_string}',
+                  urlTemplate: 'https://www.shabbathub.com/catalog?q={search_term_string}',
                 },
                 'query-input': 'required name=search_term_string',
               },
             }),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: [
+                {
+                  '@type': 'Question',
+                  name: 'What is ShabbatHub?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ShabbatHub is an online library with over 34,000 Torah publications — parsha sheets, dvar Torah materials, and Jewish educational resources in multiple languages.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Is ShabbatHub free?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Yes, all materials on ShabbatHub are completely free to read and download.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'What languages are available on ShabbatHub?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Materials are available in Russian, English, Hebrew, and Ukrainian.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Can I upload my own publications to ShabbatHub?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Yes, registered users can upload Torah publications to share with the community.',
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+        <BreadcrumbJsonLd />
         <Analytics />
         <Providers>
           <Header />

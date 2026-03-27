@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, FileText, Loader2, Download, Globe, Mail, MessageCircle, Bell } from 'lucide-react';
 import SubscribeForm from '@/components/SubscribeForm';
 import { trackEvent } from '@/lib/analytics';
@@ -25,9 +26,11 @@ interface Issue {
 }
 interface Parsha { id: number; name_ru: string; }
 
-function formatDate(dateString: string | null): string {
+const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
+
+function formatDate(dateString: string | null, lang = 'ru'): string {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(dateString).toLocaleDateString(localeMap[lang] || 'ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function getGoogleDriveThumbFromPdfUrl(url?: string | null): string | null {
@@ -56,7 +59,7 @@ export default function PublicationPage() {
     if (!id) return;
     Promise.all([
       fetch(SUPABASE_URL + '/rest/v1/publications?id=eq.' + id + '&select=*', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
-      fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + id + '&is_active=eq.true&order=gregorian_date.desc&limit=100&select=id,title,pdf_url,thumbnail_url,page_count,gregorian_date,issue_number,parsha_id', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
+      fetch(SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + id + '&is_active=eq.true&order=issue_number.desc&limit=500&select=id,title,pdf_url,thumbnail_url,page_count,gregorian_date,issue_number,parsha_id', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
       fetch(SUPABASE_URL + '/rest/v1/parshiot?select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
     ])
       .then(([pubData, issuesData, parshaData]) => {
@@ -113,9 +116,9 @@ export default function PublicationPage() {
     publisher: {
       '@type': 'Organization',
       name: 'ShabbatHub',
-      url: 'https://shabbathub.com',
+      url: 'https://www.shabbathub.com',
     },
-    url: `https://shabbathub.com/publication/${publication.id}`,
+    url: `https://www.shabbathub.com/publication/${publication.id}`,
   };
 
   return (
@@ -135,8 +138,8 @@ export default function PublicationPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex items-start gap-5">
                 {publication.cover_image_url && (
-                  <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-                    <img src={publication.cover_image_url} alt={title} className="w-full h-full object-cover" />
+                  <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0 relative">
+                    <Image src={publication.cover_image_url} alt={title} fill sizes="96px" className="object-cover" />
                   </div>
                 )}
                 <div className="flex-1">
@@ -164,11 +167,10 @@ export default function PublicationPage() {
                   return (
                     <Link key={issue.id} href={'/document/' + issue.id} className="group">
                       <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
-                        <div className="aspect-[3/4] bg-gray-100 overflow-hidden">
+                        <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
                           {issue.thumbnail_url ? (
-                            <img src={issue.thumbnail_url} alt={issue.title} loading="lazy" referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                            <Image src={issue.thumbnail_url} alt={issue.title} fill sizes="(max-width: 640px) 50vw, 25vw"
+                              className="object-cover group-hover:scale-105 transition-transform duration-300" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
                               <FileText size={32} className="text-gray-300" />
@@ -181,7 +183,7 @@ export default function PublicationPage() {
                             {issue.issue_number && <span className="text-xs text-gray-500">{'№' + issue.issue_number}</span>}
                             {pName && <span className="text-xs text-gray-400">{pName}</span>}
                           </div>
-                          {issue.gregorian_date && <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(issue.gregorian_date)}</p>}
+                          {issue.gregorian_date && <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(issue.gregorian_date, lang)}</p>}
                         </div>
                       </article>
                     </Link>
@@ -195,9 +197,9 @@ export default function PublicationPage() {
                   return (
                     <div key={issue.id} className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                        <div className="w-12 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0 relative">
                           {issue.thumbnail_url ? (
-                            <img src={issue.thumbnail_url} alt={issue.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                            <Image src={issue.thumbnail_url} alt={issue.title} fill sizes="48px" className="object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center"><FileText size={20} className="text-gray-300" /></div>
                           )}
@@ -207,7 +209,7 @@ export default function PublicationPage() {
                           <div className="flex items-center gap-3 text-sm text-gray-500">
                             {issue.issue_number && <span>{'№' + issue.issue_number}</span>}
                             {pName && <span>{pName}</span>}
-                            <span>{formatDate(issue.gregorian_date)}</span>
+                            <span>{formatDate(issue.gregorian_date, lang)}</span>
                           </div>
                         </div>
                       </div>

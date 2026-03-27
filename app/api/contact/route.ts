@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { rateLimit } from '@/lib/rate-limit';
 import { createClient } from '@supabase/supabase-js';
+import { escapeHtml } from '@/lib/api-auth';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,17 +38,17 @@ export async function POST(req: Request) {
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
       const { data: emailData, error: emailError } = await resend.emails.send({
-        from: 'ShabbatHub <onboarding@resend.dev>',
+        from: 'ShabbatHub <noreply@shabbathub.com>',
         to: 'chevrutah24x7@gmail.com',
         subject: 'ShabbatHub: Сообщение от ' + name,
         ...(isEmail ? { replyTo: email } : {}),
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;">
             <h2 style="color:#1e3a8a;">Новое сообщение с ShabbatHub</h2>
-            <p><strong>Имя:</strong> ${name}</p>
-            <p><strong>Контакт:</strong> ${email}</p>
+            <p><strong>Имя:</strong> ${escapeHtml(name)}</p>
+            <p><strong>Контакт:</strong> ${escapeHtml(email)}</p>
             <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
-            <p style="white-space:pre-wrap;">${message}</p>
+            <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
           </div>
         `,
       });
@@ -57,6 +58,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true });
   } catch (err: any) {
     console.error('[ShabbatHub] Contact error:', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

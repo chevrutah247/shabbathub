@@ -33,7 +33,7 @@ export default function RegisterPage() {
     }
 
     // Validate names (letters only, if provided)
-    const nameRegex = /^[A-Za-zА-Яа-яЁё\u0590-\u05FF\s'-]*$/;
+    const nameRegex = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ\u0590-\u05FF\s'-]*$/;
     if (firstName && !nameRegex.test(firstName)) {
       setError(t('auth.nameLettersOnly', lang));
       setLoading(false);

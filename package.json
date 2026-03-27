@@ -6,7 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "backfill:previews": "node backfill-previews.mjs",
+    "backfill:previews:dry": "node backfill-previews.mjs --dry-run",
+    "import:levi:scan": "node import-levi-archive.mjs scan",
+    "import:levi:plan": "node import-levi-archive.mjs import",
+    "import:levi:apply": "node import-levi-archive.mjs import --apply",
+    "cleanup:large:plan": "node cleanup-large-files.mjs --max-mb=25",
+    "cleanup:large:apply": "node cleanup-large-files.mjs --apply --max-mb=25",
+    "index:issues:plan": "node index-issues-content.mjs --limit=100",
+    "index:issues:apply": "node index-issues-content.mjs --apply --limit=100",
+    "summaries:plan": "node summarize-issues.mjs --limit=100",
+    "summaries:apply": "node summarize-issues.mjs --apply --limit=100"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
@@ -24,6 +35,8 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.17",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"

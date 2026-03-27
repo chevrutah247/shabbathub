@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/', '/profile', '/reset-password'],
       },
     ],
-    sitemap: 'https://shabbathub.com/sitemap.xml',
+    sitemap: 'https://www.shabbathub.com/sitemap.xml',
   };
 }

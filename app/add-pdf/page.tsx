@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Upload, Loader2, Check, AlertCircle, FileText, X, Link as LinkIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/language-context';
@@ -21,6 +22,8 @@ interface DuplicateCandidate {
   created_at?: string;
   reason: string;
 }
+const MAX_UPLOAD_MB = 25;
+const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
 
 const parshaNameToId: Record<string, number> = {
   'Bereishit': 1, 'Noach': 2, 'Lech-Lecha': 3, 'Vayera': 4, 'Chayei Sarah': 5,
@@ -35,6 +38,41 @@ const parshaNameToId: Record<string, number> = {
   'Eikev': 46, "Re'eh": 47, 'Shoftim': 48, 'Ki Teitzei': 49, 'Ki Tavo': 50,
   'Nitzavim': 51, 'Vayeilech': 52, "Ha'azinu": 53, 'Vezot Habracha': 54
 };
+
+const combinedParshaNameToId: Record<string, number> = {
+  'Vayakhel-Pekudei': 22,
+  'Tazria-Metzora': 27,
+  'Achrei Mot-Kedoshim': 29,
+  'Behar-Bechukotai': 32,
+  'Chukat-Balak': 39,
+  'Matot-Masei': 42,
+  'Nitzavim-Vayeilech': 51,
+};
+
+function resolveParshaId(rawTitle: string | undefined): number | null {
+  if (!rawTitle) return null;
+  const name = rawTitle
+    .replace('Parashat ', '')
+    .replace(/\u2019/g, "'")
+    .trim();
+
+  const direct = parshaNameToId[name];
+  if (direct) return direct;
+
+  const aliasMap: Record<string, string> = {
+    Shelach: "Sh'lach",
+    Shlach: "Sh'lach",
+    Haazinu: "Ha'azinu",
+    Vayetze: 'Vayetzei',
+  };
+  const alias = aliasMap[name];
+  if (alias && parshaNameToId[alias]) return parshaNameToId[alias];
+
+  const combined = combinedParshaNameToId[name];
+  if (combined) return combined;
+
+  return null;
+}
 
 function extractGoogleDriveId(url: string): string | null {
   const patterns = [/\/file\/d\/([a-zA-Z0-9_-]+)/, /id=([a-zA-Z0-9_-]+)/, /\/d\/([a-zA-Z0-9_-]+)/];
@@ -121,6 +159,7 @@ export default function AddPdfPage() {
     'В этой публикации уже есть выпуск с таким номером: ': 'У цій публікації вже є випуск з таким номером: ',
     'Совпадает название + дата + публикация': 'Збігається назва + дата + публікація',
     'Можно загружать только PDF файлы': 'Можна завантажувати лише PDF файли',
+    'Размер файла превышает 25 MB': 'Розмір файлу перевищує 25 MB',
     'Ошибка загрузки: ': 'Помилка завантаження: ',
     'Ошибка загрузки превью: ': 'Помилка завантаження прев’ю: ',
     'Укажите название': 'Вкажіть назву',
@@ -174,7 +213,7 @@ export default function AddPdfPage() {
     'или ': 'або ',
     'выберите файл': 'виберіть файл',
     ' с компьютера': ' з комп’ютера',
-    'Только PDF, до 50 MB': 'Лише PDF, до 50 MB',
+    'Только PDF, до 25 MB': 'Лише PDF, до 25 MB',
     'Генерация превью...': 'Генерація прев’ю...',
     'Превью создано ✓': 'Прев’ю створено ✓',
     'Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга': 'Вставте посилання на PDF з Google Drive, Dropbox або іншого хостингу',
@@ -194,6 +233,7 @@ export default function AddPdfPage() {
     'В этой публикации уже есть выпуск с таким номером: ': 'בפרסום זה כבר קיים גיליון עם מספר זה: ',
     'Совпадает название + дата + публикация': 'שם + תאריך + פרסום זהים',
     'Можно загружать только PDF файлы': 'ניתן להעלות קבצי PDF בלבד',
+    'Размер файла превышает 25 MB': 'גודל הקובץ עולה על 25MB',
     'Ошибка загрузки: ': 'שגיאת העלאה: ',
     'Ошибка загрузки превью: ': 'שגיאת העלאת תצוגה מקדימה: ',
     'Укажите название': 'יש להזין כותרת',
@@ -247,7 +287,7 @@ export default function AddPdfPage() {
     'или ': 'או ',
     'выберите файл': 'בחר קובץ',
     ' с компьютера': ' מהמחשב',
-    'Только PDF, до 50 MB': 'PDF בלבד, עד 50MB',
+    'Только PDF, до 25 MB': 'PDF בלבד, עד 25MB',
     'Генерация превью...': 'יוצר תצוגה מקדימה...',
     'Превью создано ✓': 'התצוגה המקדימה נוצרה ✓',
     'Вставьте ссылку на PDF с Google Drive, Dropbox или другого хостинга': 'הדבק קישור PDF מ-Google Drive, Dropbox או אחסון אחר',
@@ -330,8 +370,14 @@ export default function AddPdfPage() {
       try {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const res = await fetch(buildHebcalParshaUrl(today.getFullYear(), today.getMonth() + 1));
-        if (res.ok) {
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1;
+
+        // Пробуем текущий месяц, потом следующий
+        for (const m of [month, month === 12 ? 1 : month + 1]) {
+          const y = m < month ? year + 1 : year;
+          const res = await fetch(buildHebcalParshaUrl(y, m));
+          if (!res.ok) continue;
           const data = await res.json();
           const upcoming = data.items
             ?.filter((item: any) => item.category === 'parashat')
@@ -342,12 +388,12 @@ export default function AddPdfPage() {
               return d >= today;
             });
           if (upcoming) {
-            const name = upcoming.title?.replace('Parashat ', '');
-            const id = parshaNameToId[name];
+            const id = resolveParshaId(upcoming.title);
             if (id) { setCurrentParshaId(id); setParshaId(id); }
+            return;
           }
         }
-      } catch (err) { console.error('Error:', err); }
+      } catch (err) { console.error('Error fetching parsha:', err); }
     }
     fetchCurrentParsha();
   }, []);
@@ -384,8 +430,7 @@ export default function AddPdfPage() {
             });
 
           if (upcoming) {
-            const name = upcoming.title?.replace('Parashat ', '');
-            const id = parshaNameToId[name];
+            const id = resolveParshaId(upcoming.title);
             if (id) setParshaId(id);
           }
         }
@@ -403,6 +448,9 @@ export default function AddPdfPage() {
     }
   }, [pdfUrl, autoThumbnail, uploadMode]);
 
+  const [rawParshiot, setRawParshiot] = useState<Parsha[]>([]);
+
+  // Загрузка данных — один раз при маунте
   useEffect(() => {
     Promise.all([
       fetch(SUPABASE_URL + '/rest/v1/publications?is_active=eq.true&order=title_ru&select=id,title_ru,title_en,title_he', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json()),
@@ -410,18 +458,26 @@ export default function AddPdfPage() {
       fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&order=name_ru&select=id,name_ru', { headers: { 'apikey': SUPABASE_KEY } }).then(r => r.json())
     ]).then(([pubs, parshas, evts]) => {
       setPublications(pubs || []);
-      if (currentParshaId && parshas) {
-        const sorted = [...parshas].sort((a: Parsha, b: Parsha) => {
-          if (a.id === currentParshaId) return -1;
-          if (b.id === currentParshaId) return 1;
-          return a.order_num - b.order_num;
-        });
-        setParshiot(sorted);
-      } else { setParshiot(parshas || []); }
+      setRawParshiot(parshas || []);
       setEvents(evts || []);
       setLoading(false);
     });
-  }, [currentParshaId]);
+  }, []);
+
+  // Сортировка — текущая парша вверху
+  useEffect(() => {
+    if (rawParshiot.length === 0) return;
+    if (currentParshaId) {
+      const sorted = [...rawParshiot].sort((a: Parsha, b: Parsha) => {
+        if (a.id === currentParshaId) return -1;
+        if (b.id === currentParshaId) return 1;
+        return a.order_num - b.order_num;
+      });
+      setParshiot(sorted);
+    } else {
+      setParshiot(rawParshiot);
+    }
+  }, [currentParshaId, rawParshiot]);
 
   // Генерация превью при выборе файла
   useEffect(() => {
@@ -431,10 +487,15 @@ export default function AddPdfPage() {
     generateThumbnailFromPdf(selectedFile).then((blob) => {
       if (cancelled || !blob) { setGeneratingThumb(false); return; }
       const url = URL.createObjectURL(blob);
-      setThumbnailPreview(url);
+      setThumbnailPreview((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
       setGeneratingThumb(false);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [selectedFile]);
 
   useEffect(() => {
@@ -518,7 +579,9 @@ export default function AddPdfPage() {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault(); e.stopPropagation(); setIsDragging(false);
     const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/pdf') {
+    const isPdf = !!file && (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'));
+    if (file && isPdf) {
+      if (file.size > MAX_UPLOAD_BYTES) { setError(tr('Размер файла превышает 25 MB', 'File size exceeds 25 MB')); return; }
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
     } else { setError(tr('Можно загружать только PDF файлы', 'Only PDF files are allowed')); }
@@ -527,7 +590,9 @@ export default function AddPdfPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type !== 'application/pdf') { setError(tr('Можно загружать только PDF файлы', 'Only PDF files are allowed')); return; }
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      if (!isPdf) { setError(tr('Можно загружать только PDF файлы', 'Only PDF files are allowed')); return; }
+      if (file.size > MAX_UPLOAD_BYTES) { setError(tr('Размер файла превышает 25 MB', 'File size exceeds 25 MB')); return; }
       setSelectedFile(file);
       if (!title) setTitle(file.name.replace(/\.pdf$/i, ''));
     }
@@ -565,6 +630,7 @@ export default function AddPdfPage() {
     e.preventDefault(); setError(null); setSubmitting(true);
     if (!title) { setError(tr('Укажите название', 'Enter title')); setSubmitting(false); return; }
     if (uploadMode === 'file' && !selectedFile) { setError(tr('Выберите PDF файл', 'Select a PDF file')); setSubmitting(false); return; }
+    if (uploadMode === 'file' && selectedFile && selectedFile.size > MAX_UPLOAD_BYTES) { setError(tr('Размер файла превышает 25 MB', 'File size exceeds 25 MB')); setSubmitting(false); return; }
     if (uploadMode === 'url' && !pdfUrl) { setError(tr('Укажите ссылку на PDF', 'Enter PDF URL')); setSubmitting(false); return; }
     if (hardDuplicateWarnings.length > 0) { setError(hardDuplicateWarnings[0]); setSubmitting(false); return; }
     if (reviewCandidates.length > 0 && reviewDecision === null) { setError(tr('Найдены похожие материалы. Выберите: ДУБЛИКАТ или НЕ ДУБЛИКАТ.', 'Similar items found. Choose: DUPLICATE or NOT A DUPLICATE.')); setSubmitting(false); return; }
@@ -588,30 +654,8 @@ export default function AddPdfPage() {
         }
       }
 
-      if (uploadMode === 'url' && finalPdfUrl) {
-        const { data: sameUrl } = await supabase
-          .from('issues')
-          .select('id,title')
-          .eq('is_active', true)
-          .eq('pdf_url', finalPdfUrl)
-          .limit(1);
-        if (sameUrl && sameUrl.length > 0) {
-          throw new Error(tr('Этот PDF уже добавлен: ', 'This PDF is already added: ') + (sameUrl[0].title || sameUrl[0].id));
-        }
-      }
-
-      if (publicationId && issueNumber) {
-        const { data: sameNumber } = await supabase
-          .from('issues')
-          .select('id,title')
-          .eq('is_active', true)
-          .eq('publication_id', publicationId)
-          .eq('issue_number', issueNumber)
-          .limit(1);
-        if (sameNumber && sameNumber.length > 0) {
-          throw new Error(tr('Дубликат: в этой публикации уже есть выпуск с номером ', 'Duplicate: this publication already has issue number ') + issueNumber);
-        }
-      }
+      // Skip extra pre-check SELECTs (they can timeout on large datasets).
+      // Rely on DB unique indexes and parse insert error below.
 
       const { data: { session } } = await supabase.auth.getSession();
       const authToken = session?.access_token || SUPABASE_KEY;
@@ -760,9 +804,9 @@ export default function AddPdfPage() {
                   {reviewCandidates.map((c) => (
                     <div key={c.id} className="rounded-lg p-3 bg-white border" style={{ borderColor: '#fed7aa' }}>
                       <div className="flex items-center gap-3">
-                        <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden border">
+                        <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden border relative">
                           {c.thumbnail_url ? (
-                            <img src={c.thumbnail_url} alt={c.title} className="w-full h-full object-cover" />
+                            <Image src={c.thumbnail_url} alt={c.title} fill className="object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center"><FileText size={16} className="text-gray-400" /></div>
                           )}
@@ -906,7 +950,7 @@ export default function AddPdfPage() {
                       <Upload className="mx-auto mb-3" size={36} style={{ color: isDragging ? '#b8860b' : '#c9b896' }} />
                       <p style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontWeight: 500 }} className="mb-1">{isDragging ? tr('Отпустите файл', 'Drop the file') : tr('Перетащите PDF сюда', 'Drag PDF here')}</p>
                       <p className="text-sm" style={{ color: '#8a7d6b', fontFamily: "'Source Serif 4', serif" }}>{tr('или ', 'or ')}<span style={{ color: '#b8860b', textDecoration: 'underline' }}>{tr('выберите файл', 'choose file')}</span>{tr(' с компьютера', ' from your computer')}</p>
-                      <p className="text-xs mt-2" style={{ color: '#c9b896' }}>{tr('Только PDF, до 50 MB', 'PDF only, up to 50 MB')}</p>
+                      <p className="text-xs mt-2" style={{ color: '#c9b896' }}>{tr('Только PDF, до 25 MB', 'PDF only, up to 25 MB')}</p>
                       <input ref={fileInputRef} type="file" accept=".pdf,application/pdf" onChange={handleFileSelect} className="hidden" />
                     </div>
                   ) : (

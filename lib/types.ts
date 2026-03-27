@@ -1,6 +1,6 @@
 // Database types for ShabbatHub
 
-export type Language = 'ru' | 'en' | 'he';
+export type Language = 'ru' | 'en' | 'he' | 'uk';
 export type Frequency = 'daily' | 'weekly' | 'monthly' | 'irregular';
 export type EventType = 'holiday' | 'fast' | 'special' | 'other';
 export type DeliveryType = 'link' | 'attachment';
@@ -13,6 +13,7 @@ export interface Profile {
   last_name?: string;
   display_name?: string;
   avatar_url?: string;
+  role?: string;
   preferred_language: Language;
   email_notifications: boolean;
   created_at: string;
@@ -42,6 +43,7 @@ export interface Publication {
   total_issues: number;
   total_downloads: number;
   subscribers_count: number;
+  tags?: string[];
 }
 
 // Parsha (недельная глава)
@@ -78,6 +80,11 @@ export interface Issue {
   publication_id: string;
   title: string;
   description?: string;
+  ai_summary?: string;
+  content_text?: string;
+  topic_keys?: string[];
+  topic_terms?: string;
+  indexed_at?: string;
   issue_number?: string;
   
   // Григорианская дата

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { User, Mail, Globe, Bell, BellOff, BookOpen, FileText, Edit2, Save, X, LogOut, Calendar, Loader2, Users, Trophy, Sparkles } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
@@ -16,7 +17,7 @@ interface UploadedDoc { id: string; title: string; created_at: string; thumbnail
 interface Achievement { id: string; title: string; hint: string; unlocked: boolean; progress: string; }
 
 export default function ProfilePage() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, loading: authLoading } = useAuth();
   const { lang } = useLanguage();
   const router = useRouter();
   const [editing, setEditing] = useState(false);
@@ -38,14 +39,15 @@ export default function ProfilePage() {
   );
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to initialize
     if (!user) { router.push('/login'); return; }
     if (profile) {
-      setFirstName((profile as any).first_name || '');
-      setLastName((profile as any).last_name || '');
-      setPrefLang((profile as any).preferred_language || 'ru');
-      setEmailNotif((profile as any).email_notifications !== false);
+      setFirstName(profile.first_name || '');
+      setLastName(profile.last_name || '');
+      setPrefLang(profile.preferred_language || 'ru');
+      setEmailNotif(profile.email_notifications !== false);
     }
-  }, [user, profile, router]);
+  }, [user, profile, router, authLoading]);
 
   useEffect(() => {
     if (!user) return;
@@ -309,7 +311,7 @@ export default function ProfilePage() {
             ) : (
               <div className="space-y-3">{uploads.map(doc => (
                 <Link key={doc.id} href={'/document/' + doc.id} className="doc-card flex items-center gap-3 p-3 block">
-                  {doc.thumbnail_url ? <img src={doc.thumbnail_url} alt="" className="w-11 h-14 object-cover rounded-lg" style={{ border: '1px solid #e0d8c8' }} />
+                  {doc.thumbnail_url ? <Image src={doc.thumbnail_url} alt="" width={44} height={56} className="object-cover rounded-lg" style={{ border: '1px solid #e0d8c8' }} />
                     : <div className="w-11 h-14 rounded-lg flex items-center justify-center" style={{ background: '#f5f0e8', border: '1px solid #e0d8c8' }}><FileText size={16} style={{ color: '#c9b896' }} /></div>}
                   <div className="flex-1 min-w-0">
                     <p className="truncate" style={{ fontFamily: "'Source Serif 4', serif", color: '#2c2416', fontSize: '0.9rem', fontWeight: 500 }}>{doc.title}</p>

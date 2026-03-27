@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { FileText, Users, Eye, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/lib/language-context';
@@ -114,7 +115,7 @@ export default function AdminDashboard() {
         <div className="divide-y">
           {stats.recentDocs.map((doc) => (
             <div key={doc.id} className="p-4 flex items-center gap-4 hover:bg-gray-50">
-              {doc.thumbnail_url ? <img src={doc.thumbnail_url} alt="" className="w-12 h-16 object-cover rounded"/> : <div className="w-12 h-16 bg-gray-200 rounded flex items-center justify-center"><FileText className="text-gray-400" size={20}/></div>}
+              {doc.thumbnail_url ? <Image src={doc.thumbnail_url} alt="" width={48} height={64} className="object-cover rounded"/> : <div className="w-12 h-16 bg-gray-200 rounded flex items-center justify-center"><FileText className="text-gray-400" size={20}/></div>}
               <div className="flex-1 min-w-0"><p className="font-medium truncate">{doc.title}</p><p className="text-sm text-gray-500">{new Date(doc.created_at).toLocaleDateString(LOCALE_MAP[lang] || 'en-US')}</p></div>
             </div>
           ))}

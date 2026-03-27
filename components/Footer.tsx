@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Mail, Github } from 'lucide-react';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/lib/language-context';
@@ -12,14 +13,11 @@ export default function Footer() {
   return (
     <footer className="bg-primary-900 text-white">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-display font-bold">
-                <span className="text-white">Shabbat</span>
-                <span className="text-gold-400">Hub</span>
-              </span>
+              <Image src="/shabbathub-logo.png" alt="ShabbatHub" width={180} height={40} className="h-9 w-auto" />
             </Link>
             <p className="text-blue-200 mb-4 max-w-md">
               {t('footer.desc', lang)}
@@ -67,25 +65,42 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
-                  {t('footer.support', lang)}
+                <Link href="/contact" className="text-blue-200 hover:text-white transition-colors">
+                  {t('footer.contactUs', lang)}
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-blue-200 hover:text-white transition-colors">
-                  {t('footer.contactUs', lang)}
+                <Link href="/privacy-policy" className="text-blue-200 hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/donate" className="text-blue-200 hover:text-white transition-colors">
+                  {t('footer.support', lang)}
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
+        {/* Org Info */}
+        <div className="pt-6 border-t border-blue-800 mb-4">
+          <p className="text-blue-300 text-sm text-center">
+            A project of <strong className="text-blue-200">Education On The Go Corp</strong> &middot; 501(c)(3) Nonprofit &middot; EIN: 92-1172505
+          </p>
+        </div>
+
         {/* Bottom */}
-        <div className="pt-8 border-t border-blue-800">
+        <div className="pt-4 border-t border-blue-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-blue-300 text-sm">
-              © {currentYear} {t('footer.copyright', lang)}
+              &copy; {currentYear} {t('footer.copyright', lang)}
             </p>
+            <div className="flex items-center gap-4 text-sm">
+              <Link href="/privacy-policy" className="text-blue-300 hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/contact" className="text-blue-300 hover:text-white transition-colors">{t('footer.contactUs', lang)}</Link>
+              <Link href="/about" className="text-blue-300 hover:text-white transition-colors">{t('footer.aboutProject', lang)}</Link>
+            </div>
             <p className="text-blue-300 text-sm flex items-center gap-1">
               {t('footer.madeWith', lang)} <Heart size={14} className="text-red-400" /> {t('footer.forCommunity', lang)}
             </p>

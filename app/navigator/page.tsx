@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronLeft, ExternalLink, GraduationCap, ArrowRight, Star, Play, Sparkles, Compass, BookOpen, Video } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
@@ -118,9 +119,8 @@ function VideoCard({ video, lang, featured }: { video: { youtubeId: string; titl
             className="absolute inset-0 w-full h-full"
           />
         ) : (
-          <button onClick={() => setPlaying(true)} className="absolute inset-0 w-full h-full cursor-pointer">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={thumbUrl} alt={video.title[lang]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          <button onClick={() => setPlaying(true)} aria-label={video.title[lang]} className="absolute inset-0 w-full h-full cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-white">
+            <Image src={thumbUrl} alt={video.title[lang]} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className={'rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:bg-white transition-all duration-300 ' + (featured ? 'w-20 h-20' : 'w-14 h-14')}>

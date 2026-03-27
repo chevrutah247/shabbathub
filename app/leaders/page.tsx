@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Trophy, Upload, ArrowLeft, Users } from 'lucide-react';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/lib/language-context';
@@ -74,12 +75,12 @@ export default function LeadersPage() {
         const referrerIds = Object.keys(countMap);
         const { data: profiles } = await supabase
           .from('profiles')
-          .select('id, display_name, email')
+          .select('id, display_name')
           .in('id', referrerIds);
 
         const profileMap: Record<string, string> = {};
         for (const p of profiles || []) {
-          profileMap[p.id] = p.display_name || p.email?.split('@')[0] || t('leaders.anonymous', lang);
+          profileMap[p.id] = p.display_name || t('leaders.anonymous', lang);
         }
 
         const refLeaders: ReferralLeader[] = referrerIds
@@ -177,7 +178,7 @@ export default function LeadersPage() {
                     {/* 2 место */}
                     <div className={`rounded-2xl border p-6 text-center mt-8 ${MEDAL_BG[1]}`}>
                       {uploadLeaders[1].avatar_url ? (
-                        <img src={uploadLeaders[1].avatar_url} alt="" className="w-14 h-14 mx-auto rounded-full object-cover mb-3 border-2 border-gray-300" />
+                        <Image src={uploadLeaders[1].avatar_url} alt={uploadLeaders[1].display_name} width={56} height={56} className="mx-auto rounded-full object-cover mb-3 border-2 border-gray-300" />
                       ) : (
                         <div className={`w-14 h-14 mx-auto rounded-full bg-gradient-to-br ${MEDAL_COLORS[1]} flex items-center justify-center text-white font-bold text-lg mb-3`}>
                           {getInitials(uploadLeaders[1].display_name)}
@@ -193,7 +194,7 @@ export default function LeadersPage() {
                     <div className={`rounded-2xl border p-6 text-center ${MEDAL_BG[0]} shadow-lg`}>
                       <div className="text-3xl mb-2">👑</div>
                       {uploadLeaders[0].avatar_url ? (
-                        <img src={uploadLeaders[0].avatar_url} alt="" className="w-16 h-16 mx-auto rounded-full object-cover mb-3 border-2 border-yellow-400 shadow-md" />
+                        <Image src={uploadLeaders[0].avatar_url} alt={uploadLeaders[0].display_name} width={64} height={64} className="mx-auto rounded-full object-cover mb-3 border-2 border-yellow-400 shadow-md" />
                       ) : (
                         <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-br ${MEDAL_COLORS[0]} flex items-center justify-center text-white font-bold text-xl mb-3 shadow-md`}>
                           {getInitials(uploadLeaders[0].display_name)}
@@ -208,7 +209,7 @@ export default function LeadersPage() {
                     {/* 3 место */}
                     <div className={`rounded-2xl border p-6 text-center mt-12 ${MEDAL_BG[2]}`}>
                       {uploadLeaders[2].avatar_url ? (
-                        <img src={uploadLeaders[2].avatar_url} alt="" className="w-14 h-14 mx-auto rounded-full object-cover mb-3 border-2 border-amber-600" />
+                        <Image src={uploadLeaders[2].avatar_url} alt={uploadLeaders[2].display_name} width={56} height={56} className="mx-auto rounded-full object-cover mb-3 border-2 border-amber-600" />
                       ) : (
                         <div className={`w-14 h-14 mx-auto rounded-full bg-gradient-to-br ${MEDAL_COLORS[2]} flex items-center justify-center text-white font-bold text-lg mb-3`}>
                           {getInitials(uploadLeaders[2].display_name)}
@@ -237,7 +238,7 @@ export default function LeadersPage() {
                            <span className="text-lg font-bold text-gray-400">{idx + 1}</span>}
                         </div>
                         {leader.avatar_url ? (
-                          <img src={leader.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                          <Image src={leader.avatar_url} alt={leader.display_name} width={40} height={40} className="rounded-full object-cover" />
                         ) : (
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${
                             idx === 0 ? 'bg-gradient-to-br from-yellow-400 to-amber-500' :

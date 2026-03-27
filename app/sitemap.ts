@@ -2,21 +2,22 @@ import { createClient } from '@supabase/supabase-js';
 import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://shabbathub.com';
+  const baseUrl = 'https://www.shabbathub.com';
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/shabbathub`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/catalog`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.95 },
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/privacy-policy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     { url: `${baseUrl}/subscribe`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.65 },
     { url: `${baseUrl}/leaders`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/torah-groups`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/donate`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.55 },
     { url: `${baseUrl}/marketplace`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/suggest-group`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/login`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
-    { url: `${baseUrl}/register`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/navigator`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
   ];
 
   try {
@@ -51,7 +52,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.65,
     }));
 
-    return [...staticPages, ...pubPages, ...docPages];
+    // Uploader pages (top uploaders)
+    const { data: uploaders } = await supabase
+      .from('profiles')
+      .select('id')
+      .gt('upload_count', 0)
+      .order('upload_count', { ascending: false })
+      .limit(50);
+
+    const uploaderPages: MetadataRoute.Sitemap = (uploaders || []).map((u) => ({
+      url: `${baseUrl}/uploader/${u.id}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.55,
+    }));
+
+    return [...staticPages, ...pubPages, ...docPages, ...uploaderPages];
   } catch {
     return staticPages;
   }

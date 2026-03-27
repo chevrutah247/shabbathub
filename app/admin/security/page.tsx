@@ -26,8 +26,10 @@ type BlockedClient = {
   created_at: string;
 };
 
-function fmtDate(dt: string) {
-  return new Date(dt).toLocaleString('ru-RU');
+const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
+
+function fmtDate(dt: string, lang = 'ru') {
+  return new Date(dt).toLocaleString(localeMap[lang] || 'ru-RU');
 }
 
 export default function AdminSecurityPage() {
@@ -179,7 +181,7 @@ export default function AdminSecurityPage() {
                   <tr><td colSpan={5} className="px-3 py-8 text-center text-gray-500">{t('admin.noEvents', lang)}</td></tr>
                 ) : filteredEvents.map((e) => (
                   <tr key={e.id} className="border-t">
-                    <td className="px-3 py-2 whitespace-nowrap">{fmtDate(e.created_at)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{fmtDate(e.created_at, lang)}</td>
                     <td className="px-3 py-2"><span className="px-2 py-1 rounded-full text-xs bg-gray-100">{e.status}</span></td>
                     <td className="px-3 py-2 font-mono text-xs">{e.ip || '—'}</td>
                     <td className="px-3 py-2 font-mono text-xs">{e.user_id ? e.user_id.slice(0, 8) + '…' : '—'}</td>
@@ -215,7 +217,7 @@ export default function AdminSecurityPage() {
               <div key={b.id} className="border rounded-lg p-2">
                 <p className="text-xs font-mono">IP: {b.ip || '—'}</p>
                 <p className="text-xs font-mono">User: {b.user_id ? b.user_id.slice(0, 12) + '…' : '—'}</p>
-                <p className="text-xs text-gray-600">{t('admin.until', lang)} {fmtDate(b.blocked_until)}</p>
+                <p className="text-xs text-gray-600">{t('admin.until', lang)} {fmtDate(b.blocked_until, lang)}</p>
                 <p className="text-xs text-gray-500">{b.reason || '—'}</p>
                 <button onClick={() => handleUnblock(b.id)} disabled={actionBusy} className="mt-1 inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700">
                   <Trash2 size={12} /> {t('admin.unblock', lang)}

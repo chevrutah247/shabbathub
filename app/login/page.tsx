@@ -1,20 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
 
 export default function LoginPage() {
   const { lang } = useLanguage();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
   const [error, setError] = useState('');
   const [mode, setMode] = useState<'login' | 'reset'>('login');
   const [resetSent, setResetSent] = useState(false);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const redirectTo = useMemo(() => {
+    const redirect = searchParams.get('redirect');
+    return redirect && redirect.startsWith('/') ? redirect : '/admin';
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +35,15 @@ export default function LoginPage() {
       .then(async (res) => {
         const payload = await res.json().catch(() => ({}));
         if (!res.ok) {
+          if (res.status === 429 || payload?.code === 'TEMP_BLOCKED') {
+            const minutes = Math.ceil((payload?.retryAfterSec || 600) / 60);
+            const msg = lang === 'ru'
+              ? `Слишком много попыток. Попробуйте через ${minutes} мин.`
+              : lang === 'he'
+                ? `יותר מדי ניסיונות. נסו שוב בעוד ${minutes} דק'`
+                : `Too many attempts. Try again in ${minutes} min.`;
+            throw new Error(msg);
+          }
           throw new Error(payload?.error || 'Login failed');
         }
         const accessToken = payload?.session?.access_token;
@@ -41,7 +56,7 @@ export default function LoginPage() {
           refresh_token: refreshToken,
         });
         if (error) throw error;
-        setDone(true);
+        router.replace(redirectTo);
       })
       .catch((err: Error) => {
         setError(err.message);
@@ -57,7 +72,7 @@ export default function LoginPage() {
     setError('');
 
     supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://shabbathub.com/reset-password',
+      redirectTo: 'https://www.shabbathub.com/reset-password',
     }).then(({ error }) => {
       setLoading(false);
       if (error) {
@@ -67,19 +82,6 @@ export default function LoginPage() {
       }
     });
   };
-
-  if (done) {
-    return (
-      <div className="min-h-screen bg-primary-700 flex items-center justify-center" dir={dir}>
-        <div className="bg-white rounded-2xl p-8 text-center">
-          <h1 className="text-2xl font-bold text-green-600 mb-4">{t('auth.loginSuccess', lang)}</h1>
-          <a href="/" className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg">
-            {t('auth.goHome', lang)}
-          </a>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-primary-700 flex items-center justify-center p-4" dir={dir}>

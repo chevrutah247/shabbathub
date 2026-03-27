@@ -43,9 +43,10 @@ export default function AdminMessages() {
 
   const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
+  const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
   const formatDate = (d: string) => {
     const date = new Date(d);
-    return date.toLocaleString('ru-RU', {
+    return date.toLocaleString(localeMap[lang] || 'ru-RU', {
       day: 'numeric', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
     });

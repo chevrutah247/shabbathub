@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
+import { requireAuth, requireAdmin } from '@/lib/api-auth';
 
 function getRedis() {
   const url = process.env.KV_REST_API_URL;
@@ -29,9 +30,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAuth(request);
+    if (!auth.ok) return auth.response;
+
     const redis = getRedis();
     if (!redis) return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
-    
+
     const newGroup = await request.json();
     
     let groups: any[] = [];
@@ -68,9 +72,14 @@ export async function POST(request: NextRequest) {
       }
     }
     
+    // Only allow safe fields, prevent prototype pollution
     const group = {
-      id: String(Date.now()),
-      ...newGroup,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      name: String(newGroup.name || ''),
+      platform: String(newGroup.platform || ''),
+      link: String(newGroup.link || ''),
+      description: String(newGroup.description || ''),
+      language: String(newGroup.language || 'russian'),
       createdAt: new Date().toISOString(),
       status: 'approved',
     };
@@ -87,9 +96,12 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
+
     const redis = getRedis();
     if (!redis) return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
-    
+
     const updated = await request.json();
     
     let groups: any[] = [];
@@ -102,7 +114,11 @@ export async function PUT(request: NextRequest) {
     const index = groups.findIndex((g: any) => g.id === updated.id);
     if (index === -1) return NextResponse.json({ error: 'Group not found' }, { status: 404 });
     
-    groups[index] = { ...groups[index], ...updated };
+    // Only allow safe fields to be updated
+    const safeFields = ['name', 'platform', 'link', 'description', 'language', 'status'];
+    for (const key of safeFields) {
+      if (updated[key] !== undefined) groups[index][key] = String(updated[key]);
+    }
     await redis.set('torah_groups', JSON.stringify(groups));
     
     return NextResponse.json(groups[index]);
@@ -113,9 +129,12 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const auth = await requireAdmin(request);
+    if (!auth.ok) return auth.response;
+
     const redis = getRedis();
     if (!redis) return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
-    
+
     const { id } = await request.json();
     
     let groups: any[] = [];

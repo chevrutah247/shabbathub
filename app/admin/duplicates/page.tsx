@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { FileText, Trash2, Check, ExternalLink, ChevronDown, ChevronUp, Eye, X } from 'lucide-react';
+import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/lib/language-context';
 
@@ -136,10 +137,12 @@ export default function AdminDuplicates() {
                   {group.items.map((item, index) => (
                     <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                       {item.thumbnail_url ? (
-                        <img
+                        <Image
                           src={item.thumbnail_url}
                           alt=""
-                          className="w-16 h-20 object-cover rounded cursor-pointer hover:opacity-80"
+                          width={64}
+                          height={80}
+                          className="object-cover rounded cursor-pointer hover:opacity-80"
                           onClick={() => openViewer(item.pdf_url, `${group.title} (#${index + 1})`)}
                         />
                       ) : (

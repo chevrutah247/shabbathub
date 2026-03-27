@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Download, FileText, Calendar, Loader2, ExternalLink, X, Maximize2, Bell, Printer, User } from 'lucide-react';
 import ShareButtons from '@/components/ShareButtons';
 import { trackEvent } from '@/lib/analytics';
@@ -18,6 +19,8 @@ interface Issue {
   id: string;
   title: string;
   description: string;
+  ai_summary?: string | null;
+  topic_keys?: string[] | null;
   pdf_url: string;
   thumbnail_url: string;
   page_count: number;
@@ -47,9 +50,11 @@ interface RelatedIssue {
   publication_id: string;
 }
 
-function formatDate(dateString: string | null): string {
+const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
+
+function formatDate(dateString: string | null, lang = 'ru'): string {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(dateString).toLocaleDateString(localeMap[lang] || 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 function isGoogleDriveUrl(url: string): boolean {
@@ -101,11 +106,11 @@ export default function DocumentPage() {
           const doc = data[0];
           setIssue(doc);
           if (isGoogleDriveUrl(doc.pdf_url)) setViewerMode('google');
-          // Increment view count (fire and forget)
-          fetch(SUPABASE_URL + '/rest/v1/issues?id=eq.' + id, {
-            method: 'PATCH',
+          // Increment view count atomically (fire and forget)
+          fetch(SUPABASE_URL + '/rest/v1/rpc/increment_view_count', {
+            method: 'POST',
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ view_count: (doc.view_count || 0) + 1 })
+            body: JSON.stringify({ issue_id: id })
           }).catch(() => {});
         }
       })
@@ -221,9 +226,9 @@ export default function DocumentPage() {
     publisher: {
       '@type': 'Organization',
       name: 'ShabbatHub',
-      url: 'https://shabbathub.com',
+      url: 'https://www.shabbathub.com',
     },
-    mainEntityOfPage: `https://shabbathub.com/document/${issue.id}`,
+    mainEntityOfPage: `https://www.shabbathub.com/document/${issue.id}`,
   };
 
   // Полноэкранный режим
@@ -299,9 +304,24 @@ export default function DocumentPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">{issue.title}</h1>
               {issue.description && <p className="text-gray-600 mb-4">{issue.description}</p>}
+              {issue.ai_summary && issue.ai_summary !== issue.description && (
+                <div className="mb-4 rounded-xl border border-stone-200 bg-stone-50 p-3">
+                  <p className="text-xs uppercase tracking-wide text-stone-500 mb-1">{t('docExtra.detailedDescription', lang)}</p>
+                  <p className="text-sm text-stone-700 whitespace-pre-line">{issue.ai_summary}</p>
+                </div>
+              )}
+              {issue.topic_keys && issue.topic_keys.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {issue.topic_keys.map((k) => (
+                    <span key={k} className="inline-flex items-center rounded-full border border-stone-300 bg-white px-2.5 py-1 text-xs text-stone-700">
+                      #{k}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="space-y-2.5 text-sm text-gray-600">
                 {issue.gregorian_date && (
-                  <div className="flex items-center gap-2"><Calendar size={16} className="text-gray-400" />{formatDate(issue.gregorian_date)}</div>
+                  <div className="flex items-center gap-2"><Calendar size={16} className="text-gray-400" />{formatDate(issue.gregorian_date, lang)}</div>
                 )}
                 {pubName && (
                   <div className="flex items-center gap-2">
@@ -369,7 +389,7 @@ export default function DocumentPage() {
                 <Printer size={20} />{t('actions.print', lang)}
               </button>
               <div className="flex items-center justify-center pt-2">
-                <ShareButtons url={`https://shabbathub.com/document/${id}`} title={issue.title} />
+                <ShareButtons url={`https://www.shabbathub.com/document/${id}`} title={issue.title} />
               </div>
             </div>
 
@@ -394,9 +414,9 @@ export default function DocumentPage() {
                   onClick={() => trackEvent('related_document_click', { from_document_id: issue.id, to_document_id: doc.id })}
                   className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
                 >
-                  <div className="aspect-[3/4] bg-gray-100 overflow-hidden">
+                  <div className="aspect-[3/4] bg-gray-100 overflow-hidden relative">
                     {doc.thumbnail_url ? (
-                      <img src={doc.thumbnail_url} alt={doc.title} className="w-full h-full object-cover" loading="lazy" />
+                      <Image src={doc.thumbnail_url} alt={doc.title} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <FileText size={22} className="text-gray-300" />
@@ -405,7 +425,7 @@ export default function DocumentPage() {
                   </div>
                   <div className="p-2.5">
                     <p className="text-xs font-medium text-gray-900 line-clamp-2">{doc.title}</p>
-                    {doc.gregorian_date && <p className="text-[11px] text-gray-500 mt-1">{formatDate(doc.gregorian_date)}</p>}
+                    {doc.gregorian_date && <p className="text-[11px] text-gray-500 mt-1">{formatDate(doc.gregorian_date, lang)}</p>}
                   </div>
                 </Link>
               ))}

@@ -5,25 +5,58 @@ import { X, Bell } from 'lucide-react';
 import SubscribeForm from '@/components/SubscribeForm';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { trackEvent } from '@/lib/analytics';
+
+const DISMISS_UNTIL_KEY = 'shabbathub-sub-dismiss-until';
+const SESSION_VIEWS_KEY = 'shabbathub-content-views';
+const SESSION_SHOWN_KEY = 'shabbathub-sub-shown';
+const AB_VARIANT_KEY = 'shabbathub-sub-ab-variant';
+const TRACK_SOURCE_KEY = 'shabbathub-sub-source';
+const TRACK_VARIANT_KEY = 'shabbathub-sub-variant';
 
 export default function SubscribePopup() {
   const { lang } = useLanguage();
   const [show, setShow] = useState(false);
+  const [variant, setVariant] = useState<'timer' | 'intent'>('intent');
 
   useEffect(() => {
-    const dismissed = localStorage.getItem('shabbathub-sub-dismissed');
-    if (dismissed) return;
+    const dismissedUntil = Number(localStorage.getItem(DISMISS_UNTIL_KEY) || '0');
+    if (dismissedUntil > Date.now()) return;
+    if (sessionStorage.getItem(SESSION_SHOWN_KEY) === '1') return;
 
-    const timer = setTimeout(() => {
-      setShow(true);
-    }, 30000);
+    const path = window.location.pathname;
+    const isContentPage = path.startsWith('/document/') || path.startsWith('/publication/');
+    let views = Number(sessionStorage.getItem(SESSION_VIEWS_KEY) || '0');
+    if (isContentPage) {
+      views += 1;
+      sessionStorage.setItem(SESSION_VIEWS_KEY, String(views));
+    }
+
+    let chosen = localStorage.getItem(AB_VARIANT_KEY) as 'timer' | 'intent' | null;
+    if (!chosen) {
+      chosen = Math.random() < 0.5 ? 'timer' : 'intent';
+      localStorage.setItem(AB_VARIANT_KEY, chosen);
+    }
+    setVariant(chosen);
+    const delay = chosen === 'timer' ? 25000 : views >= 2 ? 8000 : isContentPage ? 12000 : 18000;
+    const timer = setTimeout(() => setShow(true), delay);
 
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!show) return;
+    sessionStorage.setItem(TRACK_SOURCE_KEY, 'popup');
+    sessionStorage.setItem(TRACK_VARIANT_KEY, variant);
+    trackEvent('subscribe_popup_shown', { variant });
+  }, [show, variant]);
+
   const handleClose = () => {
     setShow(false);
-    localStorage.setItem('shabbathub-sub-dismissed', 'true');
+    const twoWeeksMs = 14 * 24 * 60 * 60 * 1000;
+    localStorage.setItem(DISMISS_UNTIL_KEY, String(Date.now() + twoWeeksMs));
+    sessionStorage.setItem(SESSION_SHOWN_KEY, '1');
+    trackEvent('subscribe_popup_close', { variant });
   };
 
   if (!show) return null;

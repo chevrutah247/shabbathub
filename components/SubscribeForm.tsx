@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Mail, Check, Loader2, Bell, Newspaper, BookOpen } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Mail, Check, Loader2, Bell, Newspaper, BookOpen, Search } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { trackEvent } from '@/lib/analytics';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -35,6 +36,7 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [pubSearch, setPubSearch] = useState('');
 
   useEffect(() => {
     if (user?.email) setEmail(user.email);
@@ -64,8 +66,32 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
     setSelectedPubs(prev => prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]);
   };
 
+  const filteredPubs = useMemo(() => {
+    if (!pubSearch.trim()) return publications;
+    const q = pubSearch.toLowerCase();
+    return publications.filter(pub => {
+      const title = getPubTitle(pub).toLowerCase();
+      const titleRu = (pub.title_ru || '').toLowerCase();
+      const titleEn = (pub.title_en || '').toLowerCase();
+      const titleHe = (pub.title_he || '').toLowerCase();
+      return title.includes(q) || titleRu.includes(q) || titleEn.includes(q) || titleHe.includes(q);
+    });
+  }, [publications, pubSearch, lang]);
+
   const selectAll = () => {
     setSelectedPubs(selectedPubs.length === publications.length ? [] : publications.map(p => p.id));
+  };
+
+  const getTrackingPayload = () => {
+    const source = typeof window !== 'undefined' ? sessionStorage.getItem('shabbathub-sub-source') || 'page' : 'page';
+    const variant = typeof window !== 'undefined' ? sessionStorage.getItem('shabbathub-sub-variant') || 'none' : 'none';
+    return {
+      source,
+      variant,
+      has_publications: subscribePubs && selectedPubs.length > 0,
+      publications_count: subscribePubs ? selectedPubs.length : 0,
+      has_news: subscribeNews,
+    };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,11 +120,17 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
 
       if (existing) {
         await supabase.from('subscriptions').update(payload).eq('email', email);
+        trackEvent('subscribe_update', getTrackingPayload());
       } else {
         await supabase.from('subscriptions').insert(payload);
+        trackEvent('subscribe_create', getTrackingPayload());
       }
 
       setSuccess(true);
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('shabbathub-sub-source');
+        sessionStorage.removeItem('shabbathub-sub-variant');
+      }
 
       // Отправить письмо-подтверждение
       try {
@@ -113,6 +145,7 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
 
       if (onSuccess) setTimeout(onSuccess, 2000);
     } catch (err: any) {
+      trackEvent('subscribe_error');
       setError(err.message);
     } finally {
       setSubmitting(false);
@@ -191,14 +224,28 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
                 {selectedPubs.length === publications.length ? t('subscribe.deselectAll', lang) : t('subscribe.selectAll', lang)}
               </button>
             </div>
+            {/* Search */}
+            <div className={'relative mb-2 ' + (lang === 'he' ? 'pr-8' : 'pl-8')}>
+              <Search className={'absolute top-1/2 -translate-y-1/2 text-gray-400 ' + (lang === 'he' ? 'right-10' : 'left-10')} size={14} />
+              <input
+                type="text"
+                value={pubSearch}
+                onChange={(e) => setPubSearch(e.target.value)}
+                placeholder={t('subscribe.searchPubs', lang)}
+                className={'w-full py-1.5 rounded-md border border-gray-200 focus:border-primary-500 outline-none text-sm ' + (lang === 'he' ? 'pr-8 pl-3' : 'pl-8 pr-3')}
+              />
+            </div>
             <div className={'max-h-48 overflow-y-auto space-y-1 ' + (lang === 'he' ? 'pr-8' : 'pl-8')}>
-              {publications.map(pub => (
+              {filteredPubs.map(pub => (
                 <label key={pub.id} className={'flex items-center gap-2.5 py-1.5 px-2 rounded-md cursor-pointer transition-colors ' + (selectedPubs.includes(pub.id) ? 'bg-primary-50' : 'hover:bg-gray-50')}>
                   <input type="checkbox" checked={selectedPubs.includes(pub.id)} onChange={() => togglePub(pub.id)} className="rounded text-primary-600" />
                   <Newspaper size={14} className="text-gray-400 shrink-0" />
                   <span className="text-sm text-gray-800">{getPubTitle(pub)}</span>
                 </label>
               ))}
+              {filteredPubs.length === 0 && pubSearch && (
+                <p className="text-xs text-gray-400 py-2 text-center">{t('subscribe.noPubsFound', lang)}</p>
+              )}
             </div>
             {selectedPubs.length > 0 && (
               <p className={'text-xs text-primary-600 mt-2 ' + (lang === 'he' ? 'pr-8' : 'pl-8')}>

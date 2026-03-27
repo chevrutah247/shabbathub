@@ -3,20 +3,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
-const quickLinks = [
-  { label: '🕎 Ханука', query: 'Ханука' },
-  { label: '🍷 Пурим', query: 'Пурим' },
-  { label: '🫓 Песах', query: 'Песах' },
-  { label: '📜 Шавуот', query: 'Шавуот' },
-  { label: '🏕️ Суккот', query: 'Суккот' },
-  { label: '🍎 Рош Ашана', query: 'Рош Ашана' },
-  { label: '🕊️ Йом Кипур', query: 'Йом Кипур' },
-];
+const holidayKeys = ['chanukah', 'purim', 'pesach', 'shavuot', 'sukkot', 'roshHashana', 'yomKippur'] as const;
+const holidayEmojis: Record<string, string> = {
+  chanukah: '🕎', purim: '🍷', pesach: '🫓', shavuot: '📜', sukkot: '🏕️', roshHashana: '🍎', yomKippur: '🕊️',
+};
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
   const router = useRouter();
+  const { lang } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,29 +39,31 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Поиск материалов, недельных глав, тем..."
+          placeholder={t('home.searchPlaceholder', lang)}
           className="w-full pl-14 pr-32 py-4 text-lg rounded-full border-2 border-white/20 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:border-gold-400 focus:ring-4 focus:ring-gold-400/20 transition-all"
         />
         <button
           type="submit"
           className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full font-medium transition-colors"
         >
-          Найти
+          {t('find', lang)}
         </button>
       </div>
 
-      {/* Быстрые ссылки — праздники */}
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {quickLinks.map((link) => (
-          <button
-            key={link.query}
-            type="button"
-            onClick={() => handleQuickLink(link.query)}
-            className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-full text-white/80 hover:text-white transition-colors"
-          >
-            {link.label}
-          </button>
-        ))}
+        {holidayKeys.map((key) => {
+          const label = t(`holidays.${key}`, lang);
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => handleQuickLink(label)}
+              className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-full text-white/80 hover:text-white transition-colors"
+            >
+              {holidayEmojis[key]} {label}
+            </button>
+          );
+        })}
       </div>
     </form>
   );

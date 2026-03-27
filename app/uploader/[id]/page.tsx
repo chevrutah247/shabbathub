@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, FileText, Loader2, BookOpen, User, Download, Eye } from 'lucide-react';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -28,12 +31,14 @@ interface UploadedDoc {
   created_at: string;
 }
 
-function formatDate(dateString: string | null): string {
+const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
+
+function formatDate(dateString: string | null, lang: string): string {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(dateString).toLocaleDateString(localeMap[lang] || 'ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function DocCard({ doc, pubName }: { doc: UploadedDoc; pubName: string | null }) {
+function DocCard({ doc, pubName, lang }: { doc: UploadedDoc; pubName: string | null; lang: string }) {
   const [imgError, setImgError] = useState(false);
   return (
     <article className="book-card group relative">
@@ -41,7 +46,7 @@ function DocCard({ doc, pubName }: { doc: UploadedDoc; pubName: string | null })
         <div className="book-cover relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
           <div className="absolute inset-y-0 left-0 w-3 z-10" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.08) 40%, transparent 100%)' }} />
           {doc.thumbnail_url && !imgError ? (
-            <img src={doc.thumbnail_url} alt={doc.title} loading="lazy" referrerPolicy="no-referrer" onError={() => setImgError(true)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <Image src={doc.thumbnail_url} alt={doc.title} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw" onError={() => setImgError(true)} className="object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center" style={{ background: 'linear-gradient(145deg, #d4a574 0%, #b8854a 50%, #96693a 100%)' }}>
               <BookOpen size={28} className="text-amber-100/60 mb-2" />
@@ -54,7 +59,7 @@ function DocCard({ doc, pubName }: { doc: UploadedDoc; pubName: string | null })
           <h3 className="text-sm font-semibold text-stone-800 line-clamp-2 leading-snug group-hover:text-amber-800 transition-colors" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{doc.title}</h3>
           {pubName && <p className="text-[11px] text-stone-500 mt-1 line-clamp-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{pubName}</p>}
           <div className="flex items-center gap-3 mt-1">
-            {doc.gregorian_date && <span className="text-[10px] text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{formatDate(doc.gregorian_date)}</span>}
+            {doc.gregorian_date && <span className="text-[10px] text-stone-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{formatDate(doc.gregorian_date, lang)}</span>}
             <span className="text-[10px] text-stone-400 flex items-center gap-0.5"><Eye size={10} /> {doc.view_count || 0}</span>
             <span className="text-[10px] text-stone-400 flex items-center gap-0.5"><Download size={10} /> {doc.download_count || 0}</span>
           </div>
@@ -67,6 +72,7 @@ function DocCard({ doc, pubName }: { doc: UploadedDoc; pubName: string | null })
 export default function UploaderPage() {
   const params = useParams();
   const uploaderId = params.id as string;
+  const { lang } = useLanguage();
   const [profile, setProfile] = useState<UploaderProfile | null>(null);
   const [documents, setDocuments] = useState<UploadedDoc[]>([]);
   const [pubMap, setPubMap] = useState<Record<string, string>>({});
@@ -89,7 +95,7 @@ export default function UploaderPage() {
     ])
       .then(([profileData, docs, pubs]) => {
         if (!profileData || profileData.length === 0) {
-          setError('Пользователь не найден');
+          setError(t('uploader.notFound', lang));
           return;
         }
         setProfile(profileData[0]);
@@ -100,7 +106,7 @@ export default function UploaderPage() {
         }
         setPubMap(map);
       })
-      .catch(() => setError('Ошибка загрузки'))
+      .catch(() => setError(t('uploader.loadError', lang)))
       .finally(() => setLoading(false));
   }, [uploaderId]);
 
@@ -117,18 +123,18 @@ export default function UploaderPage() {
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#f5efe6' }}>
         <div className="text-center">
           <User size={64} className="mx-auto text-gray-300 mb-4" />
-          <h1 className="text-2xl font-bold text-gray-700 mb-2">{error || 'Пользователь не найден'}</h1>
-          <Link href="/catalog" className="text-primary-600 hover:underline">Вернуться в каталог</Link>
+          <h1 className="text-2xl font-bold text-gray-700 mb-2">{error || t('uploader.notFound', lang)}</h1>
+          <Link href="/catalog" className="text-primary-600 hover:underline">{t('uploader.backCatalog', lang)}</Link>
         </div>
       </div>
     );
   }
 
-  const displayName = profile.display_name || [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'Пользователь';
+  const displayName = profile.display_name || [profile.first_name, profile.last_name].filter(Boolean).join(' ') || t('uploader.user', lang);
   const initials = [(profile.first_name || '')[0], (profile.last_name || '')[0]].filter(Boolean).join('').toUpperCase() || displayName[0]?.toUpperCase() || '?';
   const totalViews = documents.reduce((sum, d) => sum + (d.view_count || 0), 0);
   const totalDownloads = documents.reduce((sum, d) => sum + (d.download_count || 0), 0);
-  const memberSince = profile.created_at ? new Date(profile.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long' }) : '';
+  const memberSince = profile.created_at ? new Date(profile.created_at).toLocaleDateString(localeMap[lang] || 'ru-RU', { year: 'numeric', month: 'long' }) : '';
 
   return (
     <div className="min-h-screen" style={{ background: '#f5efe6' }}>
@@ -144,7 +150,7 @@ export default function UploaderPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <Link href="/catalog" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600">
-            <ArrowLeft size={20} /> Назад в каталог
+            <ArrowLeft size={20} /> {t('uploader.backToCatalog', lang)}
           </Link>
         </div>
       </div>
@@ -154,7 +160,7 @@ export default function UploaderPage() {
         <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
           <div className="flex items-center gap-6">
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt={displayName} className="w-20 h-20 rounded-full object-cover border-2 border-amber-200" />
+              <Image src={profile.avatar_url} alt={displayName} width={80} height={80} className="rounded-full object-cover border-2 border-amber-200" />
             ) : (
               <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #1e3a6e, #2c5f8a)' }}>
                 <span className="text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>{initials}</span>
@@ -195,7 +201,7 @@ export default function UploaderPage() {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-8">
               {documents.map((doc) => (
-                <DocCard key={doc.id} doc={doc} pubName={doc.publication_id ? pubMap[doc.publication_id] : null} />
+                <DocCard key={doc.id} doc={doc} pubName={doc.publication_id ? pubMap[doc.publication_id] : null} lang={lang} />
               ))}
             </div>
             {/* Wooden shelf */}

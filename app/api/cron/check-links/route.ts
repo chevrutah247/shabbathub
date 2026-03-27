@@ -1,5 +1,6 @@
 import { Redis } from '@upstash/redis';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireCronSecret } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
@@ -37,7 +38,10 @@ async function checkLink(url: string): Promise<boolean> {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const denied = requireCronSecret(request);
+  if (denied) return denied;
+
   try {
     const redis = getRedis();
     if (!redis) return NextResponse.json({ error: 'No Redis' }, { status: 500 });

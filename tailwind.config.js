@@ -28,10 +28,10 @@ module.exports = {
         cream: '#faf8f5',
       },
       fontFamily: {
-        // Шрифты с поддержкой иврита и кириллицы
-        sans: ['Rubik', 'system-ui', 'sans-serif'],
-        hebrew: ['Frank Ruhl Libre', 'David Libre', 'serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
+        // Шрифты загружены через next/font (CSS variables)
+        sans: ['var(--font-rubik)', 'system-ui', 'sans-serif'],
+        hebrew: ['var(--font-frank-ruhl)', 'David Libre', 'serif'],
+        display: ['var(--font-playfair)', 'Georgia', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',

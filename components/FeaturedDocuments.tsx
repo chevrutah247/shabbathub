@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FileText, Loader2 } from 'lucide-react';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -22,12 +25,15 @@ const parshaNameToId: Record<string, number> = {
   'Teruma': 19, 'Trumah': 19
 };
 
-function formatDate(dateString: string | null | undefined): string {
-  if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-}
+const localeMap: Record<string, string> = { ru: 'ru-RU', en: 'en-US', he: 'he-IL', uk: 'uk-UA' };
 
 export default function FeaturedDocuments() {
+  const { lang } = useLanguage();
+
+  function formatDate(dateString: string | null | undefined): string {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString(localeMap[lang] || 'ru-RU', { day: 'numeric', month: 'short' });
+  }
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentParshaId, setCurrentParshaId] = useState<number | null>(null);
@@ -126,7 +132,7 @@ export default function FeaturedDocuments() {
   }
 
   if (documents.length === 0) {
-    return <div className="text-center py-8 text-gray-500 text-sm">Документы не найдены</div>;
+    return <div className="text-center py-8 text-gray-500 text-sm">{t('featured.noDocuments', lang)}</div>;
   }
 
   return (
@@ -144,10 +150,12 @@ export default function FeaturedDocuments() {
             <Link href={'/document/' + doc.id}>
               <div className="aspect-[3/4] bg-gray-100 overflow-hidden cursor-pointer relative">
                 {doc.thumbnail_url ? (
-                  <img
+                  <Image
                     src={doc.thumbnail_url}
                     alt={doc.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -156,7 +164,7 @@ export default function FeaturedDocuments() {
                 )}
                 {doc.parsha_id === currentParshaId && (
                   <div className="absolute top-2 left-2 bg-primary-600 text-white text-[10px] px-2 py-0.5 rounded-full">
-                    Эта неделя
+                    {t('catalog.thisWeek', lang)}
                   </div>
                 )}
               </div>

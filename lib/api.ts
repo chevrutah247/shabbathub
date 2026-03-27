@@ -1,6 +1,7 @@
 // Centralized Supabase API functions for ShabbatHub
 import { supabase } from './supabase';
 import { Issue, Publication, Parsha, Event, FilterOptions, PaginatedResponse } from './types';
+import { escapeLikePattern } from './api-auth';
 
 // ============================================
 // ISSUES (выпуски PDF)
@@ -59,7 +60,8 @@ export async function getIssues(options: {
 
   // Filters
   if (search) {
-    query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    const s = escapeLikePattern(search);
+    query = query.or(`title.ilike.%${s}%,description.ilike.%${s}%`);
   }
   if (publicationId) {
     query = query.eq('publication_id', publicationId);
@@ -133,11 +135,9 @@ export async function getIssueById(id: string) {
     return null;
   }
 
-  // Increment view count (fire and forget)
+  // Increment view count atomically (fire and forget)
   supabase
-    .from('issues')
-    .update({ view_count: (data.view_count || 0) + 1 })
-    .eq('id', id)
+    .rpc('increment_view_count', { issue_id: id })
     .then(() => {});
 
   return data as Issue;
@@ -225,7 +225,7 @@ export async function searchIssues(query: string, limit: number = 20) {
       event:events(*)
     `)
     .eq('is_active', true)
-    .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+    .or(`title.ilike.%${escapeLikePattern(query)}%,description.ilike.%${escapeLikePattern(query)}%`)
     .order('gregorian_date', { ascending: false })
     .limit(limit);
 

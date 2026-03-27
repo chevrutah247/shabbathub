@@ -116,7 +116,7 @@ export default function AdminUsers() {
               <button onClick={async () => {
                 setResetMsg('');
                 try {
-                  const { error } = await supabase.auth.resetPasswordForEmail(editingUser.email, { redirectTo: 'https://shabbathub.com/reset-password' });
+                  const { error } = await supabase.auth.resetPasswordForEmail(editingUser.email, { redirectTo: 'https://www.shabbathub.com/reset-password' });
                   if (error) throw error;
                   setResetMsg(t('admin.passwordResetSent', lang) + ' ' + editingUser.email);
                 } catch (e: any) { setResetMsg(t('admin.error', lang) + ' ' + e.message); }
