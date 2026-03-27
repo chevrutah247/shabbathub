@@ -1297,6 +1297,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-27',
+    slug: 'paradoks-vora-pochemu-mozhno-verit-v-boga-i-ostavatsya-prestupnikom',
+    title: {
+      ru: 'Парадокс вора: почему можно верить в Бога и оставаться преступником',
+      en: 'The Thief\'s Paradox: Why You Can Believe in God and Remain a Criminal',
+      he: 'פרדוקס הגנב: למה אפשר להאמין בה\' ולהישאר פושע',
+      uk: 'Парадокс злодія: чому можна вірити в Бога і залишатися злочинцем',
+    },
+    subtitle: {
+      ru: 'Вера без упования — это вера в пустоту',
+      en: 'Faith without trust is faith in emptiness',
+      he: 'אמונה בלי ביטחון היא אמונה בריקנות',
+      uk: 'Віра без уповання — це віра в порожнечу',
+    },
+    content: {
+      ru: `<p>Одна из самых шокирующих концепций источников заключается в том, что человек может обладать глубокой верой, но при этом совершать ужасные поступки. Вера без упования — это «вера в пустоту».</p>
+
+<h3>Молитва перед грабежом</h3>
+<p>В источниках приводится пример взломщика, который, стоя перед дверью чужого дома, делает паузу, чтобы помолиться Богу о помощи и успехе. Этот вор искренне верит, что Бог существует, слышит молитвы и управляет исходами событий. Однако его вера оторвана от реальности. Если бы он обладал не просто верой (эмуна), а упованием (битахон), он бы понял: его пропитание уже предписано Творцом, и кража — это самый нелепый способ пытаться получить то, что и так будет дано или не дано по воле Свыше.</p>
+
+<h3>Религия как инструмент эго</h3>
+<p>Преступление в данном случае — это не только сам акт кражи, но и попытка сделать Бога «соучастником». Человек, который использует религию только для достижения своих целей, не доверяя Божественному плану, превращает веру в форму духовного эгоизма. Истинное упование требует признания: если что-то не дано честным путем, значит, оно мне не нужно.</p>`,
+
+      en: `<p>One of the most shocking concepts in the sources is that a person can possess deep faith yet commit terrible deeds. Faith without trust is "faith in emptiness."</p>
+
+<h3>Prayer Before Robbery</h3>
+<p>The sources cite the example of a burglar who, standing before the door of someone else's house, pauses to pray to God for help and success. This thief sincerely believes that God exists, hears prayers, and governs outcomes. However, his faith is detached from reality. If he possessed not just faith (emunah) but trust (bitachon), he would understand: his sustenance is already decreed by the Creator, and theft is the most absurd way to try to obtain what will or will not be given by divine will.</p>
+
+<h3>Religion as an Ego Tool</h3>
+<p>The crime in this case is not just the act of theft itself, but the attempt to make God an "accomplice." A person who uses religion only to achieve their goals without trusting the Divine plan turns faith into a form of spiritual egoism. True trust requires acknowledgment: if something is not given by honest means, then I don't need it.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-28',
+    slug: 'psikhologiya-zalozhnika-pochemu-vashi-usloviya-bogu-eto-naglost',
+    title: {
+      ru: 'Психология «заложника»: почему ваши условия Богу — это наглость',
+      en: 'Hostage Psychology: Why Your Conditions to God Are Impudence',
+      he: 'פסיכולוגיית "בן הערובה": למה התנאים שלך לה\' הם חוצפה',
+      uk: 'Психологія «заручника»: чому ваші умови Богу — це нахабність',
+    },
+    subtitle: {
+      ru: 'Требовать зарплату на годы вперёд, не начав работать',
+      en: 'Demanding salary for years ahead without starting work',
+      he: 'לדרוש משכורת לשנים קדימה בלי להתחיל לעבוד',
+      uk: 'Вимагати зарплату на роки вперед, не почавши працювати',
+    },
+    content: {
+      ru: `<p>Многие современные люди живут с установкой: «Я займусь своим духовным развитием и начну помогать другим, как только буду уверен в своем финансовом будущем». В источниках таких людей называют «сектой владельцев залогов».</p>
+
+<h3>Дерзость слуги</h3>
+<p>С точки зрения упования, такое поведение подобно наглому работнику, который требует от хозяина выплатить ему зарплату на годы вперед еще до того, как он взял в руки инструмент. Мы уже пользуемся «кредитом» жизни, здоровьем и воздухом, за которые еще не расплатились своими добрыми делами. Требовать от Творца «залог» в виде богатства как условие своей верности — это высшая степень духовной наглости.</p>
+
+<h3>Иллюзия безопасности</h3>
+<p>Ловушка в том, что такой «залог» (накопленный капитал) никогда не дает обещанного покоя. Напротив, чем больше у человека имущества, тем больше у него поводов для тревоги: кризисы, инфляция, завистники. Настоящая безопасность — это не сумма в банке, а понимание того, что Бог дает ровно столько «манны», сколько нужно на сегодня.</p>`,
+
+      en: `<p>Many modern people live with the mindset: "I'll work on my spiritual development and start helping others as soon as I'm confident about my financial future." In the sources, such people are called "the sect of pledge holders."</p>
+
+<h3>The Servant's Audacity</h3>
+<p>From the perspective of trust, such behavior is like an impudent worker who demands the master pay salary for years in advance before even picking up a tool. We already use the "credit" of life, health, and air for which we haven't yet repaid with good deeds. Demanding a "pledge" in the form of wealth from the Creator as a condition of one's loyalty is the highest degree of spiritual impudence.</p>
+
+<h3>The Illusion of Safety</h3>
+<p>The trap is that such a "pledge" (accumulated capital) never delivers the promised peace. On the contrary, the more property a person has, the more reasons for anxiety: crises, inflation, envious people. True safety is not the sum in the bank, but understanding that God gives exactly as much "manna" as needed for today.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-29',
+    slug: 'proklyatiye-rasseivaniya-mysley-nevidimaya-tsena-vashego-uspekha',
+    title: {
+      ru: 'Проклятие «рассеивания мыслей»: невидимая цена вашего успеха',
+      en: 'The Curse of Scattered Thoughts: The Invisible Price of Your Success',
+      he: 'קללת "פיזור המחשבות": המחיר הנסתר של ההצלחה שלך',
+      uk: 'Прокляття «розсіювання думок»: невидима ціна вашого успіху',
+    },
+    subtitle: {
+      ru: 'Избыточное имущество — это форма тюремного заключения',
+      en: 'Excessive property is a form of imprisonment',
+      he: 'רכוש עודף הוא סוג של מאסר',
+      uk: 'Надмірне майно — це форма ув\'язнення',
+    },
+    content: {
+      ru: `<p>Мы привыкли считать богатство синонимом свободы. Однако источники выдвигают провокационный тезис: избыточное имущество — это форма тюремного заключения, которую человек выбирает сам.</p>
+
+<h3>Сон рабочего и бессонница богача</h3>
+<p>Существует понятие «рассеивание мыслей» (пиззур а-нефеш). Когда активы человека разбросаны по разным городам, банкам и предприятиям, его душа перестает принадлежать ему самому. Он постоянно «рассеян» между своими владениями, переживая за каждое из них. В то время как обычный рабочий спит спокойно, избыток имущества лишает богача сна и возможности сосредоточиться на чем-то по-настоящему важном.</p>
+
+<h3>Духовный аскетизм</h3>
+<p>Источники рассказывают о мудрецах, которые сознательно выбирали простоту, чтобы освободить разум для диалога с Творцом. Одиночество или отсутствие семьи в некоторых случаях рассматривалось ими не как трагедия, а как освобождение от груза ответственности, который мешает душе «лететь вверх», подобно огню. Свобода — это не возможность купить всё, а отсутствие необходимости беспокоиться о чем-либо, кроме своей миссии.</p>`,
+
+      en: `<p>We are used to considering wealth synonymous with freedom. However, the sources put forward a provocative thesis: excessive property is a form of imprisonment that a person chooses themselves.</p>
+
+<h3>The Worker's Sleep and the Rich Man's Insomnia</h3>
+<p>There exists a concept of "scattered thoughts" (pizzur ha-nefesh). When a person's assets are spread across different cities, banks, and enterprises, their soul ceases to belong to themselves. They are constantly "scattered" among their possessions, worrying about each one. While an ordinary worker sleeps peacefully, excess property robs the rich of sleep and the ability to focus on anything truly important.</p>
+
+<h3>Spiritual Asceticism</h3>
+<p>The sources tell of sages who deliberately chose simplicity to free their minds for dialogue with the Creator. Solitude or lack of family was in some cases viewed not as tragedy, but as liberation from the burden of responsibility that prevents the soul from "flying upward," like a flame. Freedom is not the ability to buy everything, but the absence of the need to worry about anything other than one's mission.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-30',
+    slug: 'revolyutsiya-truda-vy-ne-zarabatyvayete-dengi-vy-stroite-dekoratsii',
+    title: {
+      ru: 'Революция труда: вы не зарабатываете деньги, вы строите «декорации»',
+      en: 'The Labor Revolution: You Don\'t Earn Money, You Build "Decorations"',
+      he: 'מהפכת העבודה: אתה לא מרוויח כסף, אתה בונה "תפאורה"',
+      uk: 'Революція праці: ви не заробляєте гроші, ви будуєте «декорації»',
+    },
+    subtitle: {
+      ru: 'Ваша работа — это лишь сосуд или маскировка для чуда',
+      en: 'Your work is merely a vessel or disguise for a miracle',
+      he: 'העבודה שלך היא רק כלי או הסוואה לנס',
+      uk: 'Ваша робота — це лише посудина або маскування для дива',
+    },
+    content: {
+      ru: `<p>Самая большая иллюзия работающего человека — вера в то, что его усилия являются причиной его заработка. Источники переворачивают это представление: ваша работа — это лишь «сосуд» или маскировка для чуда.</p>
+
+<h3>Зачем работать, если всё решено?</h3>
+<p>Если сумма вашего дохода на год уже определена Свыше, зачем вставать с дивана? Ответ шокирует: работа — это тест на верность. Бог хочет, чтобы вы прилагали усилия, но при этом помнили, что результат от них не зависит. Работа — это своего рода «предохранитель», который занимает наш разум, чтобы мы не восстали против Творца от безделья.</p>
+
+<h3>Профессия как биологический дизайн</h3>
+<p>Выбор дела жизни не должен диктоваться только рынком. Источники утверждают: как у птицы есть клюв для ловли рыбы, а у льва — когти для охоты, так и ваши таланты и физическое строение — это указатель вашей миссии. Если вы идете против своей природы ради денег, вы не просто несчастны — вы совершаете акт неверия в то, что Бог может прокормить вас через ваш естественный дар. Истинный успех — это быть «партнером Творца» на том месте, которое Он для вас спроектировал.</p>`,
+
+      en: `<p>The biggest illusion of a working person is the belief that their efforts are the cause of their earnings. The sources turn this notion upside down: your work is merely a "vessel" or disguise for a miracle.</p>
+
+<h3>Why Work If Everything Is Already Decided?</h3>
+<p>If the sum of your income for the year is already determined from Above, why get off the couch? The answer is shocking: work is a test of loyalty. God wants you to make efforts while remembering that the result does not depend on them. Work is a kind of "safeguard" that occupies our minds so that we don't rebel against the Creator from idleness.</p>
+
+<h3>Profession as Biological Design</h3>
+<p>The choice of life's work should not be dictated only by the market. The sources assert: just as a bird has a beak for catching fish and a lion has claws for hunting, your talents and physical build are an indicator of your mission. If you go against your nature for money, you are not just unhappy — you commit an act of disbelief that God can sustain you through your natural gift. True success is being a "partner of the Creator" in the place He designed for you.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
