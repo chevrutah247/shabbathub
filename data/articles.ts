@@ -1017,6 +1017,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-19',
+    slug: 'shantazh-nebes-pochemu-trebovat-garantiy-ot-boga-eto-derzost',
+    title: {
+      ru: 'Шантаж Небес: почему требовать гарантий от Бога — это дерзость',
+      en: 'Blackmailing Heaven: Why Demanding Guarantees from God Is Audacity',
+      he: 'סחיטת השמיים: למה לדרוש ערבויות מה\' זו חוצפה',
+      uk: 'Шантаж Небес: чому вимагати гарантій від Бога — це зухвалість',
+    },
+    subtitle: {
+      ru: 'Секта владельцев залогов и ловушка оплаты вперёд',
+      en: 'The sect of pledge holders and the trap of advance payment',
+      he: 'כת בעלי המשכנתאות ומלכודת התשלום מראש',
+      uk: 'Секта власників застав та пастка оплати наперед',
+    },
+    content: {
+      ru: `<p>Многие люди говорят: «Я начну полноценно помогать другим или займусь своим духовным развитием, как только буду уверен в своем финансовом будущем». В источниках таких людей называют «сектой владельцев залогов».</p>
+
+<h3>Ловушка «оплаты вперед»</h3>
+<p>С точки зрения упования, такое поведение подобно наглому работнику, который требует от хозяина всю зарплату еще до того, как приступил к обязанностям. Это выглядит абсурдно: человек уже пользуется «кредитом» жизни, здоровьем и воздухом, за которые он еще не расплатился своими добрыми делами, но при этом требует от Творца «залог» в виде богатства, чтобы просто начать вести себя достойно.</p>
+
+<h3>Бесконечный долг</h3>
+<p>На самом деле, если сложить все добрые дела человечества за всю историю, их не хватит, чтобы оплатить даже одно благодеяние, которое Творец оказывает нам ежедневно. Требовать материальных гарантий у Того, Кому вы уже бесконечно должны, — это не просто глупость, а высшая степень духовной близорукости. Истинное упование — это понимание того, что Бог дает «манну» ровно на сегодня, чтобы вы оставались связаны с Ним постоянно.</p>`,
+
+      en: `<p>Many people say: "I'll start fully helping others or work on my spiritual development as soon as I'm confident about my financial future." In the sources, such people are called "the sect of pledge holders."</p>
+
+<h3>The "Advance Payment" Trap</h3>
+<p>From the perspective of trust, such behavior is like an impudent worker who demands the full salary from the master before even starting duties. It looks absurd: a person is already using the "credit" of life, health, and air for which they haven't yet repaid with good deeds, yet demands from the Creator a "pledge" in the form of wealth just to start behaving decently.</p>
+
+<h3>The Infinite Debt</h3>
+<p>In reality, if you add up all the good deeds of humanity throughout history, they wouldn't be enough to pay for even one act of kindness the Creator bestows upon us daily. Demanding material guarantees from the One to Whom you are already infinitely indebted is not just foolishness, but the highest degree of spiritual shortsightedness. True trust is the understanding that God gives "manna" for exactly today, so that you remain connected to Him constantly.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-20',
+    slug: 'biologiya-prizvaniya-pochemu-vasha-professiya-eto-vasha-sudba',
+    title: {
+      ru: 'Биология призвания: почему ваша профессия — это ваша судьба',
+      en: 'The Biology of Calling: Why Your Profession Is Your Destiny',
+      he: 'הביולוגיה של הייעוד: למה המקצוע שלך הוא הגורל שלך',
+      uk: 'Біологія покликання: чому ваша професія — це ваша доля',
+    },
+    subtitle: {
+      ru: 'Ваша работа записана в строении вашего тела и чертах характера',
+      en: 'Your work is written in the structure of your body and character traits',
+      he: 'העבודה שלך כתובה במבנה הגוף ובתכונות האופי שלך',
+      uk: 'Ваша робота записана в будові вашого тіла та рисах характеру',
+    },
+    content: {
+      ru: `<p>Современная идея о том, что «человек может всё», вступает в конфликт с концепцией божественного дизайна. Согласно источникам, ваша работа уже «записана» в строении вашего тела и чертах характера.</p>
+
+<h3>Природный инструмент</h3>
+<p>Посмотрите на животных: у птицы, питающейся рыбой, — длинный клюв и ноги; у льва — зубы и когти для охоты; у быка — рога для защиты. Точно так же Бог наделил каждого человека уникальными качествами для конкретной миссии. Если человек, наделенный состраданием, идет в мясники, или вспыльчивый человек пытается быть учителем — он идет против своей природы и воли Творца.</p>
+
+<h3>Скрытая миссия</h3>
+<p>Если вы чувствуете влечение к определенному занятию и ваши способности ему соответствуют, это и есть тот «канал», через который Бог решил кормить вас. Попытка сменить этот канал только ради денег — это форма неверия. Истинный успех заключается не в карьерном росте, а в том, чтобы быть «партнером Творца» на том месте, которое Он для вас спроектировал.</p>`,
+
+      en: `<p>The modern idea that "a person can do anything" conflicts with the concept of divine design. According to the sources, your work is already "written" in the structure of your body and character traits.</p>
+
+<h3>A Natural Instrument</h3>
+<p>Look at animals: a fish-eating bird has a long beak and legs; a lion has teeth and claws for hunting; an ox has horns for defense. In the same way, God endowed each person with unique qualities for a specific mission. If a compassionate person goes into butchery, or a hot-tempered person tries to be a teacher — they are going against their nature and the will of the Creator.</p>
+
+<h3>The Hidden Mission</h3>
+<p>If you feel drawn to a certain occupation and your abilities match it, this is the "channel" through which God decided to sustain you. Attempting to change this channel only for money is a form of disbelief. True success lies not in career advancement, but in being a "partner of the Creator" in the place He designed for you.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-21',
+    slug: 'nochnoy-depozit-pochemu-kazhdoye-utro-eto-chudo',
+    title: {
+      ru: 'Ночной депозит: почему каждое утро — это чудо, которое вы принимаете как должное',
+      en: 'The Nightly Deposit: Why Every Morning Is a Miracle You Take for Granted',
+      he: 'הפיקדון הלילי: למה כל בוקר הוא נס שאתה לוקח כמובן מאליו',
+      uk: 'Нічний депозит: чому кожен ранок — це диво, яке ви сприймаєте як належне',
+    },
+    subtitle: {
+      ru: 'Сон — это акт передачи самого ценного имущества в залог Богу',
+      en: 'Sleep is an act of entrusting your most valuable possession to God',
+      he: 'שינה היא מסירת הרכוש היקר ביותר שלך לה\'',
+      uk: 'Сон — це акт передачі найціннішого майна в заставу Богу',
+    },
+    content: {
+      ru: `<p>Мы привыкли просыпаться и считать, что жизнь принадлежит нам. Но согласно глубоким источникам, сон — это акт передачи самого ценного имущества в залог Богу.</p>
+
+<h3>Ежедневное воскрешение</h3>
+<p>Каждую ночь человек «депонирует» свою душу у Творца для сохранения. Тот факт, что утром она возвращается к вам живой и обновленной, — это не автоматический процесс, а проявление «великой верности» Бога. Бог возвращает нам душу, хотя Он не обязан этого делать и мог бы оставить её в качестве «оплаты» за наши многочисленные долги и грехи.</p>
+
+<h3>Смена перспективы</h3>
+<p>Осознание этого делает молитву «Моде Ани» (Благодарю Тебя...) не просто формальностью, а признанием своей полной зависимости от Милости Свыше. Тот, кто понимает, что жизнь выдается ему в аренду каждое утро, перестает дрожать над материальными потерями, ведь он знает: Творец — самый надежный Хранитель, Который возвращает нам жизнь даже тогда, когда мы этого не заслуживаем.</p>`,
+
+      en: `<p>We are used to waking up and assuming that life belongs to us. But according to deep sources, sleep is an act of entrusting your most valuable possession as a pledge to God.</p>
+
+<h3>Daily Resurrection</h3>
+<p>Every night a person "deposits" their soul with the Creator for safekeeping. The fact that in the morning it returns to you alive and renewed is not an automatic process, but a manifestation of God's "great faithfulness." God returns our soul to us, although He is not obligated to do so and could keep it as "payment" for our numerous debts and sins.</p>
+
+<h3>A Shift in Perspective</h3>
+<p>Realizing this makes the prayer "Modeh Ani" (I Thank You...) not just a formality, but an acknowledgment of our complete dependence on Grace from Above. One who understands that life is rented to them every morning stops trembling over material losses, for they know: the Creator is the most reliable Guardian, Who returns life to us even when we don't deserve it.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-22',
+    slug: 'paradoks-vrazhdy-pochemu-vash-obidchik-eto-palka-v-rukakh-boga',
+    title: {
+      ru: 'Парадокс вражды: почему ваш обидчик — это лишь «палка» в руках Бога',
+      en: 'The Paradox of Enmity: Why Your Offender Is Just a "Stick" in God\'s Hands',
+      he: 'פרדוקס האיבה: למה הפוגע שלך הוא רק "מקל" בידי ה\'',
+      uk: 'Парадокс ворожнечі: чому ваш кривдник — це лише «палиця» в руках Бога',
+    },
+    subtitle: {
+      ru: 'Никто не может причинить вам вреда, если это не было предписано Свыше',
+      en: 'No one can harm you unless it was decreed from Above',
+      he: 'אף אחד לא יכול להזיק לך אלא אם נגזר מלמעלה',
+      uk: 'Ніхто не може завдати вам шкоди, якщо це не було наказано Згори',
+    },
+    content: {
+      ru: `<p>Самая сложная для принятия идея «Врат упования» заключается в том, что никто не может причинить вам вреда, если это не было предписано Свыше.</p>
+
+<h3>Враг как почтальон</h3>
+<p>Когда кто-то оскорбляет вас или вредит вашему имуществу, этот человек — лишь инструмент или посланник Провидения. Злиться на обидчика так же бессмысленно, как злиться на палку, которой вас ударили. Источники утверждают: если бы это не был этот конкретный человек, Бог нашел бы другой способ донести до вас это испытание или наказание.</p>
+
+<h3>Путь к примирению</h3>
+<p>Вместо того чтобы планировать месть, человек упования должен проанализировать свои поступки перед Богом. Как только человек исправляет свои отношения с Творцом, Творец «усмиряет» его врагов, и они сами начинают искать мира с ним. Ваше спокойствие перед лицом агрессии — это не слабость, а высшая форма духовной силы, признающей единую Власть во вселенной.</p>`,
+
+      en: `<p>The most difficult idea to accept from the "Gate of Trust" is that no one can harm you unless it was decreed from Above.</p>
+
+<h3>The Enemy as a Postman</h3>
+<p>When someone insults you or damages your property, that person is merely an instrument or messenger of Providence. Being angry at the offender is as pointless as being angry at the stick that struck you. The sources assert: if it weren't this specific person, God would have found another way to deliver this trial or punishment to you.</p>
+
+<h3>The Path to Reconciliation</h3>
+<p>Instead of planning revenge, a person of trust must analyze their own deeds before God. As soon as a person corrects their relationship with the Creator, the Creator "subdues" their enemies, and they themselves begin seeking peace. Your calm in the face of aggression is not weakness, but the highest form of spiritual strength, acknowledging the single Authority in the universe.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
