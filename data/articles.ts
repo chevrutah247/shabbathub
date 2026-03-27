@@ -737,6 +737,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-11',
+    slug: 'pochemu-vasha-blagodarnost-mozhet-byt-oskorbleniem-dlya-nebes',
+    title: {
+      ru: 'Почему ваша благодарность может быть оскорблением для небес?',
+      en: 'Why Your Gratitude May Be an Insult to Heaven?',
+      he: 'למה הכרת התודה שלך יכולה להיות עלבון לשמיים?',
+      uk: 'Чому ваша вдячність може бути образою для небес?',
+    },
+    subtitle: {
+      ru: 'Чрезмерная вежливость перед человеком как форма скрытого идолопоклонства',
+      en: 'Excessive politeness toward people as a form of hidden idolatry',
+      he: 'נימוס מופרז כלפי אנשים כסוג של עבודה זרה סמויה',
+      uk: 'Надмірна ввічливість перед людиною як форма прихованого ідолопоклонства',
+    },
+    content: {
+      ru: `<p>Мы привыкли считать вежливость и благодарность безусловными добродетелями, но с точки зрения упования здесь кроется опасная духовная ловушка.</p>
+
+<h3>Иллюзия благодетеля</h3>
+<p>Когда человек оказывает вам услугу, он является не источником блага, а лишь «почтальоном» или инструментом в руках Творца. Если вы рассыпаетесь в чрезмерных благодарностях перед человеком, забывая о Первопричине, вы совершаете форму скрытого идолопоклонства, наделяя создание силой Создателя. Источники сравнивают это с тем, как если бы земледелец благодарил землю за урожай, полностью игнорируя Бога, Который заставил семя прорасти.</p>
+
+<h3>Этикет для верующего</h3>
+<p>Значит ли это, что нужно быть неблагодарным? Нет, источники указывают, что нужно благодарить человека за его добрую волю и за то, что Бог выбрал именно его каналом для добра. Однако ваше сердце должно оставаться свободным от рабской зависимости перед благодетелем. Если вам отказали, вы также не имеете права злиться на человека, ибо это решение Свыше, а человек — лишь закрытая в данный момент дверь.</p>`,
+
+      en: `<p>We are used to considering politeness and gratitude as unconditional virtues, but from the perspective of trust, a dangerous spiritual trap lies hidden here.</p>
+
+<h3>The Illusion of the Benefactor</h3>
+<p>When a person does you a service, they are not the source of the good, but merely a "postman" or instrument in the hands of the Creator. If you shower excessive gratitude on a person while forgetting the First Cause, you commit a form of hidden idolatry, endowing the creation with the power of the Creator. The sources compare this to a farmer thanking the earth for the harvest while completely ignoring God, Who made the seed sprout.</p>
+
+<h3>Etiquette for the Believer</h3>
+<p>Does this mean one should be ungrateful? No, the sources indicate that you should thank a person for their goodwill and for God choosing them as a channel for good. However, your heart must remain free from slavish dependence on the benefactor. If you were refused, you also have no right to be angry at the person, for this is a decision from Above, and the person is merely a door that is currently closed.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-12',
+    slug: 'lovushka-umnogo-biznesmena-pochemu-vashi-strategii-eto-illyuziya',
+    title: {
+      ru: 'Ловушка «умного» бизнесмена: почему ваши стратегии — это иллюзия',
+      en: 'The Smart Businessman\'s Trap: Why Your Strategies Are an Illusion',
+      he: 'מלכודת איש העסקים "החכם": למה האסטרטגיות שלך הן אשליה',
+      uk: 'Пастка «розумного» бізнесмена: чому ваші стратегії — це ілюзія',
+    },
+    subtitle: {
+      ru: 'Ваша хитрость может стать причиной вашего провала',
+      en: 'Your cleverness may become the cause of your failure',
+      he: 'הערמומיות שלך עלולה להפוך לגורם הכישלון שלך',
+      uk: 'Ваша хитрість може стати причиною вашого провалу',
+    },
+    content: {
+      ru: `<p>Современный культ личной эффективности учит, что успех зависит от остроты ума и сложности схем. «Врата упования» бросают этому вызов: ваша хитрость может стать причиной вашего провала.</p>
+
+<h3>Когда интеллект вредит</h3>
+<p>Источники утверждают, что Бог «улавливает мудрецов в их лукавстве». Часто человек строит сложнейшие планы, которые в итоге оборачиваются против него самого, становясь инструментом его гибели. Это происходит потому, что человек начинает уповать на свой разум, а не на Творца, и тогда Божественное Провидение отступает, оставляя человека на произвол случая и ограниченных возможностей.</p>
+
+<h3>Труд как маскировка</h3>
+<p>Настоящая роль усилий в бизнесе — это не создание прибыли, а создание «сосуда». Ваша работа — это лишь декорация, за которой скрывается чудо Божественного обеспечения. Те, кто слишком поглощен своими «схемами», теряют покой и сон, в то время как человек упования понимает: доход уже предписан, а его задача — лишь выполнить необходимые действия в рамках дозволенного, не теряя связи с Источником.</p>`,
+
+      en: `<p>The modern cult of personal effectiveness teaches that success depends on sharpness of mind and complexity of schemes. The "Gate of Trust" challenges this: your cleverness may become the cause of your downfall.</p>
+
+<h3>When Intellect Harms</h3>
+<p>The sources assert that God "catches the wise in their own craftiness." Often a person builds the most complex plans, which ultimately turn against them, becoming the instrument of their own destruction. This happens because a person begins to rely on their own mind rather than on the Creator, and then Divine Providence withdraws, leaving the person to the mercy of chance and limited possibilities.</p>
+
+<h3>Labor as a Disguise</h3>
+<p>The real role of effort in business is not creating profit, but creating a "vessel." Your work is merely a decoration behind which the miracle of Divine provision is hidden. Those who are too absorbed in their "schemes" lose peace and sleep, while a person of trust understands: income is already decreed, and their task is merely to perform the necessary actions within what is permitted, without losing connection to the Source.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-13',
+    slug: 'dukhovnoye-bezrassudstvo-kogda-upovaniye-na-chudo-eto-grekh',
+    title: {
+      ru: 'Духовное безрассудство: когда «упование на чудо» превращается в грех',
+      en: 'Spiritual Recklessness: When "Trusting in Miracles" Becomes a Sin',
+      he: 'פזיזות רוחנית: מתי "ביטחון בנס" הופך לחטא',
+      uk: 'Духовне безрозсудство: коли «уповання на чудо» перетворюється на гріх',
+    },
+    subtitle: {
+      ru: 'Осторожность не противоречит упованию, а является обязанностью человека',
+      en: 'Caution does not contradict trust — it is a human obligation',
+      he: 'זהירות לא סותרת ביטחון — היא חובת האדם',
+      uk: 'Обережність не суперечить упованню, а є обов\'язком людини',
+    },
+    content: {
+      ru: `<p>Многие ошибочно полагают, что высшая степень веры — это броситься в огонь, ожидая, что Бог спасет. Источники называют это не упованием, а преступным испытанием Бога.</p>
+
+<h3>Урок пророка Самуила</h3>
+<p>Даже великий пророк Самуил, получив прямое указание от Бога помазать нового царя, проявил осторожность, опасаясь мести царя Саула. Бог не упрекнул его в неверии, а, напротив, дал совет, как скрыть свои действия. Это доказывает, что осторожность не противоречит упованию, а является обязанностью человека.</p>
+
+<h3>Граница между верой и безумием</h3>
+<p>Тот, кто сознательно идет на неоправданный риск — пьет яд или вступает в схватку с хищником без нужды, — восстает против воли Творца, Который повелел нам беречь свои жизни. Если такой человек погибнет, он будет отвечать за свою смерть как самоубийца, несмотря на свои «благочестивые» оправдания. Истинное упование — это делать всё возможное в рамках природы, зная, что результат всё равно за Богом.</p>`,
+
+      en: `<p>Many mistakenly believe that the highest degree of faith is to throw yourself into fire expecting God to save you. The sources call this not trust, but criminal testing of God.</p>
+
+<h3>The Lesson of the Prophet Samuel</h3>
+<p>Even the great prophet Samuel, upon receiving a direct instruction from God to anoint a new king, exercised caution, fearing the vengeance of King Saul. God did not rebuke him for disbelief but, on the contrary, gave him advice on how to conceal his actions. This proves that caution does not contradict trust — it is a human obligation.</p>
+
+<h3>The Line Between Faith and Madness</h3>
+<p>One who deliberately takes unjustified risks — drinking poison or fighting a predator without need — rebels against the will of the Creator, Who commanded us to preserve our lives. If such a person perishes, they will answer for their death as a suicide, despite their "pious" justifications. True trust is doing everything possible within nature, knowing that the outcome is still with God.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-14',
+    slug: 'detskiy-sad-dlya-dushi-pochemu-v-tore-pochti-nichego-ne-skazano-o-raye',
+    title: {
+      ru: 'Детский сад для души: почему в Торе почти ничего не сказано о Рае',
+      en: 'Kindergarten for the Soul: Why the Torah Says Almost Nothing About Paradise',
+      he: 'גן ילדים לנשמה: למה בתורה כמעט לא כתוב על גן עדן',
+      uk: 'Дитячий садок для душі: чому в Торі майже нічого не сказано про Рай',
+    },
+    subtitle: {
+      ru: 'Почему Пятикнижие обещает дожди и урожай, а не вечное блаженство',
+      en: 'Why the Pentateuch promises rain and harvest, not eternal bliss',
+      he: 'למה חמשת חומשי תורה מבטיחים גשם ויבול, ולא אושר נצחי',
+      uk: 'Чому П\'ятикнижжя обіцяє дощі та врожай, а не вічне блаженство',
+    },
+    content: {
+      ru: `<p>Многих удивляет, что Пятикнижие обещает за соблюдение заповедей дожди и урожай, но почти не говорит о вечном блаженстве души. Источники дают провокационный ответ: человечество в тот момент было в состоянии «духовного младенчества».</p>
+
+<h3>Педагогика Творца</h3>
+<p>Подобно тому, как отец обещает маленькому сыну сладости за усердие в учебе, не имея возможности объяснить ему ценность академических знаний, Бог обещал материальные блага народу, чей разум был еще слишком слаб, чтобы постичь вечность. Если бы Бог сразу заговорил о духовном вознаграждении, которое невозможно увидеть или потрогать, люди просто не смогли бы это оценить и принять.</p>
+
+<h3>Скрытая цель</h3>
+<p>Материальный мир — это лишь тренировочная площадка. Бог скрыл детали Грядущего мира, чтобы наша служба не была корыстной, и чтобы мы научились видеть Божественное присутствие здесь, в физической реальности. Истинная награда — это близость к свету Творца, но чтобы дорасти до этого понимания, человеку нужно сначала научиться правильно распоряжаться «конфетами» этого мира.</p>`,
+
+      en: `<p>Many are surprised that the Pentateuch promises rain and harvest for keeping the commandments, but says almost nothing about the eternal bliss of the soul. The sources give a provocative answer: humanity at that point was in a state of "spiritual infancy."</p>
+
+<h3>The Creator's Pedagogy</h3>
+<p>Just as a father promises his young son sweets for diligence in studies, unable to explain the value of academic knowledge, God promised material blessings to a nation whose minds were still too weak to comprehend eternity. If God had immediately spoken about spiritual reward that cannot be seen or touched, people simply would not have been able to appreciate and accept it.</p>
+
+<h3>The Hidden Purpose</h3>
+<p>The material world is merely a training ground. God concealed the details of the World to Come so that our service would not be self-serving, and so that we would learn to see the Divine presence here, in physical reality. The true reward is closeness to the light of the Creator, but to grow into this understanding, a person must first learn to properly manage the "candies" of this world.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
