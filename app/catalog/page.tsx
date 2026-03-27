@@ -36,32 +36,24 @@ function getGoogleDriveThumbFromPdfUrl(url?: string | null): string | null {
 
 async function fetchLatestIssueThumbMap(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
-  const pageSize = 1000;
-  let from = 0;
-  let keepLoading = true;
+  // Only fetch the latest 500 issues (most recent) instead of ALL issues
+  // This is enough to get thumbnails for active publications
+  const res = await fetch(
+    SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=created_at.desc&select=publication_id,thumbnail_url,pdf_url',
+    { headers: { apikey: SUPABASE_KEY, Range: '0-499' } }
+  );
+  if (!res.ok) return map;
+  const rows = await res.json();
+  if (!Array.isArray(rows)) return map;
 
-  while (keepLoading) {
-    const res = await fetch(
-      SUPABASE_URL + '/rest/v1/issues?is_active=eq.true&order=created_at.desc&select=publication_id,thumbnail_url,pdf_url',
-      { headers: { apikey: SUPABASE_KEY, Range: from + '-' + (from + pageSize - 1) } }
-    );
-    if (!res.ok) break;
-    const rows = await res.json();
-    if (!Array.isArray(rows) || rows.length === 0) break;
-
-    for (const row of rows) {
-      if (!row?.publication_id || map[row.publication_id]) continue;
-      if (row.thumbnail_url && row.thumbnail_url.trim()) {
-        map[row.publication_id] = row.thumbnail_url;
-        continue;
-      }
-      const fallback = getGoogleDriveThumbFromPdfUrl(row.pdf_url);
-      if (fallback) map[row.publication_id] = fallback;
+  for (const row of rows) {
+    if (!row?.publication_id || map[row.publication_id]) continue;
+    if (row.thumbnail_url && row.thumbnail_url.trim()) {
+      map[row.publication_id] = row.thumbnail_url;
+      continue;
     }
-
-    if (rows.length < pageSize) keepLoading = false;
-    from += pageSize;
-    if (from > 50000) keepLoading = false;
+    const fallback = getGoogleDriveThumbFromPdfUrl(row.pdf_url);
+    if (fallback) map[row.publication_id] = fallback;
   }
 
   return map;
@@ -306,9 +298,7 @@ function CatalogContent() {
     };
   }, [viewMode]);
 
-  // Extra backfill for publications still without cover after bulk fetch
-  // Use a ref to track which publications we've already attempted to backfill
-  // to prevent infinite re-render loop (setPublicationsList triggers this effect)
+  // Lightweight backfill for publications without covers (max 10, delayed)
   const backfilledRef = useRef<Set<string>>(new Set());
   const publicationsListRef = useRef(publicationsList);
   publicationsListRef.current = publicationsList;
@@ -316,59 +306,33 @@ function CatalogContent() {
     if (viewMode !== 'publications') return;
     const missing = publicationsList.filter(
       (p) => (!p.cover_image_url || !p.cover_image_url.trim()) && !backfilledRef.current.has(p.id)
-    );
+    ).slice(0, 10); // Only backfill first 10 missing
     if (missing.length === 0) return;
-
-    // Mark these as attempted immediately to prevent re-runs
     for (const p of missing) backfilledRef.current.add(p.id);
 
     let cancelled = false;
-
-    async function fillMissingCovers() {
+    // Delay backfill to not block initial render
+    const timer = setTimeout(async () => {
       const updates: Record<string, string> = {};
-      const chunkSize = 12;
-      for (let i = 0; i < missing.length; i += chunkSize) {
-        const chunk = missing.slice(i, i + chunkSize);
-        const requests = chunk.map(async (pub) => {
-          try {
-            const res = await fetch(
-              SUPABASE_URL +
-                '/rest/v1/issues?publication_id=eq.' +
-                pub.id +
-                '&is_active=eq.true&order=created_at.desc&limit=5&select=thumbnail_url,pdf_url',
-              { headers: { apikey: SUPABASE_KEY } }
-            );
-            const data = await res.json();
-            if (!Array.isArray(data) || data.length === 0) return;
-            const withThumb = data.find((x: any) => x.thumbnail_url && x.thumbnail_url.trim());
-            if (withThumb) {
-              updates[pub.id] = withThumb.thumbnail_url;
-              return;
-            }
-            const withDrivePdf = data.find((x: any) => getGoogleDriveThumbFromPdfUrl(x.pdf_url));
-            if (withDrivePdf) {
-              const fallback = getGoogleDriveThumbFromPdfUrl(withDrivePdf.pdf_url);
-              if (fallback) updates[pub.id] = fallback;
-            }
-          } catch {
-            // ignore
-          }
-        });
-        await Promise.all(requests);
-      }
+      const requests = missing.map(async (pub) => {
+        try {
+          const res = await fetch(
+            SUPABASE_URL + '/rest/v1/issues?publication_id=eq.' + pub.id + '&is_active=eq.true&order=created_at.desc&limit=1&select=thumbnail_url,pdf_url',
+            { headers: { apikey: SUPABASE_KEY } }
+          );
+          const data = await res.json();
+          if (!Array.isArray(data) || data.length === 0) return;
+          if (data[0].thumbnail_url?.trim()) { updates[pub.id] = data[0].thumbnail_url; return; }
+          const fallback = getGoogleDriveThumbFromPdfUrl(data[0].pdf_url);
+          if (fallback) updates[pub.id] = fallback;
+        } catch { /* ignore */ }
+      });
+      await Promise.all(requests);
+      if (cancelled || Object.keys(updates).length === 0) return;
+      setPublicationsList((prev) => prev.map((p) => (updates[p.id] ? { ...p, cover_image_url: updates[p.id] } : p)));
+    }, 2000); // 2s delay
 
-      if (cancelled) return;
-      const updateIds = Object.keys(updates);
-      if (updateIds.length === 0) return;
-      setPublicationsList((prev) =>
-        prev.map((p) => (updates[p.id] ? { ...p, cover_image_url: updates[p.id] } : p))
-      );
-    }
-
-    fillMissingCovers();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; clearTimeout(timer); };
   }, [publicationsList, viewMode]);
 
   const activeTags = useMemo(() => selectedTags.length > 0 ? selectedTags : (initialTag ? [initialTag] : []), [selectedTags, initialTag]);
