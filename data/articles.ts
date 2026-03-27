@@ -597,6 +597,146 @@ export const articles: Article[] = [
     tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'bitachon-7',
+    slug: 'geneticheskoye-rabstvo-ili-bozhestvennoye-prizvaniye',
+    title: {
+      ru: 'Генетическое рабство или божественное призвание: почему вы ненавидите свою работу?',
+      en: 'Genetic Slavery or Divine Calling: Why Do You Hate Your Job?',
+      he: 'עבדות גנטית או ייעוד אלוקי: למה אתה שונא את העבודה שלך?',
+      uk: 'Генетичне рабство чи божественне покликання: чому ви ненавидите свою роботу?',
+    },
+    subtitle: {
+      ru: 'Ваша профессия уже закодирована в вашем теле и характере',
+      en: 'Your profession is already encoded in your body and character',
+      he: 'המקצוע שלך כבר מקודד בגוף ובאופי שלך',
+      uk: 'Ваша професія вже закодована у вашому тілі та характері',
+    },
+    content: {
+      ru: `<p>Современный мир учит нас, что мы можем стать кем угодно, но источники утверждают обратное: ваша профессия уже «закодирована» в вашем теле и характере.</p>
+
+<h3>Биологический дизайн</h3>
+<p>Посмотрите на природу: у птицы, питающейся рыбой, длинный клюв и длинные ноги; у льва — острые зубы и когти для охоты, а у быка — рога для защиты. Точно так же Бог наделил каждого человека уникальными чертами характера и физическим строением, подходящими для конкретного дела. Если человек, обладающий состраданием, идет работать мясником, или вспыльчивый человек пытается быть учителем — он идет против своей природы.</p>
+
+<h3>Провокация успеха</h3>
+<p>Если вы чувствуете влечение к какой-то деятельности и ваше тело к ней приспособлено, это и есть тот канал, который Бог подготовил для вашего пропитания. Попытка заниматься чем-то другим ради престижа или денег — это форма неверия в то, что Бог может прокормить вас через ваш естественный талант. Истинный успех — это не достижение карьерных высот, а выполнение своей «миссии» в том месте, куда вас привели обстоятельства.</p>`,
+
+      en: `<p>The modern world teaches us that we can become anything, but the sources assert the opposite: your profession is already "encoded" in your body and character.</p>
+
+<h3>Biological Design</h3>
+<p>Look at nature: a fish-eating bird has a long beak and long legs; a lion has sharp teeth and claws for hunting; and an ox has horns for defense. In the same way, God endowed each person with unique character traits and physical attributes suited for a specific occupation. If a compassionate person goes to work as a butcher, or a hot-tempered person tries to be a teacher — they are going against their nature.</p>
+
+<h3>The Provocation of Success</h3>
+<p>If you feel drawn to a certain activity and your body is adapted for it, this is the channel God has prepared for your livelihood. Attempting to do something else for prestige or money is a form of disbelief that God can sustain you through your natural talent. True success is not achieving career heights, but fulfilling your "mission" in the place where circumstances have led you.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-8',
+    slug: 'opasnaya-blagodarnost-pochemu-vash-blagodetel-eto-pochtalon',
+    title: {
+      ru: 'Опасная благодарность: почему ваш благодетель — это просто «почтальон»',
+      en: 'Dangerous Gratitude: Why Your Benefactor Is Just a "Postman"',
+      he: 'הכרת תודה מסוכנת: למה המיטיב שלך הוא רק "דוור"',
+      uk: 'Небезпечна вдячність: чому ваш благодійник — це просто «листоноша»',
+    },
+    subtitle: {
+      ru: 'Чрезмерная благодарность человеку — это форма духовной слепоты',
+      en: 'Excessive gratitude to a person is a form of spiritual blindness',
+      he: 'הכרת תודה מוגזמת לאדם היא סוג של עיוורון רוחני',
+      uk: 'Надмірна вдячність людині — це форма духовної сліпоти',
+    },
+    content: {
+      ru: `<p>Мы привыкли рассыпаться в благодарностях перед теми, кто нам помогает. Однако источники выдвигают шокирующий тезис: чрезмерная благодарность человеку — это форма духовной слепоты.</p>
+
+<h3>Иллюзия помощи</h3>
+<p>Когда кто-то делает вам одолжение, он лишь инструмент или посланник, через которого Бог решил передать вам благо. Благодарить человека и забывать о Боге — это всё равно что благодарить землю за урожай, игнорируя Творца, который заставил семя прорасти. Более того, праведники — это лишь «каналы», через которые Бог предпочитает совершать добро, и они сами должны быть благодарны за то, что их выбрали для этой роли.</p>
+
+<h3>Этическая дилемма</h3>
+<p>Если вам отказали в помощи, источники запрещают обвинять этого человека. Это значит, что Бог решил придержать это благо для вашего же добра или передать его через другой канал. Унижение перед богатыми или влиятельными людьми ради получения выгоды — это предательство собственного достоинства и упования на Бога.</p>`,
+
+      en: `<p>We are accustomed to showering those who help us with gratitude. However, the sources put forward a shocking thesis: excessive gratitude to a person is a form of spiritual blindness.</p>
+
+<h3>The Illusion of Help</h3>
+<p>When someone does you a favor, they are merely an instrument or messenger through whom God decided to transmit blessings to you. Thanking a person while forgetting about God is like thanking the earth for the harvest while ignoring the Creator who made the seed sprout. Moreover, the righteous are merely "channels" through which God prefers to do good, and they themselves should be grateful for being chosen for this role.</p>
+
+<h3>The Ethical Dilemma</h3>
+<p>If someone refused to help you, the sources forbid blaming that person. It means God decided to withhold that blessing for your own good or to deliver it through a different channel. Humbling yourself before the rich or powerful for the sake of gain is a betrayal of your own dignity and trust in God.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-9',
+    slug: 'blagosloveniye-odinochestva-pochemu-otsutstviye-druzey-eto-podarok',
+    title: {
+      ru: 'Благословение одиночества: почему отсутствие друзей — это подарок',
+      en: 'The Blessing of Solitude: Why Having No Friends Is a Gift',
+      he: 'ברכת הבדידות: למה חוסר חברים זה מתנה',
+      uk: 'Благословення самотності: чому відсутність друзів — це подарунок',
+    },
+    subtitle: {
+      ru: 'Одиночество может быть высшей формой милости Творца',
+      en: 'Solitude can be the highest form of the Creator\'s grace',
+      he: 'בדידות יכולה להיות הצורה הגבוהה ביותר של חסד הבורא',
+      uk: 'Самотність може бути вищою формою милості Творця',
+    },
+    content: {
+      ru: `<p>Для современного человека одиночество — это трагедия и депрессия. Но согласно «Вратам упования», одиночество может быть высшей формой милости Творца.</p>
+
+<h3>Душа как иностранец</h3>
+<p>Наша душа по своей природе — «чужестранка» в этом материальном мире. Она подобна огню, который всегда стремится вверх, желая воссоединиться со своим Источником. Социальные связи, семья и друзья часто становятся «грузом», который отвлекает нас от самопознания и подготовки к «вечному покою» в Будущем мире.</p>
+
+<h3>Скрытая выгода</h3>
+<p>Если вы оказались одни, это время дано вам, чтобы вы могли без помех сосредоточиться на служении Богу. Источники рассказывают об аскетах, которые специально бежали в горы от родственников, потому что видели в близости людей источник стресса, тщеславия и пустой траты времени. Одиночество — это не изоляция, а возможность прямого диалога с Творцом, когда никто не стоит между вами.</p>`,
+
+      en: `<p>For the modern person, loneliness is a tragedy and depression. But according to the "Gate of Trust," solitude can be the highest form of the Creator's grace.</p>
+
+<h3>The Soul as a Foreigner</h3>
+<p>Our soul by its nature is a "stranger" in this material world. It is like a flame that always strives upward, wishing to reunite with its Source. Social connections, family, and friends often become a "burden" that distracts us from self-knowledge and preparation for "eternal rest" in the World to Come.</p>
+
+<h3>The Hidden Benefit</h3>
+<p>If you find yourself alone, this time is given to you so that you can focus without disturbance on serving God. The sources tell of ascetics who deliberately fled to the mountains from relatives, because they saw in the proximity of people a source of stress, vanity, and waste of time. Solitude is not isolation, but an opportunity for direct dialogue with the Creator, when no one stands between you.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'bitachon-10',
+    slug: 'dukhovnaya-naglost-pochemu-zanachka-na-starost-eto-grekh',
+    title: {
+      ru: 'Духовная наглость: почему «заначка» на старость — это грех',
+      en: 'Spiritual Audacity: Why Saving for Retirement Is a Sin',
+      he: 'חוצפה רוחנית: למה חיסכון לפנסיה זה חטא',
+      uk: 'Духовна нахабність: чому «заначка» на старість — це гріх',
+    },
+    subtitle: {
+      ru: 'Финансовое планирование на десятилетия вперед — это дерзость по отношению к Богу',
+      en: 'Financial planning decades ahead is audacity toward God',
+      he: 'תכנון פיננסי לעשרות שנים קדימה זה חוצפה כלפי שמיא',
+      uk: 'Фінансове планування на десятиліття вперед — це зухвалість щодо Бога',
+    },
+    content: {
+      ru: `<p>Мы считаем финансовое планирование на десятилетия вперед признаком мудрости. Источники же называют таких людей «сектой владельцев залогов», которые ведут себя крайне дерзко по отношению к Богу.</p>
+
+<h3>Требование гарантий</h3>
+<p>Человек, который говорит: «Я займусь своей душой только тогда, когда накоплю достаточно денег на всю оставшуюся жизнь», — требует от Бога залог. Это абсурдно: вы требуете оплаты вперед за работу, которую еще не начали делать. Требовать от Творца гарантий пропитания на годы вперед — значит сомневаться в Его способности заботиться о вас ежедневно, как Он это делал, пока вы были в утробе матери.</p>
+
+<h3>Ловушка долголетия</h3>
+<p>Главная ошибка — уверенность в том, что у вас впереди много лет. Человек копит на старость, которой может не быть, и при этом игнорирует долги перед Богом (заповеди), которые он обязан «выплачивать» прямо сейчас. Настоящая безопасность — это не сумма в банке, а понимание того, что Бог дает ровно столько «манны», сколько нужно на сегодня, чтобы вы оставались связаны с Ним в каждый момент времени.</p>`,
+
+      en: `<p>We consider financial planning decades ahead a sign of wisdom. The sources, however, call such people "the sect of pledge holders" who behave extremely audaciously toward God.</p>
+
+<h3>Demanding Guarantees</h3>
+<p>A person who says "I'll tend to my soul only when I've saved enough money for the rest of my life" is demanding a pledge from God. This is absurd: you are demanding advance payment for work you haven't even started doing. Demanding guarantees of sustenance from the Creator for years ahead means doubting His ability to care for you daily, as He did while you were in your mother's womb.</p>
+
+<h3>The Longevity Trap</h3>
+<p>The main mistake is confidence that you have many years ahead. A person saves for old age that may never come, while ignoring debts to God (commandments) that they are obligated to "pay" right now. True security is not the sum in the bank, but the understanding that God gives exactly as much "manna" as needed for today, so that you remain connected to Him at every moment in time.</p>`,
+    },
+    tag: { ru: 'Битахон', en: 'Bitachon', he: 'ביטחון', uk: 'Бітахон' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
