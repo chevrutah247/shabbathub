@@ -3938,6 +3938,865 @@ export const articles: Article[] = [
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-28',
   },
+  {
+    id: 'rebbe-letters-science',
+    slug: 'nauchnyy-tupik-pochemu-vera-logichnee-teoriy',
+    title: {
+      ru: 'Научный тупик: Почему вера логичнее «доказанных» теорий?',
+      en: 'Scientific Dead End: Why Faith Is More Logical Than "Proven" Theories?',
+      he: 'מבוי סתום מדעי: למה אמונה הגיונית יותר מתיאוריות "מוכחות"?',
+      uk: 'Науковий глухий кут: Чому віра логічніша за «доведені» теорії?',
+    },
+    subtitle: {
+      ru: 'Конфликт между наукой и Торой — мнимый',
+      en: 'The conflict between science and Torah is imaginary',
+      he: 'הסכסוך בין מדע לתורה — מדומה',
+      uk: 'Конфлікт між наукою та Торою — уявний',
+    },
+    content: {
+      ru: `<h3>Наука — гипотеза, а не истина</h3>
+<p>Эмпирическая наука строится на наблюдениях «здесь и сейчас». Когда учёные берутся судить о событиях, произошедших миллиарды лет назад, они вступают в область чистой экстраполяции. Любая теория, включая эволюцию, может быть опровергнута завтра — и история науки полна таких примеров. То, что вчера считалось незыблемым фактом, сегодня оказывается устаревшей моделью. Наука по определению оперирует гипотезами, а не абсолютными истинами. Поэтому ставить научную теорию выше слова Б-га — значит путать предположение с фактом.</p>
+
+<h3>Творец и «зрелое» состояние мира</h3>
+<p>Если Творец создал мир, Он вполне мог создать его «зрелым» — Адам был взрослым мужчиной, а не младенцем, деревья появились уже с плодами, а Земля могла содержать готовые геологические слои с самого начала. Наука обнаруживает эти слои и делает вывод о миллиардах лет — но это лишь одна из возможных интерпретаций. Учёный, не допускающий существования Творца, ограничен в своих выводах собственной предпосылкой. Верующий человек видит в тех же данных свидетельство мудрости Создателя, Который сотворил мир полностью готовым к жизни.</p>
+
+<h3>Вывод для жизни</h3>
+<p>Тора — это «Торат Хаим», Учение Жизни, которое даёт абсолютную точку отсчёта для каждого решения и поступка. Научные теории относительны и изменчивы — они не могут служить фундаментом для нравственности и смысла существования. Вера в Творца не требует отказа от разума — напротив, глубокое размышление неизбежно приводит к признанию Единого Источника всего сущего. Истинная мудрость начинается там, где человек осознаёт границы своего познания и принимает руководство Того, Кто знает всё.</p>`,
+
+      en: `<h3>Science Is a Hypothesis, Not Truth</h3>
+<p>Empirical science builds on observations in the here and now. When scientists presume to judge events that occurred billions of years ago, they enter the realm of pure extrapolation. Any theory, including evolution, can be disproven tomorrow — and the history of science is full of such examples. What was considered an unshakable fact yesterday turns out to be an outdated model today. Science by definition operates with hypotheses, not absolute truths. Therefore, placing a scientific theory above the word of G-d means confusing an assumption with a fact.</p>
+
+<h3>The Creator and the "Mature" State of the World</h3>
+<p>If the Creator made the world, He could well have created it "mature" — Adam was an adult man, not an infant; trees appeared already bearing fruit; and the Earth could have contained ready geological layers from the very beginning. Science discovers these layers and concludes billions of years — but this is just one possible interpretation. A scientist who does not allow for the existence of a Creator is limited in his conclusions by his own premise. A person of faith sees in the same data evidence of the wisdom of the Creator, Who fashioned a world fully ready for life.</p>
+
+<h3>A Conclusion for Life</h3>
+<p>The Torah is "Torat Chaim" — Instructions for Life — providing an absolute reference point for every decision and action. Scientific theories are relative and changeable — they cannot serve as a foundation for morality and the meaning of existence. Faith in the Creator does not require abandoning reason — on the contrary, deep reflection inevitably leads to recognizing the Single Source of all that exists. True wisdom begins where a person acknowledges the limits of their knowledge and accepts the guidance of the One Who knows everything.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-depression',
+    slug: 'psikhologiya-deystviya-depressiya-kak-instrument-vraga',
+    title: {
+      ru: 'Психология действия: Депрессия как инструмент вашего врага',
+      en: 'Psychology of Action: Depression as Your Enemy\'s Tool',
+      he: 'פסיכולוגיית הפעולה: דיכאון ככלי הנשק של האויב שלך',
+      uk: 'Психологія дії: Депресія як інструмент вашого ворога',
+    },
+    subtitle: {
+      ru: 'Уныние — стратегическое оружие йецер а-ра',
+      en: 'Melancholy is the strategic weapon of the yetzer hara',
+      he: 'עצבות — הנשק האסטרטגי של היצר הרע',
+      uk: 'Зневіра — стратегічна зброя єцер а-ра',
+    },
+    content: {
+      ru: `<h3>Ловушка «дурного начала»</h3>
+<p>Депрессия — это не просто плохое настроение, а стратегическое оружие йецер а-ра (дурного начала). Его цель — заставить человека опустить руки и прекратить выполнение своей миссии в этом мире. Когда человек погружается в уныние, он теряет драгоценное время, которое мог бы использовать для добрых дел и духовного роста. Самокопание и бесконечный анализ своих недостатков — это именно та ловушка, в которую хочет загнать нас дурное начало. Пока человек занят сожалениями, он парализован и неспособен действовать.</p>
+
+<h3>Лекарство — в действии</h3>
+<p>«Главное — это действие», — учит Тора. Одно маленькое доброе дело, одна мицва имеет бесконечную ценность перед Б-гом и способна полностью изменить внутреннее состояние человека. Не нужно ждать, пока придёт вдохновение или исчезнет тоска — нужно просто начать делать. Зажечь свечу, дать цдаку, сказать доброе слово. Каждое такое действие пробивает брешь в стене уныния и впускает свет. Ребе неоднократно подчёркивал: даже самое малое усилие в служении Б-гу перевешивает годы бездействия.</p>
+
+<h3>Смещение фокуса</h3>
+<p>Меланхолия рождается от чрезмерной сосредоточенности на самом себе. Самый быстрый путь из личного кризиса — переключить внимание на других людей. Помощь ближнему, будь то доброе слово, практическая поддержка или просто искренняя улыбка, мгновенно выводит из замкнутого круга самокопания. Депрессия никогда не является оправданием для бездействия — напротив, именно в моменты тьмы от нас требуется максимальное усилие. Тот, кто помогает другим, обнаруживает, что его собственная тьма рассеивается сама собой.</p>`,
+
+      en: `<h3>The Trap of the "Evil Inclination"</h3>
+<p>Depression is not merely a bad mood — it is a strategic weapon of the yetzer hara (evil inclination). Its goal is to make a person drop their hands and stop fulfilling their mission in this world. When a person sinks into melancholy, they lose precious time that could be used for good deeds and spiritual growth. Self-digging and endless analysis of one's shortcomings is precisely the trap the evil inclination wants to drive us into. While a person is occupied with regrets, they are paralyzed and incapable of action.</p>
+
+<h3>The Cure Is in Action</h3>
+<p>"The main thing is action," the Torah teaches. One small good deed, one mitzvah has infinite value before G-d and can completely change a person's inner state. There is no need to wait for inspiration to come or for sadness to disappear — one simply needs to start doing. Light a candle, give tzedakah, say a kind word. Each such action breaks through the wall of melancholy and lets in light. The Rebbe repeatedly emphasized: even the smallest effort in serving G-d outweighs years of inaction.</p>
+
+<h3>Shifting the Focus</h3>
+<p>Melancholy is born from excessive focus on oneself. The fastest path out of a personal crisis is to switch your attention to other people. Helping another person — whether through a kind word, practical support, or simply a sincere smile — instantly breaks the vicious cycle of self-absorption. Depression is never a justification for inaction — on the contrary, it is precisely in moments of darkness that maximum effort is required of us. The one who helps others discovers that their own darkness dissipates on its own.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-family',
+    slug: 'sekret-semeynogo-schastya-kto-osnova-doma',
+    title: {
+      ru: 'Секрет семейного счастья: Кто на самом деле «основа дома»?',
+      en: 'The Secret of Family Happiness: Who Is Really the "Foundation of the Home"?',
+      he: 'סוד האושר המשפחתי: מי באמת "עקרת הבית"?',
+      uk: 'Секрет сімейного щастя: Хто насправді «основа дому»?',
+    },
+    subtitle: {
+      ru: 'Акерет а-Баит и искусство уступать ради мира',
+      en: 'Akeret HaBayit and the art of yielding for the sake of peace',
+      he: 'עקרת הבית ואומנות הוויתור למען השלום',
+      uk: 'Акерет а-Баіт і мистецтво поступатися заради миру',
+    },
+    content: {
+      ru: `<h3>Жена — основа дома</h3>
+<p>Понятие «Акерет а-Баит» — «основа дома» — означает, что именно женщина определяет атмосферу в семье. Её настроение, её слова, её отношение к мужу и детям формируют ту среду, в которой живёт каждый член семьи. В материальных и бытовых вопросах муж должен прислушиваться к мнению жены — её интуиция и чуткость делают её мнение приоритетным. Ребе писал, что мудрый муж понимает: уступая жене в повседневных делах, он не теряет авторитет, а укрепляет фундамент своего дома. Женская мудрость — это дар Б-га, и пренебрегать им означает пренебрегать Его благословением.</p>
+
+<h3>Мир как сосуд для благословений</h3>
+<p>Шалом Байт — мир в доме — это не просто отсутствие ссор. Это единственный сосуд, способный удержать благословения Всевышнего — в заработке, здоровье, воспитании детей. Там, где нет мира, благословения «утекают», как вода из треснувшего кувшина. Ребе подчёркивал: даже если человек усердно учит Тору и исполняет заповеди, но в его доме нет мира — все его духовные достижения оказываются под угрозой. Шалом Байт — это не дополнение к духовной жизни, а её необходимое условие.</p>
+
+<h3>Искусство уступать</h3>
+<p>Даже если вы абсолютно правы, уступите ради мира. Тот, кто уступает, привлекает Шхину — Б-жественное присутствие — в свой дом. Не пытайтесь изменить супруга силой — личный пример доброты и терпения куда эффективнее любых слов и упрёков. Ребе учил: каждая уступка ради мира — это не слабость, а величайшая сила. Дом, в котором оба супруга готовы уступить друг другу, становится местом, где Б-г желает пребывать. А где присутствует Б-г — там изобилие, радость и истинное счастье.</p>`,
+
+      en: `<h3>The Wife Is the Foundation of the Home</h3>
+<p>The concept of "Akeret HaBayit" — "foundation of the home" — means that it is the woman who determines the atmosphere in the family. Her mood, her words, her attitude toward her husband and children shape the environment in which every family member lives. In material and household matters, the husband should listen to his wife's opinion — her intuition and sensitivity make her perspective the priority. The Rebbe wrote that a wise husband understands: by yielding to his wife in everyday matters, he does not lose authority but strengthens the foundation of his home. A woman's wisdom is a gift from G-d, and to disregard it means to disregard His blessing.</p>
+
+<h3>Peace as a Vessel for Blessings</h3>
+<p>Shalom Bayit — peace in the home — is not merely the absence of arguments. It is the only vessel capable of holding the blessings of Hashem — in income, health, and the upbringing of children. Where there is no peace, blessings "leak out" like water from a cracked jug. The Rebbe emphasized: even if a person diligently studies Torah and fulfills commandments, but there is no peace in his home — all his spiritual achievements are at risk. Shalom Bayit is not a supplement to spiritual life but its essential prerequisite.</p>
+
+<h3>The Art of Yielding</h3>
+<p>Even if you are absolutely right, yield for the sake of peace. The one who yields attracts the Shechinah — the Divine Presence — into their home. Do not try to change your spouse by force — a personal example of kindness and patience is far more effective than any words or reproaches. The Rebbe taught: every concession for the sake of peace is not weakness but the greatest strength. A home in which both spouses are willing to yield to each other becomes a place where G-d desires to dwell. And where G-d is present — there is abundance, joy, and true happiness.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-wealth',
+    slug: 'kod-uspekha-zachem-vam-nuzhny-dengi',
+    title: {
+      ru: 'Код успеха: Зачем вам на самом деле нужны деньги?',
+      en: 'The Success Code: What Do You Really Need Money For?',
+      he: 'קוד ההצלחה: למה אתה באמת צריך כסף?',
+      uk: 'Код успіху: Навіщо вам насправді потрібні гроші?',
+    },
+    subtitle: {
+      ru: 'Материальный успех — инструмент для высшей задачи',
+      en: 'Material success is a tool for a higher purpose',
+      he: 'הצלחה חומרית — כלי למשימה עליונה',
+      uk: 'Матеріальний успіх — інструмент для вищого завдання',
+    },
+    content: {
+      ru: `<h3>Испытание богатством</h3>
+<p>Бедность — тяжёлое испытание, но богатство — ещё тяжелее. Когда человек достигает финансового успеха, возникает иллюзия, что всё достигнуто собственным умом и усилиями. Это самая опасная ловушка, потому что она отрезает человека от истинного Источника всех благ. Ребе напоминал: золото и серебро были созданы прежде всего для того, чтобы «строить Храм» — то есть использовать материальные ресурсы для святых целей. Тот, кто забывает об этом предназначении, превращает благословение Б-га в испытание, которое может его сломить.</p>
+
+<h3>Бизнес как миссия</h3>
+<p>Не разделяйте бизнес и духовную жизнь — они должны быть единым целым. Честность в деловых отношениях, признание того, что каждый успех является благословением Всевышнего, — это лучший способ освятить Имя Б-га в мире. Ребе писал многим бизнесменам: ваш офис — это тоже место служения. Каждая честная сделка, каждое доброе слово партнёру или сотруднику — это мицва. Когда нееврей видит, что еврейский бизнесмен ведёт дела с безупречной честностью, это производит впечатление сильнее любой проповеди и освящает Имя Б-га.</p>
+
+<h3>Инвестиция в вечность</h3>
+<p>Самый надёжный способ сохранить капитал — это цдака. Ребе настаивал: отделяйте десятину немедленно, как самый важный «платёж». Это не потеря, а создание духовного канала для новых благословений. Богатство дано человеку, чтобы помогать другим и поддерживать духовные проекты — изучение Торы, еврейское образование, помощь нуждающимся. Тот, кто щедро даёт цдаку, обнаруживает удивительную закономерность: чем больше он отдаёт, тем больше Б-г посылает ему. Это не магия — это духовный закон, установленный Творцом.</p>`,
+
+      en: `<h3>The Test of Wealth</h3>
+<p>Poverty is a difficult test, but wealth is even harder. When a person achieves financial success, the illusion arises that everything was achieved by their own mind and effort. This is the most dangerous trap, because it cuts a person off from the true Source of all blessings. The Rebbe reminded us: gold and silver were created primarily to "build the Temple" — that is, to use material resources for holy purposes. The one who forgets this purpose transforms G-d's blessing into a trial that may break them.</p>
+
+<h3>Business as a Mission</h3>
+<p>Do not separate business from spiritual life — they should be one and the same. Honesty in business dealings, acknowledging that every success is a blessing from Hashem — this is the best way to sanctify G-d's Name in the world. The Rebbe wrote to many businessmen: your office is also a place of service. Every honest deal, every kind word to a partner or employee is a mitzvah. When a non-Jew sees that a Jewish businessman conducts affairs with impeccable honesty, it makes an impression stronger than any sermon and sanctifies G-d's Name.</p>
+
+<h3>An Investment in Eternity</h3>
+<p>The most reliable way to preserve capital is tzedakah. The Rebbe insisted: set aside the tithe immediately as the most important "payment." This is not a loss but the creation of a spiritual channel for new blessings. Wealth is given to a person to help others and support spiritual projects — Torah study, Jewish education, assistance to those in need. The one who gives tzedakah generously discovers an amazing pattern: the more they give, the more G-d sends them. This is not magic — it is a spiritual law established by the Creator.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-mission',
+    slug: 'globalnyy-vyzov-kak-odin-chelovek-mozhet-izmenit-mir',
+    title: {
+      ru: 'Глобальный вызов: Как один человек может изменить мир?',
+      en: 'Global Challenge: How Can One Person Change the World?',
+      he: 'אתגר גלובלי: איך אדם אחד יכול לשנות את העולם?',
+      uk: 'Глобальний виклик: Як одна людина може змінити світ?',
+    },
+    subtitle: {
+      ru: 'На каждом лежит ответственность за судьбу человечества',
+      en: 'Everyone bears responsibility for the fate of humanity',
+      he: 'על כל אחד מוטלת האחריות לגורל האנושות',
+      uk: 'На кожному лежить відповідальність за долю людства',
+    },
+    content: {
+      ru: `<h3>Универсальная миссия</h3>
+<p>Еврейский народ несёт особую ответственность — распространять Семь заповедей потомков Ноаха среди всех народов мира. Эти заповеди — основа справедливости, гуманизма и признания Высшего авторитета для всего общества. Ребе неоднократно подчёркивал: это не просто рекомендация, а обязанность каждого еврея. Мир, в котором люди признают Творца и живут по Его законам, — это мир, готовый к приходу Мошиаха. Каждый разговор, в котором вы делитесь этими идеями, приближает всё человечество к его истинному предназначению.</p>
+
+<h3>Влияние каждого</h3>
+<p>Любой человек, обладающий авторитетом — профессор, бизнесмен, общественный деятель — обязан использовать своё влияние для укрепления осознания личной ответственности перед Творцом. Ребе писал президентам, учёным, деятелям культуры — и каждому говорил одно: используйте данную вам платформу, чтобы нести свет в мир. Не нужно быть раввином, чтобы влиять на людей. Достаточно быть честным человеком, который своим примером показывает, что жизнь по воле Б-га — это путь к счастью и процветанию.</p>
+
+<h3>Эффект бабочки</h3>
+<p>Одно маленькое доброе дело, одно доброе слово может склонить чашу весов всего мира к добру. Мир подобен единому организму — исцеление одной части влияет на целое. Ребе учил: никогда не говори «я слишком мал, чтобы что-то изменить». Каждый поступок записывается на небесах и имеет вечное значение. Один человек, зажёгший свечу в темноте, освещает путь для тысяч. Б-г создал мир так, что каждое действие имеет значение — и именно ваше действие может оказаться решающим.</p>
+
+<h3>Путь к избавлению</h3>
+<p>Мир стоит на пороге эры Мошиаха. Всё, что нужно — добавить ещё немного света через добрые дела. Не ждите глобальных перемен — начните с себя. Ребе говорил: мы последнее поколение изгнания и первое поколение Избавления. Каждая мицва, каждый акт доброты, каждое слово Торы приближает тот момент, когда весь мир наполнится знанием Б-га, «как воды покрывают море». Действуйте сейчас — потому что именно ваше действие может стать тем последним добрым делом, которое переведёт мир из тьмы к свету.</p>`,
+
+      en: `<h3>A Universal Mission</h3>
+<p>The Jewish people bear a special responsibility — to spread the Seven Noahide Laws among all the nations of the world. These commandments are the foundation of justice, humanism, and recognition of a Higher authority for all of society. The Rebbe repeatedly emphasized: this is not merely a recommendation but an obligation of every Jew. A world in which people acknowledge the Creator and live by His laws is a world ready for the coming of Mashiach. Every conversation in which you share these ideas brings all of humanity closer to its true purpose.</p>
+
+<h3>The Influence of Every Individual</h3>
+<p>Anyone who holds authority — a professor, a businessman, a public activist — must use their influence to strengthen awareness of personal responsibility before the Creator. The Rebbe wrote to presidents, scientists, cultural figures — and to each one he said the same thing: use the platform given to you to bring light into the world. You do not need to be a rabbi to influence people. It is enough to be an honest person who by their example shows that living according to G-d's will is the path to happiness and prosperity.</p>
+
+<h3>The Butterfly Effect</h3>
+<p>One small good deed, one kind word can tip the scales of the entire world toward good. The world is like a single organism — healing one part affects the whole. The Rebbe taught: never say "I am too small to change anything." Every action is recorded in heaven and has eternal significance. One person who lights a candle in the darkness illuminates the path for thousands. G-d created the world so that every action matters — and it is precisely your action that may prove to be the decisive one.</p>
+
+<h3>The Path to Redemption</h3>
+<p>The world stands on the threshold of the Mashiach era. All that is needed is to add a little more light through good deeds. Do not wait for global changes — start with yourself. The Rebbe said: we are the last generation of exile and the first generation of Redemption. Every mitzvah, every act of kindness, every word of Torah brings closer that moment when the entire world will be filled with the knowledge of G-d, "as the waters cover the sea." Act now — because it is precisely your action that may become the final good deed that transitions the world from darkness to light.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-furniture',
+    slug: 'remont-mebeli-ili-vospitaniye-dushi-metafora',
+    title: {
+      ru: 'Ремонт мебели или воспитание души? Метафора ответственности',
+      en: 'Furniture Repair or Soul Education? A Metaphor of Responsibility',
+      he: 'תיקון רהיטים או חינוך הנשמה? מטאפורה של אחריות',
+      uk: 'Ремонт меблів чи виховання душі? Метафора відповідальності',
+    },
+    subtitle: {
+      ru: 'Воспитание — осознанный труд, а не случайный процесс',
+      en: 'Education is conscious labor, not an accidental process',
+      he: 'חינוך הוא עבודה מודעת, לא תהליך מקרי',
+      uk: 'Виховання — усвідомлена праця, а не випадковий процес',
+    },
+    content: {
+      ru: `<h3>Партнерство с Творцом</h3>
+<p>Мудрецы Талмуда учат, что в создании каждого человека участвуют три партнёра: отец, мать и Святой, благословен Он. Отец и мать дают физическое тело, а Всевышний вкладывает Божественную искру — нешаму, святую душу. Однако после рождения ребёнка Творец, образно говоря, передаёт исключительную ответственность за эту Божественную искру в руки родителей. Именно они становятся хранителями и воспитателями того бесценного дара, который Б-г доверил им. Это не просто честь, а священная обязанность, которая требует полной самоотдачи, мудрости и постоянного духовного труда. Каждый день воспитания — это продолжение акта творения, в котором родители формируют будущее своего ребёнка и всего еврейского народа.</p>
+
+<h3>Анализ и дисциплина</h3>
+<p>Подобно опытному реставратору мебели, который внимательно изучает каждую деталь перед началом работы, родитель обязан тщательно анализировать сильные и слабые стороны своего ребёнка. Необходимо определить, какие факторы формируют его характер, понять, какие «детали» нуждаются в замене, а какие — в укреплении. Этот процесс требует сочетания безусловной любви и объективности — двух качеств, которые лишь на первый взгляд кажутся противоречивыми. Ребе предупреждал: нельзя позволять духовным деталям воспитания тускнеть ради материального комфорта. Когда родители ставят карьерный успех или финансовое благополучие выше духовного развития ребёнка, они рискуют потерять самое главное. Истинный воспитатель — тот, кто видит в ребёнке не проект для достижения земных целей, а душу, нуждающуюся в заботливом и осознанном руководстве на пути к Б-гу.</p>`,
+
+      en: `<h3>Partnership with the Creator</h3>
+<p>The Sages of the Talmud teach that three partners participate in the creation of every person: the father, the mother, and the Holy One, blessed be He. The father and mother provide the physical body, while the Almighty implants the Divine spark — the neshama, the holy soul. However, after the child's birth, the Creator, so to speak, transfers exclusive responsibility for this Divine spark into the hands of the parents. They become the guardians and educators of the priceless gift that G-d has entrusted to them. This is not merely an honor but a sacred duty that demands complete dedication, wisdom, and constant spiritual labor. Every day of upbringing is a continuation of the act of creation, in which parents shape the future of their child and of the entire Jewish people.</p>
+
+<h3>Analysis and Discipline</h3>
+<p>Like an experienced furniture restorer who carefully examines every detail before beginning work, a parent must thoroughly analyze the strengths and weaknesses of their child. It is necessary to determine which factors shape the child's character, to understand which "parts" need replacement and which need strengthening. This process requires a combination of unconditional love and objectivity — two qualities that only at first glance seem contradictory. The Rebbe warned: one must not allow the spiritual details of education to fade for the sake of material comfort. When parents place career success or financial well-being above the spiritual development of their child, they risk losing what matters most. A true educator is one who sees in a child not a project for achieving earthly goals, but a soul in need of caring and conscious guidance on the path to G-d.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-teens',
+    slug: 'podrostkovyy-krizis-kak-ne-poteryat-svyaz',
+    title: {
+      ru: 'Подростковый кризис: Как не потерять связь с ребенком?',
+      en: 'The Teenage Crisis: How Not to Lose Connection with Your Child?',
+      he: 'משבר גיל ההתבגרות: איך לא לאבד את הקשר עם הילד?',
+      uk: 'Підліткова криза: Як не втратити зв\'язок із дитиною?',
+    },
+    subtitle: {
+      ru: 'Естественное стремление к самостоятельности и способы преодоления',
+      en: 'The natural desire for independence and ways to overcome the crisis',
+      he: 'השאיפה הטבעית לעצמאות ודרכים להתגבר על המשבר',
+      uk: 'Природне прагнення до самостійності та способи подолання',
+    },
+    content: {
+      ru: `<h3>Смена тактики</h3>
+<p>Подростковый возраст — это период, когда ребёнок стремится ощутить себя взрослым и самостоятельным. Прямое давление со стороны родителей в это время не только неэффективно, но и опасно: оно усиливает сопротивление и отталкивает подростка ещё дальше. Ребе учил, что мудрый родитель понимает: тактика, которая работала с маленьким ребёнком, уже не подходит для подростка. Необходимо перестроить отношения на новых основах — уважения, терпения и доверия. Вместо приказов следует предлагать выбор, вместо нотаций — делиться жизненным опытом. Родитель должен стать для подростка не надзирателем, а мудрым советником, к которому хочется обращаться за помощью. Этот переход требует огромной внутренней работы, но именно он сохраняет связь между поколениями.</p>
+
+<h3>Сила окружения</h3>
+<p>Если ребёнок перестал слушать родителей, Ребе советовал использовать влияние «объективных» источников — хороших друзей, наставников, учителей. Подросток значительно охотнее принимает тот же самый совет от сверстника или уважаемого им авторитета извне, чем от собственных родителей. Задача родителей в таком случае — помочь ребёнку оказаться в правильном окружении, среди людей, которые будут положительно на него влиять. Выберите подходящую ешиву, познакомьте ребёнка с достойными ровесниками, обеспечьте доступ к вдохновляющим наставникам. Правильное окружение способно сделать то, чего не могут добиться даже самые любящие родители.</p>
+
+<h3>Суть проблемы</h3>
+<p>«Светскость» или протестное поведение подростка — это лишь внешняя «одежда», скрывающая истинную святую сущность его души. Ребе неоднократно подчёркивал: не судите по временным маскам, которые надевает на себя молодой человек. За бунтом и провокацией скрывается та же чистая нешама, которая жаждет близости к Б-гу. Задача родителей — не бороться с внешними проявлениями, а укреплять внутреннее «я» ребёнка через правильное окружение и терпеливую любовь. Когда подросток чувствует, что его принимают и любят безусловно, маски спадают сами собой, и святая искра внутри него начинает светить в полную силу.</p>`,
+
+      en: `<h3>Changing Tactics</h3>
+<p>Adolescence is a period when a child strives to feel grown-up and independent. Direct pressure from parents at this time is not only ineffective but dangerous: it increases resistance and pushes the teenager even further away. The Rebbe taught that a wise parent understands: tactics that worked with a young child are no longer suitable for a teenager. It is necessary to rebuild the relationship on new foundations — respect, patience, and trust. Instead of commands, one should offer choices; instead of lectures, share life experience. A parent must become not a supervisor but a wise counselor to whom the teen wants to turn for help. This transition requires enormous inner work, but it is precisely what preserves the bond between generations.</p>
+
+<h3>The Power of Environment</h3>
+<p>If a child has stopped listening to their parents, the Rebbe advised using the influence of "objective" sources — good friends, mentors, teachers. A teenager much more readily accepts the very same advice from a peer or a respected outside authority than from their own parents. The parents' task in such a case is to help the child find themselves in the right environment, among people who will positively influence them. Choose a suitable yeshiva, introduce the child to worthy peers, provide access to inspiring mentors. The right environment can accomplish what even the most loving parents cannot achieve on their own.</p>
+
+<h3>The Root of the Problem</h3>
+<p>"Secularity" or protest behavior in a teenager is merely external "clothing" hiding the true holy essence of their soul. The Rebbe repeatedly emphasized: do not judge by the temporary masks that a young person puts on. Behind rebellion and provocation lies the same pure neshama that yearns for closeness to G-d. The parents' task is not to fight external manifestations but to strengthen the child's inner self through the right environment and patient love. When a teenager feels accepted and loved unconditionally, the masks fall away on their own, and the holy spark within begins to shine at full strength.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-woman-home',
+    slug: 'zhenshchina-kak-osnova-doma-dukhovnyy-mikroklimat',
+    title: {
+      ru: 'Женщина как «Основа дома»: Духовный микроклимат семьи',
+      en: 'Woman as the "Foundation of the Home": The Spiritual Microclimate of the Family',
+      he: 'האישה כ"עקרת הבית": האקלים הרוחני של המשפחה',
+      uk: 'Жінка як «Основа дому»: Духовний мікроклімат сім\'ї',
+    },
+    subtitle: {
+      ru: 'Акерет а-Баит — от матери зависит успех воспитания',
+      en: 'Akeret HaBayit — the success of education depends on the mother',
+      he: 'עקרת הבית — הצלחת החינוך תלויה באם',
+      uk: 'Акерет а-Баїт — від матері залежить успіх виховання',
+    },
+    content: {
+      ru: `<h3>Эмоциональный канал</h3>
+<p>Мать передаёт ценности через чувства и живой пример — это самый мощный канал воспитания, который существует. Слова, произнесённые с искренностью и добротой, проникают в сердца детей значительно глубже, чем любые логические аргументы. Ребе неоднократно подчёркивал особую роль женщины в еврейском доме: отец обеспечивает финансовую основу для образования и духовного развития семьи, но именно мать создаёт ту атмосферу, в которой всё это укореняется и расцветает. Когда мать зажигает субботние свечи с радостью и благоговением, когда она произносит благословения с искренней верой, дети впитывают это на уровне, недоступном для формального обучения. Эмоциональная связь между матерью и ребёнком — это канал, через который передаётся самое важное: любовь к Б-гу, к Торе и к еврейскому народу.</p>
+
+<h3>Живой пример важнее учебников</h3>
+<p>Воспитание эффективно лишь тогда, когда оно подкреплено живым примером и вдохновением. Ребе советовал наполнить дом святыми книгами — сидурами, Хумашем, Теилим — не для украшения полок, а как инструменты, которыми дети учатся пользоваться с раннего возраста. Когда ребёнок видит, что мама каждый день читает Теилим, что папа учит Тору после работы, что в доме царит атмосфера святости и радости — это создаёт невидимую, но прочную защиту для его души. Святые книги в доме — это не просто предметы, а живые источники света, которые формируют духовный микроклимат семьи. Каждый сидур, открытый в руках ребёнка, каждая страница Хумаша, прочитанная вслух за семейным столом, — всё это кирпичики той крепости, которая будет хранить детей на протяжении всей их жизни.</p>`,
+
+      en: `<h3>The Emotional Channel</h3>
+<p>A mother transmits values through feelings and living example — this is the most powerful channel of education that exists. Words spoken with sincerity and kindness penetrate children's hearts far more deeply than any logical arguments. The Rebbe repeatedly emphasized the special role of a woman in the Jewish home: the father provides the financial foundation for the family's education and spiritual development, but it is the mother who creates the atmosphere in which all of this takes root and flourishes. When a mother lights Shabbat candles with joy and reverence, when she recites blessings with sincere faith, children absorb this at a level inaccessible to formal instruction. The emotional bond between mother and child is the channel through which the most important things are transmitted: love for G-d, for the Torah, and for the Jewish people.</p>
+
+<h3>A Living Example Is More Important Than Textbooks</h3>
+<p>Education is effective only when it is backed by a living example and inspiration. The Rebbe advised filling the home with holy books — siddurim, Chumash, Tehillim — not as shelf decorations but as tools that children learn to use from an early age. When a child sees that their mother reads Tehillim every day, that their father studies Torah after work, that the home is permeated with an atmosphere of holiness and joy — this creates an invisible but strong protection for their soul. Holy books in the home are not merely objects but living sources of light that shape the spiritual microclimate of the family. Every siddur opened in a child's hands, every page of Chumash read aloud at the family table — all of these are building blocks of the fortress that will guard the children throughout their entire lives.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-no-delay',
+    slug: 'vyshe-logiki-pochemu-vospitaniye-nelzya-otkladyvat',
+    title: {
+      ru: 'Выше логики: Почему воспитание нельзя откладывать «на потом»?',
+      en: 'Above Logic: Why Education Cannot Be Postponed?',
+      he: 'מעבר להיגיון: למה אסור לדחות חינוך ל"אחר כך"?',
+      uk: 'Вище логіки: Чому виховання не можна відкладати «на потім»?',
+    },
+    subtitle: {
+      ru: 'Ждать, пока ребёнок «сам выберет» — противоречит природе еврейской души',
+      en: 'Waiting for a child to "choose for themselves" contradicts the nature of the Jewish soul',
+      he: 'לחכות שהילד "יבחר בעצמו" — סותר את טבע הנשמה היהודית',
+      uk: 'Чекати, поки дитина «сама обере» — суперечить природі єврейської душі',
+    },
+    content: {
+      ru: `<h3>Сердце против разума</h3>
+<p>Если учить ребёнка только тому, что способен охватить его разум, духовность будет ограничена рамками человеческой логики. Однако еврейское воспитание по своей сути выходит за эти рамки — оно обращается к душе, а не только к интеллекту. Ребе учил, что основы еврейского образования необходимо закладывать в «первозданном виде», ещё до того, как ребёнок начинает критически анализировать окружающий мир. То, что входит в сердце в раннем детстве, остаётся там навсегда и становится неотъемлемой частью личности. Когда маленький ребёнок слышит о величии Б-га, о красоте Торы, о святости Шаббата — эти образы впечатываются в самую глубину его души. Никакие сомнения и вопросы, которые придут позже, не смогут полностью стереть эти первые духовные впечатления. Именно поэтому откладывать еврейское воспитание «на потом» — значит лишать ребёнка самого мощного фундамента.</p>
+
+<h3>Безоговорочная вера</h3>
+<p>Еврейский народ выживает на протяжении тысячелетий не благодаря логике, а благодаря связи с Творцом, которая находится выше природы и рационального объяснения. Эта связь — мсират нефеш, самоотверженная преданность Б-гу — передаётся из поколения в поколение. Воспитывать ребёнка в духе самопожертвования, без «но» и «если», — значит закладывать непоколебимый фундамент на всю жизнь. Ребе призывал родителей не бояться дать ребёнку «слишком много» религии. Истинная гармония приходит к тем, кто живёт по Божественному наставлению с самого детства. Ребёнок, выросший в атмосфере безоговорочной веры, не воспринимает Тору как ограничение — для него это естественная и радостная часть жизни. Не ждите, пока ребёнок «сам выберет», — дайте ему то, что принадлежит его душе по праву рождения, и он будет благодарен вам вечно.</p>`,
+
+      en: `<h3>Heart Against Mind</h3>
+<p>If you teach a child only what their mind can grasp, spirituality will be limited by the framework of human logic. Yet Jewish education by its very essence transcends these boundaries — it speaks to the soul, not only to the intellect. The Rebbe taught that the foundations of Jewish education must be laid in their "pristine form," before the child begins to critically analyze the surrounding world. What enters the heart in early childhood remains there forever and becomes an inseparable part of one's identity. When a small child hears about the greatness of G-d, the beauty of Torah, the sanctity of Shabbat — these images are imprinted in the very depths of their soul. No doubts or questions that come later can fully erase these first spiritual impressions. This is precisely why postponing Jewish education "for later" means depriving a child of the most powerful foundation.</p>
+
+<h3>Unconditional Faith</h3>
+<p>The Jewish people have survived for millennia not through logic but through a connection to the Creator that stands above nature and rational explanation. This connection — mesirat nefesh, selfless devotion to G-d — is transmitted from generation to generation. Raising a child in the spirit of self-sacrifice, without "buts" and "ifs," means building an unshakeable foundation for a lifetime. The Rebbe urged parents not to fear giving a child "too much" religion. True harmony comes to those who live by Divine instruction from childhood. A child raised in an atmosphere of unconditional faith does not perceive the Torah as a restriction — for them it is a natural and joyful part of life. Do not wait for a child to "choose for themselves" — give them what belongs to their soul by birthright, and they will be grateful to you forever.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-shalom-bayit',
+    slug: 'sekret-yevreyskogo-schastya-dokhod-zavisit-ot-atmosfery',
+    title: {
+      ru: 'Секрет «еврейского счастья»: Почему ваш доход зависит от атмосферы в спальне?',
+      en: 'The Secret of "Jewish Happiness": Why Your Income Depends on the Atmosphere at Home?',
+      he: 'סוד ה"מזל היהודי": למה ההכנסה שלך תלויה באווירה בבית?',
+      uk: 'Секрет «єврейського щастя»: Чому ваш дохід залежить від атмосфери в спальні?',
+    },
+    subtitle: {
+      ru: 'Мир в семье — «сосуд» для богатства',
+      en: 'Peace in the family is a "vessel" for wealth',
+      he: 'שלום בית — "כלי" לעושר',
+      uk: 'Мир у сім\'ї — «посудина» для багатства',
+    },
+    content: {
+      ru: `<h3>Шалом байт — сосуд для благословений</h3>
+<p>Одна из самых поразительных идей Ребе: материальное благополучие семьи напрямую связано с атмосферой мира и любви между супругами. Шалом байт — мир в доме — это не просто приятное дополнение к жизни, а духовный «сосуд», в который Б-г вливает благословения. Когда этот сосуд цел и крепок, благословения наполняют дом изобилием. Когда сосуд треснут от ссор и обид — благословения утекают, словно вода через решето. Ребе писал в одном из своих писем: постоянные конфликты между мужем и женой создают духовную «трещину», через которую уходит не только радость, но и материальный достаток. Это не метафора — это реальный духовный закон.</p>
+
+<h3>Уступай жене — и разбогатеешь</h3>
+<p>Ребе давал мужьям удивительно конкретный совет: «В повседневных бытовых вопросах поступайте так, как хочет ваша жена». Это не слабость и не потакание — это мудрость, основанная на глубоком понимании устройства еврейского дома. Женщина — акерет абайт, «основа дома». Именно через неё проходит основной канал благословений в семью. Когда муж уважает её мнение в домашних делах, он укрепляет этот канал. Когда он спорит по каждому пустяку — он сужает поток изобилия в собственный дом. Хотите увеличить свой заработок? Начните не с нового бизнес-плана, а с простого вопроса: «Как ты хочешь, дорогая?»</p>
+
+<h3>Практический путь к достатку</h3>
+<p>Ребе подчёркивал: связь между шалом байт и парносой (заработком) не является абстрактной теорией. Он приводил множество примеров, когда семьи, начавшие осознанно работать над миром в доме, видели реальные изменения в своём финансовом положении. Мир в семье привлекает Шхину — Б-жественное присутствие. А где обитает Шхина, там обитает и браха — благословение во всех сферах жизни. Вложите энергию не в претензии друг к другу, а в создание атмосферы тепла, уважения и любви — и вы увидите, как Б-г откроет перед вами каналы изобилия, о которых вы даже не мечтали.</p>`,
+
+      en: `<h3>Shalom Bayit — A Vessel for Blessings</h3>
+<p>One of the Rebbe's most striking ideas: a family's material well-being is directly connected to the atmosphere of peace and love between spouses. Shalom Bayit — peace in the home — is not merely a pleasant addition to life, but a spiritual "vessel" into which G-d pours blessings. When this vessel is whole and strong, blessings fill the home with abundance. When the vessel is cracked from quarrels and resentments — blessings leak out like water through a sieve. The Rebbe wrote in one of his letters: constant conflicts between husband and wife create a spiritual "crack" through which not only joy but also material prosperity escapes. This is not a metaphor — it is an actual spiritual law.</p>
+
+<h3>Yield to Your Wife — and Prosper</h3>
+<p>The Rebbe gave husbands a remarkably specific piece of advice: "In everyday household matters, do as your wife wants." This is not weakness or indulgence — it is wisdom based on a deep understanding of how a Jewish home functions. The woman is the akeret habayit, the "foundation of the home." It is through her that the primary channel of blessings flows into the family. When a husband respects her opinion in domestic affairs, he strengthens this channel. When he argues over every trifle — he narrows the stream of abundance into his own home. Want to increase your earnings? Start not with a new business plan, but with a simple question: "What would you like, dear?"</p>
+
+<h3>A Practical Path to Prosperity</h3>
+<p>The Rebbe emphasized: the connection between shalom bayit and parnassa (livelihood) is not an abstract theory. He cited numerous examples of families who began consciously working on peace in their home and saw real changes in their financial situation. Peace in the family attracts the Shechinah — the Divine Presence. And where the Shechinah dwells, there also dwells bracha — blessing in all areas of life. Invest your energy not in complaints against each other, but in creating an atmosphere of warmth, respect, and love — and you will see how G-d opens channels of abundance before you that you never even dreamed of.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-soul-repair',
+    slug: 'remont-dushi-kak-ispravit-oshibki-vospitaniya',
+    title: {
+      ru: 'Ремонт души: Как исправить ошибки воспитания, пока не поздно?',
+      en: 'Soul Repair: How to Fix Parenting Mistakes Before It\'s Too Late?',
+      he: 'תיקון הנשמה: איך לתקן טעויות בחינוך לפני שמאוחר מדי?',
+      uk: 'Ремонт душі: Як виправити помилки виховання, поки не пізно?',
+    },
+    subtitle: {
+      ru: 'Сравнение воспитания с ремонтом антикварной мебели',
+      en: 'Comparing education to antique furniture repair',
+      he: 'השוואת החינוך לשיפוץ רהיטים עתיקים',
+      uk: 'Порівняння виховання з ремонтом антикварних меблів',
+    },
+    content: {
+      ru: `<h3>Мастер изучает каждую деталь</h3>
+<p>В одном из своих писем Ребе приводит удивительное сравнение: воспитание ребёнка подобно ремонту антикварной мебели. Настоящий мастер-реставратор никогда не берётся за работу, не изучив предварительно каждую деталь, каждую трещинку, каждый слой краски. Он понимает историю предмета, его уникальную структуру и только после этого осторожно, с величайшей деликатностью, начинает восстановление. Так же и родитель должен подходить к душе своего ребёнка — с вниманием, терпением и глубоким уважением к его уникальной природе. Грубое вмешательство может нанести больше вреда, чем бездействие. Но осознанный, любящий подход способен восстановить даже то, что казалось безнадёжно повреждённым.</p>
+
+<h3>Никогда не поздно «добавить света»</h3>
+<p>Многие родители, осознав свои ошибки, впадают в отчаяние: «Уже поздно что-то менять». Ребе категорически отвергал такой подход. Он учил: никогда не поздно «добавить света». Даже если вы не были религиозны, даже если вы не давали ребёнку еврейского воспитания в раннем возрасте — ваш собственный духовный рост сегодня мгновенно отражается на ваших детях. Семья — это единый духовный организм. Когда один из её членов поднимается на более высокий уровень, это поднимает всех остальных. Ваша тшува (возвращение к Б-гу) — это не только ваше личное дело. Это мощнейший акт исцеления для всей семьи, включая детей, которые, казалось бы, уже давно выросли и пошли своим путём.</p>
+
+<h3>Бескомпромиссная верность ценностям</h3>
+<p>Ребе настаивал: учите детей не логике соблюдения заповедей, а бескомпромиссной верности еврейским ценностям с самого раннего возраста. Ребёнок, который видит, что родители «торгуются» с Торой — соблюдают одно, но игнорируют другое, — усваивает, что вера — это вопрос личного удобства. Напротив, ребёнок, растущий в атмосфере полной преданности Б-гу и Его Торе, воспринимает это как естественный образ жизни. Не бойтесь быть «слишком религиозными» для своих детей. Ребе говорил: избыток света никогда не вредит. Именно та цельность и последовательность, которую вы проявляете в своей духовной жизни, становится самым мощным воспитательным инструментом — сильнее любых слов и нравоучений.</p>`,
+
+      en: `<h3>A Master Studies Every Detail</h3>
+<p>In one of his letters, the Rebbe offers a remarkable comparison: raising a child is like repairing antique furniture. A true master restorer never begins work without first studying every detail, every crack, every layer of paint. He understands the history of the piece, its unique structure, and only then carefully, with the greatest delicacy, begins the restoration. In the same way, a parent must approach their child's soul — with attention, patience, and deep respect for their unique nature. Crude intervention can cause more harm than inaction. But a conscious, loving approach can restore even what seemed hopelessly damaged.</p>
+
+<h3>It's Never Too Late to "Add Light"</h3>
+<p>Many parents, upon realizing their mistakes, fall into despair: "It's too late to change anything." The Rebbe categorically rejected this approach. He taught: it is never too late to "add light." Even if you were not religious, even if you did not give your child a Jewish upbringing in their early years — your own spiritual growth today instantly reflects upon your children. A family is a single spiritual organism. When one of its members rises to a higher level, it elevates everyone else. Your teshuvah (return to G-d) is not only your personal matter. It is a powerful act of healing for the entire family, including children who seemingly grew up long ago and went their own way.</p>
+
+<h3>Uncompromising Loyalty to Values</h3>
+<p>The Rebbe insisted: teach children not the logic of observing commandments, but uncompromising loyalty to Jewish values from the earliest age. A child who sees that parents "bargain" with the Torah — observing one thing while ignoring another — learns that faith is a matter of personal convenience. On the contrary, a child growing up in an atmosphere of complete devotion to G-d and His Torah perceives this as a natural way of life. Do not be afraid of being "too religious" for your children. The Rebbe said: an excess of light never harms. It is precisely the wholeness and consistency that you demonstrate in your spiritual life that becomes the most powerful educational tool — stronger than any words or lectures.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-books-home',
+    slug: 'investitsii-v-vechnost-pochemu-knigi-vazhnee-remonta',
+    title: {
+      ru: 'Инвестиции в вечность: Почему книги в доме важнее нового ремонта?',
+      en: 'Investing in Eternity: Why Books at Home Matter More Than Renovation?',
+      he: 'השקעה לנצח: למה ספרים בבית חשובים יותר משיפוץ חדש?',
+      uk: 'Інвестиції у вічність: Чому книги в домі важливіші за новий ремонт?',
+    },
+    subtitle: {
+      ru: 'Святые книги — «присутствие» Творца в вашем пространстве',
+      en: 'Holy books are the Creator\'s "presence" in your space',
+      he: 'ספרי קודש — "נוכחות" הבורא במרחב שלך',
+      uk: 'Святі книги — «присутність» Творця у вашому просторі',
+    },
+    content: {
+      ru: `<h3>Современный дом: полон техники, пуст духовно</h3>
+<p>Посмотрите на современный еврейский дом: новейший ремонт, дорогая техника, стильная мебель — и ни одной святой книги на полке. Дом, наполненный гаджетами, но лишённый духовного содержания, подобен красивому телу без души. Ребе неоднократно подчёркивал: каждый еврейский дом обязан иметь святые книги — Тору (Хумаш), Теилим (Псалмы), сидур (молитвенник). Это не вопрос «религиозности» или «традиции» — это вопрос духовного здоровья семьи. Книга Торы в доме — это не просто текст на полке. Это присутствие Б-га в вашем жилом пространстве, живая связь с Творцом, которая действует даже тогда, когда вы об этом не думаете.</p>
+
+<h3>Книга — это «присутствие» Творца</h3>
+<p>Ребе объяснял: святая книга — это не просто источник информации. Это духовный объект, который излучает святость и создаёт вокруг себя особое поле. Когда в доме есть Хумаш, Теилим и сидур, они создают своего рода защитный «купол» — атмосферу, в которой легче принимать правильные решения, легче сохранять мир в семье, легче воспитывать детей. Дети, растущие в доме, где на видном месте стоят святые книги, впитывают уважение к Торе и к Б-гу на подсознательном уровне. Даже если они ещё не умеют читать — само присутствие этих книг формирует их душу. Библиотека святых книг привлекает радость, мир и благословение в дом — это не просто красивые слова, а духовная реальность, подтверждённая поколениями еврейского опыта.</p>
+
+<h3>Лучшая защита от «улицы»</h3>
+<p>Родители часто беспокоятся о «дурном влиянии улицы» на своих детей. Ребе давал простой и мощный совет: наполните дом святостью — и улица потеряет свою силу. Дом, в котором есть святые книги, мезуза на каждом дверном проёме, цдака-бокс (копилка для пожертвований) — это крепость, в которую трудно проникнуть негативным влияниям. Ребёнок, который каждый день видит, как папа открывает Хумаш, как мама читает Теилим, — этот ребёнок несёт в себе внутренний щит, который защищает его везде: в школе, на улице, в интернете. Инвестируйте не только в ремонт стен, но и в наполнение дома вечными ценностями. Книги на полке стоят копейки по сравнению с ремонтом — но их духовная ценность неизмеримо выше любого дизайнерского интерьера.</p>`,
+
+      en: `<h3>The Modern Home: Full of Technology, Spiritually Empty</h3>
+<p>Look at the modern Jewish home: the latest renovation, expensive appliances, stylish furniture — and not a single holy book on the shelf. A home filled with gadgets but devoid of spiritual content is like a beautiful body without a soul. The Rebbe repeatedly emphasized: every Jewish home must have holy books — a Torah (Chumash), Tehillim (Psalms), and a siddur (prayer book). This is not a question of "religiosity" or "tradition" — it is a question of the family's spiritual health. A Torah book in the home is not merely text on a shelf. It is the presence of G-d in your living space, a living connection with the Creator that operates even when you are not thinking about it.</p>
+
+<h3>A Book Is the Creator's "Presence"</h3>
+<p>The Rebbe explained: a holy book is not merely a source of information. It is a spiritual object that radiates holiness and creates a special field around itself. When a home contains a Chumash, Tehillim, and a siddur, they create a kind of protective "dome" — an atmosphere in which it is easier to make right decisions, easier to maintain peace in the family, easier to raise children. Children growing up in a home where holy books stand in a prominent place absorb respect for the Torah and for G-d on a subconscious level. Even if they cannot yet read — the very presence of these books shapes their soul. A library of holy books attracts joy, peace, and blessing into the home — these are not just beautiful words, but a spiritual reality confirmed by generations of Jewish experience.</p>
+
+<h3>The Best Protection Against "the Street"</h3>
+<p>Parents often worry about the "bad influence of the street" on their children. The Rebbe offered simple and powerful advice: fill the home with holiness — and the street will lose its power. A home that contains holy books, a mezuzah on every doorpost, a tzedakah box (charity collection box) — this is a fortress that negative influences find hard to penetrate. A child who sees every day how their father opens a Chumash, how their mother reads Tehillim — that child carries an inner shield that protects them everywhere: at school, on the street, on the internet. Invest not only in renovating walls but in filling the home with eternal values. Books on a shelf cost pennies compared to renovation — but their spiritual value is immeasurably greater than any designer interior.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-israel',
+    slug: 'bezopasnost-izrailya-pochemu-eto-kasayetsya-kazhdogo',
+    title: {
+      ru: 'Безопасность Израиля: Почему это касается каждого?',
+      en: 'Israel\'s Security: Why Does It Concern Everyone?',
+      he: 'ביטחון ישראל: למה זה נוגע לכל אחד?',
+      uk: 'Безпека Ізраїлю: Чому це стосується кожного?',
+    },
+    subtitle: {
+      ru: 'Еврейский народ — единый организм, каждый человек — жизненно важная часть',
+      en: 'The Jewish people are a single organism — every person is a vitally important part',
+      he: 'עם ישראל הוא גוף אחד — כל אדם הוא חלק חיוני',
+      uk: 'Єврейський народ — єдиний організм, кожна людина — життєво важлива частина',
+    },
+    content: {
+      ru: `<h2>Безопасность Израиля: Почему это касается каждого?</h2>
+
+<p>Земля Израиля — это место, о котором сказано, что «глаза Творца устремлены на неё от начала года и до конца года». Это не просто географическая территория — это духовный центр всего мира, точка, в которой небо соприкасается с землёй. Ребе неоднократно подчёркивал, что духовное состояние каждого еврея, где бы он ни находился, напрямую влияет на безопасность тех, кто живёт в Святой Земле. Любое доброе дело, совершённое даже за тысячи километров от Израиля, создаёт духовную защиту для жителей этой страны. Еврейский народ подобен единому организму: когда болит палец — страдает всё тело; когда укрепляется одна часть — оздоравливается целое.</p>
+
+<p>Ребе призывал не ограничиваться чтением новостей и обсуждением политики, а укреплять личную связь с традицией — зажигать субботние свечи, накладывать тфилин, давать цдаку, изучать Тору. Именно эти действия создают мощнейший духовный щит для всей страны. Б-г дал Своему народу Тору и заповеди как фундамент выживания — и когда мы соблюдаем законы Творца, мы не просто выполняем ритуалы, а строим невидимую крепость, защищающую каждого еврея. Не нужно быть генералом, чтобы защитить Израиль, — достаточно быть евреем, который живёт по Торе и своим примером вдохновляет окружающих.</p>`,
+
+      en: `<h2>Israel's Security: Why Does It Concern Everyone?</h2>
+
+<p>The Land of Israel is the place about which it is said that "the eyes of the Creator are upon it from the beginning of the year to the end of the year." This is not merely a geographical territory — it is the spiritual center of the entire world, the point where heaven meets earth. The Rebbe repeatedly emphasized that the spiritual state of every Jew, wherever they may be, directly affects the safety of those living in the Holy Land. Any good deed performed even thousands of miles from Israel creates a spiritual shield for the country's inhabitants. The Jewish people are like a single organism: when a finger hurts, the whole body suffers; when one part is strengthened, the whole becomes healthier.</p>
+
+<p>The Rebbe urged people not to limit themselves to reading news and discussing politics, but to strengthen their personal connection with tradition — lighting Shabbat candles, putting on tefillin, giving tzedakah, and studying Torah. It is precisely these actions that create the most powerful spiritual shield for the entire country. G-d gave His people the Torah and commandments as the foundation of survival — and when we observe the Creator's laws, we are not merely performing rituals but building an invisible fortress that protects every Jew. You do not need to be a general to defend Israel — it is enough to be a Jew who lives according to the Torah and inspires others by personal example.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-anxiety',
+    slug: 'pobedit-trevogu-kak-doveriye-prevrashchayetsya-v-realnost',
+    title: {
+      ru: 'Победить тревогу: Как доверие превращается в реальность',
+      en: 'Conquering Anxiety: How Trust Becomes Reality',
+      he: 'לנצח את החרדה: איך ביטחון הופך למציאות',
+      uk: 'Перемогти тривогу: Як довіра перетворюється на реальність',
+    },
+    subtitle: {
+      ru: 'Тревога — признак того, что вы забыли о Творце',
+      en: 'Anxiety is a sign that you have forgotten the Creator',
+      he: 'חרדה היא סימן שאתה שכחת את הבורא',
+      uk: 'Тривога — ознака того, що ви забули про Творця',
+    },
+    content: {
+      ru: `<h2>Победить тревогу: Как доверие превращается в реальность</h2>
+
+<p>Ребе в своих письмах неоднократно объяснял, что качество битахона — упования на Б-га — напрямую определяет объём материальных благословений, которые человек получает. Доверие Творцу — это не пассивное ожидание чуда, а активный канал связи между человеком и Небесами. Когда человек по-настоящему верит, что Всевышний заботится о нём лично, что каждая деталь его жизни находится под Б-жественным присмотром, — он освобождается от «путаницы мыслей», от бесконечного стресса и парализующего страха перед будущим. Тревога — это духовный симптом, признак того, что человек на мгновение забыл о Творце и начал полагаться исключительно на собственные силы.</p>
+
+<p>Ребе советовал вместо того, чтобы тратить энергию на страх и беспокойство, направить её на конкретные действия. Давайте цдаку, даже небольшие суммы, перед молитвой — и ситуация начнёт меняться к лучшему. Произносите слова Теилим с искренним чувством. Помогайте другим людям, особенно тем, кто переживает трудные времена, — ведь лучшее лекарство от собственной тревоги — это забота о ближнем. Когда вы открываете канал добра, Б-г открывает канал благословений в вашу жизнь. Не позволяйте страху управлять вашими решениями — доверьтесь Тому, Кто управляет всем миром.</p>`,
+
+      en: `<h2>Conquering Anxiety: How Trust Becomes Reality</h2>
+
+<p>In his letters, the Rebbe repeatedly explained that the quality of bitachon — trust in G-d — directly determines the volume of material blessings a person receives. Trust in the Creator is not passive waiting for a miracle but an active channel of connection between a person and Heaven. When a person truly believes that Hashem cares for them personally, that every detail of their life is under Divine supervision, they are freed from "confusion of thoughts," from endless stress and paralyzing fear of the future. Anxiety is a spiritual symptom, a sign that a person has momentarily forgotten the Creator and begun to rely solely on their own strength.</p>
+
+<p>The Rebbe advised that instead of spending energy on fear and worry, one should direct it toward concrete actions. Give tzedakah, even small amounts, before prayer — and the situation will begin to change for the better. Recite the words of Tehillim with sincere feeling. Help other people, especially those going through difficult times — for the best remedy for your own anxiety is caring for others. When you open a channel of goodness, G-d opens a channel of blessings into your life. Do not allow fear to control your decisions — place your trust in the One Who governs the entire world.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-gold',
+    slug: 'zoloto-serebro-i-vash-biznes-istinnaya-tsel-uspekha',
+    title: {
+      ru: 'Золото, серебро и ваш бизнес: В чем истинная цель успеха?',
+      en: 'Gold, Silver and Your Business: What Is the True Purpose of Success?',
+      he: 'זהב, כסף והעסק שלך: מהי המטרה האמיתית של הצלחה?',
+      uk: 'Золото, срібло і ваш бізнес: У чому справжня мета успіху?',
+    },
+    subtitle: {
+      ru: '«Золото и серебро были созданы для строительства Храма»',
+      en: '"Gold and silver were created for the building of the Temple"',
+      he: '«זהב וכסף נבראו לבניין בית המקדש»',
+      uk: '«Золото і срібло були створені для будівництва Храму»',
+    },
+    content: {
+      ru: `<h2>Золото, серебро и ваш бизнес: В чем истинная цель успеха?</h2>
+
+<p>Ребе в своих письмах к бизнесменам неоднократно подчёркивал: материальный успех — это не личная заслуга для удовлетворения эго, а ресурс, доверенный человеку для улучшения мира. Б-г выбирает определённых людей каналами изобилия не потому, что они «лучше» других, а потому, что Он доверяет им распоряжаться этими средствами правильно. Бизнесмен, который открыто признаёт, что его успех — это благословение Всевышнего, освящает саму материю. Золото и серебро, согласно мудрецам, были созданы в первую очередь для строительства Храма — и каждый рубль, потраченный на добрые дела, буквально выполняет эту изначальную задачу.</p>
+
+<p>Ваш офис может стать «маленьким Храмом», если вы ведёте дела честно, платите сотрудникам вовремя и справедливо, и используете прибыль для помощи нуждающимся. Алтер Ребе учил: «Б-г даёт еврею материальное, чтобы тот превратил его в духовное». Это означает, что каждая деловая сделка — это возможность для святости. Когда вы благодарите Б-га за каждый контракт, когда вы отделяете десятину на цдаку, когда вы относитесь к партнёрам и клиентам с уважением и порядочностью — вы превращаете обычный бизнес в служение Творцу.</p>`,
+
+      en: `<h2>Gold, Silver and Your Business: What Is the True Purpose of Success?</h2>
+
+<p>In his letters to businessmen, the Rebbe repeatedly emphasized that material success is not a personal merit for the satisfaction of one's ego, but a resource entrusted to a person to improve the world. G-d chooses certain people as channels of abundance not because they are "better" than others, but because He trusts them to manage these resources properly. A businessman who openly acknowledges that his success is a blessing from Hashem sanctifies matter itself. Gold and silver, according to the Sages, were created primarily for the building of the Temple — and every dollar spent on good deeds literally fulfills this original purpose.</p>
+
+<p>Your office can become a "small Temple" if you conduct business honestly, pay employees fairly and on time, and use profits to help those in need. The Alter Rebbe taught: "G-d gives a Jew material things so that he may transform them into spiritual ones." This means that every business transaction is an opportunity for holiness. When you thank G-d for every contract, when you set aside a tithe for tzedakah, when you treat partners and clients with respect and integrity — you transform an ordinary business into service of the Creator.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-woman-power',
+    slug: 'sila-zhenshchiny-kto-stroit-budushcheye',
+    title: {
+      ru: 'Сила женщины: Кто на самом деле строит будущее?',
+      en: 'The Power of Woman: Who Really Builds the Future?',
+      he: 'כוחה של האישה: מי באמת בונה את העתיד?',
+      uk: 'Сила жінки: Хто насправді будує майбутнє?',
+    },
+    subtitle: {
+      ru: 'Акерет а-Баит — женщина как основа и фундамент дома',
+      en: 'Akeret HaBayit — the woman as the foundation of the home',
+      he: 'עקרת הבית — האישה כיסוד וכבסיס הבית',
+      uk: 'Акерет а-Баіт — жінка як основа та фундамент дому',
+    },
+    content: {
+      ru: `<h2>Сила женщины: Кто на самом деле строит будущее?</h2>
+
+<p>Ребе в своих письмах к женщинам подчёркивал их уникальную и незаменимую роль в еврейской жизни. Женщина определяет духовный климат семьи — именно она задаёт тон, атмосферу и направление всего домашнего уклада. В материальных и бытовых вопросах, писал Ребе, мужьям следует прислушиваться к своим жёнам, ибо их интуиция делает их мнение приоритетным. Мягкость и терпение женщины предотвращают семейные конфликты и приносят в дом Шалом Баит — мир и гармонию, которые являются основой благословения Б-га. Без этого фундамента ни богатство, ни карьера, ни общественное положение не имеют истинной ценности.</p>
+
+<p>Воспитание детей в духе веры и преданности Торе — это главная миссия, доверенная матери. Ребе писал, что живой пример матери, её радость от исполнения заповедей, её искренняя молитва и доброта влияют на детей неизмеримо сильнее, чем строгие наставления или теоретические поучения. Когда мать зажигает субботние свечи с радостью, когда она благословляет пищу с благоговением, когда она проявляет милосердие к окружающим — дети впитывают это всем сердцем и несут эти ценности через всю жизнь. Женщина — это Акерет а-Баит, основа дома, и через неё Б-г строит будущее всего народа.</p>`,
+
+      en: `<h2>The Power of Woman: Who Really Builds the Future?</h2>
+
+<p>In his letters to women, the Rebbe emphasized their unique and irreplaceable role in Jewish life. A woman determines the spiritual climate of the family — it is she who sets the tone, the atmosphere, and the direction of the entire household. In material and domestic matters, the Rebbe wrote, husbands should listen to their wives, for their intuition makes their opinion a priority. A woman's softness and patience prevent family conflicts and bring Shalom Bayit — peace and harmony that serve as the foundation of G-d's blessing. Without this foundation, neither wealth, nor career, nor social standing holds true value.</p>
+
+<p>Raising children in the spirit of faith and devotion to Torah is the primary mission entrusted to the mother. The Rebbe wrote that a mother's living example — her joy in performing mitzvot, her sincere prayer and kindness — influences children immeasurably more than strict instructions or theoretical teachings. When a mother lights Shabbat candles with joy, when she recites blessings over food with reverence, when she shows compassion to those around her — children absorb this with their whole hearts and carry these values throughout their lives. A woman is the Akeret HaBayit, the foundation of the home, and through her G-d builds the future of the entire nation.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-action-now',
+    slug: 'net-vremeni-na-somneniya-glavnoye-eto-deystviye',
+    title: {
+      ru: 'Нет времени на сомнения: Главное — это действие',
+      en: 'No Time for Doubts: The Main Thing Is Action',
+      he: 'אין זמן לספקות: העיקר הוא המעשה',
+      uk: 'Немає часу на сумніви: Головне — це дія',
+    },
+    subtitle: {
+      ru: '«Аналитический паралич» — главная болезнь нашего поколения',
+      en: '"Analysis paralysis" is the main disease of our generation',
+      he: '«שיתוק אנליטי» — המחלה המרכזית של דורנו',
+      uk: '«Аналітичний параліч» — головна хвороба нашого покоління',
+    },
+    content: {
+      ru: `<h2>Нет времени на сомнения: Главное — это действие</h2>
+
+<p>Ребе в своих письмах часто обращался к людям, которые откладывали духовный рост, считая себя «недостойными» или «неготовыми». Его ответ был неизменным: начните выполнять хотя бы одну заповедь прямо сейчас. Душа может спуститься в этот мир на семьдесят-восемьдесят лет ради одного единственного поступка — помочь другому человеку, произнести одно благословение, зажечь одну свечу. «Аналитический паралич» — это, по сути, уловка дурного начала, которое убеждает человека, что он должен сначала всё понять, всё изучить, достичь совершенства — и только потом действовать. Но Тора говорит иначе: «Наасе ве-нишма» — сначала сделаем, а потом поймём.</p>
+
+<p>Не ждите идеального момента или полного понимания. Время, прожитое без добрых дел, невозможно вернуть — каждая минута уходит безвозвратно. Ребе учил, что каждое, даже самое маленькое доброе дело имеет бесконечную ценность и способно склонить чашу весов всего мира к добру. Один человек, наложивший тфилин сегодня утром, мог изменить судьбу целого города. Одна женщина, зажёгшая субботние свечи, могла принести свет в тысячи душ. Б-г не требует от нас совершенства — Он требует действия. Встаньте и сделайте хоть что-то прямо сейчас, потому что именно ваш поступок может оказаться тем последним добрым делом, которое переведёт весь мир из тьмы к свету.</p>`,
+
+      en: `<h2>No Time for Doubts: The Main Thing Is Action</h2>
+
+<p>In his letters, the Rebbe frequently addressed people who were postponing spiritual growth, considering themselves "unworthy" or "not ready." His answer was invariable: start performing at least one mitzvah right now. A soul may descend into this world for seventy or eighty years for the sake of a single act — helping another person, reciting one blessing, lighting one candle. "Analysis paralysis" is essentially a trick of the evil inclination, which convinces a person that they must first understand everything, study everything, achieve perfection — and only then act. But the Torah says otherwise: "Naaseh ve-nishma" — first we will do, and then we will understand.</p>
+
+<p>Do not wait for the ideal moment or complete understanding. Time lived without good deeds cannot be returned — every minute passes irrevocably. The Rebbe taught that every good deed, even the smallest one, has infinite value and can tip the scales of the entire world toward good. One person who put on tefillin this morning may have changed the fate of an entire city. One woman who lit Shabbat candles may have brought light to thousands of souls. G-d does not demand perfection from us — He demands action. Stand up and do something right now, because it may be precisely your deed that becomes the final act of goodness that transitions the entire world from darkness to light.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: 'Rebbe\'s Letters', he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-education',
+    slug: 'vospitaniye-bez-kompromissov-demokratiya-vredit-rebyonku',
+    title: {
+      ru: 'Воспитание без компромиссов: Почему «демократия» вредит вашему ребенку?',
+      en: 'Parenting Without Compromise: Why "Democracy" Harms Your Child?',
+      he: 'חינוך ללא פשרות: למה "דמוקרטיה" מזיקה לילד שלך?',
+      uk: 'Виховання без компромісів: Чому «демократія» шкодить вашій дитині?',
+    },
+    subtitle: {
+      ru: 'Истинный хинух требует бескомпромиссной позиции с раннего возраста',
+      en: 'True chinuch demands an uncompromising stance from an early age',
+      he: 'חינוך אמיתי דורש עמדה בלתי מתפשרת מגיל צעיר',
+      uk: 'Справжній хінух вимагає безкомпромісної позиції з раннього віку',
+    },
+    content: {
+      ru: `<h3>Ошибка логики: ждать, пока ребёнок «сам поймёт»</h3>
+<p>Одна из самых распространённых ошибок современных родителей — убеждённость в том, что ребёнку нужно дать «свободу выбора» в вопросах веры и морали. «Пусть вырастет и сам решит» — говорят они, считая это проявлением уважения. Однако Ребе неоднократно предупреждал: ожидание того момента, когда ребёнок «дорастёт до понимания», означает безвозвратную потерю драгоценного времени формирования личности. Фундамент души закладывается в самые ранние годы — именно тогда, когда ребёнок ещё не способен к критическому анализу. И именно поэтому основы веры, любви к Б-гу и соблюдения Торы должны быть заложены в чистом, незамутнённом виде — без оговорок и «демократических» компромиссов. Как строитель не спрашивает у фундамента, хочет ли тот держать здание, так и родитель обязан дать ребёнку прочное духовное основание без колебаний.</p>
+
+<h3>Дисциплина как акт любви</h3>
+<p>Ребе сравнивал роль родителя с работой опытного реставратора мебели, который бережно, но решительно разбирает повреждённую конструкцию, чтобы собрать её заново — правильно и прочно. Родители несут ответственность за Б-жественную искру в душе своего ребёнка. Каждый еврейский ребёнок — это доверенное сокровище, и мягкотелость в вопросах хинуха (воспитания) — не доброта, а безответственность. Твёрдость в вере — это не жёсткость, а любовь в её высшем проявлении. Ребёнок, выросший в среде чётких духовных ориентиров, обретает не ограничения, а стабильность и внутреннюю безопасность. Он знает, кто он, откуда пришёл и куда идёт. Размытые границы, напротив, порождают тревогу и потерянность. Истинная любовь к ребёнку — это мужество быть бескомпромиссным в главном, даже если это непопулярно в глазах окружающих.</p>`,
+
+      en: `<h3>The Logic Error: Waiting for a Child to "Understand on Their Own"</h3>
+<p>One of the most widespread mistakes of modern parents is the conviction that a child should be given "freedom of choice" in matters of faith and morality. "Let them grow up and decide for themselves," they say, considering it a sign of respect. However, the Rebbe repeatedly warned: waiting for the moment when a child "matures enough to understand" means an irretrievable loss of precious character-formation time. The foundation of the soul is laid in the earliest years — precisely when the child is not yet capable of critical analysis. And that is exactly why the foundations of faith, love of G-d, and Torah observance must be laid in a pure, unclouded form — without caveats or "democratic" compromises. Just as a builder does not ask the foundation whether it wants to support a building, a parent is obligated to give a child a solid spiritual foundation without hesitation.</p>
+
+<h3>Discipline as an Act of Love</h3>
+<p>The Rebbe compared the role of a parent to the work of an experienced furniture restorer who carefully yet decisively disassembles a damaged structure in order to reassemble it correctly and firmly. Parents bear responsibility for the Divine spark within their child's soul. Every Jewish child is an entrusted treasure, and softness in matters of chinuch (education) is not kindness but irresponsibility. Firmness in faith is not rigidity — it is love in its highest expression. A child raised in an environment of clear spiritual guideposts gains not restrictions but stability and inner security. They know who they are, where they came from, and where they are going. Blurred boundaries, by contrast, breed anxiety and a sense of being lost. True love for a child is the courage to be uncompromising in what matters most, even when it is unpopular in the eyes of those around you.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-suffering',
+    slug: 'pochemu-stradayut-khoroshiye-lyudi-otvet',
+    title: {
+      ru: 'Почему страдают хорошие люди? Ответ, который не дают в школах',
+      en: 'Why Do Good People Suffer? The Answer They Don\'t Teach in Schools',
+      he: 'למה אנשים טובים סובלים? התשובה שלא מלמדים בבתי הספר',
+      uk: 'Чому страждають хороші люди? Відповідь, яку не дають у школах',
+    },
+    subtitle: {
+      ru: 'Наше непонимание проистекает из ограниченного взгляда на реальность',
+      en: 'Our lack of understanding stems from a limited view of reality',
+      he: 'חוסר ההבנה שלנו נובע ממבט מוגבל על המציאות',
+      uk: 'Наше нерозуміння походить з обмеженого погляду на реальність',
+    },
+    content: {
+      ru: `<h3>Взгляд из «коридора»</h3>
+<p>Этот мир подобен коридору перед огромным залом — миром грядущим. Мы видим лишь узкий фрагмент реальности, но судим обо всём так, словно этот фрагмент и есть вся картина. Ребе объяснял: когда ребёнок не понимает, зачем родитель заставляет его учиться, или когда маленький пациент плачет от боли, причинённой врачом, — это не значит, что родитель жесток или врач — враг. Это значит, что у ребёнка пока нет инструментов для понимания. Разница между нашим разумом и замыслом Творца бесконечно больше, чем разница между разумом младенца и взрослого. Б-г видит всю картину — от начала творения до конца времён, видит все воплощения души, все скрытые связи между событиями. Мы же стоим в тёмном коридоре и пытаемся судить о свете по тени на стене. Признание ограниченности собственного понимания — это не слабость, а проявление интеллектуальной честности и начало истинной мудрости.</p>
+
+<h3>Духовная миссия</h3>
+<p>Ребе подчёркивал, что страдание может быть частью сложной миссии души — миссии, которую невозможно понять в рамках одной земной жизни. Творец есть абсолютное добро, и ничто из исходящего от Него не может быть злом в своей сущности. Это не абстрактная теология — это фундаментальный принцип, на котором строится еврейское мировоззрение. Вместо того чтобы тратить силы на вопрос «почему?», который наш ограниченный разум всё равно не в состоянии разрешить полностью, Ребе советовал сосредоточиться на вопросе «для чего?» — как использовать полученный опыт, чтобы стать лучше, сильнее, ближе к Б-гу. Каждое испытание — это возможность раскрыть в себе глубины, о которых мы не подозревали. Боль может стать источником сострадания к другим, потеря — путём к обретению более глубокого смысла, а трудности — ступенями восхождения к уровню, которого душа иначе не достигла бы.</p>`,
+
+      en: `<h3>A View from the "Corridor"</h3>
+<p>This world is like a corridor before a great hall — the World to Come. We see only a narrow fragment of reality, yet we judge everything as if that fragment were the entire picture. The Rebbe explained: when a child does not understand why a parent makes them study, or when a small patient cries from the pain inflicted by a doctor, it does not mean the parent is cruel or the doctor is an enemy. It means the child does not yet possess the tools for understanding. The difference between our mind and the plan of the Creator is infinitely greater than the difference between the mind of an infant and that of an adult. G-d sees the entire picture — from the beginning of creation to the end of time, sees all incarnations of the soul, all hidden connections between events. We stand in a dark corridor and try to judge the light by the shadow on the wall. Acknowledging the limitations of our own understanding is not weakness but a manifestation of intellectual honesty and the beginning of true wisdom.</p>
+
+<h3>The Spiritual Mission</h3>
+<p>The Rebbe emphasized that suffering may be part of the soul's complex mission — a mission that cannot be understood within the framework of a single earthly life. The Creator is absolute good, and nothing that emanates from Him can be evil in its essence. This is not abstract theology — it is a fundamental principle upon which the Jewish worldview is built. Rather than expending energy on the question "why?" — which our limited mind is incapable of fully resolving — the Rebbe advised focusing on the question "what for?" — how to use the experience gained to become better, stronger, closer to G-d. Every trial is an opportunity to reveal depths within ourselves that we never suspected. Pain can become a source of compassion for others, loss can become a path to discovering deeper meaning, and hardships can become steps of ascent to a level the soul would otherwise never have reached.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-bitachon',
+    slug: 'kanal-dlya-chudes-kak-doveriye-stanovitsya-dengami',
+    title: {
+      ru: 'Канал для чудес: Как ваше доверие превращается в реальные деньги',
+      en: 'Channel for Miracles: How Your Trust Becomes Real Money',
+      he: 'ערוץ לניסים: איך האמון שלך הופך לכסף אמיתי',
+      uk: 'Канал для чудес: Як ваша довіра перетворюється на реальні гроші',
+    },
+    subtitle: {
+      ru: 'Материальный достаток зависит от качества доверия к Б-гу',
+      en: 'Material prosperity depends on the quality of trust in G-d',
+      he: 'השפע החומרי תלוי באיכות הביטחון בה׳',
+      uk: 'Матеріальний достаток залежить від якості довіри до Б-га',
+    },
+    content: {
+      ru: `<h3>Духовный канал</h3>
+<p>Ребе многократно объяснял в своих письмах фундаментальный принцип: битахон (доверие к Б-гу) — это не просто красивое чувство, а реальный духовный механизм, создающий канал для Б-жественных благословений. Представьте себе трубу, по которой текут благословения свыше. Чем сильнее и искреннее ваше доверие — тем шире эта труба, тем больше благ может через неё пройти. И наоборот: тревога, страх, постоянное беспокойство о завтрашнем дне сужают этот канал, буквально перекрывая поток изобилия. Это не метафора — это духовный закон, действующий столь же неукоснительно, как законы физики. Когда человек по-настоящему доверяет Творцу, он открывает себя для получения того, что Б-г хочет ему дать. Беспокойство же — это форма неверия, которая говорит: «Я не верю, что Ты позаботишься обо мне», и тем самым создаёт духовное препятствие для благословения.</p>
+
+<h3>Действие и результат</h3>
+<p>При этом Ребе подчёркивал: битахон не означает бездействие. Человек обязан действовать естественным образом — работать, вести бизнес, принимать разумные решения. Б-г создал мир, в котором благословение приходит через естественные каналы, и наша задача — создать «сосуд» (кли) для его получения. Но — и это ключевой момент — необходимо ясно понимать, что успех приходит не благодаря нашим усилиям, а свыше. Золото и серебро принадлежат Б-гу, и Он даёт их человеку для совершения добрых дел — цдаки, помощи ближнему, поддержки изучения Торы. Тот, кто помнит об этом, никогда не будет порабощён своим бизнесом.</p>
+
+<h3>Практический шаг</h3>
+<p>В своих письмах Ребе давал конкретный совет тем, кто испытывает финансовые трудности: увеличьте цдаку. Это кажется парадоксальным — как можно отдавать больше, когда денег и так не хватает? Но именно в этом проявляется сила битахона. Цдака — это самый быстрый и проверенный способ привлечь новое благословение в свой бизнес и жизнь. Отдавая, вы демонстрируете Б-гу своё доверие, и Он отвечает мерой, многократно превышающей ваше вложение. Это не магия — это духовная экономика, основанная на принципе «десятина» (маасер), который действует уже тысячи лет.</p>`,
+
+      en: `<h3>The Spiritual Channel</h3>
+<p>The Rebbe explained numerous times in his letters a fundamental principle: bitachon (trust in G-d) is not merely a beautiful feeling but a real spiritual mechanism that creates a channel for Divine blessings. Imagine a pipe through which blessings flow from above. The stronger and more sincere your trust, the wider this pipe becomes, and the more goodness can flow through it. Conversely, anxiety, fear, and constant worry about tomorrow constrict this channel, literally blocking the flow of abundance. This is not a metaphor — it is a spiritual law that operates as unfailingly as the laws of physics. When a person truly trusts the Creator, they open themselves to receiving what G-d wants to give them. Worry, on the other hand, is a form of disbelief that says: "I do not believe You will take care of me," and thereby creates a spiritual barrier to blessing.</p>
+
+<h3>Action and Result</h3>
+<p>At the same time, the Rebbe emphasized: bitachon does not mean inaction. A person is obligated to act in a natural manner — to work, run a business, make reasonable decisions. G-d created a world in which blessings arrive through natural channels, and our task is to create a "vessel" (kli) for receiving them. But — and this is the key point — one must clearly understand that success comes not through our efforts but from Above. Gold and silver belong to G-d, and He gives them to a person for performing good deeds — tzedakah, helping others, supporting Torah study. One who remembers this will never be enslaved by their business.</p>
+
+<h3>A Practical Step</h3>
+<p>In his letters, the Rebbe offered concrete advice to those experiencing financial difficulties: increase your tzedakah. This seems paradoxical — how can one give more when there is already not enough money? But this is precisely where the power of bitachon manifests. Tzedakah is the fastest and most proven way to attract new blessing into your business and life. By giving, you demonstrate your trust in G-d, and He responds with a measure that far exceeds your investment. This is not magic — it is spiritual economics based on the principle of the tithe (ma'aser), which has been operating for thousands of years.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-one-deed',
+    slug: 'effekt-odnogo-postupka-mozhet-li-chelovek-izmenit-mir',
+    title: {
+      ru: 'Эффект одного поступка: Может ли один человек изменить мир?',
+      en: 'The Effect of One Deed: Can One Person Change the World?',
+      he: 'אפקט המעשה האחד: האם אדם אחד יכול לשנות את העולם?',
+      uk: 'Ефект одного вчинку: Чи може одна людина змінити світ?',
+    },
+    subtitle: {
+      ru: 'Ценность одного-единственного действия бесконечна',
+      en: 'The value of a single action is infinite',
+      he: 'הערך של מעשה אחד ויחיד הוא אינסופי',
+      uk: 'Цінність одного-єдиного вчинку нескінченна',
+    },
+    content: {
+      ru: `<h3>Космический масштаб</h3>
+<p>Ребе писал в своих письмах поразительную мысль: душа может спуститься в этот мир на семьдесят-восемьдесят лет — и всё это ради одного-единственного акта помощи другому еврею. Эта идея переворачивает наше привычное представление о ценности поступков. Мы склонны измерять значимость действия его масштабом: крупное пожертвование «считается», а доброе слово одинокому старику — «мелочь». Но в глазах Б-га нет «мелких» добрых дел. Каждая мицва — это космическое событие, каждый акт хеседа (милосердия) вызывает потрясение в высших мирах. Когда вы помогаете кому-то надеть тфилин, зажечь субботние свечи, произнести благословение — вы совершаете действие, ради которого, возможно, была создана вся вселенная. Ребе неустанно повторял: никогда не пренебрегайте «маленьким» добрым делом, потому что именно оно может оказаться тем самым поступком, ради которого ваша душа пришла в этот мир.</p>
+
+<h3>Мир на весах</h3>
+<p>Рамбам учит: каждый человек должен видеть себя и весь мир стоящими на весах — ровно посередине между заслугами и грехами. Одно доброе дело — и чаша заслуг всего мира склоняется к добру, принося спасение и избавление всем творениям. Одно доброе слово может склонить чашу весов всего мира к благу. Это не преувеличение — это галахический принцип, сформулированный величайшим кодификатором еврейского закона. Ребе призывал не откладывать доброе дело на потом, не ждать «подходящего момента» или «большой возможности». Сосредоточьтесь на конкретном действии прямо сейчас — именно здесь и именно в эту минуту. Позвоните одинокому человеку, помогите соседу, положите монету в копилку цдаки, произнесите слово Торы. Каждое из этих действий — не «капля в море», а потенциальный поворотный момент в истории всего творения. Б-г дал каждому из нас силу изменить мир — и эта сила заключена в каждом отдельном поступке.</p>`,
+
+      en: `<h3>Cosmic Scale</h3>
+<p>The Rebbe wrote a striking thought in his letters: a soul may descend into this world for seventy or eighty years — and all of it for the sake of a single act of helping another Jew. This idea overturns our usual notion of the value of deeds. We tend to measure the significance of an action by its scale: a large donation "counts," while a kind word to a lonely elderly person is "trivial." But in the eyes of G-d, there are no "trivial" good deeds. Every mitzvah is a cosmic event; every act of chesed (kindness) causes a tremor in the higher worlds. When you help someone put on tefillin, light Shabbat candles, or recite a blessing, you are performing an action for which, perhaps, the entire universe was created. The Rebbe tirelessly repeated: never dismiss a "small" good deed, because it may turn out to be the very act for which your soul came into this world.</p>
+
+<h3>The World on the Scales</h3>
+<p>The Rambam teaches: every person must see themselves and the entire world as standing on scales — exactly in the middle between merits and transgressions. One good deed — and the scale of merits for the entire world tips toward good, bringing salvation and redemption to all creatures. One kind word can tip the scales of the entire world toward good. This is not an exaggeration — it is a halachic principle formulated by the greatest codifier of Jewish law. The Rebbe urged people not to postpone a good deed, not to wait for the "right moment" or a "big opportunity." Focus on a concrete action right now — right here and at this very minute. Call a lonely person, help a neighbor, place a coin in the tzedakah box, speak a word of Torah. Each of these actions is not a "drop in the ocean" but a potential turning point in the history of all creation. G-d has given each of us the power to change the world — and that power is contained in every single deed.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-identity',
+    slug: 'sindrom-podrazhaniya-pochemu-byt-kak-vse-vedet-k-katastrofe',
+    title: {
+      ru: 'Синдром подражания: Почему попытка «быть как все» ведет к катастрофе',
+      en: 'The Imitation Syndrome: Why Trying to "Be Like Everyone" Leads to Catastrophe',
+      he: 'תסמונת החיקוי: למה הניסיון "להיות כמו כולם" מוביל לאסון',
+      uk: 'Синдром наслідування: Чому спроба «бути як усі» веде до катастрофи',
+    },
+    subtitle: {
+      ru: 'Стремление ассимилироваться приводит к потере идентичности',
+      en: 'The desire to assimilate leads to the loss of identity',
+      he: 'השאיפה להיטמע מובילה לאובדן הזהות',
+      uk: 'Прагнення асимілюватися призводить до втрати ідентичності',
+    },
+    content: {
+      ru: `<h3>Ложное признание</h3>
+<p>Ребе в своих письмах раз за разом возвращался к одной из самых болезненных иллюзий еврейского народа: вере в то, что подражание окружающим народам принесёт признание и безопасность. История снова и снова доказывает обратное. Евреи, пытавшиеся ассимилироваться в Германии, Испании, России, стремившиеся стать «больше немцами, чем сами немцы», не только не заслужили уважения, но вызвали ещё большую антипатию. Подражание — это проявление слабости, а слабость никогда не вызывает уважения. Напротив, другие народы ценят и уважают тех, кто верен своим корням, своей традиции, своей уникальности. Когда еврей гордо носит кипу, соблюдает Шаббат, открыто живёт по Торе — он вызывает подлинное уважение, потому что демонстрирует внутреннюю силу и верность принципам. Ассимиляция же — это духовное самоубийство, замаскированное под «прогресс» и «интеграцию».</p>
+
+<h3>Источник силы</h3>
+<p>Секрет выживания еврейского народа на протяжении тысячелетий — один и тот же: непоколебимая верность Торе. Когда евреи отступали от своих корней, они теряли не только духовную идентичность, но и физическую безопасность. Когда возвращались — обретали силу, невозможную с точки зрения обычной логики. «Народ, обитающий отдельно» — это не проклятие, а благословение и миссия. Наша уникальность — это наша сила. Ребе подчёркивал: истинный прогресс еврея — не в том, чтобы следовать за толпой, а в верности вечным ценностям. Тора — не «древний пережиток», а живой источник мудрости, актуальный сегодня не менее, чем три тысячи лет назад. Каждый еврей призван быть носителем света, а не отражением чужих идей. Будьте тем, кем Б-г вас создал — евреем, гордым своим наследием, верным своей миссии, несущим свет Торы в мир. Именно в этой верности — ключ к подлинному уважению, безопасности и процветанию.</p>`,
+
+      en: `<h3>False Acceptance</h3>
+<p>In his letters, the Rebbe returned again and again to one of the most painful illusions of the Jewish people: the belief that imitating the surrounding nations will bring acceptance and safety. History has proven the opposite time and again. Jews who tried to assimilate in Germany, Spain, and Russia — striving to become "more German than the Germans themselves" — not only failed to earn respect but aroused even greater antipathy. Imitation is a manifestation of weakness, and weakness never commands respect. On the contrary, other nations value and respect those who are loyal to their roots, their tradition, their uniqueness. When a Jew proudly wears a kippah, observes Shabbat, and openly lives by the Torah, he evokes genuine respect because he demonstrates inner strength and fidelity to principles. Assimilation, by contrast, is spiritual suicide disguised as "progress" and "integration."</p>
+
+<h3>The Source of Strength</h3>
+<p>The secret of the Jewish people's survival over millennia is one and the same: unwavering loyalty to the Torah. When Jews departed from their roots, they lost not only their spiritual identity but also their physical safety. When they returned, they gained a strength impossible by ordinary logic. "A nation dwelling alone" is not a curse but a blessing and a mission. Our uniqueness is our strength. The Rebbe emphasized: true progress for a Jew lies not in following the crowd but in loyalty to eternal values. The Torah is not an "ancient relic" but a living source of wisdom, as relevant today as it was three thousand years ago. Every Jew is called to be a bearer of light, not a reflection of others' ideas. Be who G-d created you to be — a Jew, proud of your heritage, faithful to your mission, carrying the light of Torah into the world. It is in this faithfulness that the key to genuine respect, safety, and prosperity is found.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-evolution-myth',
+    slug: 'nauchnyy-mif-teoriya-evolyutsii-khrupkaya-gipoteza',
+    title: {
+      ru: 'Научный миф: Почему теория эволюции — это лишь хрупкая гипотеза?',
+      en: 'Scientific Myth: Why the Theory of Evolution Is Just a Fragile Hypothesis?',
+      he: 'המיתוס המדעי: למה תיאוריית האבולוציה היא רק השערה שברירית?',
+      uk: 'Науковий міф: Чому теорія еволюції — це лише крихка гіпотеза?',
+    },
+    subtitle: {
+      ru: 'Ребе вскрывает методологическую слабость популярных теорий',
+      en: 'The Rebbe exposes the methodological weakness of popular theories',
+      he: 'הרבי חושף את החולשה המתודולוגית של תיאוריות פופולריות',
+      uk: 'Ребе розкриває методологічну слабкість популярних теорій',
+    },
+    content: {
+      ru: `<h3>Границы научного метода</h3>
+<p>Истинная эмпирическая наука основана на наблюдаемых, воспроизводимых экспериментах. Учёный может измерить температуру, зафиксировать химическую реакцию, проверить гипотезу в лаборатории — и это действительно наука. Однако когда наука пытается реконструировать события, якобы происходившие миллионы или миллиарды лет назад, она выходит за пределы своей компетенции. Ребе подчёркивал: подобные реконструкции — это не «факты», а «экстраполяции», то есть предположения, основанные на допущении, что законы природы всегда были такими же, как сегодня. Но именно это допущение невозможно доказать. Любая теория, какой бы популярной она ни была, может быть опровергнута завтра новыми данными. История науки полна примеров, когда «общепринятые истины» рушились под давлением новых открытий. Наука — это процесс, а не набор догм, и честный учёный всегда признаёт границы своего знания.</p>
+
+<h3>Аргумент «зрелого творения»</h3>
+<p>Ребе выдвигал глубокий аргумент: если Творец создал мир, Он мог создать его уже «зрелым». Первый человек, Адам, был создан взрослым, а не младенцем. Деревья были сотворены с годичными кольцами, а Земля — со сформированными геологическими слоями и окаменелостями. Когда наука находит кости динозавров и на их основании делает вывод о миллиардах лет существования планеты — это лишь одна из возможных интерпретаций. Творец, способный создать атомы из ничего, мог создать их в виде уже сложных структур мгновенно. Это не «обман» — это проявление Б-жественной мудрости, создавшей мир с полной историей, подобно тому как художник пишет картину с изображением древнего дерева: дерево на картине «выглядит» тысячелетним, но создано в один момент.</p>
+
+<h3>Тора как абсолютная точка отсчёта</h3>
+<p>Ребе призывал: не нужно «подгонять» вечную Тору под меняющиеся научные гипотезы. Тора — это «Торат Хаим», дающая абсолютную, неизменную истину, полученную от Самого Творца. Наука полезна в своей области — изучении природы здесь и сейчас, создании технологий, лечении болезней. Но она бессильна ответить на вопросы «зачем?» и «как всё началось?». Вера не противоречит разуму — она начинается там, где заканчивается ограниченный человеческий интеллект. Когда мы принимаем Тору как точку отсчёта, мы обретаем твёрдую почву под ногами, которую никакая «новая теория» не способна поколебать. Б-г создал мир с определённой целью, и эта цель раскрыта в Торе — единственном источнике, который не меняется с веками.</p>`,
+
+      en: `<h3>The Limits of the Scientific Method</h3>
+<p>True empirical science is based on observable, reproducible experiments. A scientist can measure temperature, record a chemical reaction, test a hypothesis in a laboratory — and that is indeed science. However, when science attempts to reconstruct events allegedly occurring millions or billions of years ago, it steps beyond its domain of competence. The Rebbe emphasized: such reconstructions are not "facts" but "extrapolations" — assumptions based on the premise that the laws of nature have always been the same as they are today. But this very premise is impossible to prove. Any theory, no matter how popular, can be disproven tomorrow by new data. The history of science is full of examples where "accepted truths" collapsed under the pressure of new discoveries. Science is a process, not a set of dogmas, and an honest scientist always acknowledges the limits of their knowledge.</p>
+
+<h3>The "Mature Creation" Argument</h3>
+<p>The Rebbe put forward a profound argument: if the Creator made the world, He could have created it already "mature." The first man, Adam, was created as an adult, not an infant. Trees were created with annual rings, and the Earth with fully formed geological layers and fossils. When science discovers dinosaur bones and concludes that the planet is billions of years old, this is merely one possible interpretation. A Creator capable of creating atoms from nothing could have created them as complex structures instantaneously. This is not "deception" — it is a manifestation of Divine wisdom that created the world with a complete history, much like an artist paints a picture of an ancient tree: the tree in the painting "appears" to be thousands of years old, yet was created in a single moment.</p>
+
+<h3>Torah as the Absolute Frame of Reference</h3>
+<p>The Rebbe urged: do not "adjust" the eternal Torah to fit changing scientific hypotheses. The Torah is "Torat Chaim," providing absolute, unchanging truth received from the Creator Himself. Science is useful in its domain — studying nature in the here and now, developing technologies, curing diseases. But it is powerless to answer the questions "why?" and "how did it all begin?" Faith does not contradict reason — it begins where the limited human intellect ends. When we accept the Torah as our frame of reference, we gain solid ground beneath our feet that no "new theory" can shake. G-d created the world with a specific purpose, and that purpose is revealed in the Torah — the only source that does not change with the ages.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-spiritual-kitchen',
+    slug: 'dukhovnaya-kukhnya-pochemu-mat-glavnyy-uchitel',
+    title: {
+      ru: 'Духовная кухня: Почему мать — главный учитель в жизни ребенка?',
+      en: 'The Spiritual Kitchen: Why Mother Is the Main Teacher in a Child\'s Life?',
+      he: 'המטבח הרוחני: למה האם היא המורה הראשית בחיי הילד?',
+      uk: 'Духовна кухня: Чому мати — головний вчитель у житті дитини?',
+    },
+    subtitle: {
+      ru: 'Акерет а-Баит — женщина как «основа и корень дома»',
+      en: 'Akeret HaBayit — the woman as the "foundation and root of the home"',
+      he: 'עקרת הבית — האישה כ"יסוד ושורש הבית"',
+      uk: 'Акерет а-Баіт — жінка як «основа і корінь дому»',
+    },
+    content: {
+      ru: `<h3>«Приготовление» знаний</h3>
+<p>Ребе использовал удивительно точную метафору: отец обеспечивает «ингредиенты» — нанимает учителей, оплачивает школу, приносит домой книги. Но мать — это повар, который «готовит блюдо». Только она способна подать духовные знания так, чтобы они стали частью ребёнка, наполнили его энергией и радостью. Её слова, сказанные с искренностью и любовью, проникают в сердце глубже любой логики и любого учебника. Мать чувствует ребёнка интуитивно — знает, когда он устал, когда готов воспринимать, когда нуждается в ободрении. Она превращает абстрактные заповеди в живой опыт: благословение над хлебом становится тёплым семейным ритуалом, зажигание субботних свечей — моментом волшебства, а молитва перед сном — щитом от страхов. Без этого «приготовления» знания остаются сырыми ингредиентами, которые ребёнок не способен усвоить.</p>
+
+<h3>Живой пример против учебников</h3>
+<p>Дети не просто слушают слова — они впитывают атмосферу дома. Ребе подчёркивал: если мать выполняет мицвот с радостью, а не как тяжёлую обязанность, у ребёнка формируется естественная привязанность к традиции, которая сохраняется даже во взрослом возрасте, даже вдали от родительского дома. Никакая школа, никакой самый талантливый учитель не может заменить то, что ребёнок видит каждый день в собственном доме. Когда мать с радостью готовит субботнюю трапезу, когда она с теплом произносит благословения, когда в её глазах светится вера — это впечатывается в душу ребёнка навсегда. Именно поэтому Тора называет женщину «акерет а-баит» — «основа дома»: не «помощница», а именно фундамент, на котором стоит вся духовная жизнь семьи.</p>
+
+<h3>Домашняя библиотека как щит</h3>
+<p>Ребе советовал: наполните дом святыми книгами — Торой, Теилим (Псалмами), сидуром (молитвенником). Их присутствие создаёт защитное поле, духовную атмосферу, которая влияет на каждого, кто живёт в этом доме. Когда ребёнок видит книги как живую часть жизни родителей — не пыльные украшения на полке, а источники, к которым обращаются за советом, за утешением, за мудростью, — его связь с Б-гом становится непоколебимой. Святые книги в доме — это не просто предметы, а духовные стражи, хранящие семью. Каждая книга Торы в доме — это присутствие Б-жественного света, невидимый щит, защищающий домочадцев. Мать, которая читает Теилим, создаёт канал благословения для всей семьи — и дети, наблюдая за этим, учатся главному: Б-г — живая реальность, а не абстрактная идея.</p>`,
+
+      en: `<h3>"Preparing" Knowledge</h3>
+<p>The Rebbe used a remarkably precise metaphor: the father provides the "ingredients" — hires teachers, pays for school, brings books home. But the mother is the cook who "prepares the dish." Only she can serve spiritual knowledge in a way that it becomes part of the child, fills them with energy and joy. Her words, spoken with sincerity and love, penetrate the heart more deeply than any logic or textbook. A mother feels her child intuitively — she knows when they are tired, when they are ready to absorb, when they need encouragement. She transforms abstract commandments into living experience: the blessing over bread becomes a warm family ritual, the lighting of Shabbat candles becomes a moment of wonder, and the bedtime prayer becomes a shield against fears. Without this "preparation," knowledge remains raw ingredients that a child cannot digest.</p>
+
+<h3>A Living Example vs. Textbooks</h3>
+<p>Children do not merely listen to words — they absorb the atmosphere of the home. The Rebbe emphasized: if a mother performs mitzvot with joy rather than as a heavy obligation, the child develops a natural attachment to tradition that endures even in adulthood, even far from the parental home. No school, no matter how talented the teacher, can replace what a child sees every day in their own home. When a mother joyfully prepares the Shabbat meal, when she recites blessings with warmth, when faith shines in her eyes — this is imprinted on the child's soul forever. This is precisely why the Torah calls the woman "akeret habayit" — "the foundation of the home": not a "helper," but the very foundation upon which the entire spiritual life of the family stands.</p>
+
+<h3>A Home Library as a Shield</h3>
+<p>The Rebbe advised: fill the home with holy books — Torah, Tehillim (Psalms), a siddur (prayer book). Their presence creates a protective field, a spiritual atmosphere that affects everyone living in that home. When a child sees books as a living part of their parents' lives — not dusty decorations on a shelf, but sources to which they turn for counsel, for comfort, for wisdom — their connection to G-d becomes unshakeable. Holy books in the home are not mere objects but spiritual guardians protecting the family. Every Torah book in the home is a presence of Divine light, an invisible shield guarding the household. A mother who reads Tehillim creates a channel of blessing for the entire family — and children, watching this, learn the most important lesson: G-d is a living reality, not an abstract idea.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-family-peace',
+    slug: 'sekret-semeynogo-mira-kak-pobedit-v-spore-ustupiv',
+    title: {
+      ru: 'Секрет семейного мира: Как победить в споре, уступив?',
+      en: 'The Secret of Family Peace: How to Win an Argument by Yielding?',
+      he: 'סוד השלום המשפחתי: איך לנצח בוויכוח על ידי ויתור?',
+      uk: 'Секрет сімейного миру: Як перемогти у суперечці, поступившись?',
+    },
+    subtitle: {
+      ru: 'Духовная механика отношений и мир как сосуд для благословений',
+      en: 'The spiritual mechanics of relationships and peace as a vessel for blessings',
+      he: 'המכניקה הרוחנית של היחסים והשלום ככלי לברכות',
+      uk: 'Духовна механіка стосунків і мир як посудина для благословень',
+    },
+    content: {
+      ru: `<h3>Мир как сосуд для благословений</h3>
+<p>Шалом Байит — это не просто отсутствие скандалов и криков. Ребе объяснял: мир в семье — это единственный сосуд, способный удержать Б-жественное благословение на доход, здоровье и детей. Без мира все достижения «утекают» как вода через решето — человек зарабатывает, но деньги исчезают; получает благословение на здоровье, но болезни возвращаются; растит детей, но теряет с ними связь. Ребе использовал глубокий образ: огонь и вода по своей природе уничтожают друг друга, но когда между ними существует мир — они способны сосуществовать и даже служить друг другу. Так и муж с женой — два разных мира, два разных начала, но именно их гармоничное соединение создаёт пространство, в котором поселяется Шхина (Б-жественное присутствие). Когда Шхина в доме — всё процветает: дети растут здоровыми, пропитание приходит с лёгкостью, а радость наполняет каждый угол.</p>
+
+<h3>Искусство уступать</h3>
+<p>Ребе давал практический совет: в материальных и бытовых вопросах мужу следует прислушиваться к мнению жены. Женщина обладает интуитивной связью с домом, которой у мужчины часто нет. Она чувствует, что нужно семье, на уровне, недоступном логическому анализу. Уступите, даже если на сто процентов уверены в своей правоте. Уступка — это не слабость, а мудрость, привлекающая Шхину в дом. Когда муж уступает жене в бытовых вопросах, он не теряет — он приобретает нечто бесконечно более ценное: мир, благословение и присутствие Б-га в своём доме. Ребе подчёркивал: тот, кто «побеждает» в семейном споре силой или упрямством, на самом деле проигрывает — потому что разрушает сосуд, в котором могло бы храниться благословение. Настоящая победа — это мир, а мир достигается через умение уступать с любовью и мудростью.</p>
+
+<h3>Взгляд со стороны</h3>
+<p>Если конфликт зашёл в тупик, Ребе советовал найти доверенного человека — раввина или общего друга, пользующегося уважением обоих супругов. «Слова, идущие от сердца, входят в сердце» — мягкость и личный пример всегда эффективнее давления. Посторонний взгляд способен увидеть то, что скрыто от самих участников конфликта: каждый из супругов видит ситуацию через призму своих эмоций, обид, ожиданий. Третья сторона может помочь обоим увидеть картину целиком. Ребе предупреждал: никогда не выносите семейные проблемы на публику, не обсуждайте супруга с друзьями или родственниками — это разрушает доверие и усугубляет конфликт. Обратитесь к одному мудрому человеку, способному дать совет с позиции Торы, — и следуйте этому совету с открытым сердцем. Б-г создал семью как самое святое пространство на земле, и защита этого пространства — одна из важнейших заповедей.</p>`,
+
+      en: `<h3>Peace as a Vessel for Blessings</h3>
+<p>Shalom Bayit is not simply the absence of quarrels and shouting. The Rebbe explained: peace in the family is the only vessel capable of holding Divine blessing for income, health, and children. Without peace, all achievements "leak" like water through a sieve — a person earns money, but it disappears; receives a blessing for health, but illnesses return; raises children, but loses connection with them. The Rebbe used a profound image: fire and water by their nature destroy each other, but when peace exists between them, they can coexist and even serve one another. So too with husband and wife — two different worlds, two different natures, yet it is precisely their harmonious union that creates the space in which the Shechinah (Divine Presence) dwells. When the Shechinah is in the home, everything flourishes: children grow healthy, sustenance comes with ease, and joy fills every corner.</p>
+
+<h3>The Art of Yielding</h3>
+<p>The Rebbe offered practical advice: in material and household matters, a husband should follow his wife's opinion. A woman possesses an intuitive connection to the home that a man often lacks. She senses what the family needs at a level inaccessible to logical analysis. Yield even when you are one hundred percent certain you are right. Yielding is not weakness but wisdom that draws the Shechinah into the home. When a husband defers to his wife in domestic matters, he does not lose — he gains something infinitely more valuable: peace, blessing, and the presence of G-d in his home. The Rebbe emphasized: the one who "wins" a family argument through force or stubbornness actually loses — because they destroy the vessel that could have held blessing. True victory is peace, and peace is achieved through the ability to yield with love and wisdom.</p>
+
+<h3>An Outside Perspective</h3>
+<p>If a conflict reaches a dead end, the Rebbe advised finding a trusted person — a rabbi or a mutual friend respected by both spouses. "Words that come from the heart enter the heart" — gentleness and personal example are always more effective than pressure. An outside perspective can see what is hidden from the participants in the conflict themselves: each spouse views the situation through the lens of their own emotions, grievances, and expectations. A third party can help both see the full picture. The Rebbe warned: never air family problems in public, never discuss your spouse with friends or relatives — this destroys trust and deepens the conflict. Turn to one wise person capable of offering counsel from the perspective of Torah — and follow that counsel with an open heart. G-d created the family as the most sacred space on earth, and protecting that space is one of the most important commandments.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
