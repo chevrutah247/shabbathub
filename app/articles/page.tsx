@@ -213,9 +213,9 @@ export default function ArticlesPage() {
                 className="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-primary-200 transition-all duration-300"
               >
                 {/* Image */}
-                <div className="h-44 bg-gradient-to-br from-primary-100 via-blue-50 to-gold-400/20 flex items-center justify-center overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-primary-100 via-blue-50 to-gold-400/20 flex items-center justify-center overflow-hidden">
                   {article.image ? (
-                    <img src={article.image} alt={article.title[lang]} className="w-full h-full object-cover" />
+                    <img src={article.image} alt={article.title[lang]} className="w-full h-full object-cover object-top" />
                   ) : (
                     <span className="text-5xl opacity-60">
                       {article.tag.en === 'Shabbat' && '🕯️'}
