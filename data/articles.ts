@@ -3045,6 +3045,365 @@ export const articles: Article[] = [
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-27',
   },
+  {
+    id: 'shpalerka-spirit',
+    slug: 'dukh-nad-materiyey-rebe-rayats-v-shpalerke',
+    title: {
+      ru: 'Дух над материей: Ребе Раяц в Шпалерке',
+      en: 'Spirit Over Matter: The Rebbe Rayatz in Shpalernaya Prison',
+      he: 'רוח מעל חומר: הרבי ריי"צ בשפלרקה',
+      uk: 'Дух над матерією: Ребе Раяц у Шпалерці',
+    },
+    subtitle: {
+      ru: 'Высший пример месирус нефеш в современной истории',
+      en: 'The supreme example of mesirus nefesh in modern history',
+      he: 'הדוגמה העליונה למסירות נפש בהיסטוריה המודרנית',
+      uk: 'Вищий приклад месірус нефеш у сучасній історії',
+    },
+    content: {
+      ru: `<p>В полночь 15 Сивана 5687 (1927) года агенты ГПУ ворвались в дом шестого Любавичского Ребе — Ребе Йосефа-Ицхака Шнеерсона (Ребе Раяца) — и арестовали его. Ему был вынесен смертный приговор, который позже заменили ссылкой. Однако даже в застенках Шпалерной тюрьмы Ребе проявил сверхчеловеческое спокойствие, произнеся слова, ставшие девизом поколений: «Только тела в изгнании, но не души».</p>
+
+<h3>Голодовка ради тфилин</h3>
+<p>Оказавшись в камере, Ребе Раяц немедленно объявил голодовку, требуя возвращения своих тфилин. Тюремное начальство, привыкшее ломать волю заключённых, столкнулось с непреклонностью человека, для которого связь с Б-гом была важнее физического выживания. В конце концов тфилин были возвращены. Ребе отказывался от прогулок в тюремном дворе, не желая подчиняться распорядку, навязанному врагами Торы.</p>
+
+<h3>Фотографы и маамарим</h3>
+<p>Когда тюремные власти прислали фотографов для создания «дела», Ребе решительно остановил их, не позволив сделать ни одного снимка на их условиях. Даже в заключении он продолжал писать хасидские маамарим (глубокие учения), превращая камеру в место распространения света Торы. Каждое его действие было актом духовного сопротивления.</p>
+
+<h3>Освобождение: победа для каждого еврея</h3>
+<p>3 Тамуза Ребе был освобождён из тюрьмы, а 12–13 Тамуза — полностью освобождён из ссылки. Эта дата стала символом победы духа над материей, веры над тиранией. Ребе Раяц позже объяснил, что его освобождение было не личной победой, а победой для каждого еврея — доказательством того, что никакая земная сила не может подавить еврейскую душу и её связь с Б-гом.</p>`,
+
+      en: `<p>At midnight on 15 Sivan 5687 (1927), GPU agents burst into the home of the sixth Lubavitcher Rebbe — Rabbi Yosef Yitzchak Schneersohn (the Rebbe Rayatz) — and arrested him. He was sentenced to death, later commuted to exile. Yet even within the walls of Shpalernaya Prison, the Rebbe displayed superhuman calm, uttering words that became a motto for generations: "Only bodies are in exile, not souls."</p>
+
+<h3>Hunger Strike for Tefillin</h3>
+<p>Finding himself in a cell, the Rebbe Rayatz immediately declared a hunger strike, demanding the return of his tefillin. The prison authorities, accustomed to breaking prisoners' wills, faced the resolve of a man for whom connection to God was more important than physical survival. Eventually the tefillin were returned. The Rebbe refused to take walks in the prison yard, unwilling to submit to a routine imposed by enemies of Torah.</p>
+
+<h3>Photographers and Maamarim</h3>
+<p>When prison authorities sent photographers to create a "case file," the Rebbe firmly stopped them, refusing to allow a single photograph on their terms. Even in confinement he continued writing Chassidic maamarim (profound teachings), transforming his cell into a place for spreading the light of Torah. Every action he took was an act of spiritual resistance.</p>
+
+<h3>Liberation: A Victory for Every Jew</h3>
+<p>On 3 Tammuz the Rebbe was released from prison, and on 12–13 Tammuz he was fully freed from exile. This date became a symbol of the triumph of spirit over matter, of faith over tyranny. The Rebbe Rayatz later explained that his liberation was not a personal victory but a victory for every Jew — proof that no earthly power can suppress a Jewish soul and its bond with God.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'rebbetzin-chana-heroism',
+    slug: 'rebetsn-khana-geroizm-9-nissana-i-spaseniye-naslediya',
+    title: {
+      ru: 'Ребецн Хана: Героизм 9 ниссана и спасение наследия',
+      en: 'Rebbetzin Chana: The Heroism of 9 Nissan and Saving the Legacy',
+      he: 'הרבנית חנה: גבורת ט\' ניסן והצלת המורשת',
+      uk: 'Ребецн Хана: Героїзм 9 ніссана і порятунок спадщини',
+    },
+    subtitle: {
+      ru: 'Чернила из ягод и тайный вывоз рукописей из СССР',
+      en: 'Ink from berries and the secret smuggling of manuscripts out of the USSR',
+      he: 'דיו מפירות יער והברחת כתבי יד חשאית מברית המועצות',
+      uk: 'Чорнило з ягід і таємне вивезення рукописів із СРСР',
+    },
+    content: {
+      ru: `<p>9 Ниссана 5699 (1939) года агенты НКВД ворвались в дом рабби Леви-Ицхака Шнеерсона — отца будущего седьмого Ребе — в Днепропетровске. Обыск продолжался девять часов. Рядом с мужем всё это время стояла ребецн Хана — женщина, чей героизм навсегда изменил ход еврейской истории.</p>
+
+<h3>Ссылка в Чиили: чернила из ягод и трав</h3>
+<p>После ареста рабби Леви-Ицхака сослали в отдалённый казахстанский город Чиили. Ребецн Хана последовала за мужем, оставив всё, чтобы быть рядом с ним. В ссылке рабби Леви-Ицхак продолжал записывать глубочайшие хасидские учения, но у него не было чернил. Тогда ребецн Хана начала изготавливать чернила собственными руками — из лесных ягод и трав, которые она собирала в степи. Каждая капля этих чернил была актом месирус нефеш — самопожертвования ради сохранения Торы.</p>
+
+<h3>Смерть мужа и невыполнимая миссия</h3>
+<p>20 Ава 5704 (1944) года рабби Леви-Ицхак скончался в Алма-Ате, подорванный годами ссылки. Однако ребецн Хана не сломалась. Она приняла на себя миссию, казавшуюся невыполнимой: сохранить и тайно вывезти из СССР рукописи мужа — бесценное наследие хасидской мысли.</p>
+
+<h3>Спасение рукописей</h3>
+<p>С невероятной отвагой и изобретательностью ребецн Хана организовала тайный вывоз рукописей из Советского Союза. Эти записи, сделанные чернилами из ягод, впоследствии были изданы как «Ликутей Леви-Ицхак» и стали одним из важнейших источников хасидской каббалистической мысли. Благодаря мужеству одной женщины, целое духовное наследие было спасено от уничтожения и передано будущим поколениям.</p>`,
+
+      en: `<p>On 9 Nissan 5699 (1939), NKVD agents burst into the home of Rabbi Levi Yitzchak Schneerson — father of the future seventh Rebbe — in Dnepropetrovsk. The search lasted nine hours. Standing beside her husband throughout was Rebbetzin Chana — a woman whose heroism would forever alter the course of Jewish history.</p>
+
+<h3>Exile in Chiili: Ink from Berries and Herbs</h3>
+<p>After Rabbi Levi Yitzchak's arrest, he was exiled to the remote Kazakh town of Chiili. Rebbetzin Chana followed her husband, leaving everything behind to be at his side. In exile, Rabbi Levi Yitzchak continued recording profound Chassidic teachings, but he had no ink. So Rebbetzin Chana began making ink with her own hands — from wild berries and herbs she gathered on the steppe. Every drop of that ink was an act of mesirus nefesh — self-sacrifice for the preservation of Torah.</p>
+
+<h3>Her Husband's Death and an Impossible Mission</h3>
+<p>On 20 Av 5704 (1944), Rabbi Levi Yitzchak passed away in Alma-Ata, his health broken by years of exile. But Rebbetzin Chana did not break. She took upon herself a seemingly impossible mission: to preserve and secretly smuggle her husband's manuscripts out of the USSR — a priceless heritage of Chassidic thought.</p>
+
+<h3>Saving the Manuscripts</h3>
+<p>With incredible courage and ingenuity, Rebbetzin Chana organized the clandestine removal of the manuscripts from the Soviet Union. These writings, penned in ink made from berries, were subsequently published as "Likkutei Levi Yitzchak" and became one of the most important sources of Chassidic Kabbalistic thought. Thanks to the bravery of one woman, an entire spiritual legacy was saved from destruction and transmitted to future generations.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'nissan-annual-lessons',
+    slug: 'dukhovnyye-uroki-nissana-sushchnost-i-deystviye-v2',
+    title: {
+      ru: 'Духовные уроки Ниссана: Сущность и действие',
+      en: 'Spiritual Lessons of Nissan: Essence and Action',
+      he: 'לקחים רוחניים של ניסן: מהות ומעשה',
+      uk: 'Духовні уроки Ніссана: Сутність і дія',
+    },
+    subtitle: {
+      ru: 'Три направления духовной работы в месяце Ниссан',
+      en: 'Three directions of spiritual work in the month of Nissan',
+      he: 'שלושה כיוונים של עבודה רוחנית בחודש ניסן',
+      uk: 'Три напрямки духовної роботи в місяці Ніссан',
+    },
+    content: {
+      ru: `<p>Месяц Ниссан в хасидском календаре — это не только время Песаха. Три ключевые даты этого месяца раскрывают три фундаментальных направления духовной работы, актуальных для каждого еврея в любое время года.</p>
+
+<h3>2 Ниссана: Вечная связь через рукописи Ребе Рашаба</h3>
+<p>2 Ниссана 5680 (1920) года — день, когда пятый Любавичский Ребе, Ребе Рашаб (рабби Шалом-ДовБер), покинул этот мир. Однако его уход стал не концом, а началом новой формы связи. Рукописи Ребе Рашаба — сотни глубочайших маамарим и писем — стали живым каналом, через который его учение продолжает вдохновлять поколения хасидов. Урок 2 Ниссана: духовная связь с цадиком не прерывается — она усиливается через изучение его Торы.</p>
+
+<h3>11 Ниссана: Образование — нравственность и связь с Творцом</h3>
+<p>11 Ниссана 5662 (1902) года родился седьмой Любавичский Ребе — рабби Менахем-Мендл Шнеерсон. Одним из центральных направлений его деятельности стало образование. Ребе подчёркивал, что истинное образование — это не просто передача знаний, а воспитание нравственности и формирование связи с Б-гом. «Образование без морали — это меч в руках безумца», — учил Ребе. Урок 11 Ниссана: каждый еврей обязан не только учиться сам, но и обучать других, создавая поколение, связанное с Творцом.</p>
+
+<h3>13 Ниссана: «Трахт гут — вет зайн гут» — битахон меняет реальность</h3>
+<p>13 Ниссана 5603 (1843) года — день гистолкус Цемах Цедека, третьего Любавичского Ребе. Одно из самых известных его высказываний — «Трахт гут — вет зайн гут» («Думай хорошо — и будет хорошо»). Это не просто оптимизм — это духовный закон: искренний битахон (упование на Б-га) буквально меняет реальность. Когда человек по-настоящему верит, что Б-г пошлёт добро, эта вера становится сосудом для божественного благословения. Урок 13 Ниссана: мысль — не абстракция, а инструмент, формирующий действительность.</p>`,
+
+      en: `<p>The month of Nissan in the Chassidic calendar is not only the time of Pesach. Three key dates of this month reveal three fundamental directions of spiritual work, relevant to every Jew at any time of year.</p>
+
+<h3>2 Nissan: Eternal Connection Through the Manuscripts of the Rebbe Rashab</h3>
+<p>On 2 Nissan 5680 (1920), the fifth Lubavitcher Rebbe, the Rebbe Rashab (Rabbi Shalom DovBer), departed this world. However, his passing became not an end but the beginning of a new form of connection. The Rebbe Rashab's manuscripts — hundreds of profound maamarim and letters — became a living channel through which his teaching continues to inspire generations of Chassidim. The lesson of 2 Nissan: the spiritual bond with a tzaddik is never severed — it is strengthened through studying his Torah.</p>
+
+<h3>11 Nissan: Education — Morality and Connection with the Creator</h3>
+<p>On 11 Nissan 5662 (1902), the seventh Lubavitcher Rebbe — Rabbi Menachem Mendel Schneerson — was born. One of the central directions of his work was education. The Rebbe emphasized that true education is not merely the transmission of knowledge but the cultivation of morality and the formation of a bond with God. "Education without morality is a sword in the hands of a madman," the Rebbe taught. The lesson of 11 Nissan: every Jew is obligated not only to study but to teach others, creating a generation connected to the Creator.</p>
+
+<h3>13 Nissan: "Tracht Gut — Vet Zain Gut" — Bitachon Changes Reality</h3>
+<p>13 Nissan 5603 (1843) is the day of histalkus of the Tzemach Tzedek, the third Lubavitcher Rebbe. One of his most famous sayings is "Tracht gut — vet zain gut" ("Think good — and it will be good"). This is not mere optimism — it is a spiritual law: sincere bitachon (trust in God) literally changes reality. When a person truly believes that God will send good, that faith becomes a vessel for divine blessing. The lesson of 13 Nissan: thought is not an abstraction but an instrument that shapes reality.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'annual-cycle-lessons',
+    slug: 'godovoy-tsikl-ot-iyara-do-shvata-uroki',
+    title: {
+      ru: 'Годовой цикл: От Ияра до Швата — уроки и смыслы',
+      en: 'The Annual Cycle: From Iyar to Shvat — Lessons and Meanings',
+      he: 'המחזור השנתי: מאייר ועד שבט — לקחים ומשמעויות',
+      uk: 'Річний цикл: Від Іяра до Швата — уроки та смисли',
+    },
+    subtitle: {
+      ru: 'Каждая дата — живой источник энергии для служения',
+      en: 'Every date is a living source of energy for divine service',
+      he: 'כל תאריך הוא מקור חי של אנרגיה לעבודת ה\'',
+      uk: 'Кожна дата — живе джерело енергії для служіння',
+    },
+    content: {
+      ru: `<p>Хасидский календарь — это не просто список памятных дат. Каждый месяц несёт уникальную духовную энергию, и задача еврея — раскрыть её и применить в своём служении Б-гу. Вот ключевые уроки от Ияра до Швата.</p>
+
+<h3>Ияр: «Лехатхила арибер» — с самого начала через преграду</h3>
+<p>Месяц Ияр связан с учением Ребе Махараша (четвёртого Любавичского Ребе): «Мир говорит: если не можешь пройти снизу — перелезь сверху. А я говорю: с самого начала — сверху!» Этот принцип «лехатхила арибер» учит не искать обходные пути перед препятствиями, а сразу подниматься выше них. В духовной работе это означает: не бороться с тьмой на её уровне, а подниматься на уровень, где тьма не существует.</p>
+
+<h3>Сиван: 28 Сивана — трансформация</h3>
+<p>28 Сивана 5701 (1941) года Ребе и ребецн Хая-Мушка прибыли в Америку, спасшись из охваченной войной Европы. Этот день стал поворотным моментом — началом трансформации Америки из духовной пустыни в мировой центр Торы и хасидизма. Урок: даже самое тёмное место может стать источником величайшего света.</p>
+
+<h3>Тамуз: Выше природы</h3>
+<p>Освобождение Ребе Раяца 12–13 Тамуза — урок о том, что еврей может действовать выше законов природы. Когда человек полностью предан Б-гу, Б-г действует для него за пределами естественного порядка вещей.</p>
+
+<h3>Менахем-Ав: 40 дней до Рош а-Шана</h3>
+<p>Менахем-Ав — месяц утешения. За сорок дней до Рош а-Шана (то есть с 20 Ава) начинается период подготовки к новому году. Ребе учил, что именно из глубины разрушения (9 Ава) рождается величайшее утешение и обновление.</p>
+
+<h3>Элул: Хай Элул — два светила</h3>
+<p>18 Элула — день рождения двух великих светил: основателя хасидизма Бааль-Шем-Това (5458/1698) и основателя Хабада Алтер Ребе (5505/1745). Этот день вносит «жизненность» (хайус) во всю духовную работу месяца Элул — месяца подготовки к Рош а-Шана.</p>
+
+<h3>Кислев: 19 Кислева — распространяй наружу</h3>
+<p>19 Кислева — «Рош а-Шана хасидизма», день освобождения Алтер Ребе из Петропавловской крепости. Главный урок: учение хасидизма должно распространяться «наружу» — доходить до каждого еврея, даже самого далёкого.</p>
+
+<h3>Тевес: «Дидан ноцах» — наша победа</h3>
+<p>5 Тевеса 5747 (1987) года — день, когда суд постановил, что библиотека Ребе принадлежит хасидам. «Дидан ноцах» («наша победа») стал символом того, что святые книги и учения неразрывно связаны с общиной, которая ими живёт.</p>
+
+<h3>Шват: «Баси легани» — миссия</h3>
+<p>10 Швата 5710 (1950) года — день гистолкус шестого Ребе и начала руководства седьмого Ребе. Маамар «Баси легани» («Я вошёл в Мой сад») стал программным документом: задача нашего поколения — сделать этот нижний мир жилищем для Б-га, завершив миссию, начатую Авраамом.</p>`,
+
+      en: `<p>The Chassidic calendar is not merely a list of commemorative dates. Each month carries unique spiritual energy, and a Jew's task is to reveal it and apply it in their service of God. Here are the key lessons from Iyar to Shvat.</p>
+
+<h3>Iyar: "Lechatchila Ariber" — From the Very Start, Over the Obstacle</h3>
+<p>The month of Iyar is linked to the teaching of the Rebbe Maharash (the fourth Lubavitcher Rebbe): "The world says: if you cannot go under, climb over. But I say: from the very start — go over!" This principle of "lechatchila ariber" teaches us not to seek roundabout ways before obstacles but to rise above them immediately. In spiritual work this means: do not fight darkness on its level but ascend to a level where darkness does not exist.</p>
+
+<h3>Sivan: 28 Sivan — Transformation</h3>
+<p>On 28 Sivan 5701 (1941), the Rebbe and Rebbetzin Chaya Mushka arrived in America, having escaped war-torn Europe. This day became a turning point — the beginning of America's transformation from a spiritual wasteland into the world center of Torah and Chassidism. The lesson: even the darkest place can become a source of the greatest light.</p>
+
+<h3>Tammuz: Above Nature</h3>
+<p>The liberation of the Rebbe Rayatz on 12–13 Tammuz is a lesson that a Jew can act above the laws of nature. When a person is completely devoted to God, God acts for them beyond the natural order of things.</p>
+
+<h3>Menachem-Av: 40 Days Before Rosh Hashanah</h3>
+<p>Menachem-Av is the month of consolation. Forty days before Rosh Hashanah (that is, from 20 Av), the period of preparation for the new year begins. The Rebbe taught that it is precisely from the depth of destruction (9 Av) that the greatest consolation and renewal are born.</p>
+
+<h3>Elul: Chai Elul — Two Luminaries</h3>
+<p>18 Elul is the birthday of two great luminaries: the founder of Chassidism, the Baal Shem Tov (5458/1698), and the founder of Chabad, the Alter Rebbe (5505/1745). This day infuses "vitality" (chayus) into all the spiritual work of the month of Elul — the month of preparation for Rosh Hashanah.</p>
+
+<h3>Kislev: 19 Kislev — Spread Outward</h3>
+<p>19 Kislev is the "Rosh Hashanah of Chassidism," the day the Alter Rebbe was liberated from the Peter-Paul Fortress. The main lesson: the teachings of Chassidism must be spread "outward" — reaching every Jew, even the most distant.</p>
+
+<h3>Tevet: "Didan Notzach" — Our Victory</h3>
+<p>On 5 Tevet 5747 (1987), the court ruled that the Rebbe's library belongs to the Chassidim. "Didan Notzach" ("our victory") became a symbol that holy books and teachings are inseparably bound to the community that lives by them.</p>
+
+<h3>Shvat: "Basi Legani" — The Mission</h3>
+<p>On 10 Shvat 5710 (1950), the sixth Rebbe passed away and the seventh Rebbe's leadership began. The maamar "Basi Legani" ("I have come into My garden") became the defining document: our generation's task is to make this lowest world a dwelling place for God, completing the mission begun by Abraham.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'adar-month',
+    slug: 'adar-mesyats-prevrashcheniya-tmy-v-svet',
+    hebrewDate: { month: 'Adar', day: 1 },
+    monthIntro: {
+      ru: 'Адар: Месяц превращения тьмы в свет. Не только Пурим, но и «завоевание» Америки для Торы.',
+      en: 'Adar: Month of Turning Darkness into Light. Not just Purim, but the "conquest" of America for Torah.',
+    },
+    title: {
+      ru: 'Адар: Месяц превращения тьмы в свет',
+      en: 'Adar: The Month of Turning Darkness into Light',
+      he: 'אדר: חודש הפיכת החושך לאור',
+      uk: 'Адар: Місяць перетворення темряви на світло',
+    },
+    subtitle: {
+      ru: '«Америка ничем не отличается» и кампания Еврейского дня рождения',
+      en: '"America Is No Different" and the Jewish Birthday Campaign',
+      he: '״אמריקה לא שונה״ ומבצע יום הולדת יהודי',
+      uk: '«Америка нічим не відрізняється» і кампанія Єврейського дня народження',
+    },
+    content: {
+      ru: `<p>Месяц Адар в хасидском календаре — это время радости, превращения тьмы в свет и торжества веры над отчаянием. Но помимо Пурима, Адар хранит ещё множество дат, каждая из которых несёт уникальный духовный урок.</p>
+
+<h3>9 Адара: Ребе Раяц прибывает в Америку (5700/1940)</h3>
+<p>9 Адара 5700 (1940) года шестой Любавичский Ребе — Ребе Раяц — ступил на американскую землю, спасённый из охваченной войной Европы. Его знаменитые слова «Америка из ништ андерш» («Америка ничем не отличается») перевернули представление о том, что в Новом Свете невозможно жить полноценной еврейской жизнью. Ребе Раяц заявил, что Тора и мицвот обязательны повсюду, и Америка — не исключение. Эти слова оказались пророческими: именно Америка стала мировым центром Торы и хасидизма.</p>
+
+<h3>16 Адара: Получение гражданства (5709/1949)</h3>
+<p>16 Адара 5709 (1949) года Ребе Раяц получил американское гражданство. Этот акт имел не только юридическое, но и духовное значение: он символизировал окончательное укоренение хасидизма на американском континенте и утверждение того, что Тора может процветать в любой стране, если евреи хранят верность своему наследию.</p>
+
+<h3>25 Адара: День рождения Ребецн Хаи-Мушки — Мивца Йом Уледет</h3>
+<p>25 Адара — день рождения ребецн Хаи-Мушки, супруги Ребе. Согласно хасидскому учению, мир был задуман Б-гом 25 Адара — именно в этот день возникла мысль о творении. В связи с этой датой Ребе инициировал «Мивца Йом Уледет» — кампанию Еврейского дня рождения, призывая каждого еврея отмечать свой день рождения по еврейскому календарю особыми духовными действиями: усиленным изучением Торы, дополнительной цдакой (благотворительностью) и принятием новых духовных решений. Ребе объяснял, что в день рождения «мазаль» (духовная удача) человека особенно силён.</p>
+
+<h3>2 Адара: Ребецн Штерна-Сара</h3>
+<p>2 Адара — день памяти ребецн Штерны-Сары, жены Ребе Рашаба и матери Ребе Раяца. Её жизнь была примером беззаветной преданности делу хасидизма и поддержки мужа в его духовной миссии.</p>
+
+<h3>7 Адара: Рождение и уход Моше Рабейну</h3>
+<p>7 Адара — день рождения и день ухода из этого мира Моше Рабейну (Моисея). Мидраш учит, что Б-г восполняет годы праведников до полного числа, и поэтому Моше родился и ушёл в один и тот же день. Этот день напоминает о том, что истинный лидер — это тот, кто полностью посвящает свою жизнь своему народу.</p>
+
+<h3>27 Адар I: Инсульт Ребе (5752/1992)</h3>
+<p>27 Адар I 5752 (1992) года Ребе перенёс инсульт во время молитвы у Оэля (места упокоения Ребе Раяца). Это событие стало поворотным моментом в истории Хабада и напомнило хасидам о необходимости усилить свою духовную работу, чтобы приблизить приход Мошиаха — конечную цель всего творения.</p>`,
+
+      en: `<p>The month of Adar in the Chassidic calendar is a time of joy, of turning darkness into light, and of the triumph of faith over despair. But beyond Purim, Adar holds many more dates, each carrying a unique spiritual lesson.</p>
+
+<h3>9 Adar: The Rebbe Rayatz Arrives in America (5700/1940)</h3>
+<p>On 9 Adar 5700 (1940), the sixth Lubavitcher Rebbe — the Rebbe Rayatz — set foot on American soil, having been rescued from war-torn Europe. His famous words "America iz nisht andersh" ("America is no different") overturned the notion that it was impossible to live a full Jewish life in the New World. The Rebbe Rayatz declared that Torah and mitzvot are obligatory everywhere, and America is no exception. These words proved prophetic: it was America that became the world center of Torah and Chassidism.</p>
+
+<h3>16 Adar: Receiving Citizenship (5709/1949)</h3>
+<p>On 16 Adar 5709 (1949), the Rebbe Rayatz received American citizenship. This act held not only legal but also spiritual significance: it symbolized the final rooting of Chassidism on the American continent and affirmed that Torah can flourish in any country if Jews remain faithful to their heritage.</p>
+
+<h3>25 Adar: Rebbetzin Chaya Mushka's Birthday — Mivtza Yom Huledes</h3>
+<p>25 Adar is the birthday of Rebbetzin Chaya Mushka, the Rebbe's wife. According to Chassidic teaching, the world was conceived by God on 25 Adar — it was on this day that the thought of creation arose. In connection with this date, the Rebbe initiated "Mivtza Yom Huledes" — the Jewish Birthday Campaign, calling on every Jew to celebrate their birthday according to the Jewish calendar with special spiritual actions: increased Torah study, additional tzedakah (charity), and making new spiritual resolutions. The Rebbe explained that on one's birthday, a person's "mazal" (spiritual fortune) is especially strong.</p>
+
+<h3>2 Adar: Rebbetzin Shterna Sara</h3>
+<p>2 Adar is the yahrzeit of Rebbetzin Shterna Sara, wife of the Rebbe Rashab and mother of the Rebbe Rayatz. Her life was an example of selfless devotion to the cause of Chassidism and support of her husband in his spiritual mission.</p>
+
+<h3>7 Adar: Birth and Passing of Moshe Rabbeinu</h3>
+<p>7 Adar is both the birthday and the day of passing of Moshe Rabbeinu (Moses). The Midrash teaches that God completes the years of the righteous to a full count, and therefore Moses was born and passed away on the same day. This day serves as a reminder that a true leader is one who completely devotes their life to their people.</p>
+
+<h3>27 Adar I: The Rebbe's Stroke (5752/1992)</h3>
+<p>On 27 Adar I 5752 (1992), the Rebbe suffered a stroke during prayer at the Ohel (the resting place of the Rebbe Rayatz). This event became a turning point in the history of Chabad and reminded Chassidim of the need to intensify their spiritual work to hasten the coming of Moshiach — the ultimate purpose of all creation.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'cheshvan-month',
+    slug: 'markheshvan-rozhdeniye-svetilnika',
+    hebrewDate: { month: 'Cheshvan', day: 20 },
+    monthIntro: {
+      ru: 'Мархешван: Месяц без праздников, наполненный светом рождения Ребе Рашаба.',
+      en: 'Marcheshvan: Month without holidays, filled with the light of the Rebbe Rashab\'s birth.',
+    },
+    title: {
+      ru: 'Мархешван: Рождение «Светильника» и Мастерство Воспитания',
+      en: 'Marcheshvan: The Birth of the "Luminary" and the Mastery of Education',
+      he: 'מרחשוון: לידת ה״מאור״ ואומנות החינוך',
+      uk: 'Мархешван: Народження «Світильника» і Майстерність Виховання',
+    },
+    subtitle: {
+      ru: 'Пророческий сон, рождение Ребе Рашаба и основание Томхей Тмимим',
+      en: 'A prophetic dream, the birth of the Rebbe Rashab, and the founding of Tomchei Temimim',
+      he: 'חלום נבואי, לידת הרבי הרש"ב וייסוד תומכי תמימים',
+      uk: 'Пророчий сон, народження Ребе Рашаба і заснування Томхей Тмімім',
+    },
+    content: {
+      ru: `<p>Месяц Мархешван — единственный месяц еврейского календаря, в котором нет ни одного праздника. Однако именно эта «пустота» наполнена глубочайшим смыслом: 20 Мархешвана родился пятый Любавичский Ребе — Ребе Рашаб (рабби Шалом-ДовБер Шнеерсон), «светильник», озаривший поколения.</p>
+
+<h3>Пророческий сон ребецн Ривки</h3>
+<p>Перед рождением Ребе Рашаба его бабушке, ребецн Ривке, явился во сне Мителер Ребе (второй Любавичский Ребе). Он повелел написать свиток Торы в честь будущего ребёнка. Этот пророческий сон указывал на особую миссию мальчика, который должен был родиться: стать мостом между сокровенным учением хасидизма и системой образования, способной передать это учение будущим поколениям.</p>
+
+<h3>Рождение 20 Мархешвана 5621 (1860)</h3>
+<p>Ребе Рашаб родился 20 Мархешвана 5621 (1860) года. Его имя — Шалом-ДовБер — несёт глубокий символизм: «Шалом» (мир) и «ДовБер» (медведь) — синтез святого и будничного, духовного и материального. Ребе Рашаб посвятил свою жизнь тому, чтобы показать, как самые глубокие каббалистические истины могут быть применены в повседневной жизни каждого еврея.</p>
+
+<h3>Основание Томхей Тмимим</h3>
+<p>Величайшим деянием Ребе Рашаба стало основание ешивы «Томхей Тмимим» в 5657 (1897) году. Это была не просто ешива — это была революция в еврейском образовании. Ребе Рашаб создал интеллектуальную систему, в которой изучение нигле (открытой части Торы) и хасидус (внутренней части Торы) были объединены в единое целое. Учеников он называл «тмимим» — «цельные», подчёркивая, что истинная целостность достигается только при соединении разума и сердца.</p>
+
+<h3>«Нейрот леаир» — светильники для освещения</h3>
+<p>Ребе Рашаб называл своих учеников «нейрот леаир» — «светильниками для освещения». Каждый выпускник Томхей Тмимим должен был стать не просто учёным, а источником света для окружающих. Этот принцип стал фундаментом всей системы хасидского образования Хабада и продолжает действовать по сей день: каждый хасид — это светильник, несущий свет Б-жественной мудрости в мир.</p>`,
+
+      en: `<p>The month of Marcheshvan is the only month in the Jewish calendar without a single holiday. Yet it is precisely this "emptiness" that is filled with the deepest meaning: on 20 Marcheshvan, the fifth Lubavitcher Rebbe was born — the Rebbe Rashab (Rabbi Shalom DovBer Schneersohn), the "luminary" who illuminated generations.</p>
+
+<h3>The Prophetic Dream of Rebbetzin Rivka</h3>
+<p>Before the Rebbe Rashab's birth, his grandmother, Rebbetzin Rivka, was visited in a dream by the Mitteler Rebbe (the second Lubavitcher Rebbe). He commanded that a Torah scroll be written in honor of the child to be born. This prophetic dream pointed to the special mission of the boy who was about to be born: to become a bridge between the hidden teachings of Chassidism and an educational system capable of transmitting those teachings to future generations.</p>
+
+<h3>Birth on 20 Marcheshvan 5621 (1860)</h3>
+<p>The Rebbe Rashab was born on 20 Marcheshvan 5621 (1860). His name — Shalom DovBer — carries deep symbolism: "Shalom" (peace) and "DovBer" (bear) — a synthesis of the holy and the mundane, the spiritual and the material. The Rebbe Rashab devoted his life to showing how the deepest Kabbalistic truths can be applied in the everyday life of every Jew.</p>
+
+<h3>The Founding of Tomchei Temimim</h3>
+<p>The Rebbe Rashab's greatest achievement was the founding of the Tomchei Temimim yeshiva in 5657 (1897). This was not merely a yeshiva — it was a revolution in Jewish education. The Rebbe Rashab created an intellectual framework in which the study of nigleh (the revealed part of Torah) and Chassidus (the inner part of Torah) were united into a single whole. He called his students "temimim" — "wholesome ones" — emphasizing that true wholeness is achieved only through the union of mind and heart.</p>
+
+<h3>"Neirot Le'air" — Lamps of Light</h3>
+<p>The Rebbe Rashab called his students "neirot le'air" — "lamps for illumination." Every graduate of Tomchei Temimim was meant to become not merely a scholar but a source of light for those around them. This principle became the foundation of the entire Chabad Chassidic educational system and continues to this day: every Chassid is a lamp carrying the light of divine wisdom into the world.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
+  {
+    id: 'kislev-detailed',
+    slug: 'kislev-mesyats-osvobozhdeniya-i-sveta-podrobno',
+    title: {
+      ru: 'Кислев: Месяц Освобождения и Света',
+      en: 'Kislev: The Month of Liberation and Light',
+      he: 'כסלו: חודש הגאולה והאור',
+      uk: 'Кіслев: Місяць Визволення і Світла',
+    },
+    subtitle: {
+      ru: 'Рош а-Шана хасидизма и золотая цепь поколений',
+      en: 'Rosh Hashanah of Chassidism and the golden chain of generations',
+      he: 'ראש השנה לחסידות ושלשלת הזהב של הדורות',
+      uk: 'Рош а-Шана хасидизму і золотий ланцюг поколінь',
+    },
+    content: {
+      ru: `<p>Месяц Кислев в хасидском календаре — это месяц освобождения и распространения света. Три ключевые даты этого месяца образуют золотую цепь, связывающую поколения хасидских лидеров.</p>
+
+<h3>9–10 Кислева: Мителер Ребе — рождение, уход и освобождение</h3>
+<p>9 Кислева — день рождения и одновременно день гистолкус (ухода) второго Любавичского Ребе, Мителер Ребе (рабби Дов-Бер Шнеури), а также день его освобождения из заключения. Мителер Ребе был известен своим «широким подходом» к хасидскому учению — его труд «Реховот а-Наар» («Широкие реки») олицетворяет принцип раскрытия глубочайших тайн Торы в доступной и расширенной форме. Если Алтер Ребе сжимал бесконечность в каплю, то Мителер Ребе разворачивал каплю обратно в океан.</p>
+
+<h3>14 Кислева: Свадьба Ребе (5689/1928)</h3>
+<p>14 Кислева 5689 (1928) года состоялась свадьба будущего седьмого Любавичского Ребе — рабби Менахем-Мендла Шнеерсона — с ребецн Хаей-Мушкой, дочерью Ребе Раяца. На этой свадьбе присутствовали три поколения Ребе: Ребе Рашаб (дедушка невесты по отцу, духовно), Ребе Раяц (отец невесты) и будущий седьмой Ребе. Ребе Раяц произнёс: «Этот день связал меня с вами, а вас — со мной». Эти слова стали символом неразрывной связи между Ребе и хасидами — связи, которая выходит за рамки времени и пространства.</p>
+
+<h3>19–20 Кислева: Освобождение Алтер Ребе — Рош а-Шана хасидизма</h3>
+<p>19 Кислева 5559 (1798) года первый Любавичский Ребе — Алтер Ребе (рабби Шнеур-Залман из Ляд) — был освобождён из Петропавловской крепости в Санкт-Петербурге. Он был арестован по доносу противников хасидизма, обвинявших его в государственной измене. В заключении Алтер Ребе удостоился видения Бааль-Шем-Това и Магида из Межерича, которые подтвердили, что его арест был отражением небесного суда над самим учением хасидизма.</p>
+
+<p>Освобождение стало знаком свыше: учение хасидизма должно распространяться ещё шире. После освобождения Алтер Ребе написал знаменитое письмо «Катонти» («Я стал мал»), в котором выразил смирение перед величием Б-жественной милости и призвал хасидов к усиленному распространению учения.</p>
+
+<p>С тех пор 19 Кислева стал «Рош а-Шана хасидизма» — днём, когда обновляется и усиливается поток хасидской мудрости в мир. В этот день принято устраивать «Халукас а-Шас» — распределение трактатов Талмуда между членами общины, чтобы весь Талмуд был изучен коллективно в течение года. Главный урок 19 Кислева: «Яфуцу маайанотеха хуца» — «Пусть распространятся твои источники наружу» — учение хасидизма должно доходить до каждого еврея, даже самого далёкого.</p>`,
+
+      en: `<p>The month of Kislev in the Chassidic calendar is a month of liberation and the spreading of light. Three key dates of this month form a golden chain linking generations of Chassidic leaders.</p>
+
+<h3>9–10 Kislev: The Mitteler Rebbe — Birth, Passing, and Liberation</h3>
+<p>9 Kislev is the birthday, the day of histalkus (passing), and the day of liberation from imprisonment of the second Lubavitcher Rebbe, the Mitteler Rebbe (Rabbi DovBer Schneuri). The Mitteler Rebbe was known for his "wide approach" to Chassidic teaching — his work "Rechovot ha-Nahar" ("Wide Rivers") embodies the principle of revealing the deepest secrets of Torah in an accessible and expansive form. If the Alter Rebbe compressed infinity into a drop, the Mitteler Rebbe unfolded that drop back into an ocean.</p>
+
+<h3>14 Kislev: The Rebbe's Wedding (5689/1928)</h3>
+<p>On 14 Kislev 5689 (1928), the wedding took place of the future seventh Lubavitcher Rebbe — Rabbi Menachem Mendel Schneerson — to Rebbetzin Chaya Mushka, daughter of the Rebbe Rayatz. At this wedding, three generations of Rebbes were present: the Rebbe Rashab (the bride's paternal grandfather, spiritually), the Rebbe Rayatz (the bride's father), and the future seventh Rebbe. The Rebbe Rayatz declared: "This day connected me with you, and you with me." These words became a symbol of the unbreakable bond between a Rebbe and his Chassidim — a bond that transcends time and space.</p>
+
+<h3>19–20 Kislev: Liberation of the Alter Rebbe — Rosh Hashanah of Chassidism</h3>
+<p>On 19 Kislev 5559 (1798), the first Lubavitcher Rebbe — the Alter Rebbe (Rabbi Schneur Zalman of Liadi) — was liberated from the Peter-Paul Fortress in St. Petersburg. He had been arrested on denunciation by opponents of Chassidism who accused him of treason. In prison, the Alter Rebbe was granted a vision of the Baal Shem Tov and the Maggid of Mezritch, who confirmed that his arrest was a reflection of a heavenly tribunal over the very teaching of Chassidism.</p>
+
+<p>His liberation became a sign from Above: the teachings of Chassidism must be spread even more widely. After his release, the Alter Rebbe wrote the famous letter "Katonti" ("I have become small"), expressing humility before the greatness of divine mercy and calling upon the Chassidim to intensify the dissemination of the teachings.</p>
+
+<p>Since then, 19 Kislev has been the "Rosh Hashanah of Chassidism" — a day when the flow of Chassidic wisdom into the world is renewed and intensified. On this day it is customary to hold "Chalukas HaShas" — the distribution of Talmudic tractates among community members so that the entire Talmud is studied collectively over the course of a year. The central lesson of 19 Kislev: "Yafutzu maayonosecha chutza" — "Let your wellsprings spread outward" — the teachings of Chassidism must reach every Jew, even the most distant.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-27',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
