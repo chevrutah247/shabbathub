@@ -73,16 +73,22 @@ const texts = {
     uk: 'Додавання нових публікацій, оцифрування архівів',
   },
   thanksTitle: {
-    ru: 'Спасибо!',
-    en: 'Thank you!',
-    he: '!תודה רבה',
-    uk: 'Дякуємо!',
+    ru: 'תזכו למצוות',
+    en: 'תזכו למצוות',
+    he: 'תזכו למצוות',
+    uk: 'תזכו למצוות',
+  },
+  thanksSubtitle: {
+    ru: 'Тизку лемицвойс!',
+    en: 'Tizku Lemitzvos!',
+    he: '',
+    uk: 'Тізку лемцвойс!',
   },
   thanksText: {
-    ru: 'Каждый вклад помогает еврейским общинам по всему миру получить доступ к Торе и еврейским знаниям бесплатно.',
-    en: 'Every contribution helps Jewish communities worldwide access Torah and Jewish knowledge for free.',
-    he: 'כל תרומה עוזרת לקהילות יהודיות ברחבי העולם לגשת לתורה ולידע יהודי בחינם.',
-    uk: 'Кожен внесок допомагає єврейським громадам по всьому світу отримати доступ до Тори та єврейських знань безкоштовно.',
+    ru: 'Пусть ваша заслуга в поддержке Торы принесёт благословения вам и вашей семье. Каждый вклад помогает еврейским общинам по всему миру получить доступ к Торе и еврейским знаниям бесплатно.',
+    en: 'May your merit in supporting Torah bring blessings to you and your family. Every contribution helps Jewish communities worldwide access Torah and Jewish knowledge for free.',
+    he: 'שזכות התמיכה בתורה תביא ברכה לכם ולמשפחתכם. כל תרומה עוזרת לקהילות יהודיות ברחבי העולם לגשת לתורה ולידע יהודי בחינם.',
+    uk: 'Нехай ваша заслуга у підтримці Тори принесе благословення вам і вашій родині. Кожен внесок допомагає єврейським громадам по всьому світу отримати доступ до Тори та єврейських знань безкоштовно.',
   },
 };
 
@@ -167,11 +173,14 @@ export default function DonatePage() {
         </div>
 
         {/* Thank you */}
-        <div className="bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="text-lg font-bold text-primary-800 mb-2">
+        <div className="bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100 border border-amber-200 rounded-2xl p-8 text-center shadow-lg">
+          <h3 className="text-3xl md:text-4xl font-bold text-amber-800 mb-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
             {t('thanksTitle', lang)}
           </h3>
-          <p className="text-primary-700 text-sm leading-relaxed">
+          <p className="text-lg font-semibold text-amber-700 mb-3">
+            {t('thanksSubtitle', lang)}
+          </p>
+          <p className="text-amber-900/70 text-sm leading-relaxed max-w-lg mx-auto">
             {t('thanksText', lang)}
           </p>
         </div>
