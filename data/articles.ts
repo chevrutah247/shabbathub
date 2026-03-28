@@ -4843,6 +4843,191 @@ export const articles: Article[] = [
     tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
     createdAt: '2026-03-28',
   },
+  {
+    id: 'rebbe-bitachon-anxiety',
+    slug: 'kto-zdes-nastoyashchiy-boss-pochemu-trevoga-oshibka',
+    title: {
+      ru: 'Кто здесь настоящий Босс? Почему ваша тревога — это духовная ошибка',
+      en: 'Who Is the Real Boss Here? Why Your Anxiety Is a Spiritual Mistake',
+      he: 'מי כאן הבוס האמיתי? למה החרדה שלך היא טעות רוחנית',
+      uk: 'Хто тут справжній Бос? Чому ваша тривога — це духовна помилка',
+    },
+    subtitle: {
+      ru: 'Беспокойство — признак ослабления связи с Творцом',
+      en: 'Worry is a sign of a weakened connection with the Creator',
+      he: 'דאגה היא סימן להיחלשות הקשר עם הבורא',
+      uk: 'Занепокоєння — ознака послаблення зв\'язку з Творцем',
+    },
+    content: {
+      ru: `<h3>Ловушка гиперконтроля</h3>
+<p>Человек, охваченный тревогой, ведёт себя так, словно весь мир лежит на его плечах. Он пытается просчитать каждый шаг, предусмотреть каждую неудачу, застраховаться от каждого риска. Ребе называл это состояние «путаницей мыслей» — когда разум мечется между десятками сценариев, не находя покоя ни в одном из них. Корень проблемы в том, что такой человек забывает главное: Всевышний управляет не только глобальными процессами — движением планет и судьбами народов, — но и мельчайшими деталями жизни каждого отдельного человека. Каждый лист, падающий с дерева, падает по воле Б-га. Каждая встреча, каждый телефонный звонок, каждая «случайность» — всё это элементы Б-жественного плана. Когда человек осознаёт это по-настоящему, тревога теряет свою власть над ним.</p>
+
+<h3>Битахон — действие, а не ожидание</h3>
+<p>Битахон — это не пассивное сидение сложа руки в ожидании чуда. Это активное внутреннее состояние, при котором человек становится каналом для Б-жественных благословений. Ребе подчёркивал: нужно работать, планировать, лечиться — выполнять все необходимые действия в материальном мире. Но при этом сердце должно оставаться свободным от страха. Руки делают своё дело, а душа знает: результат определяет не моя хитрость и не мой ум, а воля Творца. Битахон — это мост между усилием человека и благословением Свыше. Без этого моста даже самые грандиозные планы рассыпаются в прах, а с ним — даже скромное усилие приносит плоды, превосходящие любые ожидания.</p>
+
+<h3>Практический вывод</h3>
+<p>Ребе учил: качество упования напрямую определяет объём успеха. Чем глубже ваше доверие Б-гу, тем шире канал, через который приходят благословения. Ребе советовал «отключиться» от земных расчётов — не в смысле бездействия, а в смысле внутренней свободы от зависимости от результата. Признайте: Всевышний есть абсолютное добро, и Он заботится о вас лично. Не о человечестве вообще, не о еврейском народе в целом — а конкретно о вас, здесь и сейчас. Эта мысль, если впустить её по-настоящему глубоко, способна растворить любую тревогу и наполнить жизнь спокойной уверенностью.</p>`,
+
+      en: `<h3>The Trap of Hypercontrol</h3>
+<p>A person consumed by anxiety behaves as if the entire world rests on their shoulders. They try to calculate every step, anticipate every failure, and insure against every risk. The Rebbe called this state "confusion of thoughts" — when the mind races between dozens of scenarios, finding peace in none of them. The root of the problem is that such a person forgets the essential truth: the Almighty governs not only global processes — the movement of planets and the destinies of nations — but also the smallest details of each individual person's life. Every leaf that falls from a tree falls by the will of G-d. Every meeting, every phone call, every "coincidence" — all of these are elements of the Divine plan. When a person truly realizes this, anxiety loses its power over them.</p>
+
+<h3>Bitachon — Action, Not Waiting</h3>
+<p>Bitachon is not passively sitting with folded hands waiting for a miracle. It is an active inner state in which a person becomes a channel for Divine blessings. The Rebbe emphasized: one must work, plan, seek medical treatment — perform all necessary actions in the material world. But the heart must remain free from fear. The hands do their work, while the soul knows: the outcome is determined not by my cleverness or my intellect, but by the will of the Creator. Bitachon is the bridge between human effort and blessing from Above. Without this bridge, even the grandest plans crumble to dust, but with it, even a modest effort bears fruit that exceeds all expectations.</p>
+
+<h3>A Practical Conclusion</h3>
+<p>The Rebbe taught: the quality of trust directly determines the volume of success. The deeper your trust in G-d, the wider the channel through which blessings flow. The Rebbe advised to "detach" from earthly calculations — not in the sense of inaction, but in the sense of inner freedom from dependence on outcomes. Recognize that the Almighty is absolute good, and He cares for you personally. Not for humanity in general, not for the Jewish people as a whole — but specifically for you, here and now. This thought, if you allow it to penetrate truly deeply, is capable of dissolving any anxiety and filling your life with calm confidence.</p>`,
+    },
+    tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-bitachon-believer',
+    slug: 'veruyushchiy-vnutri-vas-nevozmozhno-byt-ateistom',
+    title: {
+      ru: 'Верующий внутри вас: Почему на самом деле невозможно быть атеистом',
+      en: 'The Believer Within You: Why It Is Actually Impossible to Be an Atheist',
+      he: 'המאמין שבתוכך: למה בעצם אי אפשר להיות אתאיסט',
+      uk: 'Віруючий усередині вас: Чому насправді неможливо бути атеїстом',
+    },
+    subtitle: {
+      ru: 'Вера — не приобретённое знание, а сущность души',
+      en: 'Faith is not acquired knowledge but the essence of the soul',
+      he: 'אמונה אינה ידע נרכש אלא מהות הנשמה',
+      uk: 'Віра — не набуте знання, а сутність душі',
+    },
+    content: {
+      ru: `<h3>Природа души</h3>
+<p>Ребе неоднократно повторял фундаментальный принцип: каждый еврей является «верующим и потомком верующих». Эмуна — вера — это не знание, приобретённое через обучение или философские размышления. Это сущность самой души, пронизывающая все её «органы» и проявления. Подобно тому, как сердце бьётся без сознательного усилия, душа верит без необходимости доказательств. Даже если человек провозглашает себя атеистом, его душа остаётся верной Б-гу. Она не может перестать верить, как лёгкие не могут перестать дышать. Вера вшита в саму ткань еврейской души — она передаётся от Авраама, Ицхака и Яакова через все поколения и не может быть уничтожена никакими интеллектуальными аргументами, никаким жизненным опытом, никакими разочарованиями.</p>
+
+<h3>Внешние оболочки</h3>
+<p>Если вера — сущность души, то откуда берётся атеизм? Ребе объяснял: атеизм — это внешняя оболочка, наросшая на душу в результате неправильного воспитания, дурного окружения или травматического опыта. Это как грязь на бриллианте: бриллиант не перестаёт быть бриллиантом оттого, что покрыт слоем грязи. Свобода выбора, данная человеку Б-гом, позволяет ему действовать вопреки своей природе — но не способна изменить саму природу. Человек может вести себя так, будто Б-га нет, но он не может заставить свою душу в это поверить. В глубине, под всеми слоями цинизма, разочарования и интеллектуальной гордыни, горит неугасимый огонь веры — и задача состоит лишь в том, чтобы снять эти оболочки.</p>
+
+<h3>Совет</h3>
+<p>Ребе давал парадоксальный совет тем, кто борется с сомнениями: не пытайтесь «понять» Б-га прежде, чем начнёте действовать. Вера начинается там, где заканчивается логика. Если вы будете ждать, пока ваш разум «докажет» существование Б-га, вы будете ждать вечно — потому что бесконечное не может быть вмещено в конечный разум. Вместо этого позвольте своей естественной вере проявиться через практические добрые дела: зажгите свечи в пятницу вечером, наденьте тфилин, положите монету в ящик для цдаки. Каждое такое действие — как удар молотка, разбивающий внешнюю оболочку и освобождающий свет души. Действие первично — понимание придёт следом, как рассвет приходит после ночи.</p>`,
+
+      en: `<h3>The Nature of the Soul</h3>
+<p>The Rebbe repeatedly stated a fundamental principle: every Jew is "a believer and a descendant of believers." Emunah — faith — is not knowledge acquired through study or philosophical reflection. It is the essence of the soul itself, permeating all its "organs" and manifestations. Just as the heart beats without conscious effort, the soul believes without the need for proof. Even if a person proclaims themselves an atheist, their soul remains faithful to G-d. It cannot stop believing, just as the lungs cannot stop breathing. Faith is woven into the very fabric of the Jewish soul — it is transmitted from Abraham, Isaac, and Jacob through all generations and cannot be destroyed by any intellectual arguments, any life experience, or any disappointments.</p>
+
+<h3>External Shells</h3>
+<p>If faith is the essence of the soul, then where does atheism come from? The Rebbe explained: atheism is an external shell that has grown over the soul as a result of poor upbringing, negative environment, or traumatic experience. It is like dirt on a diamond: the diamond does not cease to be a diamond because it is covered with a layer of dirt. Freedom of choice, given to man by G-d, allows him to act against his nature — but it cannot change the nature itself. A person can behave as though G-d does not exist, but they cannot make their soul believe this. In the depths, beneath all the layers of cynicism, disappointment, and intellectual pride, an inextinguishable fire of faith burns — and the task is simply to remove those shells.</p>
+
+<h3>Advice</h3>
+<p>The Rebbe gave paradoxical advice to those struggling with doubt: do not try to "understand" G-d before you begin to act. Faith begins where logic ends. If you wait until your mind "proves" the existence of G-d, you will wait forever — because the infinite cannot be contained within a finite mind. Instead, let your natural faith manifest through practical good deeds: light Shabbat candles on Friday evening, put on tefillin, place a coin in the tzedakah box. Each such action is like a hammer blow, shattering the external shell and liberating the light of the soul. Action is primary — understanding will follow, just as dawn follows the night.</p>`,
+    },
+    tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-bitachon-income',
+    slug: 'uspekh-bez-stressa-sekretnaya-formula-zarabotka',
+    title: {
+      ru: 'Успех без стресса: Секретная формула вашего заработка',
+      en: 'Success Without Stress: The Secret Formula for Your Income',
+      he: 'הצלחה בלי לחץ: הנוסחה הסודית להכנסה שלך',
+      uk: 'Успіх без стресу: Секретна формула вашого заробітку',
+    },
+    subtitle: {
+      ru: 'Духовная механика пропитания — руки работают, сердце уповает',
+      en: 'The spiritual mechanics of sustenance — hands work, heart trusts',
+      he: 'המכניקה הרוחנית של הפרנסה — הידיים עובדות, הלב בוטח',
+      uk: 'Духовна механіка пропітання — руки працюють, серце уповає',
+    },
+    content: {
+      ru: `<h3>Руки работают, сердце уповает</h3>
+<p>В Теhилим сказано: «От труда рук твоих будешь есть». Ребе обращал внимание на точность формулировки: именно «руки» — не голова, не сердце, не вся жизнь целиком. Ключевой принцип пропитания: руки работают, а голова и сердце наполнены упованием на Б-га. Человек обязан создать «сосуд» — пойти на работу, открыть бизнес, освоить профессию. Но Б-г наполняет этот сосуд «водой» — реальным доходом, успехом, прибылью. Без сосуда воде некуда течь — поэтому нельзя просто сидеть и ждать чуда. Но без воды Свыше сосуд останется пустым — поэтому бессмысленно полагаться только на свои усилия. Гармония между действием и упованием — вот формула, которую Ребе повторял снова и снова: делай своё дело с полной отдачей, но знай, что результат — в руках Творца.</p>
+
+<h3>Духовный канал богатства</h3>
+<p>Ребе открывал удивительную закономерность: забота о «духовном пропитании» — изучение Торы, молитва, соблюдение заповедей — является самым надёжным путём к материальному достатку. Это не магия и не суеверие, а духовная механика: когда человек расширяет свой духовный канал, через него начинает поступать больше благословений, в том числе материальных. Особую роль играет цдака — десятина, отделяемая от дохода. Ребе говорил: «Испытайте Меня этим» — это единственная заповедь, в которой Б-г прямо разрешает Его проверить. Отдавая десятую часть, вы не беднеете — вы расширяете канал для благословений Свыше. Каждая монета, данная на цдаку, возвращается многократно умноженной.</p>
+
+<h3>Главный секрет</h3>
+<p>Ребе раскрывал главный секрет финансового благополучия, который удивляет многих: Шалом Байит — мир в семье — это основной сосуд, удерживающий деньги. Нет мира в доме — благословения утекают, невзирая на гениальные бизнес-планы, блестящее образование и неутомимый труд. Можно зарабатывать миллионы, но без мира в семье деньги будут исчезать на болезни, судебные издержки, неудачные инвестиции и бесконечные непредвиденные расходы. И наоборот: когда в доме царит любовь и уважение, даже скромный доход растягивается чудесным образом, покрывая все потребности семьи. Ребе советовал: прежде чем искать новые источники дохода, наведите порядок в отношениях с супругой.</p>`,
+
+      en: `<h3>Hands Work, Heart Trusts</h3>
+<p>The Psalms say: "You shall eat from the labor of your hands." The Rebbe drew attention to the precision of the wording: specifically "hands" — not the head, not the heart, not one's entire life. The key principle of sustenance is this: the hands work, while the head and heart are filled with trust in G-d. A person is obligated to create a "vessel" — go to work, open a business, master a profession. But G-d fills this vessel with "water" — real income, success, profit. Without a vessel, the water has nowhere to flow — therefore one cannot simply sit and wait for a miracle. But without water from Above, the vessel remains empty — therefore it is pointless to rely solely on one's own efforts. The harmony between action and trust — this is the formula the Rebbe repeated again and again: do your work with full dedication, but know that the outcome is in the hands of the Creator.</p>
+
+<h3>The Spiritual Channel of Wealth</h3>
+<p>The Rebbe revealed an astonishing pattern: caring for "spiritual sustenance" — Torah study, prayer, observance of commandments — is the most reliable path to material prosperity. This is not magic or superstition, but spiritual mechanics: when a person expands their spiritual channel, more blessings begin to flow through it, including material ones. Tzedakah — the tithe set aside from income — plays a special role. The Rebbe would say: "Test Me in this" — this is the only commandment in which G-d directly permits us to test Him. By giving a tenth, you do not become poorer — you widen the channel for blessings from Above. Every coin given to tzedakah returns multiplied many times over.</p>
+
+<h3>The Main Secret</h3>
+<p>The Rebbe revealed the main secret of financial well-being, one that surprises many: Shalom Bayit — peace in the family — is the primary vessel that holds money. No peace at home means blessings leak away, regardless of brilliant business plans, outstanding education, and tireless labor. One can earn millions, but without peace in the family, money will vanish into illness, legal costs, failed investments, and endless unforeseen expenses. Conversely, when love and respect reign in the home, even a modest income stretches in a wondrous way, covering all the family's needs. The Rebbe advised: before seeking new sources of income, put your relationship with your spouse in order.</p>`,
+    },
+    tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-bitachon-depression',
+    slug: 'lovushka-chernoty-kak-emuna-vytaskivayet-iz-yamy',
+    title: {
+      ru: 'Ловушка «черноты»: Как Эмуна вытаскивает из ямы уныния',
+      en: 'The Trap of "Blackness": How Emunah Pulls You Out of the Pit of Despair',
+      he: 'מלכודת ה"שחורה": איך אמונה מוציאה אותך מבור הייאוש',
+      uk: 'Пастка «чорноти»: Як Емуна витягує з ями зневіри',
+    },
+    subtitle: {
+      ru: 'Депрессия — стратегическая уловка дурного начала',
+      en: 'Depression is a strategic ploy of the evil inclination',
+      he: 'דיכאון הוא תחבולה אסטרטגית של היצר הרע',
+      uk: 'Депресія — стратегічна хитрість поганого начала',
+    },
+    content: {
+      ru: `<h3>Стратегия врага</h3>
+<p>Ребе предупреждал: депрессия и «чернота» — это не естественные состояния души. Б-г создал душу светлой, радостной, стремящейся к жизни и к Нему. Уныние — это стратегическая уловка йецер hара (дурного начала), цель которой — ослепить разум человека и сделать его неспособным выполнять свою миссию в этом мире. Когда человек погружается в тоску, он перестаёт молиться с огнём, перестаёт учить Тору с радостью, перестаёт помогать другим, перестаёт видеть смысл в своей жизни. Именно этого и добивается йецер hара. Время, потерянное в тоске, невозможно вернуть — каждая минута уныния — это украденная минута жизни, минута, в которую человек мог бы выполнить заповедь, сказать доброе слово, поддержать ближнего. Ребе призывал осознать: уныние — это не ваше состояние, это атака врага.</p>
+
+<h3>Лекарство — в действии</h3>
+<p>Ребе часто повторял: «Главное — действие». Не ждите вдохновения, не ждите, пока «станет легче», не ждите идеального момента. Действуйте «через силу» — буквально заставляйте себя встать, одеться, выйти из дома, сделать хоть что-нибудь доброе. Одно маленькое дело имеет бесконечную ценность, потому что оно совершено вопреки тьме. Именно в действии, совершённом через преодоление, заключена особая сила — свет, который рождается из тьмы, ярче любого другого света. Каждый маленький шаг рассеивает внутреннюю тьму, как свеча рассеивает мрак комнаты. Не нужно ждать, пока вы «почувствуете» радость — начните действовать, и радость придёт сама, как тепло приходит от движения.</p>
+
+<h3>Фокус на другом</h3>
+<p>Ребе раскрывал корень уныния: оно рождается от чрезмерной сосредоточенности на самом себе — своих проблемах, своих неудачах, своих страданиях. Когда мир сужается до размеров собственного «я», тьма становится невыносимой. Лучшее лекарство — переключиться на нужды общины, на помощь другим людям. Помощь ближнему — самый быстрый выход из личного кризиса. Когда вы помогаете другому человеку, происходит чудо: ваша собственная боль отступает, потому что душа вспоминает о своём истинном предназначении — не замыкаться в себе, а нести свет в мир. Ребе советовал: если вам тяжело — найдите того, кому ещё тяжелее, и помогите ему. Это лекарство действует безотказно.</p>`,
+
+      en: `<h3>The Strategy of the Enemy</h3>
+<p>The Rebbe warned: depression and "blackness" are not natural states of the soul. G-d created the soul bright, joyful, striving toward life and toward Him. Despair is a strategic ploy of the yetzer hara (the evil inclination), whose goal is to blind a person's mind and render them incapable of fulfilling their mission in this world. When a person sinks into melancholy, they stop praying with fire, stop studying Torah with joy, stop helping others, and stop seeing meaning in their life. This is exactly what the yetzer hara seeks to achieve. Time lost in sadness cannot be returned — every minute of despair is a stolen minute of life, a minute in which a person could have fulfilled a commandment, spoken a kind word, or supported another. The Rebbe urged us to recognize: despair is not your state — it is an attack by the enemy.</p>
+
+<h3>The Remedy Is in Action</h3>
+<p>The Rebbe often repeated: "The main thing is action." Do not wait for inspiration, do not wait until "it gets easier," do not wait for the perfect moment. Act "through force" — literally make yourself get up, get dressed, leave the house, and do at least something good. One small deed has infinite value because it is performed in defiance of darkness. It is precisely in an action performed through overcoming that a special power resides — light born from darkness is brighter than any other light. Each small step disperses the inner darkness, like a candle disperses the gloom of a room. You need not wait until you "feel" joy — begin to act, and joy will come on its own, just as warmth comes from movement.</p>
+
+<h3>Focus on Others</h3>
+<p>The Rebbe revealed the root of despair: it is born from excessive self-focus — on one's own problems, one's own failures, one's own suffering. When the world narrows to the size of one's own "self," the darkness becomes unbearable. The best remedy is to shift focus to the needs of the community, to helping other people. Helping others is the fastest exit from a personal crisis. When you help another person, a miracle occurs: your own pain recedes, because the soul remembers its true purpose — not to close in upon itself, but to bring light into the world. The Rebbe advised: if you are struggling, find someone who is struggling even more and help them. This remedy works without fail.</p>`,
+    },
+    tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-bitachon-marriage',
+    slug: 'postroit-vechnoye-zdaniye-logiki-nedostatochno-dlya-braka',
+    title: {
+      ru: 'Построить «Вечное здание»: Почему логики недостаточно для счастья в браке',
+      en: 'Building an "Eternal Edifice": Why Logic Is Not Enough for a Happy Marriage',
+      he: 'לבנות "בניין עדי עד": למה הגיון לא מספיק לנישואין מאושרים',
+      uk: 'Побудувати «Вічну будівлю»: Чому логіки недостатньо для щастя у шлюбі',
+    },
+    subtitle: {
+      ru: 'В поисках спутника жизни нельзя полагаться только на разум',
+      en: 'In searching for a life partner one cannot rely on reason alone',
+      he: 'בחיפוש אחר בן/בת זוג אי אפשר להסתמך רק על השכל',
+      uk: 'У пошуках супутника життя не можна покладатися лише на розум',
+    },
+    content: {
+      ru: `<h3>Границы расчётов</h3>
+<p>Ребе предупреждал: человек не может предвидеть все последствия своих решений — его способности ограничены. Когда речь идёт о выборе спутника жизни, эта ограниченность становится особенно очевидной. Можно составить список из ста критериев, проверить каждый — и всё равно ошибиться, потому что самое важное в человеке невозможно измерить списком. Ребе учил: необходимо в значительной мере полагаться на Творца, Который соединяет подходящие души. Ещё до рождения человека на Небесах объявляют: «Дочь такого-то — такому-то». Это не значит, что не нужно прилагать усилий — нужно встречаться, узнавать друг друга, оценивать совместимость. Но окончательное решение должно включать в себя доверие Б-гу, а не только холодный анализ достоинств и недостатков.</p>
+
+<h3>Чудо как норма</h3>
+<p>Мудрецы говорили: найти достойного спутника жизни так же трудно, как рассечение Красного моря. Но ведь море рассеклось! И рассеклось оно именно благодаря вере — когда Нахшон бен Аминадав вошёл в воду по горло, не дожидаясь чуда. Так и в браке: нужно сделать шаг веры, войти в «воду», довериться процессу. Ребе называл брак «вечным зданием» — «биньян адей ад». Фундаментом этого здания должна быть Тора, а не человеческие расчёты. Расчёты рассыпаются при первом серьёзном испытании, а Тора стоит вечно. Когда оба супруга строят свой дом на фундаменте Торы и заповедей, их союз обретает прочность, недоступную никаким «рациональным» бракам. Б-г Сам становится третьим партнёром в таком браке, скрепляя его изнутри.</p>
+
+<h3>Совет сомневающимся</h3>
+<p>Ребе давал конкретный практический совет тем, кто сомневается: не ищите идеального человека — его не существует. Идеала нет ни среди мужчин, ни среди женщин, ни среди кого бы то ни было на этой земле. Если вы в целом удовлетворены, если видите в человеке основные качества — доброту, богобоязненность, порядочность — не зацикливайтесь на мелочах. Не позволяйте несущественным недостаткам затмить главное. Ребе советовал: твёрдо решите построить еврейский дом — и Всевышний поможет. Решимость — это сосуд для Б-жественной помощи. Пока человек колеблется, помощь Свыше не может войти в его жизнь, потому что нет сосуда, готового её принять. Но стоит принять решение всем сердцем — и двери открываются, препятствия исчезают, и Б-г ведёт человека к его суженому.</p>`,
+
+      en: `<h3>The Limits of Calculation</h3>
+<p>The Rebbe warned: a person cannot foresee all the consequences of their decisions — their abilities are limited. When it comes to choosing a life partner, this limitation becomes especially apparent. One can compile a list of a hundred criteria, verify each one — and still be wrong, because the most important things in a person cannot be measured by a list. The Rebbe taught: one must rely significantly on the Creator, who connects suitable souls. Even before a person is born, it is proclaimed in Heaven: "The daughter of so-and-so is destined for so-and-so." This does not mean that no effort is needed — one must meet people, get to know each other, assess compatibility. But the final decision must include trust in G-d, not only cold analysis of virtues and shortcomings.</p>
+
+<h3>Miracle as the Norm</h3>
+<p>The Sages said: finding a worthy spouse is as difficult as the splitting of the Red Sea. But the sea did split! And it split precisely through faith — when Nachshon ben Aminadav walked into the water up to his neck, without waiting for a miracle. So too in marriage: one must take a leap of faith, step into the "water," and trust the process. The Rebbe called marriage an "eternal building" — "binyan adei ad." The foundation of this building must be Torah, not human calculations. Calculations crumble at the first serious test, while Torah stands forever. When both spouses build their home on a foundation of Torah and commandments, their union acquires a strength inaccessible to any "rational" marriage. G-d Himself becomes the third partner in such a marriage, binding it from within.</p>
+
+<h3>Advice for the Doubtful</h3>
+<p>The Rebbe gave concrete practical advice to those who hesitate: do not seek the ideal person — they do not exist. There is no ideal among men, nor among women, nor among anyone on this earth. If you are generally satisfied, if you see in a person the essential qualities — kindness, G-d-fearing nature, decency — do not fixate on trifles. Do not allow insignificant flaws to overshadow what truly matters. The Rebbe advised: firmly decide to build a Jewish home — and the Almighty will help. Resolve is the vessel for Divine assistance. As long as a person wavers, help from Above cannot enter their life because there is no vessel ready to receive it. But the moment one decides with their whole heart, doors open, obstacles vanish, and G-d guides the person to their destined match.</p>`,
+    },
+    tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
+    createdAt: '2026-03-28',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
