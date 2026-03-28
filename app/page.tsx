@@ -149,15 +149,10 @@ export default function HomePage() {
           }
         }
 
-        // Find calendar article for today or next closest date
+        // Find calendar article for today ONLY (exact match)
         const calArticles = allArticles.filter(a => a.hebrewDate && a.hebrewDate.month === hMonth);
         const l = lang === 'he' ? 'he' : lang === 'uk' ? 'uk' : lang === 'en' ? 'en' : 'ru';
-        let found = calArticles.find(a => a.hebrewDate!.day === hDay);
-        if (!found) {
-          // Find next closest in same month
-          const future = calArticles.filter(a => a.hebrewDate!.day > hDay).sort((a, b) => a.hebrewDate!.day - b.hebrewDate!.day);
-          found = future[0] || calArticles[0];
-        }
+        const found = calArticles.find(a => a.hebrewDate!.day === hDay);
         if (found) {
           const contentLang = (l === 'he' || l === 'uk') ? 'ru' : l;
           setCalendarArticle({
