@@ -3653,6 +3653,7 @@ export const articles: Article[] = [
     },
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-28',
+  },
   {
     id: 'sivan-tammuz-exile',
     slug: 'sivan-tamuz-stoykost-v-izgnanii-i-spaseniye',
