@@ -3686,6 +3686,228 @@ export const articles: Article[] = [
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-28',
   },
+  {
+    id: 'nissan-18-triple',
+    slug: 'nissan-18-troynoy-uzel-istorii',
+    title: {
+      ru: '18 Ниссана: Тройной узел истории и мистический корень Хабада',
+      en: '18 Nissan: A Triple Knot of History and the Mystical Root of Chabad',
+      he: 'י\"ח ניסן: קשר משולש של היסטוריה והשורש המיסטי של חב\"ד',
+      uk: '18 Ніссана: Потрійний вузол історії та містичний корінь Хабаду',
+    },
+    subtitle: {
+      ru: 'Упшерниш Алтер Ребе, рождение рабби Леви-Ицхака и брит-мила Ребе',
+      en: 'The Upshernish of the Alter Rebbe, the Birth of Rabbi Levi Yitzchak, and the Bris of the Rebbe',
+      he: 'אופשערניש של אדמו\"ר הזקן, לידת הרב לוי יצחק וברית המילה של הרבי',
+      uk: 'Упшерніш Алтер Ребе, народження рабі Леві-Іцхака та бріт-міла Ребе',
+    },
+    content: {
+      ru: `<h3>Упшерниш Алтер Ребе (1748)</h3>
+<p>18 Ниссана 5508 года (1748) в Межибуже состоялось одно из самых таинственных событий в истории хасидизма — упшерниш (первая стрижка волос) маленького Шнеура-Залмана, будущего Алтер Ребе. Баал-Шем-Тов лично совершил обряд: срезал волосы ребёнка, оставив пейсы, и произнёс слова, полные пророческого смысла. После церемонии Бешт строго запретил родителям раскрывать подробности того, что произошло между ним и мальчиком. Эта тайна осталась неразгаданной — но результат говорит сам за себя: из этого ребёнка вырос основатель философии Хабада, человек, соединивший глубину каббалы с ясностью разума и открывший врата хасидизма для каждого еврея.</p>
+
+<h3>Рождение рабби Леви-Ицхака (1878)</h3>
+<p>Ровно через 130 лет, 18 Ниссана 5638 года (1878), в семье великих раввинов родился рабби Леви-Ицхак Шнеерсон — отец Седьмого Любавичского Ребе. С юных лет он отличался гениальным умом и глубочайшим знанием как открытой, так и сокровенной Торы. Рабби Леви-Ицхак стал выдающимся каббалистом, автором глубочайших комментариев на Зоар и каббалистические тексты. Его жизнь стала подвигом: несмотря на арест советскими властями и ссылку в Казахстан, он продолжал изучать и преподавать Тору до последнего дня. Б-г дал ему силу духа, которую он передал своему великому сыну.</p>
+
+<h3>Брит-мила Седьмого Ребе (1902)</h3>
+<p>Ещё через 24 года, 18 Ниссана 5662 года (1902), состоялась брит-мила младенца Менахем-Мендла — будущего Седьмого Любавичского Ребе. День обрезания стал днём духовного откровения. Ребецн Хана, мать Ребе, рассказывала, что перед церемонией она совершила нетилат ядаим с особой каваной, ощущая святость момента. Ребе Рашаб (пятый Любавичский Ребе) прислал телеграмму с благословением, в которой были слова: «Пусть он принесёт свет в мир». Эти три события — упшерниш, рождение и брит — переплелись в мистический узел, связавший поколения лидеров Хабада в единую цепь Б-жественного замысла.</p>`,
+
+      en: `<h3>The Upshernish of the Alter Rebbe (1748)</h3>
+<p>On the 18th of Nissan 5508 (1748), in Mezhybizh, one of the most mysterious events in the history of Chassidism took place — the upshernish (first haircut) of little Schneur Zalman, the future Alter Rebbe. The Baal Shem Tov personally performed the ceremony: he cut the child's hair, leaving the peyot, and spoke words filled with prophetic meaning. After the ceremony, the Besht strictly forbade the parents from revealing the details of what transpired between him and the boy. This secret remained unsolved — but the result speaks for itself: from this child grew the founder of Chabad philosophy, a man who united the depth of Kabbalah with the clarity of intellect and opened the gates of Chassidism to every Jew.</p>
+
+<h3>The Birth of Rabbi Levi Yitzchak (1878)</h3>
+<p>Exactly 130 years later, on the 18th of Nissan 5638 (1878), Rabbi Levi Yitzchak Schneerson was born into a family of great rabbis — the father of the Seventh Lubavitcher Rebbe. From his youth, he was distinguished by a brilliant mind and the deepest knowledge of both the revealed and the hidden Torah. Rabbi Levi Yitzchak became an outstanding Kabbalist, authoring the most profound commentaries on the Zohar and Kabbalistic texts. His life became an act of heroism: despite being arrested by the Soviet authorities and exiled to Kazakhstan, he continued to study and teach Torah until his last day. G-d granted him a strength of spirit that he transmitted to his great son.</p>
+
+<h3>The Bris of the Seventh Rebbe (1902)</h3>
+<p>Another 24 years later, on the 18th of Nissan 5662 (1902), the bris milah of the infant Menachem Mendel — the future Seventh Lubavitcher Rebbe — took place. The day of circumcision became a day of spiritual revelation. Rebbetzin Chana, the Rebbe's mother, recounted that before the ceremony she performed netilat yadayim with special kavanah, sensing the holiness of the moment. The Rebbe Rashab (the Fifth Lubavitcher Rebbe) sent a telegram with a blessing containing the words: "May he bring light to the world." These three events — upshernish, birth, and bris — intertwined into a mystical knot, binding generations of Chabad leaders into a single chain of Divine purpose.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'tishrei-visions',
+    slug: 'tishrey-videniya-mashiakha-i-naslediye',
+    title: {
+      ru: 'Тишрей: Видения Машиаха и наследие семьи Ребе',
+      en: 'Tishrei: Visions of Mashiach and the Legacy of the Rebbe\'s Family',
+      he: 'תשרי: חזיונות המשיח ומורשת משפחת הרבי',
+      uk: 'Тішрей: Видіння Машіаха та спадщина родини Ребе',
+    },
+    subtitle: {
+      ru: 'Диалог с Машиахом, подвиг ребецн Ханы и девиз Маараша',
+      en: 'A Dialogue with Mashiach, the Heroism of Rebbetzin Chana, and the Motto of the Maharash',
+      he: 'דו-שיח עם המשיח, גבורת הרבנית חנה וסיסמת המהר\"ש',
+      uk: 'Діалог із Машіахом, подвиг ребецн Хани та девіз Маараша',
+    },
+    content: {
+      ru: `<h3>Видение Баал-Шем-Това (1 тишрея 1746)</h3>
+<p>В Рош а-Шана 5507 года (1746) произошло событие, определившее судьбу всего еврейского народа. Душа Баал-Шем-Това поднялась в высшие миры — и он предстал перед Машиахом. Бешт задал вопрос, который горел в его сердце: «Когда придёт Господин?» Машиах ответил словами, которые стали программой хасидизма на столетия вперёд: «Когда распространятся твои источники наружу». Это означало, что приход Машиаха напрямую связан с распространением учения хасидизма по всему миру. Баал-Шем-Тов описал это видение в знаменитом письме, ставшем одним из важнейших документов хасидской традиции. С тех пор каждое поколение хабадских Ребе видело свою миссию в исполнении этого Б-жественного условия.</p>
+
+<h3>Подвиг ребецн Ханы (6 тишрея 1964)</h3>
+<p>6 тишрея 5725 года (1964) ушла из жизни ребецн Хана Шнеерсон — мать Седьмого Любавичского Ребе, женщина невероятной силы духа и преданности Торе. Её величайший подвиг совершился в годы советских репрессий: когда её мужа, рабби Леви-Ицхака, сослали в Казахстан, она последовала за ним. В ссылке не было чернил — и ребецн Хана собирала ягоды и травы, чтобы своими руками изготовить чернила для мужа. Благодаря этому рабби Леви-Ицхак смог продолжить записывать свои глубочайшие комментарии к Торе и каббале. Эти рукописи были спасены и дошли до наших дней — живое свидетельство подвига женщины, сохранившей Б-жественную мудрость в самых нечеловеческих условиях.</p>
+
+<h3>Йорцайт Ребе Маараша (13 тишрея 1882)</h3>
+<p>13 тишрея 5643 года (1882) покинул этот мир Ребе Маараш — рабби Шмуэль, четвёртый Любавичский Ребе. Он прожил всего 48 лет, но оставил наследие, несоразмерное столь короткой жизни. Его девиз «Лехатхила арибер» — «Изначально поверх» — стал одним из главных принципов хасидизма Хабад. Смысл этих слов в том, что не нужно сначала пытаться обойти препятствие снизу, а если не получится — перепрыгнуть. Нужно сразу прыгать поверх! Ребе Маараш создал систему хемшехим — длинных серий маамаров (хасидских дискурсов), раскрывающих глубочайшие тайны Торы. Его подход сочетал бесстрашие в служении Б-гу с глубиной мысли, ставшей образцом для последующих поколений.</p>`,
+
+      en: `<h3>The Vision of the Baal Shem Tov (1 Tishrei 1746)</h3>
+<p>On Rosh Hashanah 5507 (1746), an event occurred that determined the destiny of the entire Jewish people. The soul of the Baal Shem Tov ascended to the highest realms — and he stood before Mashiach. The Besht asked the question that burned in his heart: "When will the Master come?" Mashiach answered with words that became the program of Chassidism for centuries to come: "When your springs spread outward." This meant that the coming of Mashiach is directly linked to the dissemination of the teachings of Chassidism throughout the world. The Baal Shem Tov described this vision in his famous letter, which became one of the most important documents of the Chassidic tradition. Since then, every generation of Chabad Rebbes has seen its mission in fulfilling this Divine condition.</p>
+
+<h3>The Heroism of Rebbetzin Chana (6 Tishrei 1964)</h3>
+<p>On the 6th of Tishrei 5725 (1964), Rebbetzin Chana Schneerson passed away — the mother of the Seventh Lubavitcher Rebbe, a woman of incredible strength of spirit and devotion to the Torah. Her greatest act of heroism took place during the years of Soviet repression: when her husband, Rabbi Levi Yitzchak, was exiled to Kazakhstan, she followed him. In exile, there was no ink — so Rebbetzin Chana gathered berries and herbs to make ink with her own hands for her husband. Thanks to this, Rabbi Levi Yitzchak was able to continue writing his most profound commentaries on the Torah and Kabbalah. These manuscripts were saved and have survived to this day — a living testimony to the heroism of a woman who preserved Divine wisdom under the most inhumane conditions.</p>
+
+<h3>The Yahrtzeit of the Rebbe Maharash (13 Tishrei 1882)</h3>
+<p>On the 13th of Tishrei 5643 (1882), the Rebbe Maharash — Rabbi Shmuel, the Fourth Lubavitcher Rebbe — departed this world. He lived only 48 years, but left a legacy disproportionate to such a short life. His motto "Lechatchila Ariber" — "From the outset, go over" — became one of the central principles of Chabad Chassidism. The meaning of these words is that one should not first try to go around an obstacle from below, and only then — if that fails — try to leap over it. One should leap over from the very start! The Rebbe Maharash created the system of hemshechim — long series of maamarim (Chassidic discourses) revealing the deepest secrets of the Torah. His approach combined fearlessness in the service of G-d with a depth of thought that became a model for subsequent generations.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'kislev-wedding-light',
+    slug: 'kislev-svadba-veka-i-triumf-sveta',
+    title: {
+      ru: 'Кислев: Свадьба века и триумф света',
+      en: 'Kislev: The Wedding of the Century and the Triumph of Light',
+      he: 'כסלו: חתונת המאה וניצחון האור',
+      uk: 'Кіслев: Весілля століття та тріумф світла',
+    },
+    subtitle: {
+      ru: 'Мителер Ребе, свадьба Ребе и Рош а-Шана хасидизма',
+      en: 'The Mitteler Rebbe, the Rebbe\'s Wedding, and the Rosh Hashanah of Chassidism',
+      he: 'האדמו\"ר האמצעי, חתונת הרבי וראש השנה של החסידות',
+      uk: 'Мітелер Ребе, весілля Ребе та Рош а-Шана хасидизму',
+    },
+    content: {
+      ru: `<h3>9-10 Кислева: Мителер Ребе — рождение и уход в один день</h3>
+<p>9 Кислева 5534 года (1773) родился рабби Дов-Бер Шнеури — Мителер Ребе, второй Любавичский Ребе, и в тот же день 10 Кислева 5588 года (1827) его душа покинула этот мир. Совпадение дат рождения и ухода считается в еврейской традиции признаком совершенной праведности — это означает, что человек завершил свою миссию в мире полностью. Мителер Ребе был освобождён из Витебской тюрьмы, куда был заключён по ложному доносу, и его триумфальное возвращение стало праздником для всех хасидов. Он развил учение своего отца, Алтер Ребе, углубив интеллектуальную составляющую хасидизма Хабад и создав обширные труды, раскрывающие внутреннее измерение Торы с небывалой детальностью и глубиной.</p>
+
+<h3>14 Кислева: Свадьба Ребе (1928)</h3>
+<p>14 Кислева 5689 года (1928) в Варшаве состоялась свадьба, изменившая ход еврейской истории — бракосочетание рабби Менахем-Мендла Шнеерсона и ребецн Хаи-Мушки, дочери Ребе Раяца. На свадьбе присутствовали тысячи хасидов, а духовная атмосфера была невероятной. Ребе Раяц танцевал «по-русски», а его радость не знала границ. По свидетельствам хасидов, души трёх поколений Ребе спустились с Небес, чтобы благословить этот союз. Ребе Раяц произнёс слова, ставшие легендарными: «Этот день связал меня с вами, а вас — со мной». Это был не просто брак двух людей — это было соединение Б-жественных душ, из которого выросло величайшее еврейское движение современности.</p>
+
+<h3>19-20 Кислева: Рош а-Шана хасидизма</h3>
+<p>19 Кислева 5559 года (1798) Алтер Ребе был освобождён из Петропавловской крепости в Петербурге, где он содержался по обвинению в государственной измене. Это освобождение стало не просто юридической победой — оно стало духовным откровением. В заключении Алтер Ребе удостоился видения: к нему явились Баал-Шем-Тов и Магид из Межерича, которые открыли ему, что на Небесах шёл суд о том, допустимо ли раскрывать тайны Торы столь широко. Освобождение из тюрьмы стало знаком: Небесный суд вынес оправдательный приговор, и врата мудрости были распахнуты настежь. С тех пор 19 Кислева отмечается как Рош а-Шана хасидизма — Новый год распространения Б-жественной мудрости во всём мире.</p>`,
+
+      en: `<h3>9-10 Kislev: The Mitteler Rebbe — Born and Departed on the Same Day</h3>
+<p>On the 9th of Kislev 5534 (1773), Rabbi Dov Ber Schneuri was born — the Mitteler Rebbe, the Second Lubavitcher Rebbe — and on the same date, the 10th of Kislev 5588 (1827), his soul departed this world. The coincidence of the dates of birth and passing is considered in Jewish tradition a sign of ultimate righteousness — it means the person completed their mission in this world in full. The Mitteler Rebbe was freed from the Vitebsk prison, where he had been incarcerated on false charges, and his triumphal return became a celebration for all Chassidim. He developed the teachings of his father, the Alter Rebbe, deepening the intellectual dimension of Chabad Chassidism and creating extensive works that revealed the inner dimension of the Torah with unprecedented detail and depth.</p>
+
+<h3>14 Kislev: The Rebbe's Wedding (1928)</h3>
+<p>On the 14th of Kislev 5689 (1928), in Warsaw, a wedding took place that changed the course of Jewish history — the marriage of Rabbi Menachem Mendel Schneerson and Rebbetzin Chaya Mushka, daughter of the Rebbe Rayatz. Thousands of Chassidim attended the wedding, and the spiritual atmosphere was extraordinary. The Rebbe Rayatz danced "Russian style," and his joy knew no bounds. According to Chassidic testimony, the souls of three generations of Rebbes descended from Heaven to bless this union. The Rebbe Rayatz spoke the words that became legendary: "This day connected me with you, and you with me." This was not merely a marriage of two people — it was a union of Divine souls, from which the greatest Jewish movement of the modern era would emerge.</p>
+
+<h3>19-20 Kislev: The Rosh Hashanah of Chassidism</h3>
+<p>On the 19th of Kislev 5559 (1798), the Alter Rebbe was freed from the Peter and Paul Fortress in Saint Petersburg, where he had been held on charges of treason. This liberation was not merely a legal victory — it was a spiritual revelation. While imprisoned, the Alter Rebbe was granted a vision: the Baal Shem Tov and the Maggid of Mezritch appeared to him and revealed that a trial was taking place in Heaven over whether it was permissible to reveal the secrets of the Torah so widely. The release from prison became a sign: the Heavenly Court had issued a verdict of acquittal, and the gates of wisdom were flung wide open. Since then, the 19th of Kislev has been celebrated as the Rosh Hashanah of Chassidism — the New Year of the dissemination of Divine wisdom throughout the world.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'tevet-adar-victories',
+    slug: 'tevet-adar-ispytaniya-veroy-i-pobeda-knig',
+    title: {
+      ru: 'Тевет и Адар: Испытания верой и победа книг',
+      en: 'Tevet and Adar: Trials of Faith and the Victory of the Books',
+      he: 'טבת ואדר: מבחני אמונה וניצחון הספרים',
+      uk: 'Тевет і Адар: Випробування вірою та перемога книг',
+    },
+    subtitle: {
+      ru: 'Алтер Ребе и Наполеон, Дидан Ноцах и покорение Америки',
+      en: 'The Alter Rebbe and Napoleon, Didan Notzach, and the Conquest of America',
+      he: 'אדמו\"ר הזקן ונפוליאון, דידן נצח וכיבוש אמריקה',
+      uk: 'Алтер Ребе і Наполеон, Дідан Ноцах та підкорення Америки',
+    },
+    content: {
+      ru: `<h3>24 Тевета: Алтер Ребе и Наполеон</h3>
+<p>24 Тевета 5573 года (1812) покинул этот мир Алтер Ребе — рабби Шнеур-Залман из Ляд, основатель хасидизма Хабад. Его уход был непосредственно связан с наполеоновскими войнами. Алтер Ребе увидел в наступлении Наполеона на Россию не просто военный конфликт, а величайшую духовную угрозу: французская эмансипация сулила евреям гражданские права, но ценой утраты духовности и ассимиляции. Алтер Ребе активно поддерживал Россию, используя свои духовные способности. По преданию, он слышал звук шофара, возвещающий о ходе битвы. Спасаясь от наступающих французских войск, он бежал из Ляд и скончался в деревне Пена. Его последними словами стала молитва о сохранении еврейской души — того Б-жественного огня, который никакая эмансипация не должна погасить.</p>
+
+<h3>5 Тевета: Дидан Ноцах (1987)</h3>
+<p>5 Тевета 5747 года (1987) федеральный суд США вынес историческое решение по делу о библиотеке Любавичских Ребе. Ребецн Хая-Мушка произнесла слова, ставшие ключом к победе: «Книги принадлежат хасидам, потому что мой отец принадлежал хасидам». Суд постановил, что библиотека является собственностью движения Хабад, а не частного лица, ибо Ребе — не частный человек, а общественный институт. «Дидан Ноцах» — «Наша сторона победила» — стало девизом этого дня. Ребе увидел в этом событии нечто большее, чем юридическую победу: на Небесах завершилось обвинение, и свет Торы одержал триумф. Ребе призвал отмечать этот день приобретением книг Торы и усилением изучения хасидизма — чтобы победа стала вечной.</p>
+
+<h3>9 Адара: «Америка из ништ андерш» (1940)</h3>
+<p>9 Адара 5700 года (1940) Ребе Раяц — шестой Любавичский Ребе — ступил на землю Америки. С этого момента началась новая эпоха в истории Хабада и всего мирового еврейства. Ребе Раяц произнёс ставшие знаменитыми слова на идише: «Америка из ништ андерш» — «Америка ничем не отличается». Этими словами он разрушил барьер, который казался непреодолимым: считалось, что духовная Европа и материалистическая Америка — два несовместимых мира. Ребе Раяц доказал обратное — Тора и хасидизм могут и должны процветать повсюду. Он заложил фундамент, на котором Седьмой Ребе построил всемирную сеть еврейского образования, шлихут и духовного возрождения, превратив Америку в новый центр распространения Б-жественного света.</p>`,
+
+      en: `<h3>24 Tevet: The Alter Rebbe and Napoleon</h3>
+<p>On the 24th of Tevet 5573 (1812), the Alter Rebbe — Rabbi Schneur Zalman of Liadi, the founder of Chabad Chassidism — departed this world. His passing was directly connected to the Napoleonic Wars. The Alter Rebbe saw Napoleon's invasion of Russia not merely as a military conflict, but as the greatest spiritual threat: French emancipation promised Jews civil rights, but at the cost of losing their spirituality and assimilation. The Alter Rebbe actively supported Russia, using his spiritual abilities. According to tradition, he heard the sound of the shofar announcing the course of battle. Fleeing the advancing French forces, he escaped from Liadi and passed away in the village of Pena. His last words were a prayer for the preservation of the Jewish soul — that Divine fire which no emancipation should ever extinguish.</p>
+
+<h3>5 Tevet: Didan Notzach (1987)</h3>
+<p>On the 5th of Tevet 5747 (1987), a United States federal court issued a historic ruling in the case concerning the library of the Lubavitcher Rebbes. Rebbetzin Chaya Mushka spoke the words that became the key to victory: "The books belong to the Chassidim, because my father belonged to the Chassidim." The court ruled that the library was the property of the Chabad movement, not of a private individual, for the Rebbe is not a private person but a public institution. "Didan Notzach" — "Our side has won" — became the motto of this day. The Rebbe saw in this event something greater than a legal victory: a heavenly accusation had reached its end, and the light of Torah had triumphed. The Rebbe called for this day to be celebrated by acquiring Torah books and intensifying the study of Chassidism — so that the victory would become eternal.</p>
+
+<h3>9 Adar: "America Iz Nisht Andersh" (1940)</h3>
+<p>On the 9th of Adar 5700 (1940), the Rebbe Rayatz — the Sixth Lubavitcher Rebbe — set foot on American soil. From that moment, a new era began in the history of Chabad and world Jewry. The Rebbe Rayatz spoke the now-famous words in Yiddish: "America iz nisht andersh" — "America is no different." With these words, he shattered a barrier that had seemed insurmountable: it was believed that spiritual Europe and materialistic America were two incompatible worlds. The Rebbe Rayatz proved the opposite — Torah and Chassidism can and must flourish everywhere. He laid the foundation upon which the Seventh Rebbe built a worldwide network of Jewish education, shlichus, and spiritual renewal, transforming America into a new center for the dissemination of Divine light.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'tomchei-tmimim-system',
+    slug: 'sistema-yeshiv-tomkhey-tmimim',
+    title: {
+      ru: 'Система ешив «Томхей Тмимим»: Революция в еврейском образовании',
+      en: 'The Tomchei Temimim Yeshiva System: A Revolution in Jewish Education',
+      he: 'מערכת ישיבות תומכי תמימים: מהפכה בחינוך היהודי',
+      uk: 'Система єшив «Томхей Тмімім»: Революція в єврейській освіті',
+    },
+    subtitle: {
+      ru: 'Воины духа, зажигатели ламп и цельная Тора',
+      en: 'Warriors of the Spirit, Lamplighters, and the Complete Torah',
+      he: 'לוחמי הרוח, מדליקי הפנסים והתורה השלמה',
+      uk: 'Воїни духу, запалювачі ламп і цілісна Тора',
+    },
+    content: {
+      ru: `<h3>Объединение Торы</h3>
+<p>До основания ешивы «Томхей Тмимим» в еврейском мире существовал глубокий разрыв между изучением открытой Торы (Талмуд, Галаха) и сокровенной Торы (хасидизм, каббала). Ученики ешив изучали Гемару и законы, но хасидус оставался отдельной сферой — для избранных и посвящённых. Ребе Рашаб (пятый Любавичский Ребе) совершил революцию: он создал концепцию «Тора Тмима» — «Цельная Тора», в которой нигле (открытая часть) и хасидус составляют единое целое. В «Томхей Тмимим» ученик не мог изучать только Талмуд или только хасидус — он был обязан овладеть обоими. Это был принципиально новый подход: Тора — одна, и только постигая её во всей полноте, человек способен по-настоящему служить Б-гу.</p>
+
+<h3>«Воины дома Давида»</h3>
+<p>Ребе Рашаб называл учеников «Томхей Тмимим» «солдатами дома Давида» — воинами, призванными сражаться не мечом, а светом Торы. Их противник — не внешний враг, а духовная тьма: ассимиляция, безбожие, отчуждение евреев от своих корней. Каждый выпускник ешивы должен был стать воином на передовой — не прячась в стенах дома учения, а выходя в мир, чтобы нести свет Б-жественной мудрости туда, где царит невежество. Этот военный дух — не агрессия, а бесстрашие в служении — стал отличительной чертой хасидов Хабад и основой для будущего движения шлихут, когда тысячи молодых семей отправились в самые отдалённые уголки мира.</p>
+
+<h3>Зажигатели ламп</h3>
+<p>Одна из самых сильных метафор Ребе Рашаба — образ «зажигателя ламп» (машпиа). Каждый ученик «Томхей Тмимим» — это человек, несущий огонь. Его задача — идти по тёмным улицам мира и зажигать фонари в душах людей. Неважно, где находится этот фонарь — в пустыне, на берегу моря или в шумном городе. Там, где горит свет Торы, пустота становится видимой, а тьма отступает. Зажигатель ламп не создаёт свет — он передаёт пламя от своего огня к душе другого. Эта идея легла в основу всей системы хабадского образования: учитель не просто даёт знания, он зажигает душу ученика.</p>
+
+<h3>Роль воспитания: машпиим</h3>
+<p>Уникальной особенностью системы «Томхей Тмимим» стал институт машпиим — духовных наставников. В отличие от обычных преподавателей, машпиа не просто учит хасидизму — он превращает теорию в живое служение. Машпиа знает каждого ученика лично, понимает его внутреннюю борьбу и помогает ему найти свой путь в служении Б-гу. Это не академическое преподавание, а передача огня от души к душе. Благодаря машпиим поколения хасидов Хабад выросли не просто учёными, а людьми, живущими тем, что они изучают — людьми, для которых каждое слово Торы становится руководством к действию и источником внутренней силы.</p>`,
+
+      en: `<h3>The Unification of Torah</h3>
+<p>Before the founding of the Tomchei Temimim yeshiva, a deep divide existed in the Jewish world between the study of the revealed Torah (Talmud, Halacha) and the hidden Torah (Chassidism, Kabbalah). Yeshiva students studied Gemara and laws, but Chassidus remained a separate sphere — for the select and the initiated. The Rebbe Rashab (the Fifth Lubavitcher Rebbe) carried out a revolution: he created the concept of "Torah Temimah" — "The Complete Torah," in which nigleh (the revealed part) and Chassidus form a unified whole. In Tomchei Temimim, a student could not study only Talmud or only Chassidus — he was required to master both. This was a fundamentally new approach: the Torah is one, and only by grasping it in its entirety can a person truly serve G-d.</p>
+
+<h3>"Warriors of the House of David"</h3>
+<p>The Rebbe Rashab called the students of Tomchei Temimim "soldiers of the House of David" — warriors called to fight not with the sword, but with the light of Torah. Their adversary is not an external enemy, but spiritual darkness: assimilation, godlessness, the alienation of Jews from their roots. Every graduate of the yeshiva was to become a warrior on the front lines — not hiding within the walls of the house of study, but going out into the world to carry the light of Divine wisdom wherever ignorance reigns. This martial spirit — not aggression, but fearlessness in service — became the hallmark of Chabad Chassidim and the foundation for the future shlichus movement, when thousands of young families set out to the most remote corners of the globe.</p>
+
+<h3>Lamplighters</h3>
+<p>One of the most powerful metaphors of the Rebbe Rashab is the image of the "lamplighter" (mashpia). Every student of Tomchei Temimim is a person carrying fire. His task is to walk through the dark streets of the world and light lanterns in the souls of people. It does not matter where this lantern stands — in the desert, by the sea, or in a bustling city. Where the light of Torah burns, emptiness becomes visible and darkness retreats. The lamplighter does not create light — he transmits the flame from his own fire to the soul of another. This idea became the foundation of the entire Chabad educational system: a teacher does not merely impart knowledge, he ignites the student's soul.</p>
+
+<h3>The Role of Education: Mashpi'im</h3>
+<p>A unique feature of the Tomchei Temimim system was the institution of mashpi'im — spiritual mentors. Unlike ordinary teachers, a mashpia does not simply teach Chassidism — he transforms theory into living service. A mashpia knows each student personally, understands his inner struggles, and helps him find his path in the service of G-d. This is not academic instruction, but a transmission of fire from soul to soul. Thanks to the mashpi'im, generations of Chabad Chassidim grew up not merely as scholars, but as people who live what they study — people for whom every word of Torah becomes a guide to action and a source of inner strength.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'yom-huledes-campaign',
+    slug: 'kampaniya-yevreyskiy-den-rozhdeniya',
+    title: {
+      ru: 'Кампания «Еврейский день рождения»: Космический смысл личной даты',
+      en: 'The "Jewish Birthday" Campaign: The Cosmic Meaning of a Personal Date',
+      he: 'מבצע יום הולדת יהודי: המשמעות הקוסמית של התאריך האישי',
+      uk: 'Кампанія «Єврейський день народження»: Космічний сенс особистої дати',
+    },
+    subtitle: {
+      ru: 'Мивца Йом Оледес — превратить день рождения в духовное обновление',
+      en: 'Mivtza Yom Huledes — Transforming a Birthday into Spiritual Renewal',
+      he: 'מבצע יום הולדת — להפוך את יום ההולדת להתחדשות רוחנית',
+      uk: 'Мівца Йом Оледес — перетворити день народження на духовне оновлення',
+    },
+    content: {
+      ru: `<h3>Космическое значение дня рождения</h3>
+<p>В хасидизме Хабад день рождения — это не просто дата в календаре, а момент, когда Б-г принимает решение, что мир нуждается именно в этой душе. 25 Адара — день, когда началось сотворение мира (а человек, Адам, был создан 1 Ниссана), и каждый день рождения по еврейскому календарю является личным «Рош а-Шана» для души. Ребе инициировал кампанию «Мивца Йом Оледес» после 87-го дня рождения ребецн Хаи-Мушки в 1988 году, придав этому обычаю всемирный масштаб. Ребе объяснил, что в день рождения «мазаль» (духовное влияние) человека достигает пика — это время, когда молитвы принимаются с особой силой, а решения, принятые в этот день, имеют космическое значение. Каждый еврей должен знать свою дату рождения по еврейскому календарю и отмечать её не праздным весельем, а духовным обновлением.</p>
+
+<h3>Основные обычаи еврейского дня рождения</h3>
+<p>Ребе установил ряд обычаев, превращающих день рождения в мощный духовный инструмент. В этот день следует давать цдаку (благотворительность) — открывая канал Б-жественного благословения через акт щедрости. Необходимо усилить изучение Торы: пройти ежедневные уроки Хитас (Хумаш, Теилим, Тания) и урок Рамбама с особой каваной. Именинник должен быть вызван к Торе (алия), а если день рождения выпадает не на день чтения Торы — постараться получить алию в ближайший день чтения. Следует начать читать новую главу Теилим, соответствующую новому году жизни. Важно устроить фарбренген — хасидское застолье с друзьями, на котором делятся словами Торы и принимают добрые решения. И наконец, день рождения — это время хешбон нефеш (самоанализа): оглянуться на прошедший год, оценить свои достижения и принять решения о духовном росте на год грядущий.</p>`,
+
+      en: `<h3>The Cosmic Significance of a Birthday</h3>
+<p>In Chabad Chassidism, a birthday is not merely a date on the calendar, but the moment when G-d decides that the world needs precisely this soul. The 25th of Adar is the day when the creation of the world began (while man, Adam, was created on the 1st of Nissan), and each birthday according to the Jewish calendar is a personal "Rosh Hashanah" for the soul. The Rebbe initiated the "Mivtza Yom Huledes" campaign after Rebbetzin Chaya Mushka's 87th birthday in 1988, giving this custom a global dimension. The Rebbe explained that on one's birthday, a person's "mazal" (spiritual influence) reaches its peak — it is a time when prayers are received with special power and decisions made on this day carry cosmic significance. Every Jew should know their birth date according to the Jewish calendar and mark it not with idle celebration, but with spiritual renewal.</p>
+
+<h3>Core Customs of a Jewish Birthday</h3>
+<p>The Rebbe established a series of customs that transform a birthday into a powerful spiritual tool. On this day, one should give tzedakah (charity) — opening a channel of Divine blessing through an act of generosity. One should intensify Torah study: complete the daily Chitas lessons (Chumash, Tehillim, Tanya) and the Rambam lesson with special kavanah. The birthday person should receive an aliyah to the Torah, and if the birthday does not fall on a day of Torah reading, one should try to receive an aliyah on the nearest reading day. One should begin reciting the new chapter of Tehillim corresponding to the new year of life. It is important to hold a farbrengen — a Chassidic gathering with friends, sharing words of Torah and making positive resolutions. And finally, a birthday is a time for cheshbon nefesh (self-examination): to look back at the past year, evaluate one's achievements, and make resolutions for spiritual growth in the year ahead.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
