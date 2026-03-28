@@ -5028,6 +5028,117 @@ export const articles: Article[] = [
     tag: { ru: 'Ребе о Битахоне', en: "Rebbe on Bitachon", he: 'הרבי על ביטחון', uk: 'Ребе про Бітахон' },
     createdAt: '2026-03-28',
   },
+  {
+    id: 'rebbe-letters-marriage-order',
+    slug: 'ochered-za-schastyem-kak-vyyti-zamuzh-ranshe-starshey-sestry',
+    title: {
+      ru: 'Очередь за счастьем: Как выйти замуж раньше старшей сестры и не разрушить семью?',
+      en: 'Queue for Happiness: How to Marry Before Your Older Sister Without Destroying the Family?',
+      he: 'תור לאושר: איך להתחתן לפני האחות הגדולה בלי להרוס את המשפחה?',
+      uk: 'Черга за щастям: Як вийти заміж раніше старшої сестри і не зруйнувати сім\'ю?',
+    },
+    subtitle: {
+      ru: 'Правила очерёдности в браке и сила искреннего прощения',
+      en: 'Rules of marriage order and the power of sincere forgiveness',
+      he: 'כללי סדר הנישואין וכוח המחילה הכנה',
+      uk: 'Правила черговості у шлюбі та сила щирого прощення',
+    },
+    content: {
+      ru: `<h3>Сила искреннего прощения</h3>
+<p>Ребе писал: когда младшая сестра получает предложение раньше старшей, необходимо получить от старшей сестры искреннее прощение — «мехила» — и это не может быть формальностью. Нельзя просто подойти и сказать: «Ну, ты ведь не против?» Прощение должно быть настоящим, от всего сердца, без давления и без спешки. Ребе объяснял: когда старшая сестра прощает искренне — это становится духовным стимулом, сгулой, помогающей ей самой быстрее найти свою пару. Б-г видит великодушие её сердца и открывает для неё новые каналы благословения. Желательно зафиксировать прощение письменно или произнести его устно в присутствии двух свидетелей — это придаёт мехиле алахическую силу и защищает обе стороны от будущих претензий и обид.</p>
+
+<h3>Материальное подтверждение любви</h3>
+<p>Ребе также советовал: недостаточно слов — нужно подкрепить их делом. Младшая сестра и её семья должны отложить деньги на будущие свадебные расходы старшей сестры. Это не символический жест, а реальное проявление заботы и ответственности. Когда старшая сестра видит, что о ней не забыли, что её счастье по-прежнему является приоритетом для семьи, боль от «нарушения очерёдности» смягчается. Материальная помощь демонстрирует, что младшая сестра не просто «перебежала дорогу», а осознаёт деликатность ситуации и готова разделить своё благословение. Это создаёт атмосферу единства, а не соперничества внутри семьи.</p>
+
+<h3>Скромность как защита</h3>
+<p>Ребе особо подчёркивал: помолвку в такой ситуации следует отмечать с максимальной скромностью. Не нужно выставлять напоказ своё счастье, устраивать пышные празднования и публиковать радостные объявления раньше времени. «Ходить смиренно пред Б-гом твоим» — это не просто красивые слова из пророка Михи, а практическая защита семьи от сглаза и зависти. Скромность оберегает и саму невесту, и её старшую сестру, и всю семью. Когда человек умеет радоваться тихо, его радость становится глубже и прочнее, а Б-жественное благословение приходит в полной мере — без трещин и без побочных потерь.</p>`,
+
+      en: `<h3>The Power of Sincere Forgiveness</h3>
+<p>The Rebbe wrote: when a younger sister receives a marriage proposal before her older sister, it is essential to obtain sincere forgiveness — "mechilah" — from the elder sister, and this cannot be a mere formality. One cannot simply approach and say, "You don't mind, do you?" The forgiveness must be genuine, wholehearted, without pressure or haste. The Rebbe explained: when the older sister forgives sincerely, it becomes a spiritual stimulus — a segulah — that helps her find her own match faster. G-d sees the generosity of her heart and opens new channels of blessing for her. It is desirable to document the forgiveness in writing or to state it verbally before two witnesses — this gives the mechilah halachic force and protects both sides from future claims and resentment.</p>
+
+<h3>Material Confirmation of Love</h3>
+<p>The Rebbe also advised: words alone are insufficient — they must be backed by action. The younger sister and her family should set aside money for the older sister's future wedding expenses. This is not a symbolic gesture but a real demonstration of care and responsibility. When the older sister sees that she has not been forgotten, that her happiness remains a priority for the family, the pain of the "broken order" is softened. Financial assistance shows that the younger sister did not simply "cut in line" but understands the delicacy of the situation and is willing to share her blessing. This creates an atmosphere of unity rather than rivalry within the family.</p>
+
+<h3>Modesty as Protection</h3>
+<p>The Rebbe particularly emphasized: an engagement in such circumstances should be celebrated with maximum modesty. There is no need to flaunt happiness, throw lavish celebrations, or publish joyful announcements prematurely. "Walking humbly before your G-d" is not merely a beautiful phrase from the Prophet Micah but a practical shield protecting the family from the evil eye and envy. Modesty safeguards the bride herself, her older sister, and the entire family. When a person knows how to rejoice quietly, their joy becomes deeper and more enduring, and Divine blessing arrives in full measure — without cracks and without collateral losses.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-name-change',
+    slug: 'imya-kotoroye-menyayet-sudbu-nevesta-i-svekrov',
+    title: {
+      ru: 'Имя, которое меняет судьбу: Что делать, если невесту зовут как свекровь?',
+      en: 'A Name That Changes Destiny: What If the Bride Has the Same Name as Her Mother-in-Law?',
+      he: 'שם שמשנה גורל: מה לעשות כשלכלה יש את אותו שם כמו לחמותה?',
+      uk: 'Ім\'я, що змінює долю: Що робити, якщо наречену звати як свекруху?',
+    },
+    subtitle: {
+      ru: 'Добавление второго имени как решение конфликта имён',
+      en: 'Adding a second name as a resolution for name conflicts',
+      he: 'הוספת שם שני כפתרון לקונפליקט שמות',
+      uk: 'Додавання другого імені як вирішення конфлікту імен',
+    },
+    content: {
+      ru: `<h3>Второе имя — новый канал благословения</h3>
+<p>Ребе объяснял: когда невесту зовут так же, как свекровь, это создаёт духовное затруднение — два человека с одинаковым именем в одной семье могут «перетягивать» на себя духовные потоки, предназначенные другому. Решение, которое Ребе рекомендовал, — добавить невесте второе имя во время публичного чтения Торы, в молитве «Ми Шеберах». Важно: новое имя должно стоять первым, перед прежним. Например, если невесту звали Мириам, а свекровь тоже Мириам, невеста становится «Лея-Мириам». Новое имя создаёт новую духовную идентичность, новый канал для Б-жественного благословения, словно открывается дополнительная дверь в небесных чертогах. Это не формальность, а глубокое духовное действие, меняющее саму суть связи между душой и её именем.</p>
+
+<h3>Правило тридцати дней</h3>
+<p>Ребе настаивал: после добавления нового имени необходимо выждать тридцать дней, прежде чем объявлять о помолвке. Имя должно «прижиться» — оно должно активно использоваться в повседневной жизни: при вызове к Торе, в молитвах, в документах, в обращениях друзей и родных. Тридцать дней — это алахический срок, после которого новое имя считается полноценно принятым. Если объявить о помолвке раньше, имя может не успеть укорениться, и духовная проблема совпадения имён останется нерешённой. Терпение здесь — не просто добродетель, а практическая необходимость, обеспечивающая прочность духовного фундамента будущего брака.</p>
+
+<h3>Дистанция и уважение</h3>
+<p>Ребе также рекомендовал: молодая пара не должна жить в одном городе со свекровью, если имена невесты и свекрови совпадают. Физическая дистанция уменьшает духовное «трение» между одинаковыми именами. Однако если имена совпадают лишь частично — например, свекровь зовут Мириам, а невесту Мириам-Лея — то, по мнению Цемах Цедека (третьего Любавичского Ребе), это вызывает меньше опасений. Частичное совпадение не создаёт полного духовного «наложения», и в таких случаях можно проявить бóльшую гибкость. Тем не менее консультация с компетентным раввином обязательна в каждом конкретном случае.</p>`,
+
+      en: `<h3>A Second Name — A New Channel of Blessing</h3>
+<p>The Rebbe explained: when a bride bears the same name as her mother-in-law, it creates a spiritual difficulty — two people with identical names in one family may "draw upon" spiritual flows intended for the other. The solution the Rebbe recommended is to add a second name for the bride during a public Torah reading, in the "Mi Sheberach" prayer. Importantly, the new name must come first, before the original. For example, if the bride was called Miriam and the mother-in-law is also Miriam, the bride becomes "Leah-Miriam." The new name creates a new spiritual identity, a new channel for Divine blessing, as though an additional door opens in the heavenly chambers. This is not a formality but a profound spiritual act that changes the very essence of the connection between the soul and its name.</p>
+
+<h3>The Thirty-Day Rule</h3>
+<p>The Rebbe insisted: after adding the new name, one must wait thirty days before announcing the engagement. The name must "take root" — it must be actively used in daily life: when called to the Torah, in prayers, in documents, and in how friends and relatives address the person. Thirty days is the halachic period after which a new name is considered fully established. Announcing the engagement prematurely may prevent the name from taking hold, leaving the spiritual problem of matching names unresolved. Patience here is not merely a virtue but a practical necessity ensuring the strength of the spiritual foundation of the future marriage.</p>
+
+<h3>Distance and Respect</h3>
+<p>The Rebbe also recommended: the young couple should not live in the same city as the mother-in-law if the bride's and mother-in-law's names match. Physical distance reduces the spiritual "friction" between identical names. However, if the names only partially overlap — for example, the mother-in-law is called Miriam while the bride is Miriam-Leah — then according to the Tzemach Tzedek (the third Lubavitcher Rebbe), this raises less concern. A partial match does not create a full spiritual "overlay," and in such cases greater flexibility may be exercised. Nevertheless, consultation with a competent rabbi is essential in each specific case.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
+  {
+    id: 'rebbe-letters-income-wife',
+    slug: 'semeynyy-mir-glavnyy-bankovskiy-schyot',
+    title: {
+      ru: 'Семейный мир — главный «банковский счёт»: Почему ваш доход зависит от жены?',
+      en: 'Family Peace — The Main "Bank Account": Why Does Your Income Depend on Your Wife?',
+      he: 'שלום המשפחה — "חשבון הבנק" העיקרי: למה ההכנסה שלך תלויה באשתך?',
+      uk: 'Сімейний мир — головний «банківський рахунок»: Чому ваш дохід залежить від дружини?',
+    },
+    subtitle: {
+      ru: 'Шалом Баит как единственный сосуд для Б-жественного благословения',
+      en: 'Shalom Bayit as the only vessel for Divine blessing',
+      he: 'שלום בית ככלי היחיד לברכה אלוקית',
+      uk: 'Шалом Байт як єдина посудина для Б-жественного благословення',
+    },
+    content: {
+      ru: `<h3>Куда утекают деньги?</h3>
+<p>Ребе объяснял с поразительной ясностью: Б-жественное благословение подобно воде — оно течёт сверху вниз и наполняет тот сосуд, который способен его удержать. Шалом Баит — мир в семье — это и есть тот сосуд. Если в семье нет мира, сосуд покрыт трещинами, и деньги утекают, как вода сквозь пальцы: на болезни, на ссоры, на адвокатов, на «случайные» поломки, на бесконечные непредвиденные расходы. Мудрецы Талмуда сказали прямо: «Человек удостаивается благословения только благодаря своей жене». Это не метафора и не красивая фраза для свадебного тоста. Это духовный закон, столь же реальный, как закон гравитации. Без мира в доме — нет сосуда, без сосуда — нет благословения, без благословения — нет подлинного достатка.</p>
+
+<h3>Золотое правило для мужей</h3>
+<p>Ребе давал мужьям конкретную инструкцию: в материальных и бытовых вопросах уступайте жене. Она — «Акерет а-Байт», основа дома, и именно её удовлетворённость открывает каналы изобилия. Когда жена чувствует, что её мнение уважают, что к ней прислушиваются в вопросах домашнего хозяйства, покупок, обустройства жилья — она расцветает, и вместе с ней расцветает весь дом. Ребе подчёркивал: это не слабость мужа, а его мудрость. Мужчина, который уступает жене в быту, не теряет свой авторитет — он приобретает нечто несравнимо бóльшее: мир, гармонию и поток Б-жественного благословения, которое невозможно купить ни за какие деньги.</p>
+
+<h3>Инвестиция в тишину</h3>
+<p>Ребе учил: уступайте даже тогда, когда вы на сто процентов правы. Это самая выгодная «бизнес-инвестиция» в вашей жизни. Спокойствие жены создаёт духовный щит, защищающий семейный капитал от разрушения. Там, где пребывает Шехина — Б-жественное Присутствие, — нет недостатка ни в чём. А Шехина пребывает только там, где царят мир и радость. Каждая уступка мужа — это не потеря, а вклад в невидимый, но абсолютно реальный «банковский счёт» на Небесах. Проценты по этому вкладу — здоровье детей, удача в делах, защита от бед и та глубокая, тихая радость, которую невозможно получить никаким другим способом. Семейный мир — это не роскошь, а фундамент всего.</p>`,
+
+      en: `<h3>Where Does the Money Go?</h3>
+<p>The Rebbe explained with striking clarity: Divine blessing is like water — it flows from above downward and fills the vessel capable of holding it. Shalom Bayit — peace in the family — is that vessel. If there is no peace in the family, the vessel is covered with cracks, and money leaks away like water through fingers: into illnesses, quarrels, lawyers, "accidental" breakdowns, and endless unforeseen expenses. The Sages of the Talmud stated plainly: "A man merits blessing only through his wife." This is not a metaphor or a pretty phrase for a wedding toast. It is a spiritual law as real as the law of gravity. Without peace at home there is no vessel; without a vessel there is no blessing; without blessing there is no true prosperity.</p>
+
+<h3>The Golden Rule for Husbands</h3>
+<p>The Rebbe gave husbands a specific instruction: in material and household matters, yield to your wife. She is the "Akeret HaBayit" — the foundation of the home — and it is her satisfaction that opens channels of abundance. When a wife feels that her opinion is respected, that she is listened to regarding household management, purchases, and home arrangements, she flourishes, and the entire home flourishes with her. The Rebbe emphasized: this is not a husband's weakness but his wisdom. A man who yields to his wife in domestic matters does not lose his authority — he gains something incomparably greater: peace, harmony, and a flow of Divine blessing that no amount of money can buy.</p>
+
+<h3>An Investment in Silence</h3>
+<p>The Rebbe taught: yield even when you are one hundred percent right. This is the most profitable "business investment" of your life. A wife's calm creates a spiritual shield protecting the family's capital from destruction. Where the Shechinah — the Divine Presence — dwells, there is no lack of anything. And the Shechinah dwells only where peace and joy reign. Every concession a husband makes is not a loss but a deposit into an invisible yet absolutely real "bank account" in Heaven. The interest on this deposit is the health of children, success in endeavors, protection from misfortune, and that deep, quiet joy that cannot be obtained any other way. Family peace is not a luxury — it is the foundation of everything.</p>`,
+    },
+    tag: { ru: 'Письма Ребе', en: "Rebbe's Letters", he: 'אגרות הרבי', uk: 'Листи Ребе' },
+    createdAt: '2026-03-28',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
