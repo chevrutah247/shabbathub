@@ -6,6 +6,21 @@ import { Search, ChevronLeft, Calendar, Tag } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { articles, getAllTags } from '@/data/articles';
 
+const hebrewMonths: { en: string; ru: string; he: string; uk: string }[] = [
+  { en: 'Nisan', ru: 'Нисан', he: 'ניסן', uk: 'Нісан' },
+  { en: 'Iyar', ru: 'Ияр', he: 'אייר', uk: 'Іяр' },
+  { en: 'Sivan', ru: 'Сиван', he: 'סיוון', uk: 'Сіван' },
+  { en: 'Tammuz', ru: 'Тамуз', he: 'תמוז', uk: 'Тамуз' },
+  { en: 'Av', ru: 'Ав', he: 'אב', uk: 'Ав' },
+  { en: 'Elul', ru: 'Элул', he: 'אלול', uk: 'Елул' },
+  { en: 'Tishrei', ru: 'Тишрей', he: 'תשרי', uk: 'Тішрей' },
+  { en: 'Cheshvan', ru: 'Хешван', he: 'חשוון', uk: 'Хешван' },
+  { en: 'Kislev', ru: 'Кислев', he: 'כסלו', uk: 'Кіслев' },
+  { en: 'Tevet', ru: 'Тевет', he: 'טבת', uk: 'Тевет' },
+  { en: 'Shvat', ru: 'Шват', he: 'שבט', uk: 'Шват' },
+  { en: 'Adar', ru: 'Адар', he: 'אדר', uk: 'Адар' },
+];
+
 const pageText = {
   title: { ru: 'Статьи', en: 'Articles', he: 'מאמרים', uk: 'Статті' },
   subtitle: {
@@ -21,6 +36,8 @@ const pageText = {
     uk: 'Пошук статей...',
   },
   allTags: { ru: 'Все', en: 'All', he: 'הכל', uk: 'Всі' },
+  monthFilter: { ru: 'По месяцу', en: 'By month', he: 'לפי חודש', uk: 'За місяць' },
+  allMonths: { ru: 'Все месяцы', en: 'All months', he: 'כל החודשים', uk: 'Всі місяці' },
   readMore: { ru: 'Читать далее', en: 'Read more', he: 'קרא עוד', uk: 'Читати далі' },
   backHome: { ru: 'На главную', en: 'Home', he: 'דף הבית', uk: 'На головну' },
   noResults: {
@@ -59,6 +76,10 @@ const tagColors: Record<string, string> = {
   'Holidays': 'bg-amber-100 text-amber-800',
   'חגים': 'bg-amber-100 text-amber-800',
   'Свята': 'bg-amber-100 text-amber-800',
+  'Календарь': 'bg-yellow-100 text-yellow-800',
+  'Calendar': 'bg-yellow-100 text-yellow-800',
+  'לוח שנה': 'bg-yellow-100 text-yellow-800',
+  'Календар': 'bg-yellow-100 text-yellow-800',
 };
 
 export default function ArticlesPage() {
@@ -67,6 +88,7 @@ export default function ArticlesPage() {
 
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   const tags = useMemo(() => getAllTags(lang), [lang]);
 
@@ -77,9 +99,10 @@ export default function ArticlesPage() {
         !search ||
         article.title[lang].toLowerCase().includes(search.toLowerCase()) ||
         article.subtitle[lang].toLowerCase().includes(search.toLowerCase());
-      return matchesTag && matchesSearch;
+      const matchesMonth = !selectedMonth || article.hebrewDate?.month === selectedMonth;
+      return matchesTag && matchesSearch && matchesMonth;
     });
-  }, [search, selectedTag, lang]);
+  }, [search, selectedTag, selectedMonth, lang]);
 
   const t = (key: keyof typeof pageText) => pageText[key][lang];
 
@@ -151,6 +174,33 @@ export default function ArticlesPage() {
           ))}
         </div>
 
+        {/* Month filters */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          <button
+            onClick={() => setSelectedMonth(null)}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+              !selectedMonth
+                ? 'bg-amber-500 text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-amber-300'
+            }`}
+          >
+            {t('allMonths')}
+          </button>
+          {hebrewMonths.map((m) => (
+            <button
+              key={m.en}
+              onClick={() => setSelectedMonth(selectedMonth === m.en ? null : m.en)}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                selectedMonth === m.en
+                  ? 'bg-amber-500 text-white shadow-md'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:border-amber-300'
+              }`}
+            >
+              {m[lang]}
+            </button>
+          ))}
+        </div>
+
         {/* Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-16 text-gray-400 text-lg">{t('noResults')}</div>
@@ -174,6 +224,7 @@ export default function ArticlesPage() {
                       {article.tag.en === 'Family' && '👨‍👩‍👧‍👦'}
                       {article.tag.en === 'Holidays' && '🕎'}
                       {article.tag.en === 'Bitachon' && '🤲'}
+                      {article.tag.en === 'Calendar' && '📅'}
                     </span>
                   )}
                 </div>

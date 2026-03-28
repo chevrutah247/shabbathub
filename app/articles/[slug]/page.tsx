@@ -180,12 +180,20 @@ export default function ArticlePage() {
           <p className="text-lg text-gray-500 leading-relaxed">{article.subtitle[lang]}</p>
         </header>
 
-        {/* Article image */}
-        {article.image && (
+        {/* Article images */}
+        {article.images && article.images.length > 1 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            {article.images.map((img, i) => (
+              <div key={i} className="rounded-2xl overflow-hidden">
+                <img src={img} alt={`${article.title[lang]} — ${i + 1}`} className="w-full h-auto" />
+              </div>
+            ))}
+          </div>
+        ) : article.image ? (
           <div className="rounded-2xl overflow-hidden mb-8">
             <img src={article.image} alt={article.title[lang]} className="w-full h-auto" />
           </div>
-        )}
+        ) : null}
 
         {/* Decorative divider */}
         <div className="flex items-center gap-4 mb-8">
