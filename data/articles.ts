@@ -1683,6 +1683,7 @@ export const articles: Article[] = [
   // ========================
   {
     id: 'nissan-2',
+    image: '/images/articles/nissan-2.png',
     slug: 'nissan-2-poslednie-zavety-rebe-rashaba',
     hebrewDate: { month: 'Nisan', day: 2 },
     monthIntro: {
@@ -1733,6 +1734,7 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-9',
+    image: '/images/articles/nissan-9.png',
     slug: 'nissan-9-nachalo-puti-stradaniy-rabbi-levi-itshaka',
     hebrewDate: { month: 'Nisan', day: 9 },
     title: {
@@ -1779,6 +1781,7 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-11',
+    image: '/images/articles/nissan-11.png',
     slug: 'nissan-11-rozhdeniye-sedmogo-rebe',
     hebrewDate: { month: 'Nisan', day: 11 },
     title: {
@@ -1825,6 +1828,7 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-13',
+    image: '/images/articles/nissan-13.png',
     slug: 'nissan-13-zavershenie-puti-tsemakh-tsedeka',
     hebrewDate: { month: 'Nisan', day: 13 },
     title: {
