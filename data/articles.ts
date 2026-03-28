@@ -3577,37 +3577,82 @@ export const articles: Article[] = [
     createdAt: '2026-03-28',
   },
   {
-    id: 'nissan-iyar-destinies',
-    slug: 'nissan-iyar-peresecheniye-sudeb',
+    id: 'nissan-18-triple-celebration',
+    slug: 'nissan-18-troynoye-torzhestvo',
     hebrewDate: { month: 'Nisan', day: 18 },
     title: {
-      ru: 'Ниссан и Ияр: Пересечение судеб и величие интеллекта',
-      en: 'Nissan and Iyar: Intersection of Destinies and the Greatness of Intellect',
-      he: 'ניסן ואייר: הצטלבות גורלות וגדלות השכל',
-      uk: 'Нісан та Іяр: Перетин доль і велич інтелекту',
+      ru: '18 Ниссана: Тройное торжество (1748, 1878, 1902)',
+      en: '18 Nissan: A Triple Celebration (1748, 1878, 1902)',
+      he: 'י״ח ניסן: חגיגה משולשת (1748, 1878, 1902)',
+      uk: '18 Ніссана: Потрійне свято (1748, 1878, 1902)',
     },
     subtitle: {
-      ru: 'Тройное торжество 18 Ниссана и интеллект на службе святости',
-      en: 'The triple celebration of 18 Nissan and intellect in the service of holiness',
-      he: 'החגיגה המשולשת של י״ח ניסן והשכל בשירות הקדושה',
-      uk: 'Потрійне свято 18 Нісана та інтелект на службі святості',
+      ru: 'Упшерниш Алтер Ребе, рождение рабби Леви-Ицхака и брит-мила Ребе',
+      en: 'Upshernish of the Alter Rebbe, birth of Rabbi Levi Yitzchak, and the Rebbe\'s bris',
+      he: 'אופשערניש של אדמו״ר הזקן, לידת ר׳ לוי יצחק, וברית המילה של הרבי',
+      uk: 'Упшерніш Алтер Ребе, народження рабі Леві-Іцхака та бріт-міла Ребе',
     },
     content: {
-      ru: `<h3>18 Ниссана: Тройное торжество (1748, 1878, 1902)</h3>
-<p>Восемнадцатое Ниссана — дата поразительной концентрации событий в истории Хабада. В 5508 году (1748) состоялся аптшерниш (первая стрижка волос) трёхлетнего мальчика, которому суждено было стать Алтер Ребе — основателем движения Хабад. Спустя 130 лет, в 5638 году (1878), в этот же день родился рабби Леви-Ицхак Шнеерсон — отец будущего Седьмого Ребе, выдающийся раввин и каббалист, чья самоотверженная борьба за еврейство в Советском Союзе стоила ему здоровья и жизни. А в 5662 году (1902), ровно через неделю после рождения будущего Седьмого Ребе, 18 Ниссана состоялся его брит-мила. Ребецн Хана, мать младенца, была настолько богобоязненна, что совершала нетилат ядаим (ритуальное омовение рук) перед каждым кормлением, понимая, что питание ребёнка — это не просто физиология, а акт служения Б-гу.</p>
+      ru: `<p>Восемнадцатое Ниссана — дата поразительной концентрации событий в истории Хабада.</p>
 
-<h3>13 Ияра: Интеллект на службе святости (1952)</h3>
-<p>Тринадцатого Ияра 5712 года (1952) покинул этот мир рабби Исраэль-Арье-Лейб — младший брат Ребе. Он был феноменальным математиком, чьи рукописи были переданы профессору Розенблюму и признаны работами исключительной глубины. Его жизнь была воплощением принципа: даже самые абстрактные области знания — математика, физика, логика — могут и должны быть освящены, ибо в каждой сфере мироздания скрыта искра Б-жественности. Интеллект — это не самоцель, а инструмент для раскрытия единства Творца в мире. Когда разум служит святости, он обретает истинное величие.</p>`,
+<h3>Упшерниш Алтер Ребе (5508/1748)</h3>
+<p>В этот день состоялся упшерниш (первая стрижка волос) трёхлетнего мальчика, которому суждено было стать Алтер Ребе — основателем движения Хабад. Баал-Шем-Тов лично совершил обряд, оставив мальчику пейот, и благословил его. Он строго запретил родителям раскрывать ребёнку, кто именно его подстриг, предсказав, что мальчику суждено проложить собственный путь в служении Б-гу.</p>
 
-      en: `<h3>18 Nissan: A Triple Celebration (1748, 1878, 1902)</h3>
-<p>The eighteenth of Nissan is a date of remarkable concentration of events in Chabad history. In 5508 (1748), the upshernish (first haircut) took place for a three-year-old boy who was destined to become the Alter Rebbe — founder of the Chabad movement. One hundred and thirty years later, in 5638 (1878), on this very same day, Rabbi Levi Yitzchak Schneerson was born — father of the future Seventh Rebbe, an outstanding rabbi and kabbalist whose selfless struggle for Judaism in the Soviet Union cost him his health and life. And in 5662 (1902), exactly one week after the birth of the future Seventh Rebbe, his brit milah took place on 18 Nissan. Rebbetzin Chana, the infant's mother, was so G-d-fearing that she performed netilat yadayim (ritual hand washing) before every feeding, understanding that nourishing a child is not merely physiology but an act of service to G-d.</p>
+<h3>Рождение рабби Леви-Ицхака (5638/1878)</h3>
+<p>Спустя 130 лет, в этот же день родился рабби Леви-Ицхак Шнеерсон — отец будущего Седьмого Ребе, выдающийся раввин и каббалист. Его самоотверженная борьба за еврейство в Советском Союзе стоила ему здоровья и жизни. Ребе часто подчёркивал, что именно интеллектуальная мощь его отца позволила объединить глубочайшие тайны Зоара с логикой Талмуда.</p>
 
-<h3>13 Iyar: Intellect in the Service of Holiness (1952)</h3>
-<p>On the thirteenth of Iyar 5712 (1952), Rabbi Yisroel Aryeh Leib — the Rebbe's younger brother — departed from this world. He was a phenomenal mathematician whose manuscripts were entrusted to Professor Rosenblum and recognized as works of exceptional depth. His life embodied the principle: even the most abstract fields of knowledge — mathematics, physics, logic — can and must be sanctified, for in every sphere of creation a spark of G-dliness is concealed. Intellect is not an end in itself but an instrument for revealing the Creator's unity in the world. When the mind serves holiness, it attains true greatness.</p>`,
+<h3>Брит-мила Седьмого Ребе (5662/1902)</h3>
+<p>Ровно через 24 года после рождения отца, 18 Ниссана 1902 года, состоялся брит-мила будущего Седьмого Ребе. Ребецн Хана, мать младенца, была настолько богобоязненна, что совершала нетилат ядаим (ритуальное омовение рук) перед каждым кормлением, понимая, что питание ребёнка — это не просто физиология, а акт служения Б-гу. Пятый Ребе (Рашаб) отправил телеграмму с благословением: «Пусть он принесёт свет миру».</p>`,
+
+      en: `<p>The eighteenth of Nissan is a date of remarkable concentration of events in the history of Chabad.</p>
+
+<h3>Upshernish of the Alter Rebbe (5508/1748)</h3>
+<p>On this day, the upshernish (first haircut) took place for a three-year-old boy destined to become the Alter Rebbe — founder of the Chabad movement. The Baal Shem Tov personally performed the ceremony, leaving the boy his peyot, and blessed him. He strictly forbade the parents from revealing to the child who had cut his hair, predicting that the boy was destined to forge his own path in the service of G-d.</p>
+
+<h3>Birth of Rabbi Levi Yitzchak (5638/1878)</h3>
+<p>130 years later, on this same day, Rabbi Levi Yitzchak Schneerson was born — father of the future Seventh Rebbe, an outstanding rabbi and kabbalist. His selfless fight for Judaism in the Soviet Union cost him his health and life. The Rebbe often emphasized that it was his father's intellectual power that allowed him to unite the deepest mysteries of the Zohar with Talmudic logic.</p>
+
+<h3>Bris of the Seventh Rebbe (5662/1902)</h3>
+<p>Exactly 24 years after his father's birth, on 18 Nissan 1902, the bris mila of the future Seventh Rebbe took place. Rebbetzin Chana, the infant's mother, was so G-d-fearing that she performed netilat yadayim (ritual hand washing) before every feeding, understanding that nourishing a child is not merely physiology but an act of service to G-d. The Fifth Rebbe (Rashab) sent a telegram with the blessing: "May he bring light to the world."</p>`,
     },
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-28',
   },
+  {
+    id: 'iyar-13-intellect',
+    slug: 'iyar-13-intellekt-na-sluzhbe-svyatosti',
+    hebrewDate: { month: 'Iyar', day: 13 },
+    title: {
+      ru: '13 Ияра: Интеллект на службе святости (1952)',
+      en: '13 Iyar: Intellect in the Service of Holiness (1952)',
+      he: 'י״ג אייר: השכל בשירות הקדושה (1952)',
+      uk: '13 Іяра: Інтелект на службі святості (1952)',
+    },
+    subtitle: {
+      ru: 'Память о рабби Исраэле-Арье-Лейбе — младшем брате Ребе',
+      en: 'Memory of Rabbi Yisroel Aryeh Leib — the Rebbe\'s younger brother',
+      he: 'זכרו של ר׳ ישראל אריה לייב — אחיו הצעיר של הרבי',
+      uk: 'Пам\'ять про рабі Ісраеля-Арʼє-Лейба — молодшого брата Ребе',
+    },
+    content: {
+      ru: `<p>Тринадцатого Ияра 5712 года (1952) покинул этот мир рабби Исраэль-Арье-Лейб — младший брат Седьмого Ребе.</p>
+
+<h3>Феноменальный математик</h3>
+<p>Он обладал исключительным интеллектом и был выдающимся математиком. Его рукописи были переданы профессору Полу Розенблюму и признаны работами исключительной глубины. Ребе крайне трепетно относился к его наследию и подчёркивал, что его брат обладал «независимым характером» и стремился к истине своим путём.</p>
+
+<h3>Освящение светских знаний</h3>
+<p>Его жизнь стала воплощением принципа: даже самые абстрактные области знания — математика, физика, логика — могут и должны быть освящены, ибо в каждой сфере мироздания скрыта искра Б-жественности. Интеллект — это не самоцель, а инструмент для раскрытия единства Творца в мире. Когда разум служит святости, он обретает истинное величие.</p>`,
+
+      en: `<p>On the thirteenth of Iyar 5712 (1952), Rabbi Yisroel Aryeh Leib — the younger brother of the Seventh Rebbe — passed from this world.</p>
+
+<h3>A Phenomenal Mathematician</h3>
+<p>He possessed exceptional intellect and was an outstanding mathematician. His manuscripts were given to Professor Paul Rosenblum and recognized as works of exceptional depth. The Rebbe was extremely devoted to his legacy and emphasized that his brother possessed an "independent character" and strived for truth in his own way.</p>
+
+<h3>Sanctifying Secular Knowledge</h3>
+<p>His life embodied the principle: even the most abstract areas of knowledge — mathematics, physics, logic — can and must be sanctified, for in every sphere of creation a spark of G-dliness is hidden. Intellect is not an end in itself, but an instrument for revealing the unity of the Creator in the world. When the mind serves holiness, it achieves true greatness.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-28',
   {
     id: 'sivan-tammuz-exile',
     slug: 'sivan-tamuz-stoykost-v-izgnanii-i-spaseniye',
