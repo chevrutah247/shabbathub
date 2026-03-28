@@ -310,13 +310,9 @@ export default function ArticlesPage() {
                   <h2 className="text-lg font-bold text-primary-900 mb-2 line-clamp-2 group-hover:text-primary-700 transition-colors">
                     {article.title[lang]}
                   </h2>
-                  <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+                  <p className="text-sm text-gray-500 line-clamp-2">
                     {article.subtitle[lang]}
                   </p>
-
-                  <span className="text-sm font-medium text-primary-600 group-hover:text-primary-800 transition-colors">
-                    {t('readMore')} &rarr;
-                  </span>
                 </div>
               </Link>
             ))}
