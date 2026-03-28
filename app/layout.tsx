@@ -97,6 +97,8 @@ export default function RootLayout({
   return (
     <html lang="ru" dir="ltr" className={`${rubik.variable} ${playfair.variable} ${frankRuhl.variable}`}>
       <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-S566WZ19WJ" />
+        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-S566WZ19WJ');` }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://yvgcxmqgvxlvbxsszqcc.supabase.co" />
