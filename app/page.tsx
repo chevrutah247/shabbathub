@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BookOpen, Search, ArrowRight, ChevronRight, Users, FileText, Star, Bell, ExternalLink, Library, Sparkles, BookMarked, Flame, Scale, Smile, Crown, FolderOpen, Heart, RefreshCw } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
+import { articles as allArticles } from '@/data/articles';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -100,6 +101,8 @@ export default function HomePage() {
   const [shidduchArticles, setShidduchArticles] = useState<any[]>([]);
   const [nossiDay, setNossiDay] = useState<number | null>(null);
   const [nossiIssue, setNossiIssue] = useState<{ id: string; title: string; pdf_url: string; thumbnail_url?: string } | null>(null);
+  const [calendarArticle, setCalendarArticle] = useState<{ title: string; subtitle: string; slug: string; content: string } | null>(null);
+  const [hebrewDateStr, setHebrewDateStr] = useState<string>('');
   const [spotlightDocs, setSpotlightDocs] = useState<SpotlightDoc[]>([]);
   const [spotlightIdx, setSpotlightIdx] = useState(0);
   const [spotlightFade, setSpotlightFade] = useState(true);
@@ -133,12 +136,36 @@ export default function HomePage() {
     fetch('https://www.hebcal.com/converter?cfg=json&gy=' + today.getFullYear() + '&gm=' + (today.getMonth() + 1) + '&gd=' + today.getDate() + '&g2h=1')
       .then(r => r.json())
       .then(data => {
-        if (data.hm === 'Nisan' && data.hd >= 1 && data.hd <= 12) {
-          setNossiDay(data.hd);
-          const pdfUrl = nossiPdfs[data.hd];
+        const hMonth = data.hm;
+        const hDay = data.hd;
+        setHebrewDateStr(hDay + ' ' + hMonth);
+
+        // Nossi (1-12 Nisan)
+        if (hMonth === 'Nisan' && hDay >= 1 && hDay <= 12) {
+          setNossiDay(hDay);
+          const pdfUrl = nossiPdfs[hDay];
           if (pdfUrl) {
-            setNossiIssue({ id: 'nossi-' + data.hd, title: 'Nossi - ' + data.hd + ' Nissan', pdf_url: pdfUrl });
+            setNossiIssue({ id: 'nossi-' + hDay, title: 'Nossi - ' + hDay + ' Nissan', pdf_url: pdfUrl });
           }
+        }
+
+        // Find calendar article for today or next closest date
+        const calArticles = allArticles.filter(a => a.hebrewDate && a.hebrewDate.month === hMonth);
+        const l = lang === 'he' ? 'he' : lang === 'uk' ? 'uk' : lang === 'en' ? 'en' : 'ru';
+        let found = calArticles.find(a => a.hebrewDate!.day === hDay);
+        if (!found) {
+          // Find next closest in same month
+          const future = calArticles.filter(a => a.hebrewDate!.day > hDay).sort((a, b) => a.hebrewDate!.day - b.hebrewDate!.day);
+          found = future[0] || calArticles[0];
+        }
+        if (found) {
+          const contentLang = (l === 'he' || l === 'uk') ? 'ru' : l;
+          setCalendarArticle({
+            title: found.title[l as 'ru' | 'en' | 'he' | 'uk'],
+            subtitle: found.subtitle[l as 'ru' | 'en' | 'he' | 'uk'],
+            slug: found.slug,
+            content: found.content[contentLang as 'ru' | 'en'].replace(/<[^>]*>/g, '').slice(0, 200) + '...',
+          });
         }
       })
       .catch(() => {});
@@ -403,6 +430,20 @@ export default function HomePage() {
                   </a>
                 )}
               </div>
+              {/* Calendar article alongside Nossi */}
+              {calendarArticle && (
+                <div className="hidden md:block flex-shrink-0 w-64 xl:w-72 bg-white/5 rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-amber-400 text-sm">📅</span>
+                    <span className="text-amber-300/80 text-[10px] font-bold uppercase tracking-wider">{lang === 'ru' ? 'Этот день' : 'This Day'}</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-white mb-2 leading-tight">{calendarArticle.title}</h4>
+                  <p className="text-blue-200/60 text-xs leading-relaxed mb-3 line-clamp-4">{calendarArticle.content}</p>
+                  <Link href={'/articles/' + calendarArticle.slug} className="text-xs text-amber-400 hover:text-amber-300 font-bold">
+                    {lang === 'ru' ? 'Читать →' : 'Read →'}
+                  </Link>
+                </div>
+              )}
               {/* GetAShidduch articles */}
               <div className="hidden lg:block flex-shrink-0 w-64 xl:w-72">
                 <div className="flex items-center gap-2 mb-3">
@@ -427,6 +468,40 @@ export default function HomePage() {
                   {lang === 'he' ? 'כל המאמרים' : lang === 'en' ? 'All articles' : 'Все статьи'} →
                 </a>
               </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════ CALENDAR ARTICLE BANNER (when no Nossi or alongside) ═══════ */}
+      {calendarArticle && !nossiDay && (
+        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-400 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-blue-400 rounded-full blur-3xl" />
+          </div>
+          <div className="relative max-w-4xl mx-auto px-6 py-8 md:py-12">
+            <div className="text-center md:text-start">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)' }}>
+                <span className="text-amber-400 text-lg">📅</span>
+                <span className="text-amber-300 text-xs font-bold uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {lang === 'ru' ? 'Этот день в истории' : lang === 'he' ? 'היום הזה בהיסטוריה' : 'This Day in History'} · {hebrewDateStr}
+                </span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                {calendarArticle.title}
+              </h2>
+              <p className="text-blue-200/70 text-sm md:text-base mb-5 max-w-2xl leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                {calendarArticle.content}
+              </p>
+              <Link
+                href={'/articles/' + calendarArticle.slug}
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#1a1a2e', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 4px 20px rgba(245,158,11,0.3)' }}
+              >
+                <BookOpen size={18} />
+                {lang === 'ru' ? 'Читать полностью' : lang === 'he' ? 'קרא עוד' : 'Read more'}
+              </Link>
             </div>
           </div>
         </section>
