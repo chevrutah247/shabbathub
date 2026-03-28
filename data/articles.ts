@@ -1683,7 +1683,6 @@ export const articles: Article[] = [
   // ========================
   {
     id: 'nissan-2',
-    image: '/images/articles/nissan-2.png',
     slug: 'nissan-2-poslednie-zavety-rebe-rashaba',
     hebrewDate: { month: 'Nisan', day: 2 },
     monthIntro: {
@@ -1706,6 +1705,10 @@ export const articles: Article[] = [
       ru: `<h3>Последние дни в Ростове-на-Дону</h3>
 <p>2 Ниссана 5680 года (1920) в Ростове-на-Дону завершился земной путь пятого Любавичского Ребе — рабби Шалома Дов-Бера Шнеерсона, известного как Ребе Рашаб. Последние годы его жизни прошли в тяжёлых условиях: Гражданская война, разруха и преследования не позволяли вести нормальную жизнь. Тем не менее Ребе Рашаб продолжал руководить хасидским движением, принимать посетителей и обучать учеников.</p>
 
+<div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-2.png" alt="" style="width: 100%; height: auto;" /></div>
+
+
+
 <h3>«Я ухожу на небо — рукописи оставляю тебе»</h3>
 <p>Незадолго до ухода Ребе Рашаб обратился к своему единственному сыну, рабби Йосефу-Ицхаку (будущему Шестому Ребе), со словами, ставшими историческими: «Я ухожу на небо, а рукописи я оставляю тебе». Эти рукописи — тысячи страниц хасидских маамаров (учений), писем и заметок — представляли собой духовное наследие не только Ребе Рашаба, но и предыдущих поколений Ребе. Передача рукописей была не просто завещанием имущества — это был акт передачи духовной власти и ответственности за продолжение дела Хабада.</p>
 
@@ -1714,6 +1717,10 @@ export const articles: Article[] = [
 
       en: `<h3>Final Days in Rostov-on-Don</h3>
 <p>On 2 Nissan 5680 (1920), in Rostov-on-Don, the earthly journey of the fifth Lubavitcher Rebbe — Rabbi Shalom DovBer Schneersohn, known as the Rebbe Rashab — came to an end. The final years of his life were spent under harsh conditions: the Civil War, devastation, and persecution made normal life impossible. Nevertheless, the Rebbe Rashab continued to lead the Chassidic movement, receive visitors, and teach students.</p>
+
+<div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-2.png" alt="" style="width: 100%; height: auto;" /></div>
+
+
 
 <h3>"I Go to Heaven — the Manuscripts I Leave to You"</h3>
 <p>Shortly before his passing, the Rebbe Rashab turned to his only son, Rabbi Yosef Yitzchak (the future Sixth Rebbe), with words that became historic: "I go to heaven, and the manuscripts I leave to you." These manuscripts — thousands of pages of Chassidic maamarim (discourses), letters, and notes — represented the spiritual legacy not only of the Rebbe Rashab but of previous generations of Rebbes. The transfer of the manuscripts was not merely a bequest of property — it was an act of transmitting spiritual authority and responsibility for continuing the work of Chabad.</p>
@@ -1726,7 +1733,6 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-9',
-    image: '/images/articles/nissan-9.png',
     slug: 'nissan-9-nachalo-puti-stradaniy-rabbi-levi-itshaka',
     hebrewDate: { month: 'Nisan', day: 9 },
     title: {
@@ -1745,6 +1751,10 @@ export const articles: Article[] = [
       ru: `<h3>Ночной обыск НКВД</h3>
 <p>В ночь на 9 Ниссана 5699 года (1939) агенты НКВД ворвались в дом рабби Леви-Ицхака Шнеерсона — главного раввина Днепропетровска и отца будущего Седьмого Любавичского Ребе. Обыск длился несколько часов: перевернули всю квартиру, конфисковали книги, рукописи и личную переписку. Рабби Леви-Ицхак был арестован по обвинению в «контрреволюционной деятельности» — так советская власть квалифицировала его неустанную работу по сохранению еврейской религиозной жизни.</p>
 
+<div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-9.png" alt="" style="width: 100%; height: auto;" /></div>
+
+
+
 <h3>Несломленный дух</h3>
 <p>На допросах рабби Леви-Ицхак проявил невероятную стойкость. Несмотря на давление и угрозы, он отказывался подписывать ложные признания и называть имена тех, кто помогал ему в подпольной религиозной деятельности. Его «преступления» заключались в организации тайных миньянов, обеспечении кошерного шхита (убоя скота), обрезаний и обучении детей Торе — всём том, что составляло основу еврейской жизни на протяжении тысячелетий, но было запрещено большевистским режимом.</p>
 
@@ -1753,6 +1763,10 @@ export const articles: Article[] = [
 
       en: `<h3>The NKVD Night Raid</h3>
 <p>On the night of 9 Nissan 5699 (1939), NKVD agents burst into the home of Rabbi Levi Yitzchak Schneerson — the chief rabbi of Dnepropetrovsk and father of the future Seventh Lubavitcher Rebbe. The search lasted several hours: the entire apartment was turned upside down, and books, manuscripts, and personal correspondence were confiscated. Rabbi Levi Yitzchak was arrested on charges of "counter-revolutionary activity" — the Soviet regime's classification for his tireless work in preserving Jewish religious life.</p>
+
+<div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-9.png" alt="" style="width: 100%; height: auto;" /></div>
+
+
 
 <h3>An Unbroken Spirit</h3>
 <p>During interrogations, Rabbi Levi Yitzchak displayed incredible fortitude. Despite pressure and threats, he refused to sign false confessions or name those who assisted him in underground religious activity. His "crimes" consisted of organizing secret minyanim, ensuring kosher shechita (ritual slaughter), circumcisions, and teaching children Torah — everything that had formed the foundation of Jewish life for millennia but was forbidden by the Bolshevik regime.</p>
@@ -1765,8 +1779,6 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-11',
-    image: '/images/articles/nissan-11.png',
-    images: ['/images/articles/nissan-11.png', '/images/articles/nissan-11-1.png', '/images/articles/nissan-11-2.png'],
     slug: 'nissan-11-rozhdeniye-sedmogo-rebe',
     hebrewDate: { month: 'Nisan', day: 11 },
     title: {
@@ -1785,6 +1797,10 @@ export const articles: Article[] = [
       ru: `<h3>Рождение в Николаеве</h3>
 <p>11 Ниссана 5662 года (1902) в городе Николаеве (ныне Украина) родился мальчик, которому суждено было стать Седьмым Любавичским Ребе — рабби Менахем-Мендл Шнеерсон. Он был назван в честь третьего Любавичского Ребе — Цемах Цедека (рабби Менахем-Мендла Шнеерсона-старшего), что символически связало его с великой традицией хабадского руководства.</p>
 
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0;"><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11-1.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11-2.png" alt="" style="width: 100%; height: auto;" /></div></div>
+
+
+
 <h3>Реакция Ребе Рашаба</h3>
 <p>Когда весть о рождении достигла пятого Любавичского Ребе — Ребе Рашаба, он отправил не менее шести поздравительных телеграмм семье. Такое необычное внимание со стороны Ребе указывало на то, что он провидел особую судьбу новорождённого. По свидетельствам хасидов, Ребе Рашаб выразил большую радость, что в семье Шнеерсонов родился ребёнок, носящий имя Цемах Цедека.</p>
 
@@ -1793,6 +1809,10 @@ export const articles: Article[] = [
 
       en: `<h3>Birth in Nikolaev</h3>
 <p>On 11 Nissan 5662 (1902), in the city of Nikolaev (present-day Ukraine), a boy was born who was destined to become the Seventh Lubavitcher Rebbe — Rabbi Menachem Mendel Schneerson. He was named after the third Lubavitcher Rebbe — the Tzemach Tzedek (Rabbi Menachem Mendel Schneersohn the elder), symbolically linking him to the great tradition of Chabad leadership.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0;"><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11-1.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-11-2.png" alt="" style="width: 100%; height: auto;" /></div></div>
+
+
 
 <h3>The Rebbe Rashab's Reaction</h3>
 <p>When news of the birth reached the fifth Lubavitcher Rebbe — the Rebbe Rashab — he sent no fewer than six congratulatory telegrams to the family. Such unusual attention from the Rebbe indicated that he foresaw a special destiny for the newborn. According to Chassidic accounts, the Rebbe Rashab expressed great joy that a child bearing the name of the Tzemach Tzedek had been born into the Schneerson family.</p>
@@ -1805,8 +1825,6 @@ export const articles: Article[] = [
   },
   {
     id: 'nissan-13',
-    image: '/images/articles/nissan-13.png',
-    images: ['/images/articles/nissan-13.png', '/images/articles/nissan-13-2.png', '/images/articles/nissan-13-3.png'],
     slug: 'nissan-13-zavershenie-puti-tsemakh-tsedeka',
     hebrewDate: { month: 'Nisan', day: 13 },
     title: {
@@ -1825,6 +1843,10 @@ export const articles: Article[] = [
       ru: `<h3>Последние годы Цемах Цедека</h3>
 <p>Третий Любавичский Ребе, рабби Менахем-Мендл Шнеерсон, известный как Цемах Цедек, провёл последние годы своей жизни в состоянии крайней физической слабости. Несмотря на это, он продолжал руководить хасидским движением и принимать множество посетителей, которые приезжали к нему со всех концов Российской империи за советом и благословением. Однако с течением времени его здоровье настолько ухудшилось, что он был вынужден принимать людей через секретарей, передавая ответы в письменной форме.</p>
 
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0;"><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13-2.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13-3.png" alt="" style="width: 100%; height: auto;" /></div></div>
+
+
+
 <h3>«Свет души более не вмещается в теле»</h3>
 <p>Незадолго до ухода Цемах Цедек произнёс слова, глубоко поразившие окружающих: «Свет души более не может удерживаться в теле». Эти слова отражали хасидское понимание смерти не как конца, а как момента, когда душа, переполненная Б-жественным светом, выходит за пределы физической оболочки. Для хасидов это было свидетельством невероятного духовного уровня их Ребе — его душа буквально «переросла» тело.</p>
 
@@ -1833,6 +1855,10 @@ export const articles: Article[] = [
 
       en: `<h3>The Final Years of the Tzemach Tzedek</h3>
 <p>The third Lubavitcher Rebbe, Rabbi Menachem Mendel Schneersohn, known as the Tzemach Tzedek, spent the final years of his life in a state of extreme physical weakness. Despite this, he continued to lead the Chassidic movement and receive the many visitors who came from all corners of the Russian Empire seeking his counsel and blessing. However, as time passed, his health deteriorated to such a degree that he was forced to receive people through secretaries, conveying his responses in written form.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0;"><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13-2.png" alt="" style="width: 100%; height: auto;" /></div><div style="border-radius: 12px; overflow: hidden;"><img src="/images/articles/nissan-13-3.png" alt="" style="width: 100%; height: auto;" /></div></div>
+
+
 
 <h3>"The Light of the Soul Can No Longer Be Held in the Body"</h3>
 <p>Shortly before his passing, the Tzemach Tzedek uttered words that deeply struck those around him: "The light of the soul can no longer be held in the body." These words reflected the Chassidic understanding of death not as an end, but as a moment when the soul, overflowing with Divine light, transcends its physical vessel. For the Chassidim, this was testimony to the incredible spiritual level of their Rebbe — his soul had literally "outgrown" the body.</p>
