@@ -158,6 +158,22 @@ export default function ArticlesPage() {
           </div>
         </div>
 
+        {/* Bitachon intro banner — shown when Bitachon tag is selected */}
+        {selectedTag && (selectedTag === 'Битахон' || selectedTag === 'Bitachon' || selectedTag === 'ביטחון' || selectedTag === 'Бітахон') && (
+          <div className="mb-8 bg-gradient-to-br from-indigo-50 via-blue-50 to-amber-50 border border-indigo-200 rounded-2xl p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-indigo-900 mb-2 font-display">
+              {lang === 'ru' ? 'Врата упования: Путь к божественному доверию' : lang === 'he' ? 'שער הביטחון: מדריך לביטחון בה\'' : lang === 'uk' ? 'Ворота уповання: Шлях до божественної довіри' : 'The Gate of Trust: A Guide to Divine Reliance'}
+            </h2>
+            <p className="text-sm md:text-base text-indigo-800/80 leading-relaxed">
+              {lang === 'ru'
+                ? 'Представленные материалы содержат фрагменты классического этико-философского труда «Шаар Ха-Битахон» («Врата упования»), входящего в состав книги «Ховот Ха-Левавот» Бахьи ибн Пакуды. Текст подробно раскрывает концепцию упования на Творца, определяя его как полную и безраздельную веру в божественное провидение. Автор подчеркивает, что истинное доверие к Б-гу приносит человеку душевный покой и избавляет от рабской зависимости перед другими людьми или материальными обстоятельствами. Через многочисленные примеры и библейские цитаты объясняется, что только Всевышний является надежным источником благополучия и защиты. Эти фрагменты служат духовным и практическим руководством по достижению внутренней свободы через признание божественного управления миром.'
+                : lang === 'he'
+                ? 'החומרים המוצגים כוללים קטעים מתוך היצירה האתית-פילוסופית הקלאסית "שער הביטחון" מתוך ספר "חובות הלבבות" של רבנו בחיי אבן פקודה. הטקסט מפרט את מושג הביטחון בבורא כאמונה מלאה בהשגחה האלוקית.'
+                : 'These materials contain fragments of the classic ethical-philosophical treatise "Shaar HaBitachon" ("The Gate of Trust"), part of the book "Chovot HaLevavot" by Bachya ibn Paquda. The text thoroughly explores the concept of trust in the Creator, defining it as complete and undivided faith in Divine Providence. The author emphasizes that true trust in G-d brings a person peace of mind and frees them from slavish dependence on other people or material circumstances. These fragments serve as both a spiritual and practical guide to achieving inner freedom through recognition of Divine governance of the world.'}
+            </p>
+          </div>
+        )}
+
         {/* Search bar */}
         <div className="max-w-xl mx-auto mb-8">
           <div className="relative">
