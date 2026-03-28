@@ -97,6 +97,11 @@ export default function ArticlesPage() {
     return [...articles].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
   }, []);
 
+  // "Rebbe on Bitachon" articles for interleaving
+  const rebbeOnBitachon = useMemo(() => {
+    return articles.filter(a => a.tag.en === 'Rebbe on Bitachon');
+  }, []);
+
   const filtered = useMemo(() => {
     return articles.filter((article) => {
       const matchesTag = !selectedTag || article.tag[lang] === selectedTag;
@@ -253,8 +258,17 @@ export default function ArticlesPage() {
         {filtered.length === 0 ? (
           <div className="text-center py-16 text-gray-400 text-lg">{t('noResults')}</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((article) => (
+          <div className="space-y-6">
+            {(() => {
+              const isBitachonView = selectedTag && (selectedTag === 'Битахон' || selectedTag === 'Bitachon' || selectedTag === 'ביטחון' || selectedTag === 'Бітахон');
+              const chunks: typeof filtered[] = [];
+              for (let i = 0; i < filtered.length; i += 9) {
+                chunks.push(filtered.slice(i, i + 9));
+              }
+              return chunks.map((chunk, chunkIdx) => (
+                <div key={chunkIdx}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {chunk.map((article) => (
               <Link
                 key={article.id}
                 href={`/articles/${article.slug}`}
@@ -306,6 +320,28 @@ export default function ArticlesPage() {
                 </div>
               </Link>
             ))}
+                  </div>
+                  {/* Insert "Rebbe on Bitachon" card after every 9 articles when in Bitachon view */}
+                  {isBitachonView && rebbeOnBitachon[chunkIdx] && (
+                    <div className="mt-6">
+                      <Link
+                        href={`/articles/${rebbeOnBitachon[chunkIdx].slug}`}
+                        className="block bg-gradient-to-r from-indigo-50 via-blue-50 to-amber-50 border-2 border-indigo-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-lg transition-all"
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg">💬</span>
+                          <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                            {lang === 'ru' ? 'Что говорит Ребе' : lang === 'he' ? 'מה אומר הרבי' : 'What the Rebbe Says'}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-indigo-900 mb-2">{rebbeOnBitachon[chunkIdx].title[lang]}</h3>
+                        <p className="text-sm text-indigo-800/70 line-clamp-2">{rebbeOnBitachon[chunkIdx].subtitle[lang]}</p>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              ));
+            })()}
           </div>
         )}
       </div>
