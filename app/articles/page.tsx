@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, ChevronLeft, Calendar, Tag } from 'lucide-react';
+import { Search, ChevronLeft, Calendar, Tag, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { articles, getAllTags } from '@/data/articles';
 
@@ -92,6 +92,11 @@ export default function ArticlesPage() {
 
   const tags = useMemo(() => getAllTags(lang), [lang]);
 
+  // Latest 3 articles (by createdAt descending)
+  const latestArticles = useMemo(() => {
+    return [...articles].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
+  }, []);
+
   const filtered = useMemo(() => {
     return articles.filter((article) => {
       const matchesTag = !selectedTag || article.tag[lang] === selectedTag;
@@ -124,6 +129,33 @@ export default function ArticlesPage() {
             {t('title')}
           </h1>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto">{t('subtitle')}</p>
+        </div>
+
+        {/* Latest publications */}
+        <div className="mb-10">
+          <h2 className="text-lg font-bold text-primary-900 mb-4 flex items-center gap-2">
+            <Sparkles size={20} className="text-amber-500" />
+            {lang === 'ru' ? 'Новые публикации' : lang === 'he' ? 'פרסומים חדשים' : lang === 'uk' ? 'Нові публікації' : 'Latest Publications'}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {latestArticles.map((article) => (
+              <Link
+                key={article.id}
+                href={`/articles/${article.slug}`}
+                className="group flex gap-4 p-4 bg-white rounded-xl border border-amber-100 hover:border-amber-300 hover:shadow-md transition-all"
+              >
+                <div className="flex-1 min-w-0">
+                  <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold mb-2 ${tagColors[article.tag[lang]] || 'bg-gray-100 text-gray-700'}`}>
+                    {article.tag[lang]}
+                  </span>
+                  <h3 className="text-sm font-bold text-primary-900 mb-1 line-clamp-2 group-hover:text-amber-700 transition-colors">
+                    {article.title[lang]}
+                  </h3>
+                  <p className="text-xs text-gray-500 line-clamp-2">{article.subtitle[lang]}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Search bar */}
