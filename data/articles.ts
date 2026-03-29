@@ -5401,6 +5401,366 @@ export const articles: Article[] = [
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-28',
   },
+
+  // ========== Nissan Calendar Articles (2026-03-29) ==========
+
+  {
+    id: 'nissan-1-rosh-chodesh',
+    slug: 'nissan-1-rosh-khodesh-nissan',
+    hebrewDate: { month: 'Nisan', day: 1 },
+    title: {
+      ru: '1 Ниссана — Рош Ходеш Ниссан: Новый год месяцев',
+      en: '1 Nisan — Rosh Chodesh Nisan: The New Year of Months',
+      he: 'א\' בניסן — ראש חודש ניסן: ראש השנה לחודשים',
+      uk: '1 Ніссана — Рош Ходеш Ніссан: Новий рік місяців',
+    },
+    subtitle: {
+      ru: 'День десяти корон и начало чудес',
+      en: 'The Day of Ten Crowns and the Beginning of Miracles',
+      he: 'יום עשר העטרות ותחילת הניסים',
+      uk: 'День десяти корон і початок чудес',
+    },
+    content: {
+      ru: `<h3>Рош а-Шана месяцев — день десяти корон</h3>
+<p>Первое Ниссана — это не просто начало нового месяца, а подлинный «Новый год месяцев», как об этом сказано в Торе: «Месяц этот вам — начало месяцев» (Шмот 12:2). Мудрецы Талмуда (Шаббат 87б) учат, что в этот день сошлись десять «корон» — десять уникальных событий, произошедших впервые в истории. Среди них: день начала Творения (по мнению рабби Йеошуа), первый день служения в Мишкане, первый день для жертвоприношений и многие другие. Этот день также связан с «несиим» — лидерами поколений, ведь именно 1 Ниссана начинается чтение «приношений глав колен». Каждый руководитель еврейского народа несёт ответственность за духовное пробуждение своего поколения, и Рош Ходеш Ниссан напоминает: истинное лидерство — это служение Б-гу и народу.</p>
+
+<h3>Призыв Ребе: новое начало в Торе и заповедях</h3>
+<p>Ребе Менахем-Мендл Шнеерсон неоднократно подчёркивал, что слово «Ниссан» (נִיסָן) происходит от слова «нес» (נֵס) — «чудо». Месяц Ниссан — это время, когда Б-г действует за пределами естественного порядка, и каждый еврей может ощутить эту сверхъестественную энергию. Ребе призывал начинать Ниссан с обновлённой решимостью в изучении Торы и исполнении заповедей, говоря, что именно в этот момент открываются врата для чудес. Как первый месяц несёт энергию обновления для всего года, так и каждый человек призван обновить свою связь с Б-гом, преодолев привычные ограничения и выйдя за рамки «природного» восприятия мира.</p>`,
+
+      en: `<h3>The New Year for Months — The Day of Ten Crowns</h3>
+<p>The first of Nisan is not merely the beginning of a new month but the true "New Year of Months," as the Torah states: "This month shall be for you the beginning of months" (Exodus 12:2). The Sages of the Talmud (Shabbat 87b) teach that on this day ten "crowns" converged — ten unique events that occurred for the first time in history. Among them: the first day of Creation (according to Rabbi Yehoshua), the first day of service in the Mishkan, the first day for sacrificial offerings, and many others. This day is also connected to the Nesi'im — leaders of the generations — because on 1 Nisan the reading of the "offerings of the tribal princes" begins. Every leader of the Jewish people carries responsibility for the spiritual awakening of their generation, and Rosh Chodesh Nisan reminds us: true leadership means service to G-d and the people.</p>
+
+<h3>The Rebbe's Call: A New Beginning in Torah and Mitzvot</h3>
+<p>The Rebbe, Rabbi Menachem Mendel Schneerson, repeatedly emphasized that the word "Nisan" (נִיסָן) derives from the word "nes" (נֵס) — "miracle." The month of Nisan is a time when G-d acts beyond the natural order, and every Jew can sense this supernatural energy. The Rebbe urged beginning Nisan with renewed determination in Torah study and observance of mitzvot, saying that at this very moment gates are opened for miracles. Just as the first month carries the energy of renewal for the entire year, so too every individual is called to renew their connection with G-d, breaking through habitual limitations and going beyond a "natural" perception of the world.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'nissan-5-10-pesach-prep',
+    slug: 'nissan-5-10-podgotovka-k-pesakhu',
+    hebrewDate: { month: 'Nisan', day: 5 },
+    title: {
+      ru: '5-10 Ниссана: Подготовка к Песаху',
+      en: '5–10 Nisan: Preparing for Pesach',
+      he: 'ה\'–י\' בניסן: הכנות לפסח',
+      uk: '5-10 Ніссана: Підготовка до Песаху',
+    },
+    subtitle: {
+      ru: 'Майим шелану, пасхальный ягнёнок и десять сфирот',
+      en: 'Mayim Shelanu, the Paschal Lamb, and the Ten Sefirot',
+      he: 'מים שלנו, קרבן פסח ועשר הספירות',
+      uk: 'Маїм шелану, пасхальне ягня і десять сфірот',
+    },
+    content: {
+      ru: `<h3>5 Ниссана — черпание «маим шелану»</h3>
+<p>Пятого Ниссана в хабадской традиции совершается особый обычай: Ребе лично выходил набирать «маим шелану» — воду, которая «отстоялась на ночь» (буквально «наша вода»). Эта вода используется для выпечки шмура-мацы — мацы, за которой наблюдают от самого момента сбора пшеницы. Казалось бы, простое действие — набрать воду, — но в нём заключён глубокий смысл: подготовка к освобождению начинается с мельчайших деталей. Каждый шаг в приготовлении к Песаху — это акт осознанности, превращающий материальное действие в духовное служение Б-гу. Ребе подчёркивал, что именно тщательность в подготовке «маим шелану» отражает наше стремление к совершенству в служении Всевышнему.</p>
+
+<h3>10 Ниссана — отделение пасхального ягнёнка</h3>
+<p>Десятого Ниссана, за четыре дня до Исхода из Египта, Б-г повелел каждой еврейской семье отделить ягнёнка для пасхальной жертвы (Шмот 12:3). Это был акт невероятной смелости: ягнёнок был божеством египтян, и привязать его к ножке кровати означало бросить открытый вызов идолопоклонству. Число десять в еврейской традиции связано с десятью сфирот — каналами, через которые Б-жественный свет нисходит в мир. Подготовка к Песаху в эти дни переходит в активную фазу: генеральная уборка дома от хамеца, проверка посуды, приобретение продуктов. Всё это не просто бытовые хлопоты, а духовная работа по очищению души от «внутреннего хамеца» — гордыни и самодовольства.</p>`,
+
+      en: `<h3>5 Nisan — Drawing "Mayim Shelanu"</h3>
+<p>On the fifth of Nisan, the Chabad tradition includes a special custom: the Rebbe would personally go out to draw "mayim shelanu" — water that has "rested overnight" (literally "our water"). This water is used for baking shmura matza — matza that is guarded from the very moment of the wheat harvest. What appears to be a simple act — drawing water — contains deep meaning: preparation for liberation begins with the smallest details. Every step in Pesach preparation is an act of mindfulness, transforming a physical action into spiritual service to G-d. The Rebbe emphasized that the very meticulousness in preparing "mayim shelanu" reflects our striving for perfection in serving the Almighty.</p>
+
+<h3>10 Nisan — Separating the Paschal Lamb</h3>
+<p>On the tenth of Nisan, four days before the Exodus from Egypt, G-d commanded every Jewish family to set aside a lamb for the Passover offering (Exodus 12:3). This was an act of extraordinary courage: the lamb was a deity of the Egyptians, and tying it to the bedpost meant openly defying idolatry. The number ten in Jewish tradition is connected to the ten Sefirot — the channels through which Divine light descends into the world. Preparation for Pesach enters its active phase during these days: thorough cleaning of the home from chametz, checking utensils, purchasing supplies. All of this is not merely household chores but spiritual work of purifying the soul from "inner chametz" — pride and complacency.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'nissan-14-erev-pesach',
+    slug: 'nissan-14-erev-pesakh-i-rambam',
+    hebrewDate: { month: 'Nisan', day: 14 },
+    title: {
+      ru: '14 Ниссана — Эрев Песах и день рождения Рамбама',
+      en: '14 Nisan — Erev Pesach and the Birthday of the Rambam',
+      he: 'י"ד בניסן — ערב פסח ויום הולדת הרמב"ם',
+      uk: '14 Ніссана — Ерев Песах і день народження Рамбама',
+    },
+    subtitle: {
+      ru: 'Уничтожение хамеца и изучение учения Рамбама',
+      en: 'Destroying Chametz and Studying the Rambam\'s Teachings',
+      he: 'ביעור חמץ ולימוד תורת הרמב"ם',
+      uk: 'Знищення хамецу та вивчення вчення Рамбама',
+    },
+    content: {
+      ru: `<h3>Утреннее чтение Торы и биур хамец</h3>
+<p>Четырнадцатое Ниссана — Эрев Песах — один из самых насыщенных дней еврейского календаря. Утром совершается особое чтение Торы, а затем наступает кульминация недельной подготовки: «биур хамец» — уничтожение квасного. Накануне вечером проводится «бдикат хамец» — поиск хамеца при свете свечи, а утром найденные остатки сжигаются. Этот ритуал имеет глубочайший внутренний смысл: хамец символизирует «разбухание» эго, гордыню, которая отдаляет человека от Б-га. Сжигая хамец, мы совершаем духовное очищение, освобождая пространство для мацы — символа смирения и самоотречения перед Творцом.</p>
+
+<h3>День рождения Рамбама и призыв Ребе</h3>
+<p>Четырнадцатое Ниссана — это также день рождения величайшего кодификатора еврейского закона, рабби Моше бен Маймона (Рамбама, 1138–1204). Ребе Менахем-Мендл Шнеерсон придавал огромное значение изучению трудов Рамбама и установил ежедневный цикл изучения «Мишне Тора» — монументального кодекса Рамбама, охватывающего все 613 заповедей Торы. В фарбренгенах, приуроченных к этой дате, Ребе раскрывал глубинную связь между учением Рамбама и хасидизмом. Рамбам учил, что каждый человек одним поступком может склонить весь мир к чаше заслуг, — и этот призыв к личной ответственности перекликается с хасидским учением о том, что Б-г ожидает от каждого именно его уникального вклада.</p>`,
+
+      en: `<h3>Morning Torah Reading and Biur Chametz</h3>
+<p>The fourteenth of Nisan — Erev Pesach — is one of the most action-packed days on the Jewish calendar. In the morning a special Torah reading takes place, followed by the culmination of a week of preparation: "biur chametz" — the destruction of leavened bread. The night before, "bedikat chametz" is performed — searching for chametz by candlelight — and in the morning the remaining pieces are burned. This ritual carries the deepest inner meaning: chametz symbolizes the "puffing up" of the ego, the pride that distances a person from G-d. By burning chametz we perform a spiritual purification, clearing space for matza — the symbol of humility and self-nullification before the Creator.</p>
+
+<h3>The Rambam's Birthday and the Rebbe's Call</h3>
+<p>The fourteenth of Nisan is also the birthday of the greatest codifier of Jewish law, Rabbi Moshe ben Maimon (the Rambam, 1138–1204). The Rebbe, Rabbi Menachem Mendel Schneerson, placed enormous importance on studying the Rambam's works and established a daily cycle of studying "Mishneh Torah" — the Rambam's monumental code encompassing all 613 commandments of the Torah. In farbrengens marking this date, the Rebbe revealed the deep connection between the Rambam's teachings and Chassidism. The Rambam taught that every person, with a single deed, can tip the entire world toward the scale of merit — and this call to personal responsibility echoes the Chassidic teaching that G-d expects from each individual precisely their unique contribution.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'nissan-15-16-pesach',
+    slug: 'nissan-15-16-pesakh-i-omer',
+    hebrewDate: { month: 'Nisan', day: 15 },
+    title: {
+      ru: '15-16 Ниссана: Песах и начало отсчёта Омера',
+      en: '15–16 Nisan: Pesach and the Beginning of Counting the Omer',
+      he: 'ט"ו–ט"ז בניסן: פסח ותחילת ספירת העומר',
+      uk: '15-16 Ніссана: Песах і початок відліку Омера',
+    },
+    subtitle: {
+      ru: 'Маца — символ самоотречения и истинной свободы',
+      en: 'Matza — Symbol of Self-Nullification and True Freedom',
+      he: 'מצה — סמל הביטול והחירות האמיתית',
+      uk: 'Маца — символ самозречення та справжньої свободи',
+    },
+    content: {
+      ru: `<h3>15 Ниссана — первый день Песаха</h3>
+<p>Пятнадцатое Ниссана — ночь Седера, центральное событие всего еврейского года. В эту ночь мы не просто «вспоминаем» Исход из Египта — мы заново переживаем его. Маца, которую мы едим, — это не просто «хлеб бедности»: в хасидском учении маца символизирует «битуль» — самоотречение и полное принятие ига Небес. В отличие от хамеца, который «поднимается» и символизирует гордыню, маца остаётся плоской и скромной. Именно в этом — парадокс истинной свободы: настоящее освобождение приходит не через раздувание эго, а через смирение перед Б-гом. Ребе учил, что каждый Песах открывает новый уровень свободы — не только от внешнего рабства, но и от внутренних оков привычек, страхов и ложных представлений.</p>
+
+<h3>16 Ниссана — начало Сфират а-Омер</h3>
+<p>На второй вечер Песаха начинается Сфират а-Омер — отсчёт сорока девяти дней от Песаха до Шавуота. Каждый день мы произносим благословение и считаем: «Сегодня — такой-то день Омера». Этот отсчёт — не просто арифметическое упражнение: считая дни, мы освящаем само течение времени. Каждый из 49 дней соответствует одной из комбинаций семи нижних сфирот (хесед, гвура, тиферет, нецах, ход, йесод, малхут), и, сосредотачиваясь на качестве каждого дня, мы совершаем глубокую внутреннюю работу по исправлению своих душевных качеств. От свободы Песаха мы шаг за шагом поднимаемся к дарованию Торы на Шавуот — от освобождения к принятию цели этого освобождения.</p>`,
+
+      en: `<h3>15 Nisan — The First Day of Pesach</h3>
+<p>The fifteenth of Nisan — the night of the Seder — is the central event of the entire Jewish year. On this night we do not merely "remember" the Exodus from Egypt — we relive it. The matza we eat is not simply "bread of poverty": in Chassidic teaching, matza symbolizes "bittul" — self-nullification and complete acceptance of the Heavenly yoke. Unlike chametz, which "rises" and symbolizes pride, matza remains flat and humble. Herein lies the paradox of true freedom: genuine liberation comes not through inflating the ego but through humility before G-d. The Rebbe taught that every Pesach reveals a new level of freedom — not only from external slavery but from the inner shackles of habits, fears, and false beliefs.</p>
+
+<h3>16 Nisan — The Beginning of Sefirat HaOmer</h3>
+<p>On the second evening of Pesach, Sefirat HaOmer begins — the counting of forty-nine days from Pesach to Shavuot. Each day we recite a blessing and count: "Today is such-and-such day of the Omer." This counting is not merely an arithmetic exercise: by counting the days we sanctify the very flow of time itself. Each of the 49 days corresponds to one of the combinations of the seven lower Sefirot (Chesed, Gevurah, Tiferet, Netzach, Hod, Yesod, Malchut), and by focusing on the quality of each day we perform deep inner work of refining our character traits. From the freedom of Pesach we ascend step by step toward the giving of the Torah on Shavuot — from liberation to embracing the purpose of that liberation.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'nissan-21-22-pesach-end',
+    slug: 'nissan-21-22-shvii-i-akharon-shel-pesakh',
+    hebrewDate: { month: 'Nisan', day: 21 },
+    title: {
+      ru: '21-22 Ниссана: Рассечение моря и трапеза Машиаха',
+      en: '21–22 Nisan: The Splitting of the Sea and the Feast of Mashiach',
+      he: 'כ"א–כ"ב בניסן: קריעת ים סוף וסעודת משיח',
+      uk: '21-22 Ніссана: Розсічення моря і трапеза Машіаха',
+    },
+    subtitle: {
+      ru: 'Швии шель Песах и Ахарон шель Песах',
+      en: 'Shvii shel Pesach and Acharon shel Pesach',
+      he: 'שביעי של פסח ואחרון של פסח',
+      uk: 'Швії шель Песах і Ахарон шель Песах',
+    },
+    content: {
+      ru: `<h3>21 Ниссана — Швии шель Песах: рассечение Красного моря</h3>
+<p>Седьмой день Песаха — день, когда произошло одно из величайших чудес в истории: рассечение Красного (Тростникового) моря. Воды расступились, и весь народ Израиля прошёл по сухому дну, а преследовавшая их армия фараона была поглощена волнами. Мидраш рассказывает, что дети первыми узнали Б-га при море и воскликнули: «Это мой Б-г!» Именно поэтому Ребе уделял особое внимание детям в эти дни, организуя специальные детские собрания — «ралли». Ребе учил, что чистота детской веры способна пробудить чудеса даже в нашем поколении. Швии шель Песах напоминает нам: когда человек стоит перед непреодолимым препятствием, Б-г способен рассечь само море, — нужно лишь сделать первый шаг вперёд с полным упованием на Творца.</p>
+
+<h3>22 Ниссана — Ахарон шель Песах: трапеза Машиаха</h3>
+<p>Последний день Песаха (за пределами Земли Израиля) — Ахарон шель Песах — пронизан светом будущего Избавления. Баал Шем Тов установил обычай устраивать в этот день «Сеудат Машиах» — «Трапезу Машиаха», на которой едят мацу и пьют четыре бокала вина, подобно Седеру. Ребе Рашаб (пятый Любавичский Ребе) укрепил эту традицию, а Ребе Менахем-Мендл Шнеерсон превратил её в грандиозное событие, наполненное пением, хасидскими речами и непоколебимой верой в скорый приход Машиаха. Ахарон шель Песах — это мост между Исходом из Египта и окончательной Геулой: как Б-г вывел нас из Египта, так Он приведёт нас к полному и окончательному Избавлению, и вера в это — не абстрактная надежда, а живая реальность, которую мы ощущаем за трапезой Машиаха.</p>`,
+
+      en: `<h3>21 Nisan — Shvii shel Pesach: The Splitting of the Red Sea</h3>
+<p>The seventh day of Pesach marks the day when one of the greatest miracles in history occurred: the splitting of the Red (Reed) Sea. The waters parted and the entire nation of Israel crossed on dry ground, while Pharaoh's pursuing army was swallowed by the waves. The Midrash relates that children were the first to recognize G-d at the sea and exclaimed: "This is my G-d!" For this reason, the Rebbe placed special emphasis on children during these days, organizing special children's assemblies — "rallies." The Rebbe taught that the purity of a child's faith can awaken miracles even in our generation. Shvii shel Pesach reminds us: when a person stands before an insurmountable obstacle, G-d is capable of splitting the sea itself — one need only take the first step forward with complete trust in the Creator.</p>
+
+<h3>22 Nisan — Acharon shel Pesach: The Feast of Mashiach</h3>
+<p>The last day of Pesach (outside the Land of Israel) — Acharon shel Pesach — is suffused with the light of the future Redemption. The Baal Shem Tov established the custom of holding a "Seudat Mashiach" — a "Feast of Mashiach" — on this day, at which matza is eaten and four cups of wine are drunk, similar to the Seder. The Rebbe Rashab (the fifth Lubavitcher Rebbe) strengthened this tradition, and the Rebbe, Rabbi Menachem Mendel Schneerson, transformed it into a grand event filled with singing, Chassidic discourses, and unwavering faith in the imminent coming of Mashiach. Acharon shel Pesach is the bridge between the Exodus from Egypt and the final Geulah: just as G-d took us out of Egypt, so He will bring us to the complete and final Redemption — and faith in this is not an abstract hope but a living reality that we experience at the Feast of Mashiach.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'nissan-28-sicha',
+    slug: 'nissan-28-znamenitaya-sikha-rebe',
+    hebrewDate: { month: 'Nisan', day: 28 },
+    title: {
+      ru: '28 Ниссана: «Делайте всё, что в ваших силах!»',
+      en: '28 Nisan: "Do Everything in Your Power!"',
+      he: 'כ"ח בניסן: "עשו כל אשר ביכולתכם!"',
+      uk: '28 Ніссана: «Робіть усе, що у ваших силах!»',
+    },
+    subtitle: {
+      ru: 'Знаменитая сиха 5751 (1991) года — ответственность за приход Машиаха',
+      en: 'The Famous Sicha of 5751 (1991) — Personal Responsibility for Bringing Mashiach',
+      he: 'השיחה המפורסמת של תשנ"א (1991) — האחריות האישית להבאת המשיח',
+      uk: 'Знаменита сіха 5751 (1991) року — відповідальність за прихід Машіаха',
+    },
+    content: {
+      ru: `<h3>Сиха, изменившая всё</h3>
+<p>28 Ниссана 5751 года (1991) Ребе Менахем-Мендл Шнеерсон произнёс одну из самых потрясающих и необычных бесед в истории хасидизма. Голос Ребе дрожал от волнения, когда он обратился к тысячам хасидов со словами, которые перевернули привычное представление о роли лидера и последователей. Ребе сказал, что он сделал всё возможное со своей стороны, чтобы приблизить приход Машиаха, — и теперь передаёт эту ответственность каждому еврею лично. «Делайте всё, что в ваших силах, чтобы привести Машиаха на деле и в действительности!» — призвал Ребе. Эти слова стали поворотным моментом: отныне приход Машиаха — не вопрос ожидания чуда свыше, а дело личных усилий каждого.</p>
+
+<h3>Призыв к личному действию</h3>
+<p>Значение этой сихи невозможно переоценить. Ребе фактически заявил, что эпоха пассивного ожидания закончилась. Каждый еврей — будь то раввин или простой работник, учёный или студент — несёт личную ответственность за то, чтобы приблизить Избавление. Как это сделать практически? Через добавление в изучении Торы, в исполнении заповедей, в актах доброты и милосердия, через распространение учения хасидизма и идеалов справедливости среди народов мира. Ребе подчеркнул: Б-г ждёт именно наших действий — не ангельских, не сверхъестественных, а простых человеческих поступков, совершённых с искренностью и самоотдачей. 28 Ниссана — это ежегодное напоминание: Машиах зависит от тебя.</p>`,
+
+      en: `<h3>The Sicha That Changed Everything</h3>
+<p>On the 28th of Nisan 5751 (1991), the Rebbe, Rabbi Menachem Mendel Schneerson, delivered one of the most extraordinary and unusual talks in the history of Chassidism. The Rebbe's voice trembled with emotion as he addressed thousands of Chassidim with words that overturned the conventional understanding of the roles of leader and followers. The Rebbe said that he had done everything possible on his part to hasten the coming of Mashiach — and was now placing this responsibility upon every individual Jew. "Do everything in your power to bring Mashiach in actuality and in reality!" the Rebbe urged. These words became a turning point: from that moment on, the coming of Mashiach was no longer a matter of waiting for a miracle from above but a matter of personal effort by each individual.</p>
+
+<h3>A Call to Personal Action</h3>
+<p>The significance of this sicha cannot be overstated. The Rebbe effectively declared that the era of passive waiting was over. Every Jew — whether a rabbi or an ordinary worker, a scholar or a student — bears personal responsibility for hastening the Redemption. How does one do this in practice? Through adding in Torah study, in the observance of mitzvot, in acts of kindness and charity, through spreading the teachings of Chassidism and the ideals of justice among the nations of the world. The Rebbe emphasized: G-d awaits precisely our actions — not angelic ones, not supernatural ones, but simple human deeds performed with sincerity and dedication. The 28th of Nisan is an annual reminder: Mashiach depends on you.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'pesach-matza-freedom',
+    slug: 'svoboda-byt-nikem-pochemu-matsa-vkusnee-egoizma',
+    title: {
+      ru: 'Свобода быть «никем»: Почему маца вкуснее эгоизма',
+      en: 'Freedom to Be "Nobody": Why Matza Tastes Better Than Ego',
+      he: 'החירות להיות "אף אחד": למה מצה טעימה יותר מאגואיזם',
+      uk: 'Свобода бути «ніким»: Чому маца смачніша за егоїзм',
+    },
+    subtitle: {
+      ru: 'Битуль — самоотречение — ключ к истинной свободе Песаха',
+      en: 'Bittul — self-nullification — the key to the true freedom of Pesach',
+      he: 'ביטול — מפתח לחירות האמיתית של פסח',
+      uk: 'Бітуль — самозречення — ключ до справжньої свободи Песаха',
+    },
+    content: {
+      ru: `<h3>Маца против хамеца</h3>
+<p>В культуре «личного бренда» понятие битуля — самоотречения — кажется безнадёжно устаревшим. Зачем отказываться от себя, когда весь мир кричит «будь собой»? Но хасидизм утверждает: истинная свобода начинается именно там, где заканчивается диктатура эго. Маца — в отличие от надутого, «раздувшегося» хамеца — символизирует отсутствие «я», превращение в сосуд для Б-жественного света. Хамец — это гордыня, самодовольство, ощущение собственной важности, которое закрывает человека от Творца. Маца же — это смирение, готовность принять волю Всевышнего без примеси личных амбиций. Битуль — это не самоуничижение и не слабость, а высшая способность подняться над своей природой, выйти за пределы ограниченного «я» и стать проводником бесконечного Б-жественного света в этот мир. Именно поэтому маца называется «хлебом веры» — она питает не тело, а душу, пробуждая в нас ту точку, которая всегда связана с Б-гом.</p>
+
+<h3>Истинная свобода Песаха</h3>
+<p>Песах — это переход от служения инстинктам к каббалат оль — принятию ига Небес. Казалось бы, одно рабство сменяется другим, но это глубокое заблуждение. Рабство Египта — это подчинение низменным желаниям, привычкам и страхам. Принятие Б-жественной воли — это жизнь ради великой миссии, а не мелочных потребностей. Наши Ребеим не имели личных планов — вся их жизнь была посвящена распространению света Творца в мире. Когда мы едим мацу на Седере, мы питаем свою веру — разум должен властвовать над эмоциями, освобождая нас от рабства привычек и инстинктов. Маца учит нас, что настоящая свобода — это не вседозволенность, а способность подчинить своё животное начало высшей цели. Тот, кто живёт ради миссии, свободен от тысячи мелких тревог, ибо его жизнь наполнена смыслом, превосходящим любые личные интересы.</p>`,
+
+      en: `<h3>Matza vs. Chametz</h3>
+<p>In the culture of "personal branding," the concept of bittul — self-nullification — seems hopelessly outdated. Why give up your sense of self when the whole world screams "be yourself"? But Chassidism teaches that true freedom begins precisely where the ego's dictatorship ends. Matza — unlike puffed-up, inflated chametz — symbolizes the absence of the "I," the transformation into a vessel for G-dliness. Chametz represents pride, self-satisfaction, and the sense of self-importance that closes a person off from the Creator. Matza, on the other hand, represents humility — the willingness to accept the will of the Almighty without the admixture of personal ambitions. Bittul is not self-diminishment or weakness but the supreme ability to transcend one's nature, to go beyond the limited "I" and become a conduit for infinite G-dly light in this world. This is why matza is called the "bread of faith" — it nourishes not the body but the soul, awakening within us that essential point that is always connected to G-d.</p>
+
+<h3>The True Freedom of Pesach</h3>
+<p>Pesach marks the transition from serving our instincts to kabbalat ol — accepting the yoke of Heaven. At first glance it might seem that one form of slavery simply replaces another, but this is a profound error. The slavery of Egypt means subjugation to base desires, habits, and fears. Accepting G-d's will means living for a great mission rather than petty needs. Our Rebbes had no personal plans — their entire lives were devoted to spreading the Creator's light in the world. When we eat matza at the Seder, we nourish our faith — the intellect must rule over emotions, freeing us from slavery to habits and impulses. Matza teaches us that real freedom is not permissiveness but the ability to subordinate our animal nature to a higher purpose. One who lives for a mission is free from a thousand petty anxieties, for their life is filled with meaning that surpasses any personal interest.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'pesach-children-heroes',
+    slug: 'diktatura-detey-kak-doshkolniki-spasayut-pesakh',
+    title: {
+      ru: 'Диктатура детей: Как дошкольники спасают Песах своих родителей',
+      en: 'Children\'s Dictatorship: How Preschoolers Save Their Parents\' Pesach',
+      he: 'דיקטטורת הילדים: איך גן-ילדים מצילים את הפסח של ההורים',
+      uk: 'Диктатура дітей: Як дошкільнята рятують Песах своїх батьків',
+    },
+    subtitle: {
+      ru: 'Дети — гаранты, благодаря которым народу была дана Тора',
+      en: 'Children are the guarantors thanks to whom the nation received the Torah',
+      he: 'הילדים — הערבים שבזכותם ניתנה התורה לעם',
+      uk: 'Діти — гаранти, завдяки яким народу було дано Тору',
+    },
+    content: {
+      ru: `<h3>Революция Ребе</h3>
+<p>Ребе Менахем-Мендл Шнеерсон совершил настоящую революцию, сделав детей главными героями еврейской жизни. Он создал «Цивот Ашем» — «Армию Б-га», — чтобы дети активно участвовали в борьбе за последние мгновения изгнания. Ребе неоднократно подчёркивал, что дети нашего поколения обладают особыми душами, которые естественным образом тянутся к духовности. В то время как взрослые обременены привычками, сомнениями и компромиссами, дети обладают чистотой восприятия, позволяющей им видеть мир таким, каким его задумал Творец. Именно поэтому при даровании Торы на горе Синай Б-г потребовал, чтобы поручителями за соблюдение Торы стали дети — не мудрецы, не пророки, а именно дети. Их чистая вера и искреннее желание делать добро — вот гарантия существования Торы в мире. Ребе понимал это как никто другой и потому вкладывал колоссальную энергию в детское еврейское образование.</p>
+
+<h3>Дети влияют на дом</h3>
+<p>В хасидской модели воспитания дети не просто пассивно слушают рассказы родителей за седером — они активно влияют на атмосферу дома, напоминая о мицвот, задавая вопросы и побуждая взрослых к действию. Знаменитые парады Лаг ба-Омер, организованные Ребе, — это тысячи детей, открыто провозглашающих свою веру, становящихся примером для взрослых, привыкших скрывать своё еврейство. Ребе говорил: один ребёнок, произносящий «Шма Исраэль» с искренностью, способен пробудить целый квартал. Воспитание «умных детей», которые не просто заучивают, а применяют знания на практике, — это кратчайший путь к Избавлению. Когда дети становятся «маленькими посланниками» Ребе, они несут свет Торы в места, куда взрослые порой не могут проникнуть, — в школьные дворы, парки и детские площадки.</p>`,
+
+      en: `<h3>The Rebbe's Revolution</h3>
+<p>The Rebbe, Rabbi Menachem Mendel Schneerson, carried out a genuine revolution by making children the main heroes of Jewish life. He established "Tzivos Hashem" — the "Army of G-d" — so that children could actively participate in the battle during the final moments of exile. The Rebbe repeatedly emphasized that the children of our generation possess special souls that are naturally drawn to spirituality. While adults are burdened by habits, doubts, and compromises, children possess a purity of perception that allows them to see the world as the Creator intended it. This is precisely why, at the giving of the Torah on Mount Sinai, G-d demanded that children serve as the guarantors for the Torah's observance — not sages, not prophets, but specifically children. Their pure faith and sincere desire to do good are the guarantee of the Torah's existence in the world. The Rebbe understood this like no one else and therefore invested enormous energy in Jewish children's education.</p>
+
+<h3>Children Influence the Home</h3>
+<p>In the Chassidic model of education, children do not merely listen passively to their parents' stories at the Seder — they actively influence the home's atmosphere, reminding about mitzvot, asking questions, and prompting adults to action. The famous Lag BaOmer parades organized by the Rebbe featured thousands of children openly proclaiming their faith, becoming examples for adults accustomed to hiding their Jewishness. The Rebbe said: one child reciting "Shema Yisrael" with sincerity can awaken an entire neighborhood. Raising "smart children" who don't merely memorize but apply knowledge in practice is the shortest path to Redemption. When children become the Rebbe's "little emissaries," they carry the light of Torah to places adults sometimes cannot reach — schoolyards, parks, and playgrounds.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'pesach-matza-lion',
+    slug: 'matsa-v-pasti-lva-missiya-v-egipte',
+    title: {
+      ru: 'Маца в пасти льва: Религиозный хайп или миссия в «Египте»?',
+      en: 'Matza in the Lion\'s Mouth: Religious Hype or Mission in "Egypt"?',
+      he: 'מצה בלוע הארי: הייפ דתי או שליחות ב"מצרים"?',
+      uk: 'Маца в пащі лева: Релігійний хайп чи місія в «Єгипті»?',
+    },
+    subtitle: {
+      ru: 'Америка из духовной пустыни стала центром распространения Торы',
+      en: 'America transformed from a spiritual wasteland into a center for spreading Torah',
+      he: 'אמריקה הפכה ממדבר רוחני למרכז הפצת תורה',
+      uk: 'Америка з духовної пустелі стала центром поширення Тори',
+    },
+    content: {
+      ru: `<h3>Новая эра</h3>
+<p>Прибытие Ребе Менахем-Мендла Шнеерсона в Америку 28 Сивана 1941 года ознаменовало начало «новой эры» в истории хасидизма и всего еврейства. Ребе часто приводил притчу о птице, вытаскивающей занозу из пасти льва: мы вошли в современный «Египет» — Америку, страну безграничного материализма и духовного соблазна — и взяли её мощь на служение святости. Вместо замкнутости гетто хасидизм принял «американский стиль»: масштаб, публичность, использование прессы, радио и телевидения для распространения Торы. Ребе понимал, что нельзя бороться с ассимиляцией, прячась за стенами синагоги, — нужно выйти на улицы и площади, говорить на языке, понятном каждому. Америка из духовной пустыни, где «алте хайм» казался безвозвратно утраченным, превратилась в мировой центр еврейского образования, издательской деятельности и шлихут — системы посланников Ребе, охватившей весь земной шар.</p>
+
+<h3>Мивца-танки</h3>
+<p>Ответом на ассимиляцию стали знаменитые «мицва-танки» — передвижные станции, превращающие городские улицы в поле битвы за каждую еврейскую душу. Ребе учил: не стесняйтесь насмешников — зажигайте ханукии у городских ратуш, устанавливайте мезузы в офисах, предлагайте прохожим наложить тфиллин прямо посреди Манхэттена. Цель ясна: Б-жественность должна ощущаться естественно, стать «сделанной в Америке», проникнуть даже в заголовки светских газет. Ребе превратил каждого еврея в посланника, каждый дом — в маленький Храм, каждую улицу — в территорию Б-жественного присутствия. То, что казалось безумием в 1950-х, стало нормой к концу XX века: сегодня публичное зажигание ханукии — событие мирового масштаба, а слово «Хабад» известно в самых отдалённых уголках планеты.</p>`,
+
+      en: `<h3>A New Era</h3>
+<p>The arrival of the Rebbe, Rabbi Menachem Mendel Schneerson, in America on the 28th of Sivan 1941 marked the beginning of a "new era" in the history of Chassidism and all of Jewry. The Rebbe often cited the parable of a bird pulling a thorn from a lion's mouth: we entered the modern "Egypt" — America, a land of boundless materialism and spiritual temptation — and harnessed its power for the service of holiness. Instead of the insularity of the ghetto, Chassidism adopted the "American style": scale, publicity, and the use of press, radio, and television to spread Torah. The Rebbe understood that one cannot fight assimilation by hiding behind synagogue walls — one must go out into the streets and squares, speaking a language everyone can understand. America was transformed from a spiritual wasteland, where the "alte heim" seemed irretrievably lost, into a world center of Jewish education, publishing, and shlichus — the Rebbe's system of emissaries that came to span the entire globe.</p>
+
+<h3>Mitzvah Tanks</h3>
+<p>The response to assimilation took the form of the famous "mitzvah tanks" — mobile stations that turned city streets into a battlefield for every Jewish soul. The Rebbe taught: do not be embarrassed by mockers — light menorahs at city halls, affix mezuzot in offices, offer passersby the chance to put on tefillin right in the middle of Manhattan. The goal was clear: G-dliness should feel natural, become "made in America," penetrating even the headlines of secular newspapers. The Rebbe turned every Jew into an emissary, every home into a small Temple, every street into territory of the Divine Presence. What seemed like madness in the 1950s became the norm by the end of the twentieth century: today, public menorah lighting is a worldwide event, and the word "Chabad" is known in the most remote corners of the planet.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'pesach-jump-wall',
+    slug: 'pryzhok-cherez-stenu-pochemu-normalno-eto-tupik',
+    title: {
+      ru: 'Прыжок через стену: Почему «нормально» — это тупик',
+      en: 'Jumping Over the Wall: Why "Normal" Is a Dead End',
+      he: 'קפיצה מעל החומה: למה "רגיל" זה מבוי סתום',
+      uk: 'Стрибок через стіну: Чому «нормально» — це глухий кут',
+    },
+    subtitle: {
+      ru: 'Лехатхила Арибер и смысл слова Песах — прорыв через границы',
+      en: 'Lechatchila Ariber and the meaning of the word Pesach — breaking through boundaries',
+      he: 'לכתחילה אריבער ומשמעות המילה פסח — פריצת גבולות',
+      uk: 'Лехатхіла Арібер і сенс слова Песах — прорив через кордони',
+    },
+    content: {
+      ru: `<h3>Девиз Маараша</h3>
+<p>«Лехатхила Арибер» — знаменитый девиз Ребе Маараша (четвёртого Любавичского Ребе): когда перед тобой препятствие, не пытайся его обойти, не ищи компромиссов — иди прямо через него, сверху. Само слово «Песах» означает прыжок, перескок — прорыв за пределы всех границ природы и логики. Выход из Египта не был постепенной эволюцией: народ буквально «выпрыгнул» из самого глубокого рабства к полной свободе за одну ночь. Это — модель жизни для каждого еврея: не соглашаться на «нормально», не довольствоваться «достаточно хорошо». Жить по модели «Уфарацта» — прорываться вовне — означает превратить изучение Торы в страсть, наполняющую всю жизнь, а не в «хобби на шаббат». Ребе учил, что каждый еврей способен на сверхъестественные достижения, если откажется от ограничивающих убеждений о том, что «реально», а что «нет».</p>
+
+<h3>Выше рамок разума</h3>
+<p>В нашем поколении недостаточно быть «хорошим евреем» — необходимо действовать выше рамок разума. Ребе требовал постоянного роста: то, что было достижением час назад, теперь уже недостаточно. Стоять на месте — значит откатываться назад. Когда ты осознаёшь, что помощь приходит «ниоткуда» — свыше природы, — ты обретаешь силы для невозможного. Б-г не просит нас быть «разумными» — Он просит прыгать. История Исхода доказывает: Нахшон бен Аминадав вошёл в море по шею, прежде чем воды расступились. Действие, превосходящее логику, вызывает ответ, превосходящий природу. Именно этот принцип лежит в основе всей деятельности Хабада: открывать Дом Хабада в городе, где живёт пять евреев, посылать молодую семью шлихим на край света — это безумие с точки зрения «нормальности» и единственная стратегия с точки зрения Торы.</p>`,
+
+      en: `<h3>The Motto of the Maharash</h3>
+<p>"Lechatchila Ariber" — the famous motto of the Rebbe Maharash (the fourth Lubavitcher Rebbe): when you face an obstacle, don't try to go around it, don't seek compromises — go straight over it, from above. The very word "Pesach" means a jump, a leap — a breakthrough beyond all boundaries of nature and logic. The Exodus from Egypt was not a gradual evolution: the nation literally "jumped" from the deepest slavery to complete freedom in a single night. This is the model for every Jew's life: refuse to settle for "normal," don't be content with "good enough." Living in the "Ufaratzta" model — breaking outward — means making Torah study a passion that fills all of life, not a "Shabbat hobby." The Rebbe taught that every Jew is capable of supernatural achievements if they reject the limiting beliefs about what is "realistic" and what is "not."</p>
+
+<h3>Beyond the Framework of Reason</h3>
+<p>In our generation it is not enough to be a "good Jew" — one must act beyond the framework of reason. The Rebbe demanded constant growth: what was an achievement an hour ago is now insufficient. To stand still is to slide backward. When you realize that help comes "from nowhere" — from above nature — you gain strength for the impossible. G-d does not ask us to be "reasonable" — He asks us to jump. The story of the Exodus proves it: Nachshon ben Aminadav walked into the sea up to his neck before the waters parted. Action that exceeds logic evokes a response that exceeds nature. This very principle underlies all of Chabad's activities: opening a Chabad House in a city where five Jews live, sending a young shliach family to the ends of the earth — this is madness from the standpoint of "normality" and the only strategy from the standpoint of Torah.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
+
+  {
+    id: 'pesach-seudat-mashiach',
+    slug: 'uzhin-kotoryy-otmenyayet-izgnaniye-strategiya-posledney-trapezy',
+    title: {
+      ru: 'Ужин, который отменяет изгнание: Стратегия последней трапезы',
+      en: 'The Dinner That Cancels Exile: Strategy of the Last Meal',
+      he: 'הארוחה שמבטלת את הגלות: אסטרטגיית הסעודה האחרונה',
+      uk: 'Вечеря, що скасовує вигнання: Стратегія останньої трапези',
+    },
+    subtitle: {
+      ru: 'Сеудат Машиах — будущее Избавление становится физической реальностью',
+      en: 'Seudat Mashiach — the future Redemption becomes physical reality',
+      he: 'סעודת משיח — הגאולה העתידה הופכת למציאות פיזית',
+      uk: 'Сеудат Машіах — майбутнє Визволення стає фізичною реальністю',
+    },
+    content: {
+      ru: `<h3>Трапеза Машиаха</h3>
+<p>Обычай «Сеудат Машиах» — «Трапезы Машиаха» — был установлен Баал Шем Товом, основателем хасидизма. Это уникальный момент в конце Песаха, когда будущее Избавление становится физической реальностью, ощутимой здесь и сейчас. Изучение Торы может оставаться теорией — интеллектуальным упражнением, не затрагивающим глубины существа. Но еда и питьё буквально входят в кровь и плоть, изменяя нас изнутри. Через мацу и четыре бокала вина мы впитываем свет Машиаха — не как метафору, а как духовную субстанцию, преобразующую наше физическое тело. Баал Шем Тов понимал, что Б-жественный свет последнего дня Песаха настолько интенсивен, что способен пронизать даже материю. Именно поэтому он выбрал форму трапезы — самого «земного» из всех действий — чтобы показать: святость должна проникнуть в каждый аспект нашего существования, включая само тело. Четыре бокала вина соответствуют четырём уровням Избавления, и тот, кто пьёт их с правильным намерением, буквально притягивает Машиаха в этот мир.</p>
+
+<h3>Стратегия победы</h3>
+<p>Ребе Менахем-Мендл Шнеерсон сделал этот обычай — ранее известный лишь узкому кругу хасидов — доступным каждому еврею. Он превратил Сеудат Машиах из камерного события в грандиозное празднование, собирающее тысячи людей. Это не просто воспоминание о прошлых чудесах и не пассивное ожидание будущих — это стратегия победы над изгнанием, влияющая на все наши поступки в течение года. Ребе объяснял: мы ведём войну не ради «трофеев» — не ради почёта, не ради комфорта, не ради личного духовного удовольствия. Наша единственная цель — полное и окончательное Избавление, и всё, что меньше этого, — бессмысленно. Сеудат Машиах даёт нам вкус этой победы заранее, наполняя сердце абсолютной уверенностью: Б-г завершит то, что начал при Исходе из Египта. Каждый глоток вина, каждый кусок мацы за этой трапезой — это акт веры, разрушающий стены изгнания и приближающий мир к его окончательному исправлению.</p>`,
+
+      en: `<h3>The Feast of Mashiach</h3>
+<p>The custom of "Seudat Mashiach" — the "Feast of Mashiach" — was established by the Baal Shem Tov, the founder of Chassidism. It is a unique moment at the end of Pesach when the future Redemption becomes a physical reality, tangible here and now. Torah study can remain theory — an intellectual exercise that does not touch the depths of one's being. But eating and drinking literally enter the blood and flesh, changing us from within. Through matza and four cups of wine, we absorb the light of Mashiach — not as a metaphor but as a spiritual substance that transforms our physical body. The Baal Shem Tov understood that the G-dly light of the last day of Pesach is so intense that it can permeate even matter itself. This is precisely why he chose the form of a meal — the most "earthly" of all activities — to demonstrate that holiness must penetrate every aspect of our existence, including the body itself. The four cups of wine correspond to four levels of Redemption, and one who drinks them with proper intention literally draws Mashiach into this world.</p>
+
+<h3>Strategy of Victory</h3>
+<p>The Rebbe, Rabbi Menachem Mendel Schneerson, made this custom — previously known only to a narrow circle of Chassidim — accessible to every Jew. He transformed Seudat Mashiach from an intimate gathering into a grand celebration attended by thousands. This is not merely a remembrance of past miracles nor passive anticipation of future ones — it is a strategy of victory over exile that influences all our deeds throughout the year. The Rebbe explained: we wage war not for "trophies" — not for honor, not for comfort, not for personal spiritual pleasure. Our sole objective is the complete and final Redemption, and anything less is meaningless. Seudat Mashiach gives us a foretaste of that victory, filling the heart with absolute certainty: G-d will complete what He began with the Exodus from Egypt. Every sip of wine, every piece of matza at this meal is an act of faith that shatters the walls of exile and brings the world closer to its ultimate rectification.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
