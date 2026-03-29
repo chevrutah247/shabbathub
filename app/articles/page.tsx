@@ -227,7 +227,8 @@ export default function ArticlesPage() {
           ))}
         </div>
 
-        {/* Month filters */}
+        {/* Month filters — only shown when Calendar tag is selected */}
+        {selectedTag && (selectedTag === 'Календарь' || selectedTag === 'Calendar' || selectedTag === 'לוח שנה' || selectedTag === 'Календар') && (
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           <button
             onClick={() => setSelectedMonth(null)}
@@ -253,6 +254,7 @@ export default function ArticlesPage() {
             </button>
           ))}
         </div>
+        )}
 
         {/* Grid */}
         {filtered.length === 0 ? (
