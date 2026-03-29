@@ -5761,6 +5761,48 @@ export const articles: Article[] = [
     tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
     createdAt: '2026-03-29',
   },
+  {
+    id: 'shavuot-dateline',
+    slug: 'shavuot-i-liniya-peremeny-dat-paradoksy-tselnosti',
+    hebrewDate: { month: 'Sivan', day: 6 },
+    title: {
+      ru: 'Шавуот и линия перемены дат: Парадоксы «цельности»',
+      en: 'Shavuot and the International Date Line: Paradoxes of "Completeness"',
+      he: 'שבועות וקו התאריך הבינלאומי: פרדוקסים של "שלמות"',
+      uk: 'Шавуот і лінія зміни дат: Парадокси «цілісності»',
+    },
+    subtitle: {
+      ru: 'Когда праздновать Шавуот, если ты «пропустил» день в отсчёте Омера?',
+      en: 'When to celebrate Shavuot if you "missed" a day in the Omer count?',
+      he: 'מתי לחגוג שבועות אם "פספסת" יום בספירת העומר?',
+      uk: 'Коли святкувати Шавуот, якщо ти «пропустив» день у відліку Омера?',
+    },
+    content: {
+      ru: `<p>Представьте, что вы вылетаете из Лос-Анджелеса в Сидней в понедельник вечером, а приземляетесь уже в среду утром. Где делся вторник? Эта географическая дилемма порождает уникальный алахический вопрос: когда праздновать Шавуот, если вы «пропустили» один день в отсчёте Омера?</p>
+
+<h3>Уникальность Шавуот</h3>
+<p>Праздник Шавуот уникален тем, что у него нет фиксированной даты в Торе — он наступает на 50-й день после начала отсчёта Омера (16 Ниссана). Он зависит от завершения семи полных недель — «тмимот» (цельности). Ребе предложил революционный и, по его словам, «простой и очевидный» подход к этой проблеме.</p>
+
+<h3>Решение Ребе</h3>
+<p>Если человек пересёк линию перемены даты с востока на запад (например, из США в Австралию) и потерял день, его личный 50-й день наступит позже, чем у местных жителей. Ребе объяснил, что Шавуот определяется тем фактом, что человек физически прожил 49 дней, независимо от того, какое число на календаре у окружающих. В такой ситуации путешественник может праздновать Шавуот на день позже остальных (например, 7 и 8 Сивана вместо 6 и 7).</p>
+
+<h3>Тора в каждой точке мира</h3>
+<p>Этот случай иллюстрирует важный принцип: Тора и заповеди применимы к каждому еврею в любой точке земного шара, даже в самых «низких» местах нижнего полушария. Ребе настаивал, что мы должны привнести Б-жественность в современный мир, используя даже такие сложности, как международная линия перемены дат, чтобы доказать вечность и точность закона Торы. Для Б-га нет ограничений пространства, и наша задача — сделать это пространство «обиталищем» для Него.</p>`,
+
+      en: `<p>Imagine flying from Los Angeles to Sydney on Monday evening and landing on Wednesday morning. Where did Tuesday go? This geographical dilemma creates a unique halachic question: when to celebrate Shavuot if you "missed" a day in the Omer count?</p>
+
+<h3>The Uniqueness of Shavuot</h3>
+<p>Shavuot is unique in that it has no fixed date in the Torah — it arrives on the 50th day after the Omer count begins (16 Nissan). It depends on completing seven full weeks — "temimot" (completeness). The Rebbe proposed a revolutionary and, in his words, "simple and obvious" approach to this problem.</p>
+
+<h3>The Rebbe's Solution</h3>
+<p>If a person crosses the international date line from east to west (for example, from the USA to Australia) and loses a day, their personal 50th day will come later than for local residents. The Rebbe explained that Shavuot is determined by the fact that a person has physically lived through 49 days, regardless of what date the calendar shows for those around them. In this situation, the traveler may celebrate Shavuot one day later than everyone else (for example, 7 and 8 Sivan instead of 6 and 7).</p>
+
+<h3>Torah at Every Point on Earth</h3>
+<p>This case illustrates an important principle: Torah and mitzvot apply to every Jew at any point on the globe, even in the "lowest" places of the lower hemisphere. The Rebbe insisted that we must bring G-dliness into the modern world, using even such complexities as the international date line to prove the eternity and precision of Torah law. For G-d there are no spatial limitations, and our task is to make this space a "dwelling" for Him.</p>`,
+    },
+    tag: { ru: 'Календарь', en: 'Calendar', he: 'לוח שנה', uk: 'Календар' },
+    createdAt: '2026-03-29',
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {
