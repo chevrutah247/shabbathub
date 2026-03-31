@@ -17,9 +17,10 @@
   margin: 0;
 }
 
-html {
+html, body {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
 }
 
 /* Accessibility: visible focus indicators */
@@ -43,7 +44,6 @@ body {
   background-color: var(--color-cream);
   color: #1a1a1a;
   line-height: 1.6;
-  overflow-x: hidden;
 }
 
 /* RTL поддержка для иврита */
