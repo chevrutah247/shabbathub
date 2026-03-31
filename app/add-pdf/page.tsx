@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { ArrowLeft, Upload, Loader2, Check, AlertCircle, FileText, X, Link as LinkIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/language-context';
+import { orderedTags, getTagName } from '@/lib/category-mapping';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -329,6 +330,7 @@ export default function AddPdfPage() {
   const [autoThumbnail, setAutoThumbnail] = useState(true);
   const [description, setDescription] = useState('');
   const [pdfLanguage, setPdfLanguage] = useState('ru');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [pubSearch, setPubSearch] = useState('');
   const [pubDropdownOpen, setPubDropdownOpen] = useState(false);
 
@@ -680,7 +682,8 @@ export default function AddPdfPage() {
           pdf_url: finalPdfUrl,
           thumbnail_url: finalThumbnailUrl || null,
           uploaded_by: user.id,
-          is_active: true
+          is_active: true,
+          topic_keys: selectedTags.length > 0 ? selectedTags : null
         })
       });
 
@@ -1016,6 +1019,27 @@ export default function AddPdfPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{tr('Описание (опционально)', 'Description (optional)')}</label>
               <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder={tr('Краткое описание содержимого...', 'Short description...')} className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary-500 outline-none resize-none" />
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{tr('Теги (выберите подходящие)', 'Tags (select applicable)')}</label>
+              <div className="flex flex-wrap gap-2">
+                {orderedTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      selectedTags.includes(tag)
+                        ? 'bg-primary-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {getTagName(tag, lang)}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <button type="submit" disabled={submitting || uploading || checkingDuplicates} className="gold-submit w-full py-3 rounded-xl flex items-center justify-center gap-2 text-sm">

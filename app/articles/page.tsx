@@ -80,6 +80,10 @@ const tagColors: Record<string, string> = {
   'Calendar': 'bg-yellow-100 text-yellow-800',
   'לוח שנה': 'bg-yellow-100 text-yellow-800',
   'Календар': 'bg-yellow-100 text-yellow-800',
+  'Шиддух': 'bg-pink-100 text-pink-800',
+  'Shidduch': 'bg-pink-100 text-pink-800',
+  'שידוך': 'bg-pink-100 text-pink-800',
+  'Шідух': 'bg-pink-100 text-pink-800',
 };
 
 export default function ArticlesPage() {
