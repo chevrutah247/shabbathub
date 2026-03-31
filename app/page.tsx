@@ -51,7 +51,7 @@ const t: Record<string, Record<string, string>> = {
   nossiTitle: { ru: 'Носси', en: 'Nossi', he: 'נשיא', uk: 'Носсі' },
   nossiDay: { ru: 'день Нисана', en: 'of Nissan', he: 'ניסן', uk: 'день Нісана' },
   nossiRead: { ru: 'Читать Носси', en: 'Read Nossi', he: 'קרא נשיא', uk: 'Читати Носсі' },
-  nossiDesc: { ru: 'Каждый день с 1 по 12 Нисана мы читаем главу о приношении Носи (главы колен Израиля)', en: 'Each day from 1-12 Nissan we read the chapter about the offering of the Nasi (tribal leaders)', he: 'בכל יום מא\' עד י"ב ניסן קוראים את פרשת הנשיא של אותו יום', uk: 'Щодня з 1 по 12 Нісана ми читаємо главу про приношення Носі' },
+  nossiDesc: { ru: 'Каждый день с 1 по 13 Нисана мы читаем главу о приношении Носи (главы колен Израиля)', en: 'Each day from 1-13 Nissan we read the chapter about the offering of the Nasi (tribal leaders)', he: 'בכל יום מא\' עד י"ג ניסן קוראים את פרשת הנשיא של אותו יום', uk: 'Щодня з 1 по 13 Нісана ми читаємо главу про приношення Носі' },
   shidduchTitle: { ru: 'База знаний о шиддухе', en: 'Shidduch Knowledge Hub', he: 'מרכז ידע לשידוכים', uk: 'База знань про шидух' },
   shidduchSub: { ru: 'Всё, что нужно знать о поиске пары — мудрость Торы и практические советы', en: 'Everything you need to know about finding your match — Torah wisdom and practical advice', he: 'כל מה שצריך לדעת על מציאת זיווג — חכמת התורה ועצות מעשיות', uk: 'Все, що потрібно знати про пошук пари' },
   shidduchCta: { ru: 'Читать все статьи', en: 'Read all articles', he: 'קרא את כל המאמרים', uk: 'Читати всі статті' },
@@ -130,6 +130,7 @@ export default function HomePage() {
     10: STORAGE + '/nossi-nissan-10.pdf',
     11: STORAGE + '/nossi-nissan-11.pdf',
     12: STORAGE + '/nossi-nissan-12.pdf',
+    13: STORAGE + '/nossi-nissan-13.pdf',
   };
   useEffect(() => {
     const today = new Date();
@@ -140,8 +141,8 @@ export default function HomePage() {
         const hDay = data.hd;
         setHebrewDateStr(hDay + ' ' + hMonth);
 
-        // Nossi (1-12 Nisan)
-        if (hMonth === 'Nisan' && hDay >= 1 && hDay <= 12) {
+        // Nossi (1-13 Nisan)
+        if (hMonth === 'Nisan' && hDay >= 1 && hDay <= 13) {
           setNossiDay(hDay);
           const pdfUrl = nossiPdfs[hDay];
           if (pdfUrl) {
