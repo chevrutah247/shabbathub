@@ -18,10 +18,9 @@ export default function FloatingContactSticker() {
         onClick={() => setOpen(true)}
         title={t('contact.tooltip', lang)}
         aria-label={t('contact.tooltip', lang)}
-        className="fixed bottom-4 right-4 z-50 group"
-        style={{ maxWidth: 'calc(100vw - 32px)' }}
+        className="fixed bottom-6 right-6 z-50 group"
       >
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 ring-2 ring-white ring-offset-2 ring-offset-transparent">
+        <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 ring-2 ring-white ring-offset-2 ring-offset-transparent">
           {!imgError ? (
             <Image
               src="/images/stickers/contact_sticker.png"
