@@ -43,6 +43,7 @@ body {
   background-color: var(--color-cream);
   color: #1a1a1a;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* RTL поддержка для иврита */
