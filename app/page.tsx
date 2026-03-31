@@ -125,6 +125,7 @@ export default function HomePage() {
     4: STORAGE + '/nossi-nissan-4.pdf',
     5: STORAGE + '/nossi-nissan-5.pdf',
     6: STORAGE + '/nossi-nissan-6.pdf',
+    7: STORAGE + '/nossi-nissan-7.pdf',
     8: STORAGE + '/nossi-nissan-8.pdf',
     9: STORAGE + '/nossi-nissan-9.pdf',
     10: STORAGE + '/nossi-nissan-10.pdf',
