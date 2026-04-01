@@ -214,7 +214,8 @@ export default function DocumentPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: issue.title,
-    description: issue.description || undefined,
+    description: issue.ai_summary || issue.description || undefined,
+    articleBody: issue.ai_summary || undefined,
     image: issue.thumbnail_url || undefined,
     datePublished: issue.gregorian_date || undefined,
     isPartOf: pubName
