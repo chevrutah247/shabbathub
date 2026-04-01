@@ -199,7 +199,7 @@ export default function RootLayout({
             <ReferralTracker />
           </Suspense>
           <SubscribePopup />
-          <FloatingContactSticker />
+          {/* FloatingContactSticker removed — caused horizontal overflow on all pages */}
           <main id="main-content" className="flex-grow">
             {children}
           </main>
