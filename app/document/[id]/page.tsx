@@ -304,7 +304,27 @@ export default function DocumentPage() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">{issue.title}</h1>
-              {issue.description && <p className="text-gray-600 mb-4">{issue.description}</p>}
+              {issue.description && (
+                <>
+                  {/* Show description, but extract original link if present */}
+                  {issue.description.includes('Original:') ? (
+                    <div className="mb-4">
+                      <p className="text-gray-600 mb-2">{issue.description.split('Original:')[0].replace('Source:', '').trim()}</p>
+                      <a
+                        href={issue.description.split('Original:')[1]?.trim()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                      >
+                        <ExternalLink size={14} />
+                        {lang === 'ru' ? 'Оригинал на сайте издателя' : 'Original on publisher site'}
+                      </a>
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 mb-4">{issue.description}</p>
+                  )}
+                </>
+              )}
               {issue.ai_summary && issue.ai_summary !== issue.description && (
                 <div className="mb-4 rounded-xl border border-stone-200 bg-stone-50 p-3">
                   <p className="text-xs uppercase tracking-wide text-stone-500 mb-1">{t('docExtra.detailedDescription', lang)}</p>
