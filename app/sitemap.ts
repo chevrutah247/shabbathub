@@ -48,14 +48,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     }));
 
-    const { data: documents } = await supabase
-      .from('issues')
-      .select('id, created_at')
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
-      .limit(500);
+    // Fetch ALL documents in batches (Supabase default limit is 1000)
+    let allDocs: { id: string; created_at: string }[] = [];
+    let from = 0;
+    const batchSize = 1000;
+    while (true) {
+      const { data: batch } = await supabase
+        .from('issues')
+        .select('id, created_at')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .range(from, from + batchSize - 1);
+      if (!batch || batch.length === 0) break;
+      allDocs = allDocs.concat(batch);
+      if (batch.length < batchSize) break;
+      from += batchSize;
+    }
 
-    const docPages: MetadataRoute.Sitemap = (documents || []).map((doc) => ({
+    const docPages: MetadataRoute.Sitemap = allDocs.map((doc) => ({
       url: `${baseUrl}/document/${doc.id}`,
       lastModified: doc.created_at ? new Date(doc.created_at) : new Date(),
       changeFrequency: 'monthly' as const,
