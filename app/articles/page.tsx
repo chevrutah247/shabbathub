@@ -108,9 +108,12 @@ export default function ArticlesPage() {
     return all.filter(t => t !== 'Айом Йом' && t !== 'HaYom Yom' && t !== 'היום יום');
   }, [lang, isAdmin]);
 
-  // Latest 3 articles (by createdAt descending)
+  // Latest 3 articles (by createdAt descending, exclude HaYom Yom)
   const latestArticles = useMemo(() => {
-    return [...articles].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
+    return [...articles]
+      .filter(a => a.tag.en !== 'HaYom Yom')
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, 3);
   }, []);
 
   // "Rebbe on Bitachon" articles for interleaving
