@@ -1,0 +1,117 @@
+{
+  "sync_schedule": "Sundays 10:00 AM ET (fallback 10:00 PM if missed)",
+  "only_new_since": "2026-02-01",
+  "sources": [
+    {
+      "name": "Exodus Magazine (EN)",
+      "url": "https://www.exodusmagazine.org/category/exodus-english-magazine",
+      "language": "en",
+      "status": "done",
+      "notes": "107 issues synced, auto-cron monthly"
+    },
+    {
+      "name": "Exodus Magazine (RU)",
+      "url": "https://www.exodusmagazine.org/ru/category/exodus-russian-magazine",
+      "language": "ru",
+      "status": "done",
+      "notes": "37 issues synced"
+    },
+    {
+      "name": "Jewish Louisville Community - In Print",
+      "url": "https://jewishlouisville.org/community/community-newspaper/print-version/",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "The Voice of Jacob",
+      "url": "https://www.nli.org.il/en/newspapers/voiceofjacob",
+      "language": "en",
+      "status": "pending",
+      "notes": "National Library of Israel archive"
+    },
+    {
+      "name": "Toledo Jewish News",
+      "url": "https://www.jewishtoledo.org/about-us/tjnff",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "The Jewish Link Archives",
+      "url": "https://jewishlink.news/archives/",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "Jewish Press (Des Moines)",
+      "url": "https://www.jewishdesmoines.org/news-events/jewish-press/",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "Rav Efraim Kachlon eBooks",
+      "url": "https://www.beezrathashem.org/rav-efraim-ebooks",
+      "language": "he",
+      "status": "pending"
+    },
+    {
+      "name": "Parsha.net PDF Archive",
+      "url": "https://www.parsha.net/pdf/",
+      "language": "en",
+      "status": "pending",
+      "notes": "Lots of parsha PDFs"
+    },
+    {
+      "name": "Torah Lectures Weekly Torah",
+      "url": "https://www.torahlectures.org/weeklytorah",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "YadAvNow Printable Weekly Torah",
+      "url": "https://www.yadavnow.com/printable-weekly-torah/",
+      "language": "en",
+      "status": "pending",
+      "notes": "Good journals"
+    },
+    {
+      "name": "Torah Or - LearnChassidus",
+      "url": "https://www.learnchassidus.com/lessons",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "Kfar Chabad Magazine",
+      "url": "https://anash.org/kfar-chabad-magazine-available-for-online-viewing/",
+      "language": "he",
+      "status": "pending",
+      "notes": "Lots of content"
+    },
+    {
+      "name": "The Weekly Farbrengen",
+      "url": "http://theweeklyfarbrengen.com/",
+      "language": "en",
+      "status": "pending"
+    },
+    {
+      "name": "Torah Tidbits Past Issues",
+      "url": "https://www.torahtidbits.com/past-issues/",
+      "language": "en",
+      "status": "pending",
+      "notes": "Need to compress PDFs with PDF24"
+    },
+    {
+      "name": "Ascent of Safed Stories",
+      "url": "https://ascentofsafed.com/Stories/Stories/5782/pdf/",
+      "language": "en",
+      "status": "pending",
+      "notes": "Yerachmiel Tilles - change year in URL for archive"
+    },
+    {
+      "name": "Here's My Story (JEM)",
+      "url": "https://videos.jem.tv/hms/archive",
+      "language": "en",
+      "status": "pending",
+      "notes": "PDF stories about the Rebbe"
+    }
+  ]
+}
