@@ -52,6 +52,12 @@ const t: Record<string, Record<string, string>> = {
   nossiDay: { ru: 'день Нисана', en: 'of Nissan', he: 'ניסן', uk: 'день Нісана' },
   nossiRead: { ru: 'Читать Носси', en: 'Read Nossi', he: 'קרא נשיא', uk: 'Читати Носсі' },
   nossiDesc: { ru: 'Каждый день с 1 по 13 Нисана мы читаем главу о приношении Носи (главы колен Израиля)', en: 'Each day from 1-13 Nissan we read the chapter about the offering of the Nasi (tribal leaders)', he: 'בכל יום מא\' עד י"ג ניסן קוראים את פרשת הנשיא של אותו יום', uk: 'Щодня з 1 по 13 Нісана ми читаємо главу про приношення Носі' },
+  omerTitle: { ru: 'Сфират hа-Омер', en: 'Sefirat HaOmer', he: 'ספירת העומר', uk: 'Сфірат hа-Омер' },
+  omerToday: { ru: 'Сегодня', en: 'Today is', he: 'היום', uk: 'Сьогодні' },
+  omerDay: { ru: 'день Омера', en: 'of the Omer', he: 'לעומר', uk: 'день Омера' },
+  omerWeek: { ru: 'неделя', en: 'week', he: 'שבוע', uk: 'тиждень' },
+  omerDays: { ru: 'дней', en: 'days', he: 'ימים', uk: 'днів' },
+  omerBlessing: { ru: 'Благословен Ты, Г-сподь Б-г наш, Царь вселенной, освятивший нас Своими заповедями и повелевший нам считать Омер.', en: 'Blessed are You, Lord our God, King of the Universe, who has sanctified us with His commandments, and commanded us concerning the counting of the Omer.', he: 'בָּרוּךְ אַתָּה ה׳ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו, וְצִוָּנוּ עַל סְפִירַת הָעֹמֶר.', uk: 'Благословен Ти, Г-сподь Б-г наш, Цар всесвіту, який освятив нас Своїми заповідями і наказав нам рахувати Омер.' },
   shidduchTitle: { ru: 'База знаний о шиддухе', en: 'Shidduch Knowledge Hub', he: 'מרכז ידע לשידוכים', uk: 'База знань про шидух' },
   shidduchSub: { ru: 'Всё, что нужно знать о поиске пары — мудрость Торы и практические советы', en: 'Everything you need to know about finding your match — Torah wisdom and practical advice', he: 'כל מה שצריך לדעת על מציאת זיווג — חכמת התורה ועצות מעשיות', uk: 'Все, що потрібно знати про пошук пари' },
   shidduchCta: { ru: 'Читать все статьи', en: 'Read all articles', he: 'קרא את כל המאמרים', uk: 'Читати всі статті' },
@@ -102,6 +108,7 @@ export default function HomePage() {
   const [nossiDay, setNossiDay] = useState<number | null>(null);
   const [nossiIssue, setNossiIssue] = useState<{ id: string; title: string; pdf_url: string; thumbnail_url?: string } | null>(null);
   const [calendarArticle, setCalendarArticle] = useState<{ title: string; subtitle: string; slug: string; content: string } | null>(null);
+  const [omerDay, setOmerDay] = useState<number | null>(null);
   const [hebrewDateStr, setHebrewDateStr] = useState<string>('');
   const [spotlightDocs, setSpotlightDocs] = useState<SpotlightDoc[]>([]);
   const [spotlightIdx, setSpotlightIdx] = useState(0);
@@ -141,6 +148,15 @@ export default function HomePage() {
         const hMonth = data.hm;
         const hDay = data.hd;
         setHebrewDateStr(hDay + ' ' + hMonth);
+
+        // Sefirat HaOmer (from events)
+        if (data.events) {
+          const omerEvent = data.events.find((e: string) => e.includes('day of the Omer'));
+          if (omerEvent) {
+            const match = omerEvent.match(/(\d+)\w* day of the Omer/);
+            if (match) setOmerDay(parseInt(match[1]));
+          }
+        }
 
         // Nossi (1-13 Nisan)
         if (hMonth === 'Nisan' && hDay >= 1 && hDay <= 13) {
@@ -464,6 +480,59 @@ export default function HomePage() {
                   className="mt-3 inline-flex items-center gap-1 text-xs text-amber-400/60 hover:text-amber-300 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   {lang === 'he' ? 'כל המאמרים' : lang === 'en' ? 'All articles' : 'Все статьи'} →
                 </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════ SEFIRAT HAOMER BANNER (16 Nisan - 5 Sivan, 49 days) ═══════ */}
+      {omerDay && (
+        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #4a1d6e 100%)' }}>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-1/4 w-80 h-80 bg-purple-400 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-amber-400 rounded-full blur-3xl" />
+          </div>
+          <div className="relative max-w-5xl mx-auto px-6 py-8 md:py-10">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+              {/* Omer counter circle */}
+              <div className="flex-shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-full flex flex-col items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.2), rgba(168,85,247,0.2))', border: '3px solid rgba(251,191,36,0.4)', boxShadow: '0 0 40px rgba(168,85,247,0.2)' }}>
+                <span className="text-4xl md:text-5xl font-bold text-amber-400" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>{omerDay}</span>
+                <span className="text-purple-300 text-[10px] md:text-xs font-bold uppercase tracking-wider">{g('omerDay')}</span>
+              </div>
+              {/* Content */}
+              <div className="flex-1 text-center md:text-start">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)' }}>
+                  <span className="text-purple-300 text-xs font-bold uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    {g('omerTitle')} — {g('omerToday')} {omerDay} {g('omerDay')}
+                    {omerDay >= 7 && ` (${Math.floor(omerDay / 7)} ${g('omerWeek')}${Math.floor(omerDay / 7) > 1 && lang === 'en' ? 's' : ''} ${omerDay % 7 > 0 ? `+ ${omerDay % 7} ${g('omerDays')}` : ''})`}
+                  </span>
+                </div>
+                <h2 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
+                  {[
+                    '', // 0
+                    'חסד שבחסד', 'גבורה שבחסד', 'תפארת שבחסד', 'נצח שבחסד', 'הוד שבחסד', 'יסוד שבחסד', 'מלכות שבחסד',
+                    'חסד שבגבורה', 'גבורה שבגבורה', 'תפארת שבגבורה', 'נצח שבגבורה', 'הוד שבגבורה', 'יסוד שבגבורה', 'מלכות שבגבורה',
+                    'חסד שבתפארת', 'גבורה שבתפארת', 'תפארת שבתפארת', 'נצח שבתפארת', 'הוד שבתפארת', 'יסוד שבתפארת', 'מלכות שבתפארת',
+                    'חסד שבנצח', 'גבורה שבנצח', 'תפארת שבנצח', 'נצח שבנצח', 'הוד שבנצח', 'יסוד שבנצח', 'מלכות שבנצח',
+                    'חסד שבהוד', 'גבורה שבהוד', 'תפארת שבהוד', 'נצח שבהוד', 'הוד שבהוד', 'יסוד שבהוד', 'מלכות שבהוד',
+                    'חסד שביסוד', 'גבורה שביסוד', 'תפארת שביסוד', 'נצח שביסוד', 'הוד שביסוד', 'יסוד שביסוד', 'מלכות שביסוד',
+                    'חסד שבמלכות', 'גבורה שבמלכות', 'תפארת שבמלכות', 'נצח שבמלכות', 'הוד שבמלכות', 'יסוד שבמלכות', 'מלכות שבמלכות',
+                  ][omerDay] || ''}
+                </h2>
+                <p className="text-purple-200/60 text-xs md:text-sm mb-4 max-w-xl leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {g('omerBlessing')}
+                </p>
+                {/* Progress bar */}
+                <div className="max-w-md mx-auto md:mx-0">
+                  <div className="flex justify-between text-[10px] text-purple-300/50 mb-1">
+                    <span>{g('omerTitle')}</span>
+                    <span>{omerDay}/49</span>
+                  </div>
+                  <div className="h-2 bg-purple-900/50 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${(omerDay / 49) * 100}%`, background: 'linear-gradient(90deg, #f59e0b, #a855f7)' }} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
