@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, ChevronLeft, Calendar, Tag, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { articles, getAllTags } from '@/data/articles';
+import HayomYomBanner from '@/components/HayomYomBanner';
 
 const hebrewMonths: { en: string; ru: string; he: string; uk: string }[] = [
   { en: 'Nisan', ru: 'Нисан', he: 'ניסן', uk: 'Нісан' },
@@ -123,6 +124,9 @@ export default function ArticlesPage() {
   return (
     <div className="min-h-screen bg-cream py-8 px-4" dir={dir}>
       <div className="max-w-6xl mx-auto">
+        {/* HaYom Yom daily block */}
+        <HayomYomBanner />
+
         {/* Back link */}
         <Link
           href="/"
