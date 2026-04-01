@@ -1,3 +1,5 @@
+import hayomYomRaw from './hayom-yom-articles.json';
+
 export interface Article {
   id: string;
   slug: string;
@@ -7866,6 +7868,18 @@ export function getAllSlugs(): string[] {
 }
 
 export type ArticleTag = 'Шаббат' | 'Галаха' | 'Хасидус' | 'Семья' | 'Праздники';
+
+// Append HaYom Yom articles from JSON (avoids template literal issues)
+const hayomYomArticles: Article[] = (hayomYomRaw as any[]).map((a) => ({
+  id: a.id,
+  slug: a.slug,
+  title: { ru: a.title, en: a.title, he: a.title, uk: a.title },
+  subtitle: { ru: a.subtitle, en: a.subtitle, he: a.subtitle, uk: a.subtitle },
+  content: { ru: a.content, en: a.content },
+  tag: { ru: 'Айом Йом', en: 'HaYom Yom', he: 'היום יום', uk: 'Айом Йом' },
+  createdAt: '2026-04-01',
+}));
+articles.push(...hayomYomArticles);
 
 export function getAllTags(lang: 'ru' | 'en' | 'he' | 'uk'): string[] {
   const tagSet = new Set<string>();

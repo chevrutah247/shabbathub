@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, ChevronLeft, Calendar, Tag, Sparkles } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/lib/language-context';
 import { articles, getAllTags } from '@/data/articles';
 import HayomYomBanner from '@/components/HayomYomBanner';
@@ -85,17 +86,27 @@ const tagColors: Record<string, string> = {
   'Shidduch': 'bg-pink-100 text-pink-800',
   'שידוך': 'bg-pink-100 text-pink-800',
   'Шідух': 'bg-pink-100 text-pink-800',
+  'Айом Йом': 'bg-orange-100 text-orange-800',
+  'HaYom Yom': 'bg-orange-100 text-orange-800',
+  'היום יום': 'bg-orange-100 text-orange-800',
 };
 
 export default function ArticlesPage() {
   const { lang } = useLanguage();
   const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const searchParams = useSearchParams();
+  const isAdmin = searchParams.get('admin') === '1';
 
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
-  const tags = useMemo(() => getAllTags(lang), [lang]);
+  // Hide "Айом Йом" tag unless ?admin=1
+  const tags = useMemo(() => {
+    const all = getAllTags(lang);
+    if (isAdmin) return all;
+    return all.filter(t => t !== 'Айом Йом' && t !== 'HaYom Yom' && t !== 'היום יום');
+  }, [lang, isAdmin]);
 
   // Latest 3 articles (by createdAt descending)
   const latestArticles = useMemo(() => {
@@ -109,6 +120,10 @@ export default function ArticlesPage() {
 
   const filtered = useMemo(() => {
     return articles.filter((article) => {
+      // Hide HaYom Yom articles unless admin mode or specifically selected
+      const isHayomYom = article.tag.en === 'HaYom Yom';
+      if (isHayomYom && !isAdmin && selectedTag !== article.tag[lang]) return false;
+
       const matchesTag = !selectedTag || article.tag[lang] === selectedTag;
       const matchesSearch =
         !search ||
@@ -117,7 +132,7 @@ export default function ArticlesPage() {
       const matchesMonth = !selectedMonth || article.hebrewDate?.month === selectedMonth;
       return matchesTag && matchesSearch && matchesMonth;
     });
-  }, [search, selectedTag, selectedMonth, lang]);
+  }, [search, selectedTag, selectedMonth, lang, isAdmin]);
 
   const t = (key: keyof typeof pageText) => pageText[key][lang];
 
