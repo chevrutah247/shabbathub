@@ -86,6 +86,21 @@ export default function HayomYomBanner() {
         const key = data.hm + '-' + data.hd;
         const found = hayomYomData[key];
         if (found) setEntry(found);
+
+        // Check Supabase for edited override
+        fetch('/api/admin/hayom-yom')
+          .then(r => r.json())
+          .then(rows => {
+            if (Array.isArray(rows)) {
+              const override = rows.find(
+                (r: any) => r.hebrew_month === data.hm && r.hebrew_day === data.hd
+              );
+              if (override?.main_text) {
+                setEntry({ header: override.header || found?.header || key, text: override.main_text });
+              }
+            }
+          })
+          .catch(() => {});
       })
       .catch(() => {});
   }, []);
