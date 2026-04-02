@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, ChevronLeft, Calendar, Tag, Sparkles } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/lib/language-context';
 import { articles, getAllTags } from '@/data/articles';
 import HayomYomBanner from '@/components/HayomYomBanner';
@@ -94,8 +93,17 @@ const tagColors: Record<string, string> = {
 export default function ArticlesPage() {
   const { lang } = useLanguage();
   const dir = lang === 'he' ? 'rtl' : 'ltr';
-  const searchParams = useSearchParams();
-  const isAdmin = searchParams.get('admin') === '1';
+  // Admin mode: activated by ?admin=1, then remembered in localStorage
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === '1') {
+      localStorage.setItem('shabbathub_admin', '1');
+      setIsAdmin(true);
+    } else if (localStorage.getItem('shabbathub_admin') === '1') {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
