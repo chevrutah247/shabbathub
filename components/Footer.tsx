@@ -83,10 +83,39 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Org Info */}
+        {/* Sister Projects */}
         <div className="pt-6 border-t border-blue-800 mb-4">
-          <p className="text-blue-300 text-sm text-center">
-            A project of <strong className="text-blue-200">Education On The Go Corp</strong> &middot; 501(c)(3) Nonprofit &middot; EIN: 92-1172505
+          <h3 className="font-semibold mb-3 text-gold-400 text-center text-sm">{t('footer.info', lang) === 'Информация' ? 'Наши проекты' : 'Our Sister Projects'}</h3>
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
+            <a
+              href="https://edonthego.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-200 hover:text-white transition-colors text-sm"
+            >
+              Education On The Go
+            </a>
+            <span className="text-blue-700">&middot;</span>
+            <a
+              href="https://getashidduch.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-200 hover:text-white transition-colors text-sm"
+            >
+              GetAShidduch
+            </a>
+            <span className="text-blue-700">&middot;</span>
+            <a
+              href="https://chevrutah24x7.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-200 hover:text-white transition-colors text-sm"
+            >
+              Chevrutah 24x7
+            </a>
+          </div>
+          <p className="text-blue-300 text-xs text-center">
+            A project of <strong className="text-blue-200">Education On The Go Corp</strong> — 501(c)(3) Nonprofit | EIN: 92-1172505
           </p>
         </div>
 

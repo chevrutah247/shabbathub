@@ -136,7 +136,20 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'ShabbatHub',
-              url: 'https://www.shabbathub.com',
+              url: 'https://shabbathub.com',
+              description: "The world's largest digital archive of Shabbat publications — over 34,000 PDFs in Russian, English, and Hebrew.",
+              publisher: {
+                '@type': 'NGO',
+                name: 'Education On The Go Corp',
+                url: 'https://edonthego.org',
+                nonprofitStatus: '501(c)(3)',
+                taxID: '92-1172505',
+              },
+              sameAs: [
+                'https://edonthego.org',
+                'https://getashidduch.org',
+                'https://chevrutah24x7.net',
+              ],
               potentialAction: {
                 '@type': 'SearchAction',
                 target: {
