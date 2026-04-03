@@ -80,10 +80,10 @@ function AnimateIn({ children, delay = 0, className = '' }: { children: React.Re
 }
 
 const networkProjects = [
-  { name: 'ShabbatHub', desc: { ru: 'Архив материалов к Шаббату', en: 'Shabbat Materials Archive', he: 'ארכיון חומרי שבת', uk: 'Архів матеріалів до Шаббату' }, url: '/', icon: '📚', accent: '#1e3a8a' },
-  { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы онлайн', en: 'Torah Learning Online', he: 'לימוד תורה אונליין', uk: 'Вивчення Тори онлайн' }, url: 'https://edonthego.org', icon: '🎓', accent: '#065f46' },
+  { name: 'ShabbatHub', desc: { ru: 'Архив материалов к Шаббату', en: 'Shabbat Materials Archive', he: 'ארכיון חומרי שבת', uk: 'Архів матеріалів до Шаббату' }, url: '/', icon: '📚', accent: '#1e3a8a', logo: '/images/shabbathub-logo-icon.png' },
+  { name: 'EdOnTheGo', desc: { ru: 'Изучение Торы онлайн', en: 'Torah Learning Online', he: 'לימוד תורה אונליין', uk: 'Вивчення Тори онлайн' }, url: 'https://edonthego.org', icon: '🎓', accent: '#065f46', logo: '/images/edonthego-logo.png' },
   { name: 'CH Groups', desc: { ru: 'Группы изучения', en: 'Study Groups', he: 'קבוצות לימוד', uk: 'Групи вивчення' }, url: 'https://crownheightsgroups.com', icon: '👥', accent: '#92400e' },
-  { name: 'GetAShidduch', desc: { ru: 'Еврейские знакомства', en: 'Jewish Matchmaking', he: 'שידוכים יהודיים', uk: 'Єврейські знайомства' }, url: 'https://getashidduch.org', icon: '💍', accent: '#b45309' },
+  { name: 'GetAShidduch', desc: { ru: 'Еврейские знакомства', en: 'Jewish Matchmaking', he: 'שידוכים יהודיים', uk: 'Єврейські знайомства' }, url: 'https://getashidduch.org', icon: '💍', accent: '#b45309', logo: '/images/getashidduch-logo.png' },
 ];
 
 const libraryFolders = [
@@ -778,8 +778,8 @@ export default function HomePage() {
           <AnimateIn>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #92400e, #b45309)' }}>
-                  <span className="text-2xl">💍</span>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden" style={{ background: 'linear-gradient(135deg, #92400e, #b45309)' }}>
+                  <Image src="/images/getashidduch-logo.png" alt="GetAShidduch" width={40} height={40} className="object-contain" />
                 </div>
                 <div>
                   <h2 className="text-2xl md:text-3xl font-semibold text-amber-900" style={{ fontFamily: "'Crimson Pro', Georgia, serif" }}>
@@ -822,7 +822,7 @@ export default function HomePage() {
           <div className="mt-6 text-center">
             <a href="https://getashidduch.org" target="_blank" rel="noopener"
               className="inline-flex items-center gap-2 text-amber-900/60 hover:text-amber-900 text-sm transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              <span className="text-lg">💍</span> GetAShidduch.org — {lang === 'he' ? 'פלטפורמת שידוכים יהודית' : lang === 'en' ? 'Jewish Matchmaking Platform' : 'Еврейская платформа знакомств'}
+              <Image src="/images/getashidduch-logo.png" alt="GetAShidduch" width={20} height={20} className="object-contain" /> GetAShidduch.org — {lang === 'he' ? 'פלטפורמת שידוכים יהודית' : lang === 'en' ? 'Jewish Matchmaking Platform' : 'Еврейская платформа знакомств'}
               <ExternalLink size={12} />
             </a>
           </div>
@@ -849,7 +849,13 @@ export default function HomePage() {
               <AnimateIn key={i} delay={i * 80}>
                 <a href={p.url} target={p.url.startsWith('http') ? '_blank' : '_self'} rel="noopener" className="net-card block p-5">
                   <div className="flex items-start justify-between mb-3">
-                    <span className="text-2xl">{p.icon}</span>
+                    {(p as any).logo ? (
+                      <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center" style={{ background: p.accent + '15' }}>
+                        <Image src={(p as any).logo} alt={p.name} width={32} height={32} className="object-contain" />
+                      </div>
+                    ) : (
+                      <span className="text-2xl">{p.icon}</span>
+                    )}
                     {p.url.startsWith('http') && <ExternalLink size={13} className="text-stone-300" />}
                   </div>
                   <h3 className="text-base font-semibold text-stone-700 mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{p.name}</h3>
