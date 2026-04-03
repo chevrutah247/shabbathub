@@ -13,6 +13,7 @@ const SESSION_SHOWN_KEY = 'shabbathub-sub-shown';
 const AB_VARIANT_KEY = 'shabbathub-sub-ab-variant';
 const TRACK_SOURCE_KEY = 'shabbathub-sub-source';
 const TRACK_VARIANT_KEY = 'shabbathub-sub-variant';
+const SUBSCRIBED_KEY = 'shabbathub-subscribed';
 
 export default function SubscribePopup() {
   const { lang } = useLanguage();
@@ -20,6 +21,9 @@ export default function SubscribePopup() {
   const [variant, setVariant] = useState<'timer' | 'intent'>('intent');
 
   useEffect(() => {
+    // Never show to already subscribed users
+    if (localStorage.getItem(SUBSCRIBED_KEY) === '1') return;
+
     const dismissedUntil = Number(localStorage.getItem(DISMISS_UNTIL_KEY) || '0');
     if (dismissedUntil > Date.now()) return;
     if (sessionStorage.getItem(SESSION_SHOWN_KEY) === '1') return;

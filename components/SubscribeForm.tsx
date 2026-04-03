@@ -143,6 +143,9 @@ export default function SubscribeForm({ preSelectedPubId, compact = false, onSuc
         console.warn('Confirmation email failed:', emailErr);
       }
 
+      // Mark as subscribed so popup never shows again
+      try { localStorage.setItem('shabbathub-subscribed', '1'); } catch {}
+
       if (onSuccess) setTimeout(onSuccess, 2000);
     } catch (err: any) {
       trackEvent('subscribe_error');
