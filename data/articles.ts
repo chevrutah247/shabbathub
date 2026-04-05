@@ -15,6 +15,295 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  // ===== PESACH =====
+  {
+    id: 'pesach-1',
+    slug: 'pochemu-imenno-matza-duhovnyj-smysl-presnogo-hleba',
+    image: '/images/articles/pesach-1.png',
+    title: {
+      ru: 'Почему именно маца? Духовный смысл пресного хлеба',
+      en: 'Why Matzah? The Spiritual Meaning of Unleavened Bread',
+      he: 'למה דווקא מצה? המשמעות הרוחנית של הלחם הדל',
+      uk: 'Чому саме маца? Духовний сенс прісного хліба',
+    },
+    subtitle: {
+      ru: 'Маца — символ смирения, а хамец — символ гордыни',
+      en: 'Matzah represents humility; chametz represents ego',
+      he: 'מצה מסמלת ענווה, חמץ מסמל גאווה',
+      uk: 'Маца — символ смирення, а хамець — символ гордині',
+    },
+    content: {
+      ru: `<p>Маца и хамец производятся из одних и тех же ингредиентов — муки и воды. Единственная разница — время. Если тесто поднимается более 18 минут, оно становится хамецом. Маца — это тесто, которое не успело «раздуться».</p>
+<h3>Хамец — это эго</h3>
+<p>По учению хасидизма, закваска символизирует гордыню — раздутое «я». Когда человек «поднимается» от ощущения собственной значимости, он отдаляется от Б-га. Хамец — это когда мы приписываем заслуги себе, забывая об Источнике.</p>
+<h3>Маца — это смирение</h3>
+<p>Маца плоская, простая, без претензий. Она символизирует битуль — самоаннулирование перед Творцом. Именно в этом состоянии смирения еврейский народ вышел из Египта — не благодаря своим заслугам, а благодаря милости Всевышнего.</p>
+<h3>Практический урок</h3>
+<p>Когда мы убираем хамец из дома перед Пейсахом, мы одновременно убираем «хамец» из души — гордыню, самодовольство, иллюзию контроля. Это внутренний Исход — освобождение от рабства собственного эго.</p>`,
+      en: `<p>Matzah and chametz are made from the same ingredients — flour and water. The only difference is time. If the dough rises for more than 18 minutes, it becomes chametz. Matzah is dough that didn't have time to "puff up."</p>
+<h3>Chametz Is the Ego</h3>
+<p>According to Chassidic teaching, leaven symbolizes pride — an inflated sense of self. When a person "rises" from a feeling of self-importance, they distance themselves from G-d. Chametz is when we take credit for ourselves, forgetting the Source.</p>
+<h3>Matzah Is Humility</h3>
+<p>Matzah is flat, simple, unpretentious. It symbolizes bitul — self-nullification before the Creator. It was in this state of humility that the Jewish people left Egypt — not through their own merit, but through G-d's grace.</p>
+<h3>Practical Lesson</h3>
+<p>When we remove chametz from our homes before Pesach, we simultaneously remove the "chametz" from our souls — pride, complacency, the illusion of control. This is the inner Exodus — liberation from the slavery of our own ego.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-2',
+    slug: 'chetyre-syna-chetyre-podhoda-k-vospitaniyu',
+    image: '/images/articles/pesach-2.png',
+    title: {
+      ru: 'Четыре сына — четыре подхода к воспитанию',
+      en: 'Four Sons — Four Approaches to Education',
+      he: 'ארבעה בנים — ארבע גישות לחינוך',
+      uk: 'Чотири сини — чотири підходи до виховання',
+    },
+    subtitle: {
+      ru: 'Агада учит индивидуальному подходу к каждому ребёнку',
+      en: 'The Haggadah teaches us to meet each child where they are',
+      he: 'ההגדה מלמדת גישה אישית לכל ילד',
+      uk: 'Агада вчить індивідуальному підходу до кожної дитини',
+    },
+    content: {
+      ru: `<p>Одна из центральных тем Пасхальной Агады — четыре сына: мудрый, злой, простой и тот, кто не умеет спрашивать. Это не просто литературные персонажи — это руководство по воспитанию.</p>
+<h3>Мудрый сын</h3>
+<p>Он спрашивает: «Что это за свидетельства, уставы и законы?» Ему отвечают подробно, до самого последнего закона Пейсаха. Урок: тому, кто готов учиться, давай максимум знаний.</p>
+<h3>Злой сын</h3>
+<p>Он спрашивает: «Что это за служение для вас?» — исключая себя из общины. Ему отвечают резко. Но Ребе объясняет: сам факт, что он пришёл на Седер, говорит о том, что в глубине души он хочет быть частью. Задача — пробудить эту искру.</p>
+<h3>Простой сын</h3>
+<p>Он спрашивает: «Что это?» Ему отвечают просто и кратко. Не каждому нужны сложные объяснения — иногда достаточно показать красоту традиции.</p>
+<h3>Тот, кто не умеет спрашивать</h3>
+<p>Он не задаёт вопросов — не потому что знает, а потому что не знает, что спросить. «Ты сам открой ему» — не жди, пока спросят. Проявляй инициативу в образовании.</p>`,
+      en: `<p>One of the central themes of the Passover Haggadah is the Four Sons: the Wise, the Wicked, the Simple, and the One Who Does Not Know How to Ask. These aren't just literary characters — they are a guide to education.</p>
+<h3>The Wise Son</h3>
+<p>He asks: "What are these testimonies, statutes, and laws?" He is answered in full detail, down to the last law of Pesach. Lesson: give maximum knowledge to those ready to learn.</p>
+<h3>The Wicked Son</h3>
+<p>He asks: "What is this service to you?" — excluding himself from the community. He is answered sharply. But the Rebbe explains: the very fact that he came to the Seder shows that deep down, he wants to belong. The task is to awaken that spark.</p>
+<h3>The Simple Son</h3>
+<p>He asks: "What is this?" He is answered simply and briefly. Not everyone needs complex explanations — sometimes it's enough to show the beauty of tradition.</p>
+<h3>The One Who Does Not Know How to Ask</h3>
+<p>He doesn't ask — not because he knows, but because he doesn't know what to ask. "You open the conversation for him" — don't wait to be asked. Take initiative in education.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-3',
+    slug: 'pochemu-my-oblokachivaemsa-na-sedere',
+    image: '/images/articles/pesach-3.png',
+    title: {
+      ru: 'Почему мы облокачиваемся на Седере?',
+      en: 'Why Do We Recline at the Seder?',
+      he: 'למה אנחנו מסבים בסדר?',
+      uk: 'Чому ми спираємось на Седері?',
+    },
+    subtitle: {
+      ru: 'Свобода — это не просто отсутствие рабства, а царственное достоинство',
+      en: 'Freedom is not just the absence of slavery — it is royal dignity',
+      he: 'חירות היא לא רק העדר עבדות — היא כבוד מלכותי',
+      uk: 'Свобода — це не просто відсутність рабства, а царська гідність',
+    },
+    content: {
+      ru: `<p>На Седере мы едим мацу и пьём вино, облокотившись на левую сторону. Это древний обычай свободных людей — так ели в Римской империи аристократы, возлежавшие за столом.</p>
+<h3>Свобода как состояние духа</h3>
+<p>Облокачивание — не просто поза. Это декларация: «Я — свободный человек. Не раб фараона, не раб обстоятельств, не раб собственных страстей». Тора учит, что даже бедняк в Израиле должен облокотиться — потому что свобода не зависит от материального достатка.</p>
+<h3>Левая сторона</h3>
+<p>Почему именно на левую? Практическая причина — чтобы правая рука была свободна для еды. Но есть и глубокий смысл: левая сторона в каббале символизирует гвуру — строгость, ограничение. Облокачиваясь на левую сторону, мы показываем, что подчиняем строгость — смягчаем суд милосердием.</p>
+<h3>Каждый год заново</h3>
+<p>«В каждом поколении человек обязан видеть себя так, как будто он сам вышел из Египта». Облокачивание помогает нам физически ощутить этот переход — от рабства к свободе, от унижения к достоинству.</p>`,
+      en: `<p>At the Seder, we eat matzah and drink wine while reclining to the left side. This is an ancient custom of free people — this is how aristocrats in the Roman Empire ate, reclining at the table.</p>
+<h3>Freedom as a State of Mind</h3>
+<p>Reclining is not just a posture. It's a declaration: "I am a free person. Not a slave to Pharaoh, not a slave to circumstances, not a slave to my own passions." The Torah teaches that even a poor person in Israel must recline — because freedom doesn't depend on material wealth.</p>
+<h3>The Left Side</h3>
+<p>Why specifically the left? The practical reason — so the right hand is free for eating. But there's a deeper meaning: the left side in Kabbalah symbolizes gevurah — strictness, limitation. By reclining to the left, we show that we subjugate strictness — softening judgment with mercy.</p>
+<h3>Every Year Anew</h3>
+<p>"In every generation, a person is obligated to see themselves as if they personally left Egypt." Reclining helps us physically feel this transition — from slavery to freedom, from humiliation to dignity.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-4',
+    slug: 'afikoman-tajnyj-smysl-spryatannogo-kuska-macy',
+    image: '/images/articles/pesach-4.png',
+    title: {
+      ru: 'Афикоман: тайный смысл спрятанного куска мацы',
+      en: 'Afikoman: The Hidden Meaning of the Broken Matzah',
+      he: 'אפיקומן: המשמעות הנסתרת של המצה השבורה',
+      uk: 'Афікоман: таємний сенс захованого шматка маци',
+    },
+    subtitle: {
+      ru: 'Почему мы прячем лучшую часть Седера на конец',
+      en: 'Why we save the best part of the Seder for last',
+      he: 'למה אנחנו שומרים את החלק הטוב ביותר של הסדר לסוף',
+      uk: 'Чому ми ховаємо найкращу частину Седеру на кінець',
+    },
+    content: {
+      ru: `<p>В начале Седера мы разламываем среднюю мацу на две части. Большую часть заворачиваем и прячем — это афикоман. Дети ищут его, а нашедший получает подарок. Но за этим весёлым обычаем скрывается глубокий смысл.</p>
+<h3>Скрытое больше явного</h3>
+<p>Большая часть мацы — спрятана. Это намёк на то, что в жизни самое важное часто скрыто. Истинная суть вещей не на поверхности — она требует поиска, усилий, глубокого взгляда.</p>
+<h3>Вкус Машиаха</h3>
+<p>Афикоман — последнее, что мы едим на Седере. Его вкус должен остаться во рту на всю ночь. По мнению комментаторов, афикоман символизирует пасхальную жертву, а в более глубоком смысле — грядущее Избавление. Вкус Машиаха — это то, с чем мы засыпаем.</p>
+<h3>Дети и поиск</h3>
+<p>То, что именно дети ищут афикоман, не случайно. Детская способность искать с чистотой и энтузиазмом — это модель нашего служения. Мы все должны искать скрытый свет с детской верой и настойчивостью.</p>`,
+      en: `<p>At the beginning of the Seder, we break the middle matzah in two. The larger piece is wrapped and hidden — this is the afikoman. Children search for it, and the finder receives a prize. But behind this fun custom lies a profound meaning.</p>
+<h3>The Hidden Is Greater Than the Revealed</h3>
+<p>The larger piece of matzah is hidden. This hints that in life, the most important things are often concealed. The true essence of things is not on the surface — it requires searching, effort, and a deeper look.</p>
+<h3>The Taste of Mashiach</h3>
+<p>The afikoman is the last thing we eat at the Seder. Its taste should linger in our mouths all night. According to commentators, the afikoman symbolizes the Paschal offering, and on a deeper level — the coming Redemption. The taste of Mashiach is what we fall asleep with.</p>
+<h3>Children and Seeking</h3>
+<p>The fact that children search for the afikoman is not accidental. A child's ability to seek with purity and enthusiasm is a model for our service. We should all search for the hidden light with childlike faith and persistence.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-02',
+  },
+  {
+    id: 'pesach-5',
+    slug: 'desyat-kaznej-kak-bog-razrushaet-illyuzii',
+    image: '/images/articles/pesach-5.png',
+    title: {
+      ru: 'Десять казней: как Б-г разрушает иллюзии',
+      en: 'Ten Plagues: How G-d Shatters Illusions',
+      he: 'עשר מכות: איך ה\' מנפץ אשליות',
+      uk: 'Десять кар: як Б-г руйнує ілюзії',
+    },
+    subtitle: {
+      ru: 'Каждая казнь — удар по конкретному ложному убеждению',
+      en: 'Each plague struck a specific false belief of Egypt',
+      he: 'כל מכה פגעה באמונה שקרית מסוימת של מצרים',
+      uk: 'Кожна кара — удар по конкретному хибному переконанню',
+    },
+    content: {
+      ru: `<p>Десять казней — это не просто наказание Египта. Каждая казнь была направлена против конкретного египетского божества и ложного убеждения.</p>
+<h3>Кровь — удар по Нилу</h3>
+<p>Египтяне обожествляли Нил — источник жизни. Первая казнь показала: вода — не бог. Всё, от чего зависит ваша жизнь, находится в руках Творца.</p>
+<h3>Тьма — удар по Ра</h3>
+<p>Египтяне поклонялись солнцу. Три дня полной тьмы доказали: свет — не ваша заслуга и не ваш бог.</p>
+<h3>Внутренний смысл</h3>
+<p>По учению Ребе, десять казней соответствуют десяти сфирот — каналам божественной энергии. Каждая казнь очищала один «канал», возвращая его от нечистоты к святости. Исход из Египта — это восстановление правильного порядка мира.</p>
+<h3>Урок для нас</h3>
+<p>У каждого из нас есть свои «египетские боги» — вещи, которым мы придаём чрезмерное значение: деньги, статус, мнение окружающих. Пейсах — время разрушить эти иллюзии и вернуться к единственному Источнику.</p>`,
+      en: `<p>The Ten Plagues were not simply punishments against Egypt. Each plague was directed against a specific Egyptian deity and false belief.</p>
+<h3>Blood — Strike Against the Nile</h3>
+<p>The Egyptians deified the Nile — their source of life. The first plague showed: water is not a god. Everything your life depends on is in the hands of the Creator.</p>
+<h3>Darkness — Strike Against Ra</h3>
+<p>The Egyptians worshipped the sun. Three days of complete darkness proved: light is not your achievement and not your god.</p>
+<h3>Inner Meaning</h3>
+<p>According to the Rebbe's teaching, the ten plagues correspond to the ten sefirot — channels of divine energy. Each plague purified one "channel," returning it from impurity to holiness. The Exodus from Egypt is the restoration of the proper order of the world.</p>
+<h3>Lesson for Us</h3>
+<p>Each of us has our own "Egyptian gods" — things we give excessive importance to: money, status, others' opinions. Pesach is a time to shatter these illusions and return to the only Source.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-02',
+  },
+  {
+    id: 'pesach-6',
+    slug: 'svoboda-ot-chego-i-svoboda-dlya-chego',
+    image: '/images/articles/pesach-6.png',
+    title: {
+      ru: 'Свобода «от чего» и свобода «для чего»',
+      en: 'Freedom "From" and Freedom "For"',
+      he: 'חירות "ממה" וחירות "למה"',
+      uk: 'Свобода «від чого» і свобода «для чого»',
+    },
+    subtitle: {
+      ru: 'Настоящая свобода — это не отсутствие ограничений, а выбор служения',
+      en: 'True freedom is not the absence of limits — it is the choice of service',
+      he: 'חירות אמיתית היא לא העדר מגבלות — היא בחירה בעבודה',
+      uk: 'Справжня свобода — це не відсутність обмежень, а вибір служіння',
+    },
+    content: {
+      ru: `<p>Евреи вышли из Египта не для того, чтобы стать «свободными» в современном понимании — делать что хочу. Они вышли, чтобы через 49 дней получить Тору на горе Синай.</p>
+<h3>Два вида свободы</h3>
+<p>Есть свобода «от» — освобождение от угнетения, рабства, ограничений. И есть свобода «для» — свобода служить высшей цели, реализовать своё предназначение. Первая без второй — пустота.</p>
+<h3>Парадокс Торы</h3>
+<p>Тора — это 613 заповедей, множество ограничений и обязанностей. Как это может быть «свободой»? Ответ: раб фараона служил чужой цели. Еврей, соблюдающий Тору, служит своей истинной сущности. Когда ты делаешь то, для чего создан, — это и есть настоящая свобода.</p>
+<h3>Счёт Омера</h3>
+<p>49 дней между Пейсахом и Шавуотом — это не просто ожидание. Это подготовка, очищение, рост. Каждый день — ступень от «свободы от рабства» к «свободе для получения Торы».</p>`,
+      en: `<p>The Jewish people did not leave Egypt to become "free" in the modern sense — to do whatever they want. They left so that 49 days later they could receive the Torah at Mount Sinai.</p>
+<h3>Two Types of Freedom</h3>
+<p>There is freedom "from" — liberation from oppression, slavery, limitations. And there is freedom "for" — freedom to serve a higher purpose, to fulfill one's destiny. The first without the second is emptiness.</p>
+<h3>The Torah Paradox</h3>
+<p>The Torah contains 613 commandments, many restrictions and obligations. How can this be "freedom"? The answer: a slave of Pharaoh served someone else's purpose. A Jew observing Torah serves their true essence. When you do what you were created for — that is real freedom.</p>
+<h3>Counting the Omer</h3>
+<p>The 49 days between Pesach and Shavuot are not simply waiting. They are preparation, purification, growth. Each day is a step from "freedom from slavery" to "freedom for receiving the Torah."</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-03',
+  },
+  {
+    id: 'pesach-7',
+    slug: 'kos-eliyagu-ozhidanie-mashiacha-za-prazdnichnym-stolom',
+    image: '/images/articles/pesach-7.png',
+    title: {
+      ru: 'Бокал Элияу: ожидание Машиаха за праздничным столом',
+      en: "Elijah's Cup: Awaiting Mashiach at the Festive Table",
+      he: 'כוס אליהו: ציפייה למשיח ליד השולחן החגיגי',
+      uk: 'Келих Елії: очікування Машіаха за святковим столом',
+    },
+    subtitle: {
+      ru: 'Почему мы наливаем бокал для того, кто может не прийти',
+      en: 'Why we pour a cup for someone who may not come',
+      he: 'למה אנחנו מוזגים כוס למי שאולי לא יבוא',
+      uk: 'Чому ми наливаємо келих для того, хто може не прийти',
+    },
+    content: {
+      ru: `<p>На каждом Седере мы наливаем пятый бокал вина — бокал Элияу-пророка. Мы открываем дверь и приглашаем его войти. Этот обычай — одно из самых трогательных выражений еврейской веры.</p>
+<h3>Почему Элияу?</h3>
+<p>Пророк Элияу, согласно традиции, — предвестник Машиаха. Он появится перед приходом Избавителя, чтобы разрешить все нерешённые вопросы и объявить о наступлении Геулы.</p>
+<h3>Бокал надежды</h3>
+<p>Наливая бокал для Элияу, мы показываем: мы верим, что Избавление может прийти прямо сейчас. Не завтра, не через год — в этот самый момент. Открытая дверь — это приглашение будущему войти в настоящее.</p>
+<h3>Каждый может быть Элияу</h3>
+<p>Ребе учил: не ждите, пока Элияу придёт к вам. Станьте Элияу для других — несите весть о добре, помогайте, вдохновляйте. Каждое доброе дело приближает Геулу.</p>`,
+      en: `<p>At every Seder, we pour a fifth cup of wine — the Cup of Elijah the Prophet. We open the door and invite him to enter. This custom is one of the most touching expressions of Jewish faith.</p>
+<h3>Why Elijah?</h3>
+<p>The Prophet Elijah, according to tradition, is the herald of Mashiach. He will appear before the coming of the Redeemer to resolve all unresolved questions and announce the arrival of the Geulah.</p>
+<h3>A Cup of Hope</h3>
+<p>By pouring a cup for Elijah, we show: we believe that Redemption can come right now. Not tomorrow, not in a year — at this very moment. The open door is an invitation for the future to enter the present.</p>
+<h3>Everyone Can Be Elijah</h3>
+<p>The Rebbe taught: don't wait for Elijah to come to you. Become Elijah for others — bring tidings of good, help, inspire. Every good deed brings the Geulah closer.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-03',
+  },
+  {
+    id: 'pesach-8',
+    slug: 'poslednyj-den-pejsaha-rasshcheplenie-morya-i-vera',
+    image: '/images/articles/pesach-8.png',
+    title: {
+      ru: 'Последний день Пейсаха: рассечение моря и вера',
+      en: 'The Last Day of Pesach: Splitting the Sea and Faith',
+      he: 'יום אחרון של פסח: קריעת ים סוף והאמונה',
+      uk: 'Останній день Песаху: розсічення моря і віра',
+    },
+    subtitle: {
+      ru: 'Когда перед тобой море, а позади — армия: урок абсолютной веры',
+      en: 'When the sea is before you and an army behind: a lesson in absolute faith',
+      he: 'כשהים לפניך והצבא מאחור: שיעור באמונה מוחלטת',
+      uk: 'Коли перед тобою море, а позаду — армія: урок абсолютної віри',
+    },
+    content: {
+      ru: `<p>Седьмой день Пейсаха — день рассечения Красного моря. Это один из величайших чудес в истории. Но что произошло на самом деле — и чему это учит нас сегодня?</p>
+<h3>Нахшон бен Аминадав</h3>
+<p>Мидраш рассказывает: когда евреи стояли перед морем, а сзади приближалась армия фараона, все были в панике. Нахшон бен Аминадав вошёл в воду — по колено, по пояс, по горло. И только когда вода дошла до ноздрей — море расступилось.</p>
+<h3>Урок: действуй первым</h3>
+<p>Б-г ждёт нашего первого шага. Не волшебной палочки, не чуда с неба — а нашего решения идти вперёд несмотря ни на что. Вера — это не пассивное ожидание. Это активное действие в условиях неопределённости.</p>
+<h3>Трапеза Машиаха</h3>
+<p>Баал-Шем-Тов установил обычай устраивать «Трапезу Машиаха» в последний день Пейсаха. Мы пьём четыре бокала вина и едим мацу — как на Седере, но с фокусом на будущее Избавление. Это выражение нашей уверенности: так же, как Б-г рассёк море, Он завершит и окончательное Избавление.</p>`,
+      en: `<p>The seventh day of Pesach marks the Splitting of the Red Sea. It is one of the greatest miracles in history. But what really happened — and what does it teach us today?</p>
+<h3>Nachshon ben Aminadav</h3>
+<p>The Midrash tells us: when the Jews stood before the sea with Pharaoh's army approaching from behind, everyone panicked. Nachshon ben Aminadav walked into the water — knee-deep, waist-deep, neck-deep. And only when the water reached his nostrils did the sea split.</p>
+<h3>Lesson: Act First</h3>
+<p>G-d waits for our first step. Not a magic wand, not a miracle from heaven — but our decision to move forward despite everything. Faith is not passive waiting. It is active action in the face of uncertainty.</p>
+<h3>Mashiach's Feast</h3>
+<p>The Baal Shem Tov established the custom of holding "Mashiach's Feast" on the last day of Pesach. We drink four cups of wine and eat matzah — like at the Seder, but with focus on the future Redemption. This expresses our confidence: just as G-d split the sea, He will complete the final Redemption.</p>`,
+    },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
+    createdAt: '2026-04-04',
+  },
   {
     id: 'bitachon-1',
     slug: 'illyuziya-sobstvennosti-pochemu-vashi-dengi-vam-ne-prinadlezhat',
