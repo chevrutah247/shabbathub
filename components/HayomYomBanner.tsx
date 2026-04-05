@@ -188,20 +188,12 @@ export default function HayomYomBanner() {
         {mainText && (
           <div className="px-6 py-4">
             <div
-              className="text-stone-800 text-[15px] leading-[1.8]"
+              className="text-stone-800 text-[15px] leading-[1.65] text-justify"
               style={{ fontFamily: "Georgia, 'Crimson Pro', serif" }}
             >
               {mainText.split('\n\n').map((paragraph, i) => (
                 <p key={i} className={i > 0 ? 'mt-3' : ''}>
-                  {i === 0 && (
-                    <span
-                      className="text-3xl font-bold text-amber-800/30 float-left mr-2 leading-none"
-                      style={{ marginTop: '2px' }}
-                    >
-                      {paragraph.charAt(0)}
-                    </span>
-                  )}
-                  {i === 0 ? paragraph.slice(1) : paragraph}
+                  {paragraph}
                 </p>
               ))}
             </div>
