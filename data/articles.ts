@@ -15,295 +15,114 @@ export interface Article {
 }
 
 export const articles: Article[] = [
-  // ===== PESACH =====
+  // ===== PESACH (34 articles) =====
+  // ===== PESACH (34 articles) =====
   {
-    id: 'pesach-1',
-    slug: 'pochemu-imenno-matza-duhovnyj-smysl-presnogo-hleba',
-    image: '/images/articles/pesach-1.png',
-    title: {
-      ru: 'Почему именно маца? Духовный смысл пресного хлеба',
-      en: 'Why Matzah? The Spiritual Meaning of Unleavened Bread',
-      he: 'למה דווקא מצה? המשמעות הרוחנית של הלחם הדל',
-      uk: 'Чому саме маца? Духовний сенс прісного хліба',
-    },
-    subtitle: {
-      ru: 'Маца — символ смирения, а хамец — символ гордыни',
-      en: 'Matzah represents humility; chametz represents ego',
-      he: 'מצה מסמלת ענווה, חמץ מסמל גאווה',
-      uk: 'Маца — символ смирення, а хамець — символ гордині',
-    },
-    content: {
-      ru: `<p>Маца и хамец производятся из одних и тех же ингредиентов — муки и воды. Единственная разница — время. Если тесто поднимается более 18 минут, оно становится хамецом. Маца — это тесто, которое не успело «раздуться».</p>
-<h3>Хамец — это эго</h3>
-<p>По учению хасидизма, закваска символизирует гордыню — раздутое «я». Когда человек «поднимается» от ощущения собственной значимости, он отдаляется от Б-га. Хамец — это когда мы приписываем заслуги себе, забывая об Источнике.</p>
-<h3>Маца — это смирение</h3>
-<p>Маца плоская, простая, без претензий. Она символизирует битуль — самоаннулирование перед Творцом. Именно в этом состоянии смирения еврейский народ вышел из Египта — не благодаря своим заслугам, а благодаря милости Всевышнего.</p>
-<h3>Практический урок</h3>
-<p>Когда мы убираем хамец из дома перед Пейсахом, мы одновременно убираем «хамец» из души — гордыню, самодовольство, иллюзию контроля. Это внутренний Исход — освобождение от рабства собственного эго.</p>`,
-      en: `<p>Matzah and chametz are made from the same ingredients — flour and water. The only difference is time. If the dough rises for more than 18 minutes, it becomes chametz. Matzah is dough that didn't have time to "puff up."</p>
-<h3>Chametz Is the Ego</h3>
-<p>According to Chassidic teaching, leaven symbolizes pride — an inflated sense of self. When a person "rises" from a feeling of self-importance, they distance themselves from G-d. Chametz is when we take credit for ourselves, forgetting the Source.</p>
-<h3>Matzah Is Humility</h3>
-<p>Matzah is flat, simple, unpretentious. It symbolizes bitul — self-nullification before the Creator. It was in this state of humility that the Jewish people left Egypt — not through their own merit, but through G-d's grace.</p>
-<h3>Practical Lesson</h3>
-<p>When we remove chametz from our homes before Pesach, we simultaneously remove the "chametz" from our souls — pride, complacency, the illusion of control. This is the inner Exodus — liberation from the slavery of our own ego.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-01',
+    id: 'pesach-1', slug: 'peysah-ne-generalnaya-uborka', image: '/images/articles/pesach-1.png',
+    title: { ru: 'Пейсах — это не «генеральная уборка»', en: 'Pesach Is Not Spring Cleaning', he: 'פסח זה לא ניקיון כללי', uk: 'Песах — це не генеральне прибирання' },
+    subtitle: { ru: 'Как не стать рабом швабры?', en: 'How not to become a slave to your mop', he: 'איך לא להפוך לעבד של הסמרטוט', uk: 'Як не стати рабом швабри?' },
+    content: { ru: `<p>Многие еврейские женщины подходят к подготовке к Пейсаху в состоянии крайнего нервного истощения. Главная ошибка — неумение отличить «то, что я обязана сделать» от «того, что мне хотелось бы сделать».</p><h3>Галахический минимум</h3><p>Вы обязаны устранить хамец, который находится в съедобном состоянии. Пылесоса для ковров и обычного подметания пола вполне достаточно; мытьё штор или шампунь для ковров — это ваше личное желание, а не требование закона.</p><h3>Где искать врага</h3><p>Проверке подлежат все места, куда хамец мог попасть: сумки, карманы, машины, офисные столы и даже игрушки.</p><h3>Совет для выживания</h3><p>Если вы чувствуете, что не справляетесь, помните — лучше подготовить дом с радостью, чем сидеть за столом Седера с больной спиной и плохим настроением.</p>`, en: `<p>Many Jewish women approach Pesach preparation in a state of extreme exhaustion. The main mistake is the inability to distinguish between "what I must do" and "what I'd like to do."</p><h3>Halachic Minimum</h3><p>You must remove chametz that is in an edible state. Vacuuming carpets and sweeping floors is sufficient; washing curtains is your personal choice, not a legal requirement.</p><h3>Where to Search</h3><p>Check all places where chametz could have reached: bags, pockets, cars, office desks, and even toys.</p><h3>Survival Tip</h3><p>If you feel overwhelmed, remember — it's better to prepare the house with joy than to sit at the Seder table with a sore back and bad mood.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-2',
-    slug: 'chetyre-syna-chetyre-podhoda-k-vospitaniyu',
-    image: '/images/articles/pesach-2.png',
-    title: {
-      ru: 'Четыре сына — четыре подхода к воспитанию',
-      en: 'Four Sons — Four Approaches to Education',
-      he: 'ארבעה בנים — ארבע גישות לחינוך',
-      uk: 'Чотири сини — чотири підходи до виховання',
-    },
-    subtitle: {
-      ru: 'Агада учит индивидуальному подходу к каждому ребёнку',
-      en: 'The Haggadah teaches us to meet each child where they are',
-      he: 'ההגדה מלמדת גישה אישית לכל ילד',
-      uk: 'Агада вчить індивідуальному підходу до кожної дитини',
-    },
-    content: {
-      ru: `<p>Одна из центральных тем Пасхальной Агады — четыре сына: мудрый, злой, простой и тот, кто не умеет спрашивать. Это не просто литературные персонажи — это руководство по воспитанию.</p>
-<h3>Мудрый сын</h3>
-<p>Он спрашивает: «Что это за свидетельства, уставы и законы?» Ему отвечают подробно, до самого последнего закона Пейсаха. Урок: тому, кто готов учиться, давай максимум знаний.</p>
-<h3>Злой сын</h3>
-<p>Он спрашивает: «Что это за служение для вас?» — исключая себя из общины. Ему отвечают резко. Но Ребе объясняет: сам факт, что он пришёл на Седер, говорит о том, что в глубине души он хочет быть частью. Задача — пробудить эту искру.</p>
-<h3>Простой сын</h3>
-<p>Он спрашивает: «Что это?» Ему отвечают просто и кратко. Не каждому нужны сложные объяснения — иногда достаточно показать красоту традиции.</p>
-<h3>Тот, кто не умеет спрашивать</h3>
-<p>Он не задаёт вопросов — не потому что знает, а потому что не знает, что спросить. «Ты сам открой ему» — не жди, пока спросят. Проявляй инициативу в образовании.</p>`,
-      en: `<p>One of the central themes of the Passover Haggadah is the Four Sons: the Wise, the Wicked, the Simple, and the One Who Does Not Know How to Ask. These aren't just literary characters — they are a guide to education.</p>
-<h3>The Wise Son</h3>
-<p>He asks: "What are these testimonies, statutes, and laws?" He is answered in full detail, down to the last law of Pesach. Lesson: give maximum knowledge to those ready to learn.</p>
-<h3>The Wicked Son</h3>
-<p>He asks: "What is this service to you?" — excluding himself from the community. He is answered sharply. But the Rebbe explains: the very fact that he came to the Seder shows that deep down, he wants to belong. The task is to awaken that spark.</p>
-<h3>The Simple Son</h3>
-<p>He asks: "What is this?" He is answered simply and briefly. Not everyone needs complex explanations — sometimes it's enough to show the beauty of tradition.</p>
-<h3>The One Who Does Not Know How to Ask</h3>
-<p>He doesn't ask — not because he knows, but because he doesn't know what to ask. "You open the conversation for him" — don't wait to be asked. Take initiative in education.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-01',
+    id: 'pesach-2', slug: 'alkogolnaya-lovushka-skrytyj-hamec-v-bare', image: '/images/articles/pesach-2.png',
+    title: { ru: 'Алкогольная ловушка: Что скрывает ваш бар?', en: 'The Alcohol Trap: What Your Bar Is Hiding', he: 'מלכודת האלכוהול: מה מסתתר בבר שלך', uk: 'Алкогольна пастка: що ховає ваш бар?' },
+    subtitle: { ru: 'Почему ваш любимый скотч может быть запрещён навсегда', en: 'Why your favorite scotch may be forbidden forever', he: 'למה הסקוטש האהוב עליך עלול להיאסר לנצח', uk: 'Чому ваш улюблений скотч може бути заборонений назавжди' },
+    content: { ru: `<p>Даже после Пейсаха вы можете столкнуться с проблемой «хамец ше-авар алав ха-Песаха» — хамец, который принадлежал еврею во время праздника. Это делает продукт запрещённым навсегда.</p><h3>Чёрный список</h3><p>Ассоциация организаций кашрута (AKO) предупреждает, что ряд известных винокурен (Buffalo Trace, Eagle Rare, Blanton's) могут принадлежать евреям, которые не продают свой хамец должным образом.</p><h3>Виноградная проблема</h3><p>Многие сорта виски выдерживаются в бочках из-под шерри или портвейна, что создаёт вопросы кашрута из-за некошерного вина.</p><h3>Решение</h3><p>Для Пейсаха покупайте только напитки с сертификатом «Kosher for Passover». Для остального года убедитесь, что дистрибьютор продал свой хамец.</p>`, en: `<p>Even after Pesach you may encounter the problem of "chametz she'avar alav ha-Pesach" — chametz that belonged to a Jew during the holiday. This makes the product forbidden forever.</p><h3>Blacklisted Brands</h3><p>The Association of Kashrus Organizations (AKO) warns that several well-known distilleries (Buffalo Trace, Eagle Rare, Blanton's) may be owned by Jews who don't properly sell their chametz.</p><h3>The Grape Problem</h3><p>Many whiskeys are aged in sherry or port barrels, creating additional kashrut issues due to non-kosher wine.</p><h3>Solution</h3><p>For Pesach, buy only beverages with a "Kosher for Passover" certification.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-3',
-    slug: 'pochemu-my-oblokachivaemsa-na-sedere',
-    image: '/images/articles/pesach-3.png',
-    title: {
-      ru: 'Почему мы облокачиваемся на Седере?',
-      en: 'Why Do We Recline at the Seder?',
-      he: 'למה אנחנו מסבים בסדר?',
-      uk: 'Чому ми спираємось на Седері?',
-    },
-    subtitle: {
-      ru: 'Свобода — это не просто отсутствие рабства, а царственное достоинство',
-      en: 'Freedom is not just the absence of slavery — it is royal dignity',
-      he: 'חירות היא לא רק העדר עבדות — היא כבוד מלכותי',
-      uk: 'Свобода — це не просто відсутність рабства, а царська гідність',
-    },
-    content: {
-      ru: `<p>На Седере мы едим мацу и пьём вино, облокотившись на левую сторону. Это древний обычай свободных людей — так ели в Римской империи аристократы, возлежавшие за столом.</p>
-<h3>Свобода как состояние духа</h3>
-<p>Облокачивание — не просто поза. Это декларация: «Я — свободный человек. Не раб фараона, не раб обстоятельств, не раб собственных страстей». Тора учит, что даже бедняк в Израиле должен облокотиться — потому что свобода не зависит от материального достатка.</p>
-<h3>Левая сторона</h3>
-<p>Почему именно на левую? Практическая причина — чтобы правая рука была свободна для еды. Но есть и глубокий смысл: левая сторона в каббале символизирует гвуру — строгость, ограничение. Облокачиваясь на левую сторону, мы показываем, что подчиняем строгость — смягчаем суд милосердием.</p>
-<h3>Каждый год заново</h3>
-<p>«В каждом поколении человек обязан видеть себя так, как будто он сам вышел из Египта». Облокачивание помогает нам физически ощутить этот переход — от рабства к свободе, от унижения к достоинству.</p>`,
-      en: `<p>At the Seder, we eat matzah and drink wine while reclining to the left side. This is an ancient custom of free people — this is how aristocrats in the Roman Empire ate, reclining at the table.</p>
-<h3>Freedom as a State of Mind</h3>
-<p>Reclining is not just a posture. It's a declaration: "I am a free person. Not a slave to Pharaoh, not a slave to circumstances, not a slave to my own passions." The Torah teaches that even a poor person in Israel must recline — because freedom doesn't depend on material wealth.</p>
-<h3>The Left Side</h3>
-<p>Why specifically the left? The practical reason — so the right hand is free for eating. But there's a deeper meaning: the left side in Kabbalah symbolizes gevurah — strictness, limitation. By reclining to the left, we show that we subjugate strictness — softening judgment with mercy.</p>
-<h3>Every Year Anew</h3>
-<p>"In every generation, a person is obligated to see themselves as if they personally left Egypt." Reclining helps us physically feel this transition — from slavery to freedom, from humiliation to dignity.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-01',
+    id: 'pesach-3', slug: 'matza-baster-kak-perezhit-prazdnichnoe-menyu', image: '/images/articles/pesach-3.png',
+    title: { ru: '«Маца-бастер»: Как пережить праздничное меню', en: 'Matzah-Buster: Surviving the Holiday Menu', he: 'מצה-באסטר: איך לשרוד את התפריט החגיגי', uk: '«Маца-бастер»: Як пережити святкове меню' },
+    subtitle: { ru: 'Изжога, вздутие и лишний сахар: путеводитель для желудка', en: 'Heartburn, bloating, and sugar: a guide for your stomach', he: 'צרבת, נפיחות וסוכר: מדריך לבטן שלך', uk: 'Печія, здуття і зайвий цукор: путівник для шлунку' },
+    content: { ru: `<p>Переход на мацу и обилие праздничных блюд — серьёзное испытание для пищеварения.</p><h3>Диабетикам на заметку</h3><p>Одна маца содержит около 81% углеводов. «Кезаит» составляет от 10 до 27 грамм. Выбирайте сухие вина — в них почти нет углеводов (около 4 г на бокал).</p><h3>Клетчатка — ваше спасение</h3><p>Маца крепит. Добавляйте в рацион свежие овощи, используйте цельнозерновую мацу и пейте много воды.</p><h3>Рыбный день</h3><p>Вместо тяжёлого мяса рекомендуется свежий лосось — он богат Омега-3 и легче усваивается.</p>`, en: `<p>Switching to matzah and abundant holiday dishes is a serious challenge for digestion.</p><h3>For Diabetics</h3><p>One matzah contains about 81% carbohydrates. A "kezayit" ranges from 10 to 27 grams. Choose dry wines — they have almost no carbs (about 4g per glass).</p><h3>Fiber Is Your Friend</h3><p>Matzah causes constipation. Add fresh vegetables, use whole wheat matzah, and drink plenty of water.</p><h3>Fish Day</h3><p>Fresh salmon is recommended instead of heavy meat — it's rich in Omega-3 and easier to digest.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-4',
-    slug: 'afikoman-tajnyj-smysl-spryatannogo-kuska-macy',
-    image: '/images/articles/pesach-4.png',
-    title: {
-      ru: 'Афикоман: тайный смысл спрятанного куска мацы',
-      en: 'Afikoman: The Hidden Meaning of the Broken Matzah',
-      he: 'אפיקומן: המשמעות הנסתרת של המצה השבורה',
-      uk: 'Афікоман: таємний сенс захованого шматка маци',
-    },
-    subtitle: {
-      ru: 'Почему мы прячем лучшую часть Седера на конец',
-      en: 'Why we save the best part of the Seder for last',
-      he: 'למה אנחנו שומרים את החלק הטוב ביותר של הסדר לסוף',
-      uk: 'Чому ми ховаємо найкращу частину Седеру на кінець',
-    },
-    content: {
-      ru: `<p>В начале Седера мы разламываем среднюю мацу на две части. Большую часть заворачиваем и прячем — это афикоман. Дети ищут его, а нашедший получает подарок. Но за этим весёлым обычаем скрывается глубокий смысл.</p>
-<h3>Скрытое больше явного</h3>
-<p>Большая часть мацы — спрятана. Это намёк на то, что в жизни самое важное часто скрыто. Истинная суть вещей не на поверхности — она требует поиска, усилий, глубокого взгляда.</p>
-<h3>Вкус Машиаха</h3>
-<p>Афикоман — последнее, что мы едим на Седере. Его вкус должен остаться во рту на всю ночь. По мнению комментаторов, афикоман символизирует пасхальную жертву, а в более глубоком смысле — грядущее Избавление. Вкус Машиаха — это то, с чем мы засыпаем.</p>
-<h3>Дети и поиск</h3>
-<p>То, что именно дети ищут афикоман, не случайно. Детская способность искать с чистотой и энтузиазмом — это модель нашего служения. Мы все должны искать скрытый свет с детской верой и настойчивостью.</p>`,
-      en: `<p>At the beginning of the Seder, we break the middle matzah in two. The larger piece is wrapped and hidden — this is the afikoman. Children search for it, and the finder receives a prize. But behind this fun custom lies a profound meaning.</p>
-<h3>The Hidden Is Greater Than the Revealed</h3>
-<p>The larger piece of matzah is hidden. This hints that in life, the most important things are often concealed. The true essence of things is not on the surface — it requires searching, effort, and a deeper look.</p>
-<h3>The Taste of Mashiach</h3>
-<p>The afikoman is the last thing we eat at the Seder. Its taste should linger in our mouths all night. According to commentators, the afikoman symbolizes the Paschal offering, and on a deeper level — the coming Redemption. The taste of Mashiach is what we fall asleep with.</p>
-<h3>Children and Seeking</h3>
-<p>The fact that children search for the afikoman is not accidental. A child's ability to seek with purity and enthusiasm is a model for our service. We should all search for the hidden light with childlike faith and persistence.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-02',
+    id: 'pesach-4', slug: 'operaciya-chistyj-list-nasekomye-v-salatah', image: '/images/articles/pesach-4.png',
+    title: { ru: 'Операция «Чистый лист»: Тайная жизнь насекомых в салатах', en: 'Operation Clean Leaf: The Secret Life of Bugs in Your Salad', he: 'מבצע עלה נקי: החיים הסודיים של חרקים בסלט', uk: 'Операція «Чистий лист»: Таємне життя комах у салатах' },
+    subtitle: { ru: 'Шесть запретов в одном листе салата', en: 'Six Torah prohibitions in one lettuce leaf', he: 'שישה איסורים בעלה חסה אחד', uk: 'Шість заборон в одному листку салату' },
+    content: { ru: `<p>Употребление в пищу даже одного насекомого нарушает до шести запретов Торы. Современные пестициды больше не работают — насекомые выработали иммунитет.</p><h3>Зоны риска</h3><p>Клубника, брокколи, цветная капуста и салат ромэн входят в категорию высокого уровня заражения.</p><h3>Метод очистки</h3><p>Замачивание в растворе мыла (Kosher for Passover) на 5-10 минут — единственный эффективный способ. Просто промыть водой недостаточно.</p><h3>Проверка</h3><p>Используйте лайт-бокс или яркий свет, чтобы проверить каждый лист.</p>`, en: `<p>Eating even one insect violates up to six Torah prohibitions. Modern pesticides no longer work — insects have developed immunity.</p><h3>High-Risk Zones</h3><p>Strawberries, broccoli, cauliflower, and romaine lettuce are in the high infestation category.</p><h3>Cleaning Method</h3><p>Soaking in soapy water (Kosher for Passover) for 5-10 minutes is the only effective method. Simply rinsing with water is insufficient.</p><h3>Inspection</h3><p>Use a light box or bright light to check each leaf.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-5',
-    slug: 'desyat-kaznej-kak-bog-razrushaet-illyuzii',
-    image: '/images/articles/pesach-5.png',
-    title: {
-      ru: 'Десять казней: как Б-г разрушает иллюзии',
-      en: 'Ten Plagues: How G-d Shatters Illusions',
-      he: 'עשר מכות: איך ה\' מנפץ אשליות',
-      uk: 'Десять кар: як Б-г руйнує ілюзії',
-    },
-    subtitle: {
-      ru: 'Каждая казнь — удар по конкретному ложному убеждению',
-      en: 'Each plague struck a specific false belief of Egypt',
-      he: 'כל מכה פגעה באמונה שקרית מסוימת של מצרים',
-      uk: 'Кожна кара — удар по конкретному хибному переконанню',
-    },
-    content: {
-      ru: `<p>Десять казней — это не просто наказание Египта. Каждая казнь была направлена против конкретного египетского божества и ложного убеждения.</p>
-<h3>Кровь — удар по Нилу</h3>
-<p>Египтяне обожествляли Нил — источник жизни. Первая казнь показала: вода — не бог. Всё, от чего зависит ваша жизнь, находится в руках Творца.</p>
-<h3>Тьма — удар по Ра</h3>
-<p>Египтяне поклонялись солнцу. Три дня полной тьмы доказали: свет — не ваша заслуга и не ваш бог.</p>
-<h3>Внутренний смысл</h3>
-<p>По учению Ребе, десять казней соответствуют десяти сфирот — каналам божественной энергии. Каждая казнь очищала один «канал», возвращая его от нечистоты к святости. Исход из Египта — это восстановление правильного порядка мира.</p>
-<h3>Урок для нас</h3>
-<p>У каждого из нас есть свои «египетские боги» — вещи, которым мы придаём чрезмерное значение: деньги, статус, мнение окружающих. Пейсах — время разрушить эти иллюзии и вернуться к единственному Источнику.</p>`,
-      en: `<p>The Ten Plagues were not simply punishments against Egypt. Each plague was directed against a specific Egyptian deity and false belief.</p>
-<h3>Blood — Strike Against the Nile</h3>
-<p>The Egyptians deified the Nile — their source of life. The first plague showed: water is not a god. Everything your life depends on is in the hands of the Creator.</p>
-<h3>Darkness — Strike Against Ra</h3>
-<p>The Egyptians worshipped the sun. Three days of complete darkness proved: light is not your achievement and not your god.</p>
-<h3>Inner Meaning</h3>
-<p>According to the Rebbe's teaching, the ten plagues correspond to the ten sefirot — channels of divine energy. Each plague purified one "channel," returning it from impurity to holiness. The Exodus from Egypt is the restoration of the proper order of the world.</p>
-<h3>Lesson for Us</h3>
-<p>Each of us has our own "Egyptian gods" — things we give excessive importance to: money, status, others' opinions. Pesach is a time to shatter these illusions and return to the only Source.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-02',
+    id: 'pesach-5', slug: 'seder-2026-tajming-reshaet-vsyo', image: '/images/articles/pesach-5.png',
+    title: { ru: 'Седер 2026: Тайминг решает всё', en: 'Seder 2026: Timing Is Everything', he: 'סדר 2026: התזמון קובע הכל', uk: 'Седер 2026: Тайминг вирішує все' },
+    subtitle: { ru: 'Не дайте детям уснуть до Афикомана', en: "Don't let children fall asleep before the Afikoman", he: 'אל תתנו לילדים להירדם לפני האפיקומן', uk: 'Не дайте дітям заснути до Афікомана' },
+    content: { ru: `<p>В 2026 году Пейсах начинается в среду вечером, 1 апреля.</p><h3>Главные дедлайны (1 апреля)</h3><p>Последний завтрак с хлебом: до 10:19 утра. Время уничтожить остатки (Биур хамец): до 11:37 утра.</p><h3>Стратегия для Седера</h3><p>Чтобы дети могли задать «Ма Ништана», дайте им поспать днём. Начинайте Седер сразу после выхода звёзд.</p><h3>Афикоман</h3><p>Его нужно съесть до полуночи (Хацот), которая наступит около 12:59 ночи.</p><p><strong>Важно:</strong> Не забудьте сделать Эрув Тавшилин 2 апреля!</p>`, en: `<p>In 2026, Pesach begins Wednesday evening, April 1.</p><h3>Key Deadlines (April 1)</h3><p>Last breakfast with bread: before 10:19 AM. Destroy remaining chametz (Biur Chametz): before 11:37 AM.</p><h3>Seder Strategy</h3><p>Let children nap during the day so they can ask the Mah Nishtana. Start the Seder right after nightfall.</p><h3>Afikoman</h3><p>Must be eaten before midnight (Chatzot), approximately 12:59 AM.</p><p><strong>Important:</strong> Don't forget Eruv Tavshilin on April 2!</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-6',
-    slug: 'svoboda-ot-chego-i-svoboda-dlya-chego',
-    image: '/images/articles/pesach-6.png',
-    title: {
-      ru: 'Свобода «от чего» и свобода «для чего»',
-      en: 'Freedom "From" and Freedom "For"',
-      he: 'חירות "ממה" וחירות "למה"',
-      uk: 'Свобода «від чого» і свобода «для чого»',
-    },
-    subtitle: {
-      ru: 'Настоящая свобода — это не отсутствие ограничений, а выбор служения',
-      en: 'True freedom is not the absence of limits — it is the choice of service',
-      he: 'חירות אמיתית היא לא העדר מגבלות — היא בחירה בעבודה',
-      uk: 'Справжня свобода — це не відсутність обмежень, а вибір служіння',
-    },
-    content: {
-      ru: `<p>Евреи вышли из Египта не для того, чтобы стать «свободными» в современном понимании — делать что хочу. Они вышли, чтобы через 49 дней получить Тору на горе Синай.</p>
-<h3>Два вида свободы</h3>
-<p>Есть свобода «от» — освобождение от угнетения, рабства, ограничений. И есть свобода «для» — свобода служить высшей цели, реализовать своё предназначение. Первая без второй — пустота.</p>
-<h3>Парадокс Торы</h3>
-<p>Тора — это 613 заповедей, множество ограничений и обязанностей. Как это может быть «свободой»? Ответ: раб фараона служил чужой цели. Еврей, соблюдающий Тору, служит своей истинной сущности. Когда ты делаешь то, для чего создан, — это и есть настоящая свобода.</p>
-<h3>Счёт Омера</h3>
-<p>49 дней между Пейсахом и Шавуотом — это не просто ожидание. Это подготовка, очищение, рост. Каждый день — ступень от «свободы от рабства» к «свободе для получения Торы».</p>`,
-      en: `<p>The Jewish people did not leave Egypt to become "free" in the modern sense — to do whatever they want. They left so that 49 days later they could receive the Torah at Mount Sinai.</p>
-<h3>Two Types of Freedom</h3>
-<p>There is freedom "from" — liberation from oppression, slavery, limitations. And there is freedom "for" — freedom to serve a higher purpose, to fulfill one's destiny. The first without the second is emptiness.</p>
-<h3>The Torah Paradox</h3>
-<p>The Torah contains 613 commandments, many restrictions and obligations. How can this be "freedom"? The answer: a slave of Pharaoh served someone else's purpose. A Jew observing Torah serves their true essence. When you do what you were created for — that is real freedom.</p>
-<h3>Counting the Omer</h3>
-<p>The 49 days between Pesach and Shavuot are not simply waiting. They are preparation, purification, growth. Each day is a step from "freedom from slavery" to "freedom for receiving the Torah."</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-03',
+    id: 'pesach-6', slug: 'lekarstvennyj-peysah-tabletka-eda-ili-yad', image: '/images/articles/pesach-6.png',
+    title: { ru: 'Лекарственный Пейсах: Таблетка — это еда или яд?', en: 'Medical Pesach: Is Your Pill Food or Poison?', he: 'פסח רפואי: הכדור שלך אוכל או רעל?', uk: 'Лікарський Песах: Таблетка — це їжа чи отрута?' },
+    subtitle: { ru: 'Почему ваше лекарство может «провалить» проверку на хамец', en: 'Why your medication might fail the chametz test', he: 'למה התרופה שלך עלולה להיכשל בבדיקת חמץ', uk: 'Чому ваші ліки можуть «провалити» перевірку на хамець' },
+    content: { ru: `<p>Таблетки и сиропы часто содержат хамец в качестве вспомогательных веществ.</p><h3>Ловушка в оболочке</h3><p>Оболочка многих таблеток содержит крахмал из пшеницы. Жидкие лекарства содержат этиловый спирт или подсластители со статусом хамеца.</p><h3>Галахический лайфхак</h3><p>Если необходимо принять таблетку с хамецом, а замены нет, источники рекомендуют (после консультации с раввином) измельчить её и смешать с разрешённой едой.</p><h3>Диабет и Пейсах</h3><p>Маца на 81% состоит из углеводов. Диабетикам следует выбирать сухие вина (4 г углеводов на бокал) и рассчитывать порцию мацы.</p>`, en: `<p>Pills and syrups often contain chametz as excipients.</p><h3>The Coating Trap</h3><p>Many pill coatings contain wheat starch. Liquid medications often contain ethyl alcohol or sweeteners with chametz status.</p><h3>Halachic Lifehack</h3><p>If you must take a pill containing chametz with no substitute, sources recommend (after consulting a rabbi) crushing it and mixing with permitted food.</p><h3>Diabetes and Pesach</h3><p>Matzah is 81% carbohydrates. Diabetics should choose dry wines (4g carbs per glass) and carefully calculate matzah portions.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-7',
-    slug: 'kos-eliyagu-ozhidanie-mashiacha-za-prazdnichnym-stolom',
-    image: '/images/articles/pesach-7.png',
-    title: {
-      ru: 'Бокал Элияу: ожидание Машиаха за праздничным столом',
-      en: "Elijah's Cup: Awaiting Mashiach at the Festive Table",
-      he: 'כוס אליהו: ציפייה למשיח ליד השולחן החגיגי',
-      uk: 'Келих Елії: очікування Машіаха за святковим столом',
-    },
-    subtitle: {
-      ru: 'Почему мы наливаем бокал для того, кто может не прийти',
-      en: 'Why we pour a cup for someone who may not come',
-      he: 'למה אנחנו מוזגים כוס למי שאולי לא יבוא',
-      uk: 'Чому ми наливаємо келих для того, хто може не прийти',
-    },
-    content: {
-      ru: `<p>На каждом Седере мы наливаем пятый бокал вина — бокал Элияу-пророка. Мы открываем дверь и приглашаем его войти. Этот обычай — одно из самых трогательных выражений еврейской веры.</p>
-<h3>Почему Элияу?</h3>
-<p>Пророк Элияу, согласно традиции, — предвестник Машиаха. Он появится перед приходом Избавителя, чтобы разрешить все нерешённые вопросы и объявить о наступлении Геулы.</p>
-<h3>Бокал надежды</h3>
-<p>Наливая бокал для Элияу, мы показываем: мы верим, что Избавление может прийти прямо сейчас. Не завтра, не через год — в этот самый момент. Открытая дверь — это приглашение будущему войти в настоящее.</p>
-<h3>Каждый может быть Элияу</h3>
-<p>Ребе учил: не ждите, пока Элияу придёт к вам. Станьте Элияу для других — несите весть о добре, помогайте, вдохновляйте. Каждое доброе дело приближает Геулу.</p>`,
-      en: `<p>At every Seder, we pour a fifth cup of wine — the Cup of Elijah the Prophet. We open the door and invite him to enter. This custom is one of the most touching expressions of Jewish faith.</p>
-<h3>Why Elijah?</h3>
-<p>The Prophet Elijah, according to tradition, is the herald of Mashiach. He will appear before the coming of the Redeemer to resolve all unresolved questions and announce the arrival of the Geulah.</p>
-<h3>A Cup of Hope</h3>
-<p>By pouring a cup for Elijah, we show: we believe that Redemption can come right now. Not tomorrow, not in a year — at this very moment. The open door is an invitation for the future to enter the present.</p>
-<h3>Everyone Can Be Elijah</h3>
-<p>The Rebbe taught: don't wait for Elijah to come to you. Become Elijah for others — bring tidings of good, help, inspire. Every good deed brings the Geulah closer.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-03',
+    id: 'pesach-7', slug: 'kosher-dlya-barsika-korm-dlya-pitomcev', image: '/images/articles/pesach-7.png',
+    title: { ru: '«Кошер для Барсика»: Корм для питомцев в Пейсах', en: "Kosher for Kitty: Your Pet's Pesach Diet", he: 'כשר לחתול: תזונת חיות המחמד בפסח', uk: '«Кошер для Барсика»: Корм для тварин на Песах' },
+    subtitle: { ru: 'Что нельзя давать животным в Пейсах', en: "What you can't feed your pets during Pesach", he: 'מה אסור להאכיל חיות מחמד בפסח', uk: 'Що не можна давати тваринам на Песах' },
+    content: { ru: `<p>В Пейсах еврею запрещено не только есть хамец, но и получать от него любую выгоду, что включает кормление домашних животных.</p><h3>Запретные смеси</h3><p>Круглый год запрещено давать питомцам смеси мяса и молока, но в Пейсах добавляется строгий запрет на злаки.</p><h3>Где прячется хамец</h3><p>Большинство коммерческих кормов содержат пшеницу, овёс или ячмень. Читайте этикетку!</p><h3>Праздничное меню для кота</h3><p>Свежая рыба или консервированный тунец с сертификатом «Kosher for Passover». Для собак — маца и мясо.</p>`, en: `<p>During Pesach, a Jew is forbidden not only from eating chametz but also from deriving any benefit from it, including feeding pets.</p><h3>Forbidden Mixtures</h3><p>Year-round it's forbidden to feed pets meat-milk mixtures, but during Pesach grain prohibition is added.</p><h3>Hidden Chametz</h3><p>Most commercial pet foods contain wheat, oats, or barley. Read the label!</p><h3>Holiday Menu for Kitty</h3><p>Fresh fish or canned tuna with "Kosher for Passover" certification. For dogs — matzah and meat.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
   {
-    id: 'pesach-8',
-    slug: 'poslednyj-den-pejsaha-rasshcheplenie-morya-i-vera',
-    image: '/images/articles/pesach-8.png',
-    title: {
-      ru: 'Последний день Пейсаха: рассечение моря и вера',
-      en: 'The Last Day of Pesach: Splitting the Sea and Faith',
-      he: 'יום אחרון של פסח: קריעת ים סוף והאמונה',
-      uk: 'Останній день Песаху: розсічення моря і віра',
-    },
-    subtitle: {
-      ru: 'Когда перед тобой море, а позади — армия: урок абсолютной веры',
-      en: 'When the sea is before you and an army behind: a lesson in absolute faith',
-      he: 'כשהים לפניך והצבא מאחור: שיעור באמונה מוחלטת',
-      uk: 'Коли перед тобою море, а позаду — армія: урок абсолютної віри',
-    },
-    content: {
-      ru: `<p>Седьмой день Пейсаха — день рассечения Красного моря. Это один из величайших чудес в истории. Но что произошло на самом деле — и чему это учит нас сегодня?</p>
-<h3>Нахшон бен Аминадав</h3>
-<p>Мидраш рассказывает: когда евреи стояли перед морем, а сзади приближалась армия фараона, все были в панике. Нахшон бен Аминадав вошёл в воду — по колено, по пояс, по горло. И только когда вода дошла до ноздрей — море расступилось.</p>
-<h3>Урок: действуй первым</h3>
-<p>Б-г ждёт нашего первого шага. Не волшебной палочки, не чуда с неба — а нашего решения идти вперёд несмотря ни на что. Вера — это не пассивное ожидание. Это активное действие в условиях неопределённости.</p>
-<h3>Трапеза Машиаха</h3>
-<p>Баал-Шем-Тов установил обычай устраивать «Трапезу Машиаха» в последний день Пейсаха. Мы пьём четыре бокала вина и едим мацу — как на Седере, но с фокусом на будущее Избавление. Это выражение нашей уверенности: так же, как Б-г рассёк море, Он завершит и окончательное Избавление.</p>`,
-      en: `<p>The seventh day of Pesach marks the Splitting of the Red Sea. It is one of the greatest miracles in history. But what really happened — and what does it teach us today?</p>
-<h3>Nachshon ben Aminadav</h3>
-<p>The Midrash tells us: when the Jews stood before the sea with Pharaoh's army approaching from behind, everyone panicked. Nachshon ben Aminadav walked into the water — knee-deep, waist-deep, neck-deep. And only when the water reached his nostrils did the sea split.</p>
-<h3>Lesson: Act First</h3>
-<p>G-d waits for our first step. Not a magic wand, not a miracle from heaven — but our decision to move forward despite everything. Faith is not passive waiting. It is active action in the face of uncertainty.</p>
-<h3>Mashiach's Feast</h3>
-<p>The Baal Shem Tov established the custom of holding "Mashiach's Feast" on the last day of Pesach. We drink four cups of wine and eat matzah — like at the Seder, but with focus on the future Redemption. This expresses our confidence: just as G-d split the sea, He will complete the final Redemption.</p>`,
-    },
-    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' },
-    createdAt: '2026-04-04',
+    id: 'pesach-8', slug: 'shatnez-skrytaya-ugroza-v-prazdnichnom-kostyume', image: '/images/articles/pesach-8.png',
+    title: { ru: 'Шатнез: Скрытая угроза в праздничном костюме', en: 'Shatnez: The Hidden Threat in Your Holiday Suit', he: 'שעטנז: האיום הנסתר בחליפת החג', uk: 'Шатнез: Прихована загроза у святковому костюмі' },
+    subtitle: { ru: 'Как не нарушить запрет «смеси тканей» во время Седера', en: "How not to violate the 'mixed fabrics' prohibition at the Seder", he: 'איך לא להפר את איסור שעטנז בסדר', uk: 'Як не порушити заборону «суміші тканин» під час Седеру' },
+    content: { ru: `<p>Шатнез — запрещённая Торой смесь шерсти и льна. Пейсах — время покупки новых нарядов, и именно здесь кроется риск.</p><h3>Коварный воротник</h3><p>В дорогих костюмах для формы воротника часто используется льняная прокладка, вшитая в шерстяную ткань. Чем дороже костюм, тем выше вероятность.</p><h3>Женская мода</h3><p>Шерстяной свитер поверх льняной блузки может создать проблему.</p><h3>Совет</h3><p>Никогда не полагайтесь на слова продавца. Только проверка в сертифицированной лаборатории гарантирует отсутствие запрещённой смеси.</p>`, en: `<p>Shatnez is a Torah-prohibited mixture of wool and linen. Pesach is a time for buying new outfits, and that's where the risk lies.</p><h3>The Treacherous Collar</h3><p>Expensive suits often use linen padding sewn into wool fabric for collar support. The more expensive the suit, the higher the probability.</p><h3>Women's Fashion</h3><p>A wool sweater over a linen blouse can create a problem.</p><h3>Advice</h3><p>Never rely on the seller's word. Only testing at a certified laboratory guarantees the absence of the prohibited mixture.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
   },
+  {
+    id: 'pesach-9', slug: 'voda-iz-pod-krana-koshernyj-zoopark', image: '/images/articles/pesach-9.png',
+    title: { ru: 'Вода из-под крана: Кошерный зоопарк в стакане', en: 'Tap Water: A Kosher Zoo in Your Glass', he: 'מים מהברז: גן חיות כשר בכוס שלך', uk: 'Вода з-під крана: Кошерний зоопарк у склянці' },
+    subtitle: { ru: 'Почему фильтрация воды в Нью-Йорке — это заповедь', en: 'Why water filtration in NYC is a mitzvah', he: 'למה סינון מים בניו יורק זה מצווה', uk: 'Чому фільтрація води в Нью-Йорку — це заповідь' },
+    content: { ru: `<p>Водопроводная вода в Нью-Йорке содержит крошечных ракообразных — копеподов.</p><h3>Миллион галлонов с «мясом»</h3><p>Вода забирается из резервуаров с глубины 65 футов, где обитает основная масса этих существ.</p><h3>Почему это важно</h3><p>Употребление видимого глазом насекомого нарушает до шести запретов Торы. Копеподы видны без микроскопа.</p><h3>Решение</h3><p>Необходимы качественные фильтры (Glattwater или 3M), которые задерживают частицы менее 5 микрон.</p>`, en: `<p>NYC tap water contains tiny crustaceans — copepods.</p><h3>A Million Gallons of "Meat"</h3><p>Water is drawn from reservoirs at 65 feet depth where most of these creatures live.</p><h3>Why It Matters</h3><p>Consuming a visible insect violates up to six Torah prohibitions. Copepods are visible without a microscope.</p><h3>Solution</h3><p>Quality filters (Glattwater or 3M) that capture particles under 5 microns are necessary.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-10', slug: 'bumazhnye-tarelki-i-pomada-nesyedobnyj-hamec', image: '/images/articles/pesach-10.png',
+    title: { ru: 'Бумажные тарелки и помада: Несъедобный хамец', en: 'Paper Plates and Lipstick: Inedible Chametz', he: 'צלחות נייר ושפתון: חמץ שאי אפשר לאכול', uk: 'Паперові тарілки і помада: Неїстівний хамець' },
+    subtitle: { ru: 'Хамец на губах и в тарелке', en: 'Chametz on your lips and in your plate', he: 'חמץ על השפתיים ובצלחת', uk: 'Хамець на губах і в тарілці' },
+    content: { ru: `<p>Галаха требует убирать хамец из всех сфер жизни.</p><h3>Бумажная катастрофа</h3><p>Бумажные тарелки часто проклеиваются крахмалом, который при контакте с горячей едой может стать проблемой.</p><h3>Клей на конвертах</h3><p>Не облизывайте марки или конверты в Пейсах — клей может содержать пшеничный крахмал.</p><h3>Косметика</h3><p>Губная помада должна быть свободна от ингредиентов-хамец.</p><h3>Зубная паста</h3><p>Источники настаивают на использовании только проверенных брендов.</p>`, en: `<p>Halacha requires removing chametz from all areas of life.</p><h3>Paper Disaster</h3><p>Paper plates are often bonded with starch, which can become problematic with hot food.</p><h3>Envelope Glue</h3><p>Don't lick stamps or envelopes during Pesach — the glue may contain wheat starch.</p><h3>Cosmetics</h3><p>Lipstick must be free of chametz ingredients.</p><h3>Toothpaste</h3><p>Sources insist on using only verified brands.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-11', slug: 'poteryannaya-subbota-perelet-cherez-okean', image: '/images/articles/pesach-11.png',
+    title: { ru: 'Потерянная суббота: Перелёт через океан', en: 'The Lost Shabbat: Flying Across the Ocean', he: 'השבת האבודה: טיסה מעבר לאוקיינוס', uk: 'Втрачена субота: переліт через океан' },
+    subtitle: { ru: 'Галахические ловушки для путешественников', en: 'Halachic traps for travelers', he: 'מלכודות הלכתיות למטיילים', uk: 'Галахічні пастки для мандрівників' },
+    content: { ru: `<p>Перелёт через Тихий океан может превратить ваш календарь в галахическую головоломку.</p><h3>Гавайский вопрос</h3><p>Статус Гавайев остаётся спорным. Рекомендуется соблюдать две субботы.</p><h3>Счёт Омера в полёте</h3><p>Если вы летите из США в Тайвань, вы теряете день. Считайте Омер без благословения по местному времени.</p><h3>Праздник в Арктике</h3><p>Где солнце не заходит 24 часа, определение «дня» становится критическим. Избегайте поездок в Арктику в период Пейсаха.</p>`, en: `<p>Flying across the Pacific can turn your calendar into a halachic puzzle.</p><h3>The Hawaii Question</h3><p>Hawaii's status remains disputed. It's recommended to observe two Shabbats.</p><h3>Counting Omer in Flight</h3><p>If flying from the US to Taiwan, you "lose" a day. Count the Omer without a blessing by local time.</p><h3>Holiday in the Arctic</h3><p>Where the sun doesn't set for 24 hours, defining "day" becomes critical. Avoid Arctic trips during Pesach.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
+  },
+  {
+    id: 'pesach-12', slug: 'peysah-v-otele-duhovnyj-otdyh-ili-kashrutnyj-koshmar', image: '/images/articles/pesach-12.png',
+    title: { ru: 'Пейсах в отеле: Духовный отдых или кашрутный кошмар?', en: 'Pesach at a Hotel: Spiritual Rest or Kashrut Nightmare?', he: 'פסח במלון: מנוחה רוחנית או סיוט כשרות?', uk: 'Песах в готелі: Духовний відпочинок чи кашрутний кошмар?' },
+    subtitle: { ru: 'Почему ваш гостиничный Седер может оказаться фикцией', en: 'Why your hotel Seder might be a fiction', he: 'למה הסדר במלון שלך עלול להיות בדיה', uk: 'Чому ваш готельний Седер може виявитися фікцією' },
+    content: { ru: `<p>Индустрия пасхальных отелей процветает, но за блеском могут скрываться серьёзные проблемы.</p><h3>Риски кашрута</h3><p>Подготовить нееврейский отель к Пейсаху крайне сложно. Есть риск путаницы с посудой и продуктами.</p><h3>Атмосфера праздника</h3><p>Дети лишаются «маминого супа» и опыта совместной подготовки дома.</p><h3>Совет</h3><p>Лучше провести скромный, но настоящий Седер дома, чем сидеть в роскошном зале с аниматорами.</p>`, en: `<p>The Pesach hotel industry thrives, but serious problems may lurk behind the glamour.</p><h3>Kashrut Risks</h3><p>Preparing a non-Jewish hotel for Pesach is extremely difficult. There's risk of confusion with utensils and products.</p><h3>Holiday Atmosphere</h3><p>Children miss "mom's soup" and the shared experience of preparing at home.</p><h3>Advice</h3><p>Better a modest but genuine Seder at home than sitting in a luxurious hall with entertainers.</p>` },
+    tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-01',
+  },
+  { id: 'pesach-13', slug: 'musor-ili-svyatost-shaiemos', image: '/images/articles/pesach-13.png', title: { ru: 'Мусор или святость? Шаимос при уборке', en: 'Trash or Holiness? Shaimos During Cleaning', he: 'זבל או קדושה? שאימוס בניקיון', uk: 'Сміття чи святість? Шаімос при прибиранні' }, subtitle: { ru: 'Как правильно утилизировать священные тексты', en: 'How to properly dispose of sacred texts', he: 'איך להיפטר כהלכה מטקסטים קדושים', uk: 'Як правильно утилізувати священні тексти' }, content: { ru: `<p>Предпасхальная уборка выявляет горы бумаг. Не всё можно выбросить.</p><h3>Что такое шаимос</h3><p>Тексты с Именами Всевышнего или словами Торы. Запрещено уничтожать Имя Б-га.</p><h3>Зоны риска</h3><p>Приглашения на свадьбы с цитатами из Тегилим — нельзя в мусор, только в генизу.</p><h3>Совет</h3><p>При печати приглашений используйте сокращения. Тексты на экране не обладают святостью.</p>`, en: `<p>Pre-Pesach cleaning reveals mountains of papers. Not everything can be thrown away.</p><h3>What Is Shaimos</h3><p>Texts containing Names of G-d or words of Torah. It's forbidden to destroy G-d's Name.</p><h3>Risk Zones</h3><p>Wedding invitations with Psalms quotes cannot go in the trash — only to genizah.</p><h3>Tip</h3><p>When printing invitations, use abbreviations. Text on screens has no sanctity.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-14', slug: 'zerno-novogo-urozhaya-zakon-hodosh', image: '/images/articles/pesach-14.png', title: { ru: 'Зерно «нового» урожая: Закон «Ходош»', en: 'New Grain: The Law of Chadash', he: 'תבואה חדשה: חוק חדש', uk: 'Зерно «нового» врожаю: Закон «Ходош»' }, subtitle: { ru: 'Почему ваш багет после Пейсаха может быть под запретом', en: 'Why your post-Pesach baguette might be forbidden', he: 'למה הבאגט שלך אחרי פסח עלול להיות אסור', uk: 'Чому ваш багет після Песаху може бути під забороною' }, content: { ru: `<p>Злаки, посаженные после Пейсаха, запрещены до второго дня Пейсаха следующего года.</p><h3>Где подвох</h3><p>Основной риск — овёс и ячмень, которые в США часто сажают весной.</p><h3>Йошон</h3><p>Покупайте продукты с пометкой «yoshon».</p><h3>Израиль</h3><p>Законы Ходош соблюдаются максимально строго, без послаблений.</p>`, en: `<p>Grains planted after Pesach are forbidden until the second day of Pesach the following year.</p><h3>Where's the Catch</h3><p>Main risk — oats and barley, often planted in spring in the US.</p><h3>Yoshon</h3><p>Buy products marked "yoshon."</p><h3>Israel</h3><p>Chadash laws are strictly observed with no leniencies.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-15', slug: 'mikva-dlya-skovorodki-tvilat-keylim', image: '/images/articles/pesach-15.png', title: { ru: 'Миква для сковородки: Твилат Кейлим', en: 'Mikvah for Your Pan: Tevilat Keilim', he: 'מקווה למחבת: טבילת כלים', uk: 'Міква для сковорідки: Твілат Кейлім' }, subtitle: { ru: 'Какие кастрюли нужно «окунать», а какие — нет', en: 'Which pots to immerse and which not', he: 'אילו סירים צריך לטבול ואילו לא', uk: 'Які каструлі треба «занурювати», а які — ні' }, content: { ru: `<p>Новая посуда к Пейсаху требует ритуального погружения в микву, если произведена неевреем.</p><h3>Металл и стекло</h3><p>Обязательны к погружению с благословением. Включая Pyrex и эмалированную посуду.</p><h3>Пластик и дерево</h3><p>Не требуют погружения.</p><h3>Электроприборы</h3><p>Чайники нужно окунать целиком. Не включайте 24-36 часов до полного высыхания.</p>`, en: `<p>New Pesach dishes require ritual immersion in a mikvah if manufactured by a non-Jew.</p><h3>Metal and Glass</h3><p>Must be immersed with a blessing. Including Pyrex and enamel.</p><h3>Plastic and Wood</h3><p>Don't require immersion.</p><h3>Electrical Appliances</h3><p>Kettles must be fully immersed. Don't plug in for 24-36 hours until completely dry.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-16', slug: 'skrytyj-hamec-lactaid-i-griby', image: '/images/articles/pesach-16.png', title: { ru: 'Скрытый хамец: Lactaid и грибы', en: 'Hidden Chametz: Lactaid and Mushrooms', he: 'חמץ נסתר: לקטייד ופטריות', uk: 'Прихований хамець: Lactaid і гриби' }, subtitle: { ru: 'Где прячется «закваска» в лекарствах и овощах', en: "Where 'leaven' hides in medicine and vegetables", he: 'איפה מסתתר החמץ בתרופות ובירקות', uk: 'Де ховається «закваска» в ліках та овочах' }, content: { ru: `<p>Иногда хамец находят там, где не ждут.</p><h3>Lactaid</h3><p>Популярные таблетки содержат фермент на пшеничных отрубях — настоящий хамец.</p><h3>Грибы</h3><p>Культивируемые грибы часто выращивают на субстрате из пшеничной соломы.</p><h3>Крахмал на тарелках</h3><p>Бумажные тарелки могут быть проклеены пшеничным крахмалом.</p>`, en: `<p>Sometimes chametz is found where you least expect it.</p><h3>Lactaid</h3><p>Popular pills contain an enzyme cultured on wheat bran — real chametz.</p><h3>Mushrooms</h3><p>Cultivated mushrooms are often grown on wheat straw substrate.</p><h3>Starch on Plates</h3><p>Paper plates may be bonded with wheat starch.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-17', slug: 'k-p-kosher-ili-katastrofa-gajd-po-supermarketu', image: '/images/articles/pesach-17.png', title: { ru: '«K-P»: Кошерно или Катастрофа? Гайд по супермаркету', en: 'K-P: Kosher or Catastrophe? Supermarket Guide', he: 'K-P: כשר או קטסטרופה? מדריך סופרמרקט', uk: '«K-P»: Кошерно чи Катастрофа? Гайд по супермаркету' }, subtitle: { ru: 'Почему ваш Пейсах может закончиться на полке магазина', en: 'Why your Pesach might end at the store shelf', he: 'למה הפסח שלך עלול להסתיים על מדף החנות', uk: 'Чому ваш Песах може закінчитися на полиці магазину' }, content: { ru: `<p>За яркими этикетками скрываются ловушки.</p><h3>Магия наклейки</h3><p>Знак «Kosher for Passover» наклеенный поверх этикетки — часто самодеятельность магазинов. Ищите печатный знак на упаковке.</p><h3>Ребус «K-P»</h3><p>«K-P» может означать и «Kosher for Passover», и просто «Kosher Parve» — который может содержать хамец.</p><h3>Секретные ингредиенты</h3><p>Яблочный сок часто пастеризуют в тех же чанах, где был виноградный сок.</p>`, en: `<p>Behind bright labels lurk traps.</p><h3>Sticker Magic</h3><p>A "Kosher for Passover" sticker placed over the regular label is often the store's initiative, not the manufacturer's guarantee.</p><h3>The K-P Puzzle</h3><p>"K-P" can mean both "Kosher for Passover" and simply "Kosher Parve" — which may contain real chametz.</p><h3>Secret Ingredients</h3><p>Apple juice is often pasteurized in the same vats that previously held grape juice.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-18', slug: 'mikki-maus-na-sedere-industriya-oteley', image: '/images/articles/pesach-18.png', title: { ru: 'Микки Маус на Седере: Индустрия пасхальных отелей', en: 'Mickey Mouse at the Seder: The Pesach Hotel Industry', he: 'מיקי מאוס בסדר: תעשיית מלונות הפסח', uk: 'Міккі Маус на Седері: Індустрія пасхальних готелів' }, subtitle: { ru: 'Как индустрия разрушает семейные традиции', en: 'How the industry destroys family traditions', he: 'איך התעשייה הורסת מסורות משפחתיות', uk: 'Як індустрія руйнує сімейні традиції' }, content: { ru: `<p>Индустрия Пейсаха в отелях — огромный бизнес от Кении до Диснейленда. Но за блеском теряется суть.</p><h3>Утраченные воспоминания</h3><p>Новое поколение не знает вкуса «бабушкиного супа» и опыта совместной уборки.</p><h3>Галахический риск</h3><p>Подготовить кухню нееврейского отеля крайне сложно.</p><h3>Совет</h3><p>Лучше скромный настоящий Седер дома, чем роскошный зал с ковбойскими шляпами.</p>`, en: `<p>The Pesach hotel industry has become a huge business from Kenya to Disneyland. But the essence is lost behind the glamour.</p><h3>Lost Memories</h3><p>The new generation doesn't know "grandma's soup" or the experience of cleaning together.</p><h3>Halachic Risk</h3><p>Preparing a non-Jewish hotel kitchen is extremely difficult.</p><h3>Advice</h3><p>Better a modest genuine Seder at home than a luxurious hall with cowboy hats.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-19', slug: 'aptechka-iz-holodilnika-narodnaya-medicina', image: '/images/articles/pesach-19.png', title: { ru: 'Аптечка из холодильника: Бабушкины секреты', en: "Fridge First Aid: Grandmother's Secrets", he: 'ערכת עזרה ראשונה מהמקרר: סודות סבתא', uk: 'Аптечка з холодильника: Бабусині секрети' }, subtitle: { ru: 'Народная медицина, одобренная Галахой', en: 'Folk medicine approved by Halacha', he: 'רפואה עממית מאושרת על ידי ההלכה', uk: 'Народна медицина, схвалена Галахою' }, content: { ru: `<p>На Пейсах на помощь приходят домашние средства.</p><h3>Молоко против ожогов</h3><p>Салфетка, смоченная в цельном молоке, на 15 минут.</p><h3>Чай для ног</h3><p>Ванночка из крепкого чая устраняет запах благодаря дубильной кислоте.</p><h3>Лук против астмы</h3><p>Смесь соков лука, моркови и петрушки расслабляет бронхи.</p><h3>Сахар от икоты</h3><p>Чайная ложка сахара без воды + задержать дыхание.</p>`, en: `<p>During Pesach, home remedies come to the rescue.</p><h3>Milk for Burns</h3><p>A cloth soaked in whole milk for 15 minutes.</p><h3>Tea for Feet</h3><p>A strong tea bath eliminates odor thanks to tannic acid.</p><h3>Onion for Asthma</h3><p>A mix of onion, carrot, and parsley juice relaxes bronchial muscles.</p><h3>Sugar for Hiccups</h3><p>A teaspoon of sugar without water + hold your breath.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-20', slug: 'haroset-so-vsego-mira-sekretnye-recepty', image: '/images/articles/pesach-20.png', title: { ru: 'Кулинарный детектив: Харосет со всего мира', en: 'Culinary Detective: Charoset From Around the World', he: 'בלש קולינרי: חרוסת מרחבי העולם', uk: 'Кулінарний детектив: Харосет з усього світу' }, subtitle: { ru: 'Секретные рецепты, которые изменят ваш Седер', en: 'Secret recipes that will transform your Seder', he: 'מתכונים סודיים שישנו את הסדר שלך', uk: 'Секретні рецепти, що змінять ваш Седер' }, content: { ru: `<p>Харосет символизирует глину, но его вкус может быть шедевром.</p><h3>Грузинский</h3><p>Яблоки, груши, фундук, грецкие орехи, миндаль, мёд и настой гвоздики.</p><h3>Египетский (Рамбан, XIII век)</h3><p>Финики и изюм, варятся до пасты, с уксусом и иссопом.</p><h3>Французский (XIII век)</h3><p>Каштаны, кислые яблоки, сушёный инжир, имбирь и винный уксус.</p><h3>Лайфхак</h3><p>Остался харосет? Нафаршируйте яблоки, залейте вином и запеките!</p>`, en: `<p>Charoset symbolizes mortar, but its taste can be a masterpiece.</p><h3>Georgian</h3><p>Apples, pears, hazelnuts, walnuts, almonds, honey, and clove infusion.</p><h3>Egyptian (Ramban, 13th century)</h3><p>Dates and raisins cooked to paste with vinegar and hyssop.</p><h3>French (13th century)</h3><p>Chestnuts, sour apples, dried figs, ginger, and wine vinegar.</p><h3>Lifehack</h3><p>Leftover charoset? Stuff apples, pour wine, and bake!</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-02' },
+  { id: 'pesach-21', slug: 'gastronomiya-hol-a-moed', image: '/images/articles/pesach-21.png', title: { ru: 'Гастрономия Холь а-Моэд', en: 'Chol HaMoed Cuisine', he: 'גסטרונומיה של חול המועד', uk: 'Гастрономія Холь а-Моед' }, subtitle: { ru: 'Лазанья из мацы и «фальшивая» кишка', en: 'Matzah lasagna and creative holiday cooking', he: 'לזניה ממצה ובישול חג יצירתי', uk: 'Лазанья з маци та «фальшива» кишка' }, content: { ru: `<p>Будни праздника — время разнообразить меню без хамеца.</p><h3>Пасхальная лазанья</h3><p>Тонкие блинчики из яиц и картофельного крахмала вместо макарон.</p><h3>Гефилте фиш без хлеба</h3><p>Для связки — тёртая свёкла или морковь.</p><h3>Маца — идеальный продукт</h3><p>Цельнозерновая маца: 4 г клетчатки на унцию, на 75% меньше жира.</p>`, en: `<p>Chol HaMoed is time to diversify the menu without chametz.</p><h3>Pesach Lasagna</h3><p>Thin crepes from eggs and potato starch instead of pasta.</p><h3>Gefilte Fish Without Bread</h3><p>Use grated beet or carrot as a binder.</p><h3>Matzah Is Perfect</h3><p>Whole wheat matzah: 4g fiber per ounce, 75% less fat.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-22', slug: 'saharnyj-udar-matza-dlya-diabetikov', image: '/images/articles/pesach-22.png', title: { ru: 'Сахарный удар: Маца для диабетиков', en: 'Sugar Shock: Matzah for Diabetics', he: 'הלם סוכר: מצה לסוכרתיים', uk: 'Цукровий удар: Маца для діабетиків' }, subtitle: { ru: 'Маца на 81% состоит из углеводов', en: 'Matzah is 81% carbohydrates', he: 'מצה מכילה 81% פחמימות', uk: 'Маца на 81% складається з вуглеводів' }, content: { ru: `<p>Для диабетиков Седер — испытание.</p><h3>Математика углеводов</h3><p>«Кезаит» — от 10 до 27 грамм. Маца содержит 81% углеводов.</p><h3>Выбор вина</h3><p>Сухое красное — около 4 г углеводов на бокал. Виноградный сок — 40 г сахара!</p><h3>Горькие травы</h3><p>Тёртый хрен (1.1 унции) или салат ромэн (8x10 дюймов).</p>`, en: `<p>For diabetics, the Seder is a challenge.</p><h3>Carb Math</h3><p>"Kezayit" ranges from 10 to 27 grams. Matzah is 81% carbohydrates.</p><h3>Wine Choice</h3><p>Dry red — about 4g carbs per glass. Grape juice — 40g sugar!</p><h3>Bitter Herbs</h3><p>Grated horseradish (1.1 oz) or romaine lettuce (8x10 inches).</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-23', slug: 'zernovoj-detektiv-zakon-hodosh-2026', image: '/images/articles/pesach-23.png', title: { ru: 'Зерновой детектив: Закон «Ходош» 2026', en: 'Grain Detective: The Chadash Law 2026', he: 'בלש תבואה: חוק חדש 2026', uk: 'Зерновий детектив: Закон «Ходош» 2026' }, subtitle: { ru: 'Что нужно знать о «новом» зерне', en: "What you need to know about 'new' grain", he: 'מה צריך לדעת על תבואה חדשה', uk: 'Що потрібно знати про «нове» зерно' }, content: { ru: `<p>Пять видов злаков, посаженные после Пейсаха, запрещены до следующего года.</p><h3>Где опасность</h3><p>Большинство овса и ячменя в США сажают весной, после праздника.</p><h3>Йошон</h3><p>Ищите продукты с пометкой «Yoshon».</p><h3>Израиль</h3><p>Строжайшее соблюдение, без послаблений для туристов.</p>`, en: `<p>Five types of grain planted after Pesach are forbidden until next year.</p><h3>Where's the Danger</h3><p>Most oats and barley in the US are planted in spring, after the holiday.</p><h3>Yoshon</h3><p>Look for products marked "Yoshon."</p><h3>Israel</h3><p>Strictest observance, no leniency for tourists.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-24', slug: 'svyatoj-musor-shaiemos-pri-uborke', image: '/images/articles/pesach-24.png', title: { ru: 'Святой мусор: Шаимос при уборке', en: 'Holy Trash: Shaimos During Cleaning', he: 'זבל קדוש: שאימוס בניקיון', uk: 'Святе сміття: Шаімос при прибиранні' }, subtitle: { ru: 'Как утилизировать еврейские тексты', en: 'How to dispose of Jewish texts properly', he: 'איך להיפטר מטקסטים יהודיים כהלכה', uk: 'Як утилізувати єврейські тексти' }, content: { ru: `<p>Далеко не всё из найденного при уборке можно выбросить.</p><h3>Шаимос</h3><p>Любые тексты с Именами Всевышнего — в генизу, не в мусор.</p><h3>Цифровой мир</h3><p>Тексты на экране не обладают святостью, пока не распечатаны.</p>`, en: `<p>Not everything found during cleaning can be thrown away.</p><h3>Shaimos</h3><p>Any texts with G-d's Names go to genizah, not trash.</p><h3>Digital World</h3><p>Text on screens has no sanctity until printed.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-25', slug: 'umnyj-holodilnik-protiv-galahi', image: '/images/articles/pesach-25.png', title: { ru: '«Умный» холодильник против Галахи', en: 'Smart Fridge vs Halacha', he: 'מקרר חכם נגד ההלכה', uk: '«Розумний» холодильник проти Галахи' }, subtitle: { ru: 'Цифровые сенсоры и законы Шаббата', en: 'Digital sensors and Shabbat laws', he: 'חיישנים דיגיטליים וחוקי שבת', uk: 'Цифрові сенсори і закони Шаббату' }, content: { ru: `<p>Современная техника с микропроцессорами создаёт проблемы в Йом Тов.</p><h3>Ловушка сенсоров</h3><p>Холодильники отслеживают открытие двери для регулировки разморозки.</p><h3>Светодиоды и вентиляторы</h3><p>При открытии может отключиться вентилятор или включиться подсветка.</p><h3>Решение</h3><p>Заклеивайте кнопки и датчики лентой до наступления праздника.</p>`, en: `<p>Modern appliances with microprocessors create Yom Tov problems.</p><h3>Sensor Trap</h3><p>Fridges track door openings to regulate defrost cycles.</p><h3>LEDs and Fans</h3><p>Opening may turn off a fan or activate hidden lighting.</p><h3>Solution</h3><p>Tape over buttons and sensors before the holiday begins.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-26', slug: 'ne-kormite-kota-hamcem', image: '/images/articles/pesach-26.png', title: { ru: 'Не кормите кота хамецом!', en: "Don't Feed Your Cat Chametz!", he: 'אל תאכילו את החתול חמץ!', uk: 'Не годуйте кота хамецом!' }, subtitle: { ru: 'Гастрономические правила для питомцев', en: 'Dietary rules for your pets', he: 'כללי תזונה לחיות המחמד', uk: 'Гастрономічні правила для улюбленців' }, content: { ru: `<p>Запрещено получать выгоду от хамеца, включая кормление животных.</p><h3>Скрытый хамец</h3><p>Большинство кормов содержат злаки. Даже «говядина» содержит муку.</p><h3>Практический совет</h3><p>Свежая рыба, тунец или мясо. Все корма покупайте до Йом Тов.</p>`, en: `<p>It's forbidden to derive benefit from chametz, including feeding animals.</p><h3>Hidden Chametz</h3><p>Most pet foods contain grains. Even "beef" contains flour.</p><h3>Practical Tip</h3><p>Fresh fish, tuna, or meat. Buy all food before Yom Tov.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-27', slug: 'matematika-koshernosti-nasekomye-v-ovoshchah', image: '/images/articles/pesach-27.png', title: { ru: 'Математика кошерности: Насекомые в овощах', en: 'Kashrut Math: Insects in Vegetables', he: 'מתמטיקה של כשרות: חרקים בירקות', uk: 'Математика кошерності: Комахи в овочах' }, subtitle: { ru: 'Когда 10% превращают салат в запретный плод', en: 'When 10% turns your salad into forbidden fruit', he: 'כש-10% הופכים את הסלט לפרי אסור', uk: 'Коли 10% перетворюють салат на заборонений плід' }, content: { ru: `<p>Галаха разделяет продукты на три категории заражённости.</p><h3>Миют а-мацуй</h3><p>Если насекомые в более чем 10% случаев — обязательная проверка.</p><h3>Групповая проверка</h3><p>Если в партии найдена заражённая часть — весь вид считается проблемным.</p><h3>Световой короб</h3><p>Используйте лайт-бокс. Промывки водой недостаточно.</p>`, en: `<p>Halacha divides products into three infestation categories.</p><h3>Miyut HaMatzui</h3><p>If insects are found in more than 10% of cases — mandatory inspection.</p><h3>Batch Testing</h3><p>If an infested batch is found, the entire variety is considered problematic.</p><h3>Light Box</h3><p>Use a light box. Water rinsing is insufficient.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-28', slug: 'poteryannyj-den-perelet-i-omer', image: '/images/articles/pesach-28.png', title: { ru: 'Потерянный день: Перелёт и Омер', en: 'The Lost Day: Flying and the Omer', he: 'היום האבוד: טיסה והעומר', uk: 'Втрачений день: переліт та Омер' }, subtitle: { ru: 'Линия перемены дат и счёт Омера', en: 'International Date Line and counting the Omer', he: 'קו התאריך הבינלאומי וספירת העומר', uk: 'Лінія зміни дат та лічба Омера' }, content: { ru: `<p>Пересечение линии перемены дат во время счёта Омера — головоломка.</p><h3>Счёт в полёте</h3><p>Из США в Тайвань — теряете день. Считайте без благословения по местному времени.</p><h3>Шавуот</h3><p>Праздник наступает по вашему личному счёту (50-й день).</p><h3>Арктика</h3><p>Где солнце не заходит — избегайте поездок во время праздников.</p>`, en: `<p>Crossing the International Date Line during the Omer count is a puzzle.</p><h3>Counting in Flight</h3><p>US to Taiwan — you "lose" a day. Count without a blessing by local time.</p><h3>Shavuot</h3><p>The holiday arrives according to your personal count (day 50).</p><h3>Arctic</h3><p>Where the sun doesn't set — avoid trips during holidays.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-03' },
+  { id: 'pesach-29', slug: 'klyuch-hala-tajnyj-smysl', image: '/images/articles/pesach-29.png', title: { ru: 'Ключ к богатству? Тайный смысл «ключ-халы»', en: "The Key to Wealth? The Secret of 'Key Challah'", he: 'המפתח לעושר? הסוד של חלת המפתח', uk: 'Ключ до багатства? Таємний сенс «ключ-хали»' }, subtitle: { ru: 'Почему первая суббота после Пейсаха пахнет деньгами', en: 'Why the first Shabbat after Pesach smells like money', he: 'למה השבת הראשונה אחרי פסח מריחה כסף', uk: 'Чому перша субота після Песаху пахне грошима' }, content: { ru: `<p>В первую субботу после Пейсаха пекут халы в форме ключа.</p><h3>Смысл</h3><p>Во время Пейсаха врата Небес открыты. «Ключ» оставляет их открытыми для благословений и парносы.</p><h3>Символизм</h3><p>Ключи от успеха — в руках Всевышнего. Мы просим открыть сокровищницы милости.</p><h3>Практика</h3><p>Некоторые делают халу в форме ключа, другие впекают настоящий ключ в фольге.</p>`, en: `<p>The first Shabbat after Pesach, many bake key-shaped challah.</p><h3>Meaning</h3><p>During Pesach, heaven's gates are open. The "key" keeps them open for blessings and parnasah.</p><h3>Symbolism</h3><p>Keys to success are in G-d's hands. We ask Him to open His treasuries of grace.</p><h3>Practice</h3><p>Some shape the challah as a key, others bake a real key wrapped in foil inside.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
+  { id: 'pesach-30', slug: '18-minut-do-katastrofy-nauka-hameca', image: '/images/articles/pesach-30.png', title: { ru: '18 минут до «катастрофы»: Наука превращения теста в хамец', en: '18 Minutes to Disaster: The Science of Chametz', he: '18 דקות לאסון: המדע של חמץ', uk: '18 хвилин до «катастрофи»: Наука перетворення тіста на хамець' }, subtitle: { ru: 'Ферменты против веры', en: 'Enzymes vs faith', he: 'אנזימים נגד אמונה', uk: 'Ферменти проти віри' }, content: { ru: `<p>Запрет на хамец — точный биохимический процесс.</p><h3>Биология</h3><p>Когда вода касается злаков, активируются ферменты, выделяющие углекислый газ.</p><h3>Правило 18 минут</h3><p>После 18 минут процесс брожения становится необратимым.</p><h3>Сила движения</h3><p>Постоянное замешивание подавляет ферменты. В пекарнях мацы работа идёт в бешеном темпе.</p>`, en: `<p>The chametz prohibition is a precise biochemical process.</p><h3>Biology</h3><p>When water touches grain, enzymes activate and release carbon dioxide.</p><h3>The 18-Minute Rule</h3><p>After 18 minutes, the fermentation process becomes irreversible.</p><h3>The Power of Motion</h3><p>Constant kneading suppresses enzymes. Matzah bakeries work at a frantic pace.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
+  { id: 'pesach-31', slug: 'peysahovyj-tehosmotr-ketuba', image: '/images/articles/pesach-31.png', title: { ru: 'Пейсаховый техосмотр: Зачем искать Кетубу?', en: 'Pesach Inspection: Why Find Your Ketubah?', he: 'בדיקת פסח: למה לחפש את הכתובה?', uk: 'Песаховий техогляд: Навіщо шукати Ктубу?' }, subtitle: { ru: 'Почему потеря документа ставит брак на паузу', en: 'Why losing the document puts your marriage on pause', he: 'למה אובדן המסמך משהה את הנישואין', uk: 'Чому втрата документа ставить шлюб на паузу' }, content: { ru: `<p>Уборка к Пейсаху — идеальное время проверить Кетубу.</p><h3>Строгий закон</h3><p>Муж и жена не имеют права жить вместе без доступа к Кетубе. Если потеряна — немедленно выписать новую.</p><h3>Проверка</h3><p>Убедитесь, что документ без ошибок в именах и пустых мест.</p>`, en: `<p>Pesach cleaning is the perfect time to check your Ketubah.</p><h3>Strict Law</h3><p>Husband and wife may not live together without access to the Ketubah. If lost — immediately issue a new one.</p><h3>Inspection</h3><p>Make sure the document has no errors in names or blank spaces.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
+  { id: 'pesach-32', slug: 'cvetochnyj-benefis-birkas-a-ilanos', image: '/images/articles/pesach-32.png', title: { ru: 'Цветочный бенефис: Биркас а-Иланос', en: "Floral Premiere: Birkat Ha'Ilanot", he: 'ברכת האילנות: הבכורה הפרחונית', uk: 'Квітковий бенефіс: Біркас а-Іланос' }, subtitle: { ru: 'Единственный шанс в году поблагодарить Б-га за красоту мира', en: "The only chance all year to thank G-d for the world's beauty", he: 'ההזדמנות היחידה בשנה להודות לה\' על יופי העולם', uk: 'Єдиний шанс на рік подякувати Б-гу за красу світу' }, content: { ru: `<p>В месяце Нисан — уникальная возможность исполнить заповедь раз в году.</p><h3>Суть</h3><p>Увидев впервые цветущие фруктовые деревья, произносится благословение, восхваляющее Творца.</p><h3>Условия</h3><p>Нужно видеть цветы, а не плоды. Если отцвело — поздно.</p><h3>Детали</h3><p>Нужно хотя бы два дерева. Заповедь для мужчин, женщин и детей. Можно через окно.</p>`, en: `<p>In the month of Nissan — a unique once-a-year mitzvah.</p><h3>Essence</h3><p>Upon seeing blooming fruit trees for the first time, a special blessing is recited praising the Creator.</p><h3>Conditions</h3><p>You must see flowers, not fruit. If it's already fruited — too late.</p><h3>Details</h3><p>At least two trees needed. For men, women, and children. Can be through a window.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
+  { id: 'pesach-33', slug: 'tonkosti-yom-tova-ogon-v-prazdnik', image: '/images/articles/pesach-33.png', title: { ru: 'Тонкости Йом Това: Огонь в праздник', en: 'Yom Tov Details: Fire on the Holiday', he: 'דקויות יום טוב: אש בחג', uk: 'Тонкощі Йом Тову: Вогонь у свято' }, subtitle: { ru: 'Можно ли зажигать плиту в праздник?', en: 'Can you light the stove on the holiday?', he: 'האם מותר להדליק כיריים בחג?', uk: 'Чи можна запалювати плиту у свято?' }, content: { ru: `<p>В Йом Тов действуют особые правила обращения с огнём.</p><h3>Создание vs Перенос</h3><p>Запрещено создавать новый огонь. Разрешено переносить от существующего пламени.</p><h3>Газовая плита</h3><p>Плиту с автоподжигом нельзя включать. Оставьте конфорку на минимуме или зажигайте от фитиля.</p><h3>Готовка «день в день»</h3><p>Готовить только для нужд текущего праздничного дня. Запрещено готовить заранее.</p>`, en: `<p>Special rules for handling fire on Yom Tov.</p><h3>Creating vs Transferring</h3><p>Forbidden to create new fire. Permitted to transfer from existing flame.</p><h3>Gas Stove</h3><p>Auto-ignition stoves can't be turned on. Leave a burner on low or light from an existing candle.</p><h3>Same-Day Cooking</h3><p>Cook only for the current holiday day. Forbidden to cook in advance.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
+  { id: 'pesach-34', slug: 'ultra-ochistka-himicheskie-sovety', image: '/images/articles/pesach-34.png', title: { ru: 'Ультра-очистка: Химические советы для дома', en: 'Ultra-Clean: Chemical Tips for a Perfect Home', he: 'ניקוי אולטרה: טיפים כימיים לבית מושלם', uk: 'Ультра-очищення: Хімічні поради для дому' }, subtitle: { ru: '«Магический ластик» и спирт против хамеца', en: 'Magic Eraser and alcohol vs chametz crumbs', he: 'מחק קסם ואלכוהול נגד פירורי חמץ', uk: '«Магічний ластик» і спирт проти хамецу' }, content: { ru: `<p>Практические советы для облегчения подготовки дома.</p><h3>Спирт против крошек</h3><p>Протирочный спирт — мгновенная очистка поверхностей без следов.</p><h3>Борьба с пятнами</h3><p>Murphy Oil Soap за 15 минут до стирки. Magic Eraser — для следов на стенах.</p><h3>Свежесть холодильника</h3><p>Раствор пищевой соды в тёплой воде убирает запахи.</p><h3>Труднодоступные места</h3><p>Старая зубная щётка для ручек плиты. Хлорка делает хамец непригодным.</p>`, en: `<p>Practical tips to ease home preparation.</p><h3>Alcohol vs Crumbs</h3><p>Rubbing alcohol — instant surface cleaning with no residue.</p><h3>Stain Fighting</h3><p>Murphy Oil Soap 15 minutes before washing. Magic Eraser for wall marks.</p><h3>Fridge Freshness</h3><p>Baking soda solution in warm water removes odors.</p><h3>Hard-to-Reach Places</h3><p>Old toothbrush for stove knobs. Bleach renders chametz inedible.</p>` }, tag: { ru: 'Пейсах', en: 'Pesach', he: 'פסח', uk: 'Песах' }, createdAt: '2026-04-04' },
   {
     id: 'bitachon-1',
     slug: 'illyuziya-sobstvennosti-pochemu-vashi-dengi-vam-ne-prinadlezhat',
