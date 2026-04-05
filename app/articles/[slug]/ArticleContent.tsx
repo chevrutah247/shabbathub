@@ -204,8 +204,8 @@ export default function ArticleContent() {
 
         {/* Article content */}
         <div
-          className="prose prose-lg max-w-none text-gray-700 leading-relaxed
-            prose-p:mb-5 prose-p:text-[1.05rem] prose-p:leading-[1.8]
+          className="prose prose-lg max-w-none text-gray-700 text-justify
+            prose-p:mb-4 prose-p:text-[1.05rem] prose-p:leading-[1.6]
             prose-h3:text-xl prose-h3:font-bold prose-h3:text-primary-900 prose-h3:mt-8 prose-h3:mb-4 prose-h3:border-l-4 prose-h3:border-amber-400 prose-h3:pl-4
             prose-headings:text-primary-900 prose-headings:font-bold
             prose-a:text-primary-600 prose-a:hover:text-primary-800
