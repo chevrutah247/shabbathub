@@ -380,6 +380,33 @@ export default function ArticlesPage() {
             })()}
           </div>
         )}
+
+        {/* Share section button */}
+        {selectedTag && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={async () => {
+                const tagSlug = encodeURIComponent(selectedTag);
+                const url = `https://www.shabbathub.com/articles?tag=${tagSlug}`;
+                const title = `${selectedTag} — ShabbatHub`;
+                if (navigator.share) {
+                  try { await navigator.share({ title, url }); } catch {}
+                } else {
+                  await navigator.clipboard.writeText(url);
+                  const btn = document.getElementById('share-section-btn');
+                  if (btn) { btn.textContent = lang === 'ru' ? '✓ Ссылка скопирована!' : '✓ Link copied!'; setTimeout(() => { btn.textContent = lang === 'ru' ? '📤 Поделиться всем разделом' : '📤 Share entire section'; }, 2000); }
+                }
+              }}
+              id="share-section-btn"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-medium hover:bg-primary-700 transition-all shadow-md hover:shadow-lg"
+            >
+              {lang === 'ru' ? '📤 Поделиться всем разделом' : lang === 'he' ? '📤 שתף את כל המדור' : lang === 'uk' ? '📤 Поділитися всім розділом' : '📤 Share entire section'}
+            </button>
+            <p className="text-gray-400 text-xs mt-2">
+              {lang === 'ru' ? `${filtered.length} статей в разделе «${selectedTag}»` : `${filtered.length} articles in "${selectedTag}"`}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
